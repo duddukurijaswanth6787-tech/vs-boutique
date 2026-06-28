@@ -1,0 +1,129 @@
+﻿
+> admin@0.0.0 build
+> vite build
+
+[36mvite v8.1.0 [32mbuilding client environment for production...[36m[39m
+[2K
+transforming...Γ£ô 688 modules transformed.
+node.exe : [31mΓ£ù[39m Build failed in 1.12s
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([31mΓ£ù[39m Build failed in 1.12s:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[31merror during build:
+[31mBuild failed with 40 errors:
+
+[31m[UNLOADABLE_DEPENDENCY] [0mCould not load src/core/hooks/useDebounce
+   [38;5;246mΓò¡[0m[38;5;246mΓöÇ[0m[38;5;246m[[0m src/pages/owner/reviews/OwnerProductReviews.jsx:8:25 
+[38;5;246m][0m
+   [38;5;246mΓöé[0m
+ [38;5;246m8 Γöé[0m 
+[38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;
+249mu[0m[38;5;249ms[0m[38;5;249me[0m[38;5;249mD[0m[38;5;249me[0m[38;5;249mb[0m[38;5;249mo[0m[38;5;249mu[
+0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249m 
+[0m[38;5;249mf[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mm[0m[38;5;249m 
+[0m"@core/hooks/useDebounce"[38;5;249m;[0m
+ [38;5;240m  Γöé[0m                         
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  
+ [38;5;240m  Γöé[0m                                     Γò░ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ The system 
+cannot find the file specified. (os error 2)
+[38;5;246mΓöÇΓöÇΓöÇΓò»[0m
+
+[31m[UNLOADABLE_DEPENDENCY] [0mCould not load src/core/services/api
+   [38;5;246mΓò¡[0m[38;5;246mΓöÇ[0m[38;5;246m[[0m src/pages/auth/SetPassword.jsx:3:17 [38;5;246m][0m
+   [38;5;246mΓöé[0m
+ [38;5;246m3 Γöé[0m 
+[38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m 
+[0m[38;5;249ma[0m[38;5;249mp[0m[38;5;249mi[0m[38;5;249m 
+[0m[38;5;249mf[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mm[0m[38;5;249m 
+[0m"@core/services/api"[38;5;249m;[0m
+ [38;5;240m  Γöé[0m                 ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  
+ [38;5;240m  Γöé[0m                           Γò░ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ Access is denied. (os error 5)
+[38;5;246mΓöÇΓöÇΓöÇΓò»[0m
+
+[31m[UNRESOLVED_IMPORT] [0mCould not resolve '../../../../core/components/ui/Button' in 
+src/pages/shared/DesignSystemShowcase.jsx
+   [38;5;246mΓò¡[0m[38;5;246mΓöÇ[0m[38;5;246m[[0m src/pages/shared/DesignSystemShowcase.jsx:4:20 [38;5;246m][0m
+   [38;5;246mΓöé[0m
+ [38;5;246m4 Γöé[0m 
+[38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m 
+[0m[38;5;249mB[0m[38;5;249mu[0m[38;5;249mt[0m[38;5;249mt[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m 
+[0m[38;5;249mf[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mm[0m[38;5;249m 
+[0m"../../../../core/components/ui/Button"[38;5;249m;[0m
+ [38;5;240m  Γöé[0m                    
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  
+ [38;5;240m  Γöé[0m                                       
+Γò░ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ Module not found.
+ [38;5;240m  Γöé[0m 
+ [38;5;240m  Γöé[0m [38;5;115mHelp[0m: 'src/pages/shared/DesignSystemShowcase.jsx' is imported by the following 
+path:
+ [38;5;240m  Γöé[0m         - src/pages/shared/DesignSystemShowcase.jsx
+ [38;5;240m  Γöé[0m         - src/App.jsx
+ [38;5;240m  Γöé[0m         - src/main.jsx
+ [38;5;240m  Γöé[0m         - index.html
+[38;5;246mΓöÇΓöÇΓöÇΓò»[0m
+
+[31m[UNRESOLVED_IMPORT] [0mCould not resolve '../../../../core/components/ui/IconButton' in 
+src/pages/shared/DesignSystemShowcase.jsx
+   [38;5;246mΓò¡[0m[38;5;246mΓöÇ[0m[38;5;246m[[0m src/pages/shared/DesignSystemShowcase.jsx:5:24 [38;5;246m][0m
+   [38;5;246mΓöé[0m
+ [38;5;246m5 Γöé[0m 
+[38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;
+249mI[0m[38;5;249mc[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mB[0m[38;5;249mu[0m[38;5;249mt[0m[38;5;249mt[
+0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m 
+[0m[38;5;249mf[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mm[0m[38;5;249m 
+[0m"../../../../core/components/ui/IconButton"[38;5;249m;[0m
+ [38;5;240m  Γöé[0m                        ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓö
+ÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  
+ [38;5;240m  Γöé[0m                                             
+Γò░ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ Module not found.
+ [38;5;240m  Γöé[0m 
+ [38;5;240m  Γöé[0m [38;5;115mHelp[0m: 'src/pages/shared/DesignSystemShowcase.jsx' is imported by the following 
+path:
+ [38;5;240m  Γöé[0m         - src/pages/shared/DesignSystemShowcase.jsx
+ [38;5;240m  Γöé[0m         - src/App.jsx
+ [38;5;240m  Γöé[0m         - src/main.jsx
+ [38;5;240m  Γöé[0m         - index.html
+[38;5;246mΓöÇΓöÇΓöÇΓò»[0m
+
+[31m[UNRESOLVED_IMPORT] [0mCould not resolve '../../../../core/components/ui/Input' in 
+src/pages/shared/DesignSystemShowcase.jsx
+   [38;5;246mΓò¡[0m[38;5;246mΓöÇ[0m[38;5;246m[[0m src/pages/shared/DesignSystemShowcase.jsx:6:19 [38;5;246m][0m
+   [38;5;246mΓöé[0m
+ [38;5;246m6 Γöé[0m 
+[38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m 
+[0m[38;5;249mI[0m[38;5;249mn[0m[38;5;249mp[0m[38;5;249mu[0m[38;5;249mt[0m[38;5;249m 
+[0m[38;5;249mf[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mm[0m[38;5;249m 
+[0m"../../../../core/components/ui/Input"[38;5;249m;[0m
+ [38;5;240m  Γöé[0m                   
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  
+ [38;5;240m  Γöé[0m                                      
+Γò░ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ Module not found.
+ [38;5;240m  Γöé[0m 
+ [38;5;240m  Γöé[0m [38;5;115mHelp[0m: 'src/pages/shared/DesignSystemShowcase.jsx' is imported by the following 
+path:
+ [38;5;240m  Γöé[0m         - src/pages/shared/DesignSystemShowcase.jsx
+ [38;5;240m  Γöé[0m         - src/App.jsx
+ [38;5;240m  Γöé[0m         - src/main.jsx
+ [38;5;240m  Γöé[0m         - index.html
+[38;5;246mΓöÇΓöÇΓöÇΓò»[0m
+
+...[31m
+    at aggregateBindingErrorsIntoJsError (file:///C:/Users/jashwanth/Downloads/simple-app-update-25-06/web/node_modules
+/rolldown/dist/shared/error-B68YLzl3.mjs:48:18)
+    at unwrapBindingResult (file:///C:/Users/jashwanth/Downloads/simple-app-update-25-06/web/node_modules/rolldown/dist
+/shared/error-B68YLzl3.mjs:18:128)
+    at #build (file:///C:/Users/jashwanth/Downloads/simple-app-update-25-06/web/node_modules/rolldown/dist/shared/rolld
+own-build-DR0wzp0V.mjs:3256:34)
+    at async buildEnvironment 
+(file:///C:/Users/jashwanth/Downloads/simple-app-update-25-06/web/node_modules/vite/dist/node/chunks/node.js:32575:66)
+    at async Object.build 
+(file:///C:/Users/jashwanth/Downloads/simple-app-update-25-06/web/node_modules/vite/dist/node/chunks/node.js:32997:19)
+    at async Object.buildApp 
+(file:///C:/Users/jashwanth/Downloads/simple-app-update-25-06/web/node_modules/vite/dist/node/chunks/node.js:32994:153)
+    at async CAC.<anonymous> 
+(file:///C:/Users/jashwanth/Downloads/simple-app-update-25-06/web/node_modules/vite/dist/node/cli.js:777:3) {
+  errors: [Getter/Setter]
+}[39m

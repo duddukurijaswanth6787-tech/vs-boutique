@@ -1,0 +1,40 @@
+{
+  "name": "vs-boutique-backend",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "prestart": "node swagger-gen.js",
+    "predev": "node swagger-gen.js",
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1041.0",
+    "@prisma/client": "^6.19.3",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.2",
+    "bullmq": "^5.79.2",
+    "chalk": "^4.1.2",
+    "cors": "^2.8.6",
+    "dayjs": "^1.11.21",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "express-rate-limit": "^8.5.2",
+    "ioredis": "^5.11.1",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.11.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^9.0.1",
+    "pg": "^8.21.0",
+    "razorpay": "^2.9.6",
+    "sharp": "^0.34.5",
+    "swagger-autogen": "^2.23.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
+    "uuid": "^14.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4",
+    "prisma": "^6.19.3"
+  }
+}

@@ -1,0 +1,900 @@
+{
+  "notifications": [],
+  "users": [],
+  "payments": [],
+  "activities": [],
+  "orders": [],
+  "owners": [
+    {
+      "_id": "69f1aa682a664ab4f1b83950",
+      "ownerName": "Super Administrator",
+      "username": "superadmin",
+      "email": "admin@vsboutique.com",
+      "mobileNumber": "0000000000",
+      "password": "$2b$10$EVAZy6.waStoWIU4GGI.eelBUagqirP./eN6tXaeLV2x1WUfcup3K",
+      "role": "super-admin",
+      "mustResetPassword": false,
+      "permissions": {
+        "canEditProfile": true,
+        "canEditServices": true,
+        "canEditGallery": true,
+        "canManageOrders": true,
+        "canManageBookings": true,
+        "canManageDesigns": true,
+        "canViewReports": true
+      },
+      "status": "Active",
+      "createdAt": "2026-04-29T06:51:20.945Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f203f3ceddcfe9b7035ef9",
+      "ownerName": "Sanjana Kapoor",
+      "username": "sanjana_tiny_admin",
+      "email": "hello@tinytucks.com",
+      "mobileNumber": "9052011447",
+      "password": "$2b$10$m0V7BFP0ywGgumX/WUp96uzsu/50LmbfoqitsHMK87BWw2b.V8BZu",
+      "role": "owner",
+      "status": "Active",
+      "mustResetPassword": false,
+      "emailVerified": true,
+      "isDeleted": false,
+      "permissions": {
+        "canEditProfile": true,
+        "canEditServices": true,
+        "canEditGallery": true,
+        "canManageDesigns": true,
+        "canManageOrders": true,
+        "canManageBookings": true,
+        "canManageReviews": true,
+        "canManageMedia": true,
+        "canViewAnalytics": true
+      },
+      "createdAt": "2026-04-29T13:13:23.243Z",
+      "__v": 0,
+      "assignedBoutiqueId": "69f203f2ceddcfe9b7035ef5"
+    }
+  ],
+  "auditlogs": [
+    {
+      "_id": "69f203f3ceddcfe9b7035ef7",
+      "actionType": "CREATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "name": "Tiny Tucks"
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-29T13:13:23.058Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f203f3ceddcfe9b7035efc",
+      "actionType": "CREATE_OWNER_DIRECT",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "username": "sanjana_tiny_admin"
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-29T13:13:23.324Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2e569e5a997366951f87e",
+      "actionType": "UNLINK_OWNER",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "boutiqueId": "69f203f2ceddcfe9b7035ef5"
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-30T05:15:21.286Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2ecea3b32334f9018be6e",
+      "actionType": "LINK_OWNER",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "boutiqueId": "69f203f2ceddcfe9b7035ef5"
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-30T05:47:22.480Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2ed973b32334f9018be80",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": false,
+          "canEditServices": true,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-30T05:50:15.585Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2eda53b32334f9018be89",
+      "actionType": "OWNER_UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T05:50:29.814Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2edb13b32334f9018be8c",
+      "actionType": "OWNER_UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T05:50:41.958Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2edb83b32334f9018be91",
+      "actionType": "OWNER_UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T05:50:48.137Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2ee703b32334f9018be96",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": false,
+          "canEditServices": false,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-30T05:53:52.271Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2ee7a3b32334f9018be9d",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": false,
+          "canEditServices": true,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-30T05:54:02.408Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2f193287f34699eec3fa7",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": false,
+          "canEditServices": true,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-30T06:07:15.294Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2f225287f34699eec3fca",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": false,
+          "canEditServices": false,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-30T06:09:41.094Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2f22c287f34699eec3fd9",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": true,
+          "canEditServices": false,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-30T06:09:48.757Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2f236287f34699eec3fe8",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": true,
+          "canEditServices": true,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-30T06:09:58.079Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2fa8234c5a08244bdf751",
+      "actionType": "OWNER_UPDATE_GALLERY",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T06:45:22.429Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2fcef34c5a08244bdf754",
+      "actionType": "OWNER_UPDATE_GALLERY",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T06:55:43.583Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2ff8834c5a08244bdf772",
+      "actionType": "OWNER_UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T07:06:48.971Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f2ffbc34c5a08244bdf775",
+      "actionType": "OWNER_UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T07:07:40.935Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f301c65c729259e334d00f",
+      "actionType": "OWNER_UPDATE_MEDIA",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "metadata": {
+        "fields": [
+          "logo",
+          "coverImage"
+        ]
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-30T07:16:22.834Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f301c85c729259e334d012",
+      "actionType": "OWNER_UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T07:16:24.919Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f3147f3c6206170e7047b6",
+      "actionType": "UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "changes": [
+          "featuredBoutique"
+        ]
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-30T08:36:15.143Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f3147f3c6206170e7047ba",
+      "actionType": "UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "changes": [
+          "featuredBoutique"
+        ]
+      },
+      "ipAddress": null,
+      "timestamp": "2026-04-30T08:36:15.990Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f317042fe5d478e5e757e1",
+      "actionType": "OWNER_UPDATE_SERVICES",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T08:47:00.796Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f31c2173662dff87b0e0f6",
+      "actionType": "OWNER_UPDATE_SERVICES",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T09:08:49.692Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f31c3a73662dff87b0e0f9",
+      "actionType": "OWNER_UPDATE_SERVICES",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T09:09:14.411Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f31d4c73662dff87b0e107",
+      "actionType": "CREATE_DESIGN",
+      "entityType": "Design",
+      "entityId": "69f31d4c73662dff87b0e105",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T09:13:48.288Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f31f0f05234414c6b812c3",
+      "actionType": "DELETE_DESIGN",
+      "entityType": "Design",
+      "entityId": "69f31d4c73662dff87b0e105",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T09:21:19.169Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f31f3d05234414c6b812c8",
+      "actionType": "CREATE_DESIGN",
+      "entityType": "Design",
+      "entityId": "69f31f3d05234414c6b812c6",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T09:22:05.834Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f325af05234414c6b812e9",
+      "actionType": "OWNER_UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-04-30T09:49:35.683Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f63f297d7a87407dc7d8f2",
+      "actionType": "SOFT_DELETE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f1d49f54e6f6a7e249aa36",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "name": "Sai Ram"
+      },
+      "ipAddress": null,
+      "timestamp": "2026-05-02T18:15:05.915Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f6422479e6278df3b40ee0",
+      "actionType": "UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "changes": [
+          "experienceYears",
+          "logo",
+          "coverImage"
+        ]
+      },
+      "ipAddress": null,
+      "timestamp": "2026-05-02T18:27:48.158Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f6429f79e6278df3b40ee4",
+      "actionType": "UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "changes": [
+          "experienceYears"
+        ]
+      },
+      "ipAddress": null,
+      "timestamp": "2026-05-02T18:29:51.855Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f6437679e6278df3b40eeb",
+      "actionType": "UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "changes": [
+          "experienceYears",
+          "logo"
+        ]
+      },
+      "ipAddress": null,
+      "timestamp": "2026-05-02T18:33:26.216Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f643f979e6278df3b40ef0",
+      "actionType": "UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "changes": [
+          "experienceYears",
+          "logo"
+        ]
+      },
+      "ipAddress": null,
+      "timestamp": "2026-05-02T18:35:37.828Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f6625db54a7d544f5b2d3a",
+      "actionType": "UPDATE_BOUTIQUE",
+      "entityType": "Boutique",
+      "entityId": "69f203f2ceddcfe9b7035ef5",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "changes": [
+          "experienceYears",
+          "media"
+        ]
+      },
+      "ipAddress": null,
+      "timestamp": "2026-05-02T20:45:17.896Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f9e4e95c084be1ac33aabe",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": true,
+          "canEditServices": true,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true,
+          "canViewAnalytics": true
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-05-05T12:39:05.120Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f9e50a5c084be1ac33aadc",
+      "actionType": "UPDATE_DESIGN",
+      "entityType": "Design",
+      "entityId": "69f31f3d05234414c6b812c6",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-05-05T12:39:38.296Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f9e5625c084be1ac33aae6",
+      "actionType": "CREATE_DESIGN",
+      "entityType": "Design",
+      "entityId": "69f9e5625c084be1ac33aae4",
+      "performedBy": "69f203f3ceddcfe9b7035ef9",
+      "ipAddress": null,
+      "timestamp": "2026-05-05T12:41:06.967Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f9e7f55c084be1ac33aafb",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": true,
+          "canEditServices": true,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true,
+          "canViewAnalytics": true
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-05-05T12:52:05.932Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f9e8125c084be1ac33ab1c",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": true,
+          "canEditServices": true,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true,
+          "canViewAnalytics": false
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-05-05T12:52:34.335Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f9e9a25c084be1ac33ab3c",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": true,
+          "canEditServices": true,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true,
+          "canViewAnalytics": true
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-05-05T12:59:14.409Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f9ea3e5fc1abfa58ee33e2",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": true,
+          "canEditServices": true,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true,
+          "canViewAnalytics": false
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-05-05T13:01:50.449Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f9ea465fc1abfa58ee33eb",
+      "actionType": "UPDATE_OWNER_PERMISSIONS",
+      "entityType": "Owner",
+      "entityId": "69f203f3ceddcfe9b7035ef9",
+      "performedBy": "69f1aa682a664ab4f1b83950",
+      "metadata": {
+        "permissions": {
+          "canEditProfile": true,
+          "canEditServices": true,
+          "canEditGallery": true,
+          "canManageDesigns": true,
+          "canManageOrders": true,
+          "canManageBookings": true,
+          "canManageReviews": true,
+          "canManageMedia": true,
+          "canViewAnalytics": true
+        }
+      },
+      "ipAddress": null,
+      "timestamp": "2026-05-05T13:01:58.868Z",
+      "__v": 0
+    }
+  ],
+  "designs": [
+    {
+      "_id": "69f31d4c73662dff87b0e105",
+      "boutiqueId": "69f203f2ceddcfe9b7035ef5",
+      "name": "Organza",
+      "description": "a variation in spelling for a saree (or sari), a traditional garment from the Indian subcontinent, often featured in online retail collections",
+      "category": "Saree",
+      "images": [],
+      "price": 500,
+      "tags": [],
+      "isFeatured": false,
+      "isAvailable": true,
+      "isDeleted": true,
+      "createdAt": "2026-04-30T09:13:48.240Z",
+      "__v": 0
+    },
+    {
+      "_id": "69f31f3d05234414c6b812c6",
+      "boutiqueId": "69f203f2ceddcfe9b7035ef5",
+      "name": "Simulator ",
+      "description": "a variation in spelling for a saree (or sari), a traditional garment from the Indian subcontinent, often featured in online retail collections",
+      "category": "Blouse",
+      "images": [
+        "https://vs-boutique-images.s3.ap-south-1.amazonaws.com/uploads/gallery/1777984773846-1862cac3-73a2-472e-8d1f-869063884817.png"
+      ],
+      "price": 600,
+      "tags": [],
+      "isFeatured": false,
+      "isAvailable": true,
+      "isDeleted": false,
+      "createdAt": "2026-04-30T09:22:05.782Z",
+      "__v": 1
+    },
+    {
+      "_id": "69f9e5625c084be1ac33aae4",
+      "boutiqueId": "69f203f2ceddcfe9b7035ef5",
+      "name": "google",
+      "description": "pink",
+      "category": "Blouse",
+      "images": [
+        "https://vs-boutique-images.s3.ap-south-1.amazonaws.com/uploads/gallery/1777984860863-ee08c8a3-416f-4f0a-ab44-891d0f560f05.png"
+      ],
+      "price": 400,
+      "tags": [],
+      "isFeatured": false,
+      "isAvailable": true,
+      "isDeleted": false,
+      "createdAt": "2026-05-05T12:41:06.923Z",
+      "__v": 0
+    }
+  ],
+  "bookings": [],
+  "measurements": [
+    {
+      "_id": "69f5b8a14e1d6b9cb1e2a1bc",
+      "userId": "string",
+      "__v": 0,
+      "measurements": {},
+      "notes": "string",
+      "updatedAt": "2026-05-02T08:41:48.900Z"
+    }
+  ],
+  "boutiques": [
+    {
+      "_id": "69f1d49f54e6f6a7e249aa36",
+      "name": "Sai Ram",
+      "ownerName": "Kumar",
+      "description": "Register Complete Boutique Entity Fill in the comprehensive details to onboard a new boutique and generate owner credentials.  1. Basic Information Boutique Name * Sai Ram Owner Name * Kumar Boutique Description  Bridal and custom blouse specialist... Experience Years  e.g. 5+ Years Status Active Featured Boutique? 2. Contact Details Mobile Number * 9876543210 WhatsApp Number  9876543210 Email Address * sri@gmail.com 3. Location Details Full Address * Shop No. 12, Banjara Hills... Area / Locality  Banjara Hills City * Hyderabad State * Telangana Pincode  500034 Google Maps Link  https://maps.google.com/... Service Radius  Within 10 km 4. Business Hours Open Days  Mon-Sat Opening Time  11:00 AM Closing Time  8:00 PM Weekly Holiday  Sunday 5. Services & Specialities Services Offered (comma separated)  Custom blouse, bridal wear, sarees Work Specialty (comma separated)  Maggam work, hand embroidery 6. Features & Availability Pickup Available Delivery Available Tailor Home Visit Appointment Booking Rush Order Ava",
+      "experienceYears": "8+ Years",
+      "status": "Active",
+      "featuredBoutique": false,
+      "mobileNumber": "7660922416",
+      "whatsappNumber": "9123456789",
+      "email": "2100031261cser@gmail.com",
+      "fullAddress": "Plot 45, Ground Floor, Jubilee Hills Check Post, Road No. 36.",
+      "area": "Jubilee Hills",
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "pincode": "500033",
+      "googleMapsLink": "https://maps.app.goo.gl/gQEB7YBivPv13xvw6",
+      "serviceRadius": "Within 10 km",
+      "openDays": "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday",
+      "openingTime": "11:00 AM",
+      "closingTime": "08:00 PM",
+      "weeklyHoliday": "Sunday",
+      "servicesOffered": [
+        "Lehenga Stitching",
+        "Blouse Customization",
+        "Gown Alterations"
+      ],
+      "workTypeSpecialty": [
+        "Zardosi Work",
+        "Bead Work",
+        "Cut-work Embroidery"
+      ],
+      "pickupAvailable": true,
+      "deliveryAvailable": true,
+      "homeVisitAvailable": true,
+      "appointmentBookingAvailable": true,
+      "rushOrderAvailable": false,
+      "startingPrice": "₹750",
+      "turnaroundTime": "3-5 Days",
+      "instagramHandle": "@Sai_Ram",
+      "facebookPage": "",
+      "websiteLink": "",
+      "verificationDocuments": [
+        "https://drive.google.com/file/d/gst_doc_ab"
+      ],
+      "payoutDetails": "",
+      "internalNotes": "",
+      "rating": "0",
+      "createdAt": "2026-04-29T09:51:27.369Z",
+      "__v": 1,
+      "isDeleted": true,
+      "payoutStatus": "Pending",
+      "verified": true,
+      "deletedAt": "2026-05-02T18:15:05.838Z",
+      "happyClients": 0,
+      "media": {
+        "coverImage": "",
+        "gallery": [],
+        "logo": ""
+      },
+      "ownerIds": [],
+      "reviewsCount": 0,
+      "totalDesigns": 0
+    },
+    {
+      "_id": "69f203f2ceddcfe9b7035ef5",
+      "name": "Tiny Tucks",
+      "ownerName": "Sanjana Kapoor",
+      "description": "Custom-made ethnic wear for newborns to teenagers. We specialize in skin-friendly fabrics and comfortable festive wear.",
+      "experienceYears": null,
+      "status": "Active",
+      "featuredBoutique": true,
+      "verified": false,
+      "mobileNumber": "9052011447",
+      "whatsappNumber": "9052011447",
+      "email": "hello@tinytucks.com",
+      "fullAddress": "Shop G-4, Pearl Residency, Somajiguda Main Road.",
+      "area": "Somajiguda",
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "pincode": "500082",
+      "googleMapsLink": "https://maps.google.com/urban_dhaga_madhapur",
+      "serviceRadius": "Within 10 km",
+      "openDays": "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday",
+      "openingTime": "11:00 AM",
+      "closingTime": "08:00 PM",
+      "weeklyHoliday": "Sunday",
+      "servicesOffered": [],
+      "workTypeSpecialty": [
+        "Custom Blouse",
+        "Soft Cotton Lining"
+      ],
+      "pickupAvailable": true,
+      "deliveryAvailable": true,
+      "homeVisitAvailable": true,
+      "appointmentBookingAvailable": false,
+      "rushOrderAvailable": true,
+      "startingPrice": "766",
+      "turnaroundTime": "3-5 Days",
+      "instagramHandle": "@tinytucks_hyd",
+      "facebookPage": "facebook.com/tinytucks",
+      "websiteLink": "",
+      "verificationDocuments": [],
+      "payoutDetails": "",
+      "payoutStatus": "Pending",
+      "internalNotes": "",
+      "isDeleted": false,
+      "rating": "0",
+      "createdAt": "2026-04-29T13:13:22.928Z",
+      "__v": 1,
+      "ownerId": "69f203f3ceddcfe9b7035ef9",
+      "ownerIds": [
+        "69f203f3ceddcfe9b7035ef9"
+      ],
+      "happyClients": "",
+      "totalDesigns": "",
+      "reviewsCount": 0,
+      "media": {
+        "logo": "https://vs-boutique-images.s3.ap-south-1.amazonaws.com/uploads/logo/1777754714618-df96b370-7674-4c74-ac25-7c10eb32beed.png",
+        "coverImage": "",
+        "gallery": []
+      }
+    }
+  ]
+}
