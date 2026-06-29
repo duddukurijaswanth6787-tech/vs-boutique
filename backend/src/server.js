@@ -178,9 +178,11 @@ app.use('/api/v1/cms/orchestrator', require('./modules/ai-core/routes/ai.routes'
 app.use('/api/v1/cms/generator', require('./modules/website-generator/routes/generator.routes'));
 app.use('/api/v1/cms/certification', require('./modules/website-certification/routes/certification.routes'));
 app.use('/api/v1/marketplace', require('./modules/marketplace/routes/marketplace.routes'));
+// CMS system routes
 app.use('/api/v1/cms/standards', require('./modules/cms-standards/routes/standards.routes'));
 app.use('/api/v1/cms/requirements', require('./modules/cms-requirements/routes/requirements.routes'));
 app.use('/api/v1/cms/blueprints', require('./modules/cms-blueprints/routes/blueprints.routes'));
+app.use('/api/v1/cms/projects', require('./modules/cms-uploads/routes/uploads.routes'));
 
 
 /**

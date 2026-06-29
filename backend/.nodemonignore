@@ -1,0 +1,4 @@
+uploads/
+*.json
+*.zip
+*.log
