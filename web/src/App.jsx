@@ -96,7 +96,8 @@ const StudioApp = lazy(() => import('./studio/StudioApp'));
 // CMS Workspace Pages
 const CMSDashboard = lazy(() => import('./features/admin/cms/dashboard/pages/CMSDashboard'));
 const WebsiteBlueprint = lazy(() => import('./features/admin/cms/website-platform/pages/WebsiteBlueprint'));
-const WebsiteStandards = lazy(() => import('./features/admin/cms/website-platform/pages/WebsiteStandards'));
+const WebsiteStandards = lazy(() => import('./features/admin/cms/standards/pages/StandardsDashboard'));
+const RequirementsSelector = lazy(() => import('./features/admin/cms/requirements/pages/RequirementsSelector'));
 const WebsiteDevelopmentKit = lazy(() => import('./features/admin/cms/website-platform/pages/WebsiteDevelopmentKit'));
 const PromptLibrary = lazy(() => import('./features/admin/cms/website-platform/pages/PromptLibrary'));
 const AIRequirementGenerator = lazy(() => import('./features/admin/cms/website-platform/pages/AIRequirementGenerator'));
@@ -104,6 +105,7 @@ const AIWebsiteGenerator = lazy(() => import('./features/admin/cms/website-platf
 const UploadWebsite = lazy(() => import('./features/admin/cms/website-platform/pages/UploadWebsite'));
 const TemplateLibrary = lazy(() => import('./features/admin/cms/website-platform/pages/TemplateLibrary'));
 const AICertification = lazy(() => import('./features/admin/cms/ai-certification/pages/AICertification'));
+const MarketplaceHome = lazy(() => import('./features/admin/cms/marketplace/pages/MarketplaceHome'));
 const ValidationReports = lazy(() => import('./features/admin/cms/ai-certification/pages/ValidationReports'));
 const PromptGenerator = lazy(() => import('./features/admin/cms/ai-certification/pages/PromptGenerator'));
 const AIAgentsConfig = lazy(() => import('./features/admin/cms/ai-certification/pages/AIAgentsConfig'));
@@ -462,6 +464,14 @@ function AppRoutes() {
         } 
       />
       <Route 
+        path="/admin/cms/requirements" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><RequirementsSelector /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
         path="/admin/cms/sdk" 
         element={
           <ProtectedRoute allowedRoles={['super-admin']}>
@@ -514,6 +524,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute allowedRoles={['super-admin']}>
             <AdminLayout><AICertification /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/marketplace" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><MarketplaceHome /></AdminLayout>
           </ProtectedRoute>
         } 
       />

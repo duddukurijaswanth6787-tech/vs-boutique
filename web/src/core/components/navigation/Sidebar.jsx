@@ -158,6 +158,7 @@ const Sidebar = ({ activePage, setActivePage, isOpen, onClose }) => {
                         {[
                           { path: '/admin/cms/blueprint', label: 'Website Blueprint' },
                           { path: '/admin/cms/standards', label: 'Website Standards' },
+                          { path: '/admin/cms/requirements', label: 'Website Requirements' },
                           { path: '/admin/cms/sdk', label: 'Website Dev Kit (WDK)' },
                           { path: '/admin/cms/prompt-library', label: 'Prompt Library' },
                           { path: '/admin/cms/requirement-generator', label: 'AI Requirement Generator' },
@@ -189,6 +190,27 @@ const Sidebar = ({ activePage, setActivePage, isOpen, onClose }) => {
                           { path: '/admin/cms/prompt-generator', label: 'Prompt Generator' },
                           { path: '/admin/cms/agents', label: 'AI Agents' },
                           { path: '/admin/cms/rules', label: 'Certification Rules' },
+                        ].map((sub) => (
+                          <Link
+                            key={sub.path}
+                            to={sub.path}
+                            onClick={handleNavClick}
+                            className={`text-xs font-semibold py-1.5 px-2.5 rounded-lg transition-colors ${
+                              location.pathname === sub.path
+                                ? 'text-primary bg-primary/5 font-bold'
+                                : 'text-gray-500 hover:text-primary hover:bg-gray-50'
+                            }`}
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+
+                      {/* Submenu App Marketplace */}
+                      <div className="flex flex-col space-y-1">
+                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest px-2.5 mb-0.5">App Marketplace</span>
+                        {[
+                          { path: '/admin/cms/marketplace', label: 'Browse Marketplace' }
                         ].map((sub) => (
                           <Link
                             key={sub.path}

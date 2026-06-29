@@ -176,6 +176,8 @@ model Owner {
   ticketAdminNotes      SupportTicketAdminNote[]
   supportTickets        SupportTicket[]
 
+  marketplacePublishers MarketplacePublisher[]
+
   @@map("owners")
 }
 
@@ -1631,49 +1633,49 @@ enum ExchangeStatus {
 // ========================================================
 
 model AIKnowledgeBase {
-  id          String   @id @default(uuid())
-  key         String   @unique
-  value       String
-  tags        Json
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  tags      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model AIContext {
-  id             String          @id @default(uuid())
-  sessionId      String
-  activeAgentId  String
-  variables      Json
-  conversations  AIConversation[]
+  id            String           @id @default(uuid())
+  sessionId     String
+  activeAgentId String
+  variables     Json
+  conversations AIConversation[]
 }
 
 model AIConversation {
-  id          String   @id @default(uuid())
-  contextId   String
-  context     AIContext @relation(fields: [contextId], references: [id])
-  role        String   // 'system' | 'user' | 'assistant'
-  content     String
-  createdAt   DateTime @default(now())
+  id        String    @id @default(uuid())
+  contextId String
+  context   AIContext @relation(fields: [contextId], references: [id])
+  role      String // 'system' | 'user' | 'assistant'
+  content   String
+  createdAt DateTime  @default(now())
 }
 
 model AIArtifact {
-  id             String   @id @default(uuid())
-  version        String   // e.g. "v1.0.0"
-  checksum       String   // SHA256 of payload
-  createdByAgent String   // Agent ID
-  schemaVersion  String   @default("v1.0.0")
+  id               String   @id @default(uuid())
+  version          String // e.g. "v1.0.0"
+  checksum         String // SHA256 of payload
+  createdByAgent   String // Agent ID
+  schemaVersion    String   @default("v1.0.0")
   parentArtifactId String?
-  status         String   // 'Draft' | 'Finalized'
-  payload        Json
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  status           String // 'Draft' | 'Finalized'
+  payload          Json
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model AITool {
   id           String   @id @default(uuid())
   name         String   @unique
   description  String
-  category     String   // 'search' | 'code' | 'validator'
+  category     String // 'search' | 'code' | 'validator'
   inputSchema  Json
   outputSchema Json
   permissions  Json
@@ -1684,33 +1686,33 @@ model AITool {
 }
 
 model ApprovalRequest {
-  id             String           @id @default(uuid())
-  targetType     String           // 'Blueprint' | 'Standards' | 'Template'
-  targetId       String
-  status         ApprovalStatus   @default(PENDING_REVIEW)
-  requesterId    String
-  history        ApprovalHistory[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  id          String            @id @default(uuid())
+  targetType  String // 'Blueprint' | 'Standards' | 'Template'
+  targetId    String
+  status      ApprovalStatus    @default(PENDING_REVIEW)
+  requesterId String
+  history     ApprovalHistory[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
 }
 
 model ApprovalHistory {
-  id             String           @id @default(uuid())
-  requestId      String
-  request        ApprovalRequest  @relation(fields: [requestId], references: [id])
-  decision       String           // 'Approved' | 'Rejected'
-  comments       String?
-  reviewerId     String
-  createdAt      DateTime         @default(now())
+  id         String          @id @default(uuid())
+  requestId  String
+  request    ApprovalRequest @relation(fields: [requestId], references: [id])
+  decision   String // 'Approved' | 'Rejected'
+  comments   String?
+  reviewerId String
+  createdAt  DateTime        @default(now())
 }
 
 model AICacheRecord {
-  id             String   @id @default(uuid())
-  cacheKey       String   @unique // MD5 of prompt + schema
-  responseVal    String
-  ttl            Int
-  hits           Int      @default(0)
-  createdAt      DateTime @default(now())
+  id          String   @id @default(uuid())
+  cacheKey    String   @unique // MD5 of prompt + schema
+  responseVal String
+  ttl         Int
+  hits        Int      @default(0)
+  createdAt   DateTime @default(now())
 }
 
 model AIAgent {
@@ -1718,15 +1720,15 @@ model AIAgent {
   name             String
   description      String
   providerId       String
-  model            String         // e.g. "gemini-1.5-pro", "gpt-4o"
+  model            String // e.g. "gemini-1.5-pro", "gpt-4o"
   systemPrompt     String
   temperature      Float          @default(0.2)
   maxTokens        Int            @default(2048)
-  inputSchema      Json           // Expected input structure
-  outputSchema     Json           // Target JSON schema
+  inputSchema      Json // Expected input structure
+  outputSchema     Json // Target JSON schema
   enabled          Boolean        @default(true)
-  executionOrder   Int            // Sequence order: 1..12
-  retryPolicy      Json           // { maxRetries: 3, backoffMs: 1000 }
+  executionOrder   Int // Sequence order: 1..12
+  retryPolicy      Json // { maxRetries: 3, backoffMs: 1000 }
   timeout          Int            @default(30000) // ms
   promptTemplateId String
   promptTemplate   PromptTemplate @relation(fields: [promptTemplateId], references: [id])
@@ -1735,62 +1737,62 @@ model AIAgent {
 }
 
 model PromptTemplate {
-  id             String         @id @default(uuid())
+  id             String          @id @default(uuid())
   name           String
   activeVersion  String
-  variables      Json           // Array of variable tags
+  variables      Json // Array of variable tags
   promptsHistory PromptHistory[]
   agents         AIAgent[]
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }
 
 model PromptHistory {
-  id               String         @id @default(uuid())
-  templateId       String
-  template         PromptTemplate @relation(fields: [templateId], references: [id])
-  version          String         // e.g., "v1.2.0"
-  promptContent    String
-  changeNotes      String
-  author           String
-  createdAt        DateTime       @default(now())
+  id            String         @id @default(uuid())
+  templateId    String
+  template      PromptTemplate @relation(fields: [templateId], references: [id])
+  version       String // e.g., "v1.2.0"
+  promptContent String
+  changeNotes   String
+  author        String
+  createdAt     DateTime       @default(now())
 }
 
 model AISession {
-  id               String         @id @default(uuid())
-  businessName     String
-  vertical         String
-  status           SessionStatus  @default(IN_PROGRESS)
-  totalCost        Float          @default(0.0) // Aggregated USD
-  totalTokens      Int            @default(0)
-  executions       AIExecution[]
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  id           String        @id @default(uuid())
+  businessName String
+  vertical     String
+  status       SessionStatus @default(IN_PROGRESS)
+  totalCost    Float         @default(0.0) // Aggregated USD
+  totalTokens  Int           @default(0)
+  executions   AIExecution[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 model AIExecution {
-  id             String         @id @default(uuid())
-  sessionId      String
-  session        AISession      @relation(fields: [sessionId], references: [id])
-  agentId        String
-  status         ExecutionStatus @default(PENDING)
-  inputPayload   Json
-  outputPayload  Json?
-  tokensUsed     Int            @default(0)
-  latencyMs      Int            @default(0)
-  retryCount     Int            @default(0)
-  logs           AIExecutionLog[]
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  id            String           @id @default(uuid())
+  sessionId     String
+  session       AISession        @relation(fields: [sessionId], references: [id])
+  agentId       String
+  status        ExecutionStatus  @default(PENDING)
+  inputPayload  Json
+  outputPayload Json?
+  tokensUsed    Int              @default(0)
+  latencyMs     Int              @default(0)
+  retryCount    Int              @default(0)
+  logs          AIExecutionLog[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 }
 
 model AIExecutionLog {
-  id             String         @id @default(uuid())
-  executionId    String
-  execution      AIExecution    @relation(fields: [executionId], references: [id])
-  level          LogLevel       @default(INFO)
-  message        String
-  timestamp      DateTime       @default(now())
+  id          String      @id @default(uuid())
+  executionId String
+  execution   AIExecution @relation(fields: [executionId], references: [id])
+  level       LogLevel    @default(INFO)
+  message     String
+  timestamp   DateTime    @default(now())
 }
 
 enum SessionStatus {
@@ -1836,27 +1838,30 @@ model Tenant {
 
 // 2. Global Business Entity
 model Business {
-  id            String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  tenantId      String             @map("tenant_id")
-  tenant        Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  name          String             @db.VarChar(255)
-  nicheVertical String             @map("niche_vertical") @db.VarChar(100)
-  status        String             @default("ACTIVE")
-  boutique      Boutique?
-  websites      Website[]
-  mobileApps    MobileApp[]
-  plugins       BoutiquePlugin[]
-  users         UserRoleMapping[]
-  releases      ImmutableRelease[]
-  contentItems  UniversalContent[]
-  assets        AssetLibrary[]
-  themes        BoutiqueTheme[]
+  id                     String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  tenantId               String                  @map("tenant_id")
+  tenant                 Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name                   String                  @db.VarChar(255)
+  nicheVertical          String                  @map("niche_vertical") @db.VarChar(100)
+  status                 String                  @default("ACTIVE")
+  boutique               Boutique?
+  websites               Website[]
+  mobileApps             MobileApp[]
+  plugins                BoutiquePlugin[]
+  users                  UserRoleMapping[]
+  releases               ImmutableRelease[]
+  contentItems           UniversalContent[]
+  assets                 AssetLibrary[]
+  themes                 BoutiqueTheme[]
   certifications         BoutiqueCertification[]
   autofixQueue           AutoFixQueueItem[]
   certificationWorkflows CertificationWorkflow[]
   certificationProfiles  CertificationProfile[]
-  createdAt     DateTime           @default(now()) @map("created_at")
-  updatedAt     DateTime           @updatedAt @map("updated_at")
+  createdAt              DateTime                @default(now()) @map("created_at")
+  updatedAt              DateTime                @updatedAt @map("updated_at")
+
+  marketplaceInstallations MarketplaceInstallation[]
+  marketplaceLicenses      MarketplaceLicense[]
 
   @@map("businesses")
 }
@@ -1896,7 +1901,7 @@ model UniversalContent {
   key          String               @db.VarChar(100) // e.g. "hero-headline", "contact-phone"
   baseText     String               @db.Text
   translations ContentTranslation[]
-  seoTags      Json?                // { title, desc, keywords, ogImage }
+  seoTags      Json? // { title, desc, keywords, ogImage }
   version      Int                  @default(1)
   createdAt    DateTime             @default(now()) @map("created_at")
   updatedAt    DateTime             @updatedAt @map("updated_at")
@@ -1906,14 +1911,14 @@ model UniversalContent {
 }
 
 model ContentTranslation {
-  id               String           @id @default(uuid())
-  contentId        String           @map("content_id")
-  content          UniversalContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
-  locale           String           @db.VarChar(10) // e.g. "es", "fr", "hi"
-  translatedText   String           @db.Text
-  translatedSeo    Json?
-  createdAt        DateTime         @default(now()) @map("created_at")
-  updatedAt        DateTime         @updatedAt @map("updated_at")
+  id             String           @id @default(uuid())
+  contentId      String           @map("content_id")
+  content        UniversalContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  locale         String           @db.VarChar(10) // e.g. "es", "fr", "hi"
+  translatedText String           @db.Text
+  translatedSeo  Json?
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
 
   @@unique([contentId, locale])
   @@map("content_translations")
@@ -1921,89 +1926,89 @@ model ContentTranslation {
 
 // 5. Central Asset Management Library
 model AssetLibrary {
-  id         String     @id @default(uuid())
-  businessId String     @map("business_id") @db.Uuid
-  business   Business   @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  name       String     @db.VarChar(255)
-  type       String     @db.VarChar(50) // IMAGE, VIDEO, FONT, EMBROIDERY
-  url        String     @db.VarChar(512)
-  version    Int        @default(1)
-  meta       Json       // { sizeBytes, mimeType, compressionUrl, s3Bucket, cdnUrl }
-  isAi       Boolean    @default(false) @map("is_ai")
-  promptLog  String?    @map("prompt_log") @db.Text
-  createdAt  DateTime   @default(now()) @map("created_at")
-  updatedAt  DateTime   @updatedAt @map("updated_at")
+  id         String   @id @default(uuid())
+  businessId String   @map("business_id") @db.Uuid
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name       String   @db.VarChar(255)
+  type       String   @db.VarChar(50) // IMAGE, VIDEO, FONT, EMBROIDERY
+  url        String   @db.VarChar(512)
+  version    Int      @default(1)
+  meta       Json // { sizeBytes, mimeType, compressionUrl, s3Bucket, cdnUrl }
+  isAi       Boolean  @default(false) @map("is_ai")
+  promptLog  String?  @map("prompt_log") @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
   @@map("asset_libraries")
 }
 
 // 6. Dynamic AI Agent Registry
 model AIAgentRegistry {
-  id               String               @id @default(uuid())
-  name             String               @unique @db.VarChar(100)
-  role             String               @db.VarChar(100)
-  promptTemplate   String               @db.Text
-  requiredInputs   Json                 // Array of parameter key tags
-  producedOutputs  Json                 // Target validation schemas
-  dependencies     String[]             // Dependent agent ids
-  retryPolicy      Json                 // { maxAttempts, backoffMs }
-  estimatedCost    Float                @default(0.0)
-  estimatedTokens  Int                  @default(0)
-  timeoutMs        Int                  @default(30000)
-  tasks            WorkflowTask[]
-  createdAt        DateTime             @default(now()) @map("created_at")
+  id              String         @id @default(uuid())
+  name            String         @unique @db.VarChar(100)
+  role            String         @db.VarChar(100)
+  promptTemplate  String         @db.Text
+  requiredInputs  Json // Array of parameter key tags
+  producedOutputs Json // Target validation schemas
+  dependencies    String[] // Dependent agent ids
+  retryPolicy     Json // { maxAttempts, backoffMs }
+  estimatedCost   Float          @default(0.0)
+  estimatedTokens Int            @default(0)
+  timeoutMs       Int            @default(30000)
+  tasks           WorkflowTask[]
+  createdAt       DateTime       @default(now()) @map("created_at")
 
   @@map("ai_agent_registry")
 }
 
 // 7. Workflow Engine
 model WorkflowDefinition {
-  id          String           @id @default(uuid())
-  name        String           @unique @db.VarChar(100) // "Website Generation", "SEO Audit"
+  id          String              @id @default(uuid())
+  name        String              @unique @db.VarChar(100) // "Website Generation", "SEO Audit"
   description String?
   stages      WorkflowStage[]
   executions  WorkflowExecution[]
-  createdAt   DateTime         @default(now()) @map("created_at")
+  createdAt   DateTime            @default(now()) @map("created_at")
 
   @@map("workflow_definitions")
 }
 
 model WorkflowStage {
-  id           String             @id @default(uuid())
-  workflowId   String             @map("workflow_id")
-  workflow     WorkflowDefinition @relation(fields: [workflowId], references: [id], onDelete: Cascade)
-  name         String             @db.VarChar(100)
-  order        Int
-  tasks        WorkflowTask[]
-  createdAt    DateTime           @default(now()) @map("created_at")
+  id         String             @id @default(uuid())
+  workflowId String             @map("workflow_id")
+  workflow   WorkflowDefinition @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  name       String             @db.VarChar(100)
+  order      Int
+  tasks      WorkflowTask[]
+  createdAt  DateTime           @default(now()) @map("created_at")
 
   @@map("workflow_stages")
 }
 
 model WorkflowTask {
-  id            String          @id @default(uuid())
-  stageId       String          @map("stage_id")
-  stage         WorkflowStage   @relation(fields: [stageId], references: [id], onDelete: Cascade)
-  name          String          @db.VarChar(100)
-  order         Int
-  agentId       String?         @map("agent_id")
-  agent         AIAgentRegistry? @relation(fields: [agentId], references: [id])
-  artifactType  String          @map("artifact_type") // e.g. "styling.json"
-  dependencies  String[]
-  createdAt     DateTime        @default(now()) @map("created_at")
+  id           String           @id @default(uuid())
+  stageId      String           @map("stage_id")
+  stage        WorkflowStage    @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  name         String           @db.VarChar(100)
+  order        Int
+  agentId      String?          @map("agent_id")
+  agent        AIAgentRegistry? @relation(fields: [agentId], references: [id])
+  artifactType String           @map("artifact_type") // e.g. "styling.json"
+  dependencies String[]
+  createdAt    DateTime         @default(now()) @map("created_at")
 
   @@map("workflow_tasks")
 }
 
 model WorkflowExecution {
-  id          String             @id @default(uuid())
-  workflowId  String             @map("workflow_id")
-  workflow    WorkflowDefinition @relation(fields: [workflowId], references: [id], onDelete: Cascade)
-  status      String             @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
-  payload     Json               // Input parameters
-  progress    Float              @default(0.0)
-  createdAt   DateTime           @default(now()) @map("created_at")
-  updatedAt   DateTime           @updatedAt @map("updated_at")
+  id         String             @id @default(uuid())
+  workflowId String             @map("workflow_id")
+  workflow   WorkflowDefinition @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  status     String             @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
+  payload    Json // Input parameters
+  progress   Float              @default(0.0)
+  createdAt  DateTime           @default(now()) @map("created_at")
+  updatedAt  DateTime           @updatedAt @map("updated_at")
 
   @@map("workflow_executions")
 }
@@ -2029,16 +2034,16 @@ model BoutiqueTheme {
 
 // 9. Sitemap Pages
 model BoutiquePage {
-  id         String            @id @default(uuid())
-  websiteId  String            @map("website_id")
-  website    Website           @relation(fields: [websiteId], references: [id], onDelete: Cascade)
-  title      String            @db.VarChar(255)
-  slug       String            @db.VarChar(100)
-  isEnabled  Boolean           @default(true) @map("is_enabled")
-  status     String            @default("DRAFT")
+  id         String              @id @default(uuid())
+  websiteId  String              @map("website_id")
+  website    Website             @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  title      String              @db.VarChar(255)
+  slug       String              @db.VarChar(100)
+  isEnabled  Boolean             @default(true) @map("is_enabled")
+  status     String              @default("DRAFT")
   components PageComponentNode[]
-  createdAt  DateTime          @default(now()) @map("created_at")
-  updatedAt  DateTime          @updatedAt @map("updated_at")
+  createdAt  DateTime            @default(now()) @map("created_at")
+  updatedAt  DateTime            @updatedAt @map("updated_at")
 
   @@unique([websiteId, slug])
   @@map("boutique_pages")
@@ -2046,13 +2051,13 @@ model BoutiquePage {
 
 // 10. Page Component Nodes Tree
 model PageComponentNode {
-  id                 String            @id @default(uuid())
-  pageId             String            @map("page_id")
-  page               BoutiquePage      @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  parentId           String?           @map("parent_id")
-  name               String            @db.VarChar(100)
-  type               String            @db.VarChar(100)
-  variant            String            @default("default") @db.VarChar(50)
+  id                 String       @id @default(uuid())
+  pageId             String       @map("page_id")
+  page               BoutiquePage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  parentId           String?      @map("parent_id")
+  name               String       @db.VarChar(100)
+  type               String       @db.VarChar(100)
+  variant            String       @default("default") @db.VarChar(50)
   order              Int
   styleTokens        Json
   editableProperties Json
@@ -2060,10 +2065,10 @@ model PageComponentNode {
   animations         Json?
   visibilityRules    Json?
   permissions        Json?
-  contentKeysBind    Json              // Array of UniversalContent key pointers e.g. ["hero-headline"]
-  dataSourceBind     String?           @map("data_source_bind") @db.VarChar(100)
-  createdAt          DateTime          @default(now()) @map("created_at")
-  updatedAt          DateTime          @updatedAt @map("updated_at")
+  contentKeysBind    Json // Array of UniversalContent key pointers e.g. ["hero-headline"]
+  dataSourceBind     String?      @map("data_source_bind") @db.VarChar(100)
+  createdAt          DateTime     @default(now()) @map("created_at")
+  updatedAt          DateTime     @updatedAt @map("updated_at")
 
   @@map("page_component_nodes")
 }
@@ -2106,7 +2111,7 @@ model ImmutableRelease {
   releaseTag  String   @map("release_tag") @db.VarChar(50)
   status      String   @default("DRAFT") // DRAFT, QA, APPROVED, PUBLISHED, ARCHIVED
   environment String   @default("DEV")
-  payloadDump Json     // Complete config state
+  payloadDump Json // Complete config state
   checksum    String   @db.VarChar(64)
   createdBy   String   @map("created_by")
   createdAt   DateTime @default(now()) @map("created_at")
@@ -2117,12 +2122,12 @@ model ImmutableRelease {
 
 // 14. Marketplace Installed Catalog
 model MarketplaceInstall {
-  id          String   @id @default(uuid())
-  businessId  String   @map("business_id") @db.Uuid
-  itemKey     String   @map("item_key") @db.VarChar(100) // componentId, themeId, pluginId
-  type        String   @db.VarChar(50) // COMPONENT, THEME, PLUGIN, WORKFLOW
-  version     String   @db.VarChar(50)
-  createdAt   DateTime @default(now()) @map("created_at")
+  id         String   @id @default(uuid())
+  businessId String   @map("business_id") @db.Uuid
+  itemKey    String   @map("item_key") @db.VarChar(100) // componentId, themeId, pluginId
+  type       String   @db.VarChar(50) // COMPONENT, THEME, PLUGIN, WORKFLOW
+  version    String   @db.VarChar(50)
+  createdAt  DateTime @default(now()) @map("created_at")
 
   @@unique([businessId, itemKey])
   @@map("marketplace_installs")
@@ -2161,7 +2166,7 @@ model CertificationWorkflowDefinition {
   version        String                  @db.VarChar(50) // e.g. "v1.0.0", "v1.1.0"
   isEnabled      Boolean                 @default(true) @map("is_enabled")
   targetType     String                  @default("WEBSITE") @map("target_type") // WEBSITE, MOBILE_APP, LANDING_PAGE
-  stages         Json                    // Array of stage specs: stageId, stageName, executionOrder, agentKey, retryPolicy, timeout, dependsOn, parallel, outputSchema
+  stages         Json // Array of stage specs: stageId, stageName, executionOrder, agentKey, retryPolicy, timeout, dependsOn, parallel, outputSchema
   rollbackPolicy Json                    @map("rollback_policy")
   workflows      CertificationWorkflow[]
   createdAt      DateTime                @default(now()) @map("created_at")
@@ -2173,56 +2178,56 @@ model CertificationWorkflowDefinition {
 
 // 17. Certification Workflows Trackers & Execution History
 model CertificationWorkflow {
-  id           String                          @id @default(uuid())
-  businessId   String                          @map("business_id") @db.Uuid
-  business     Business                        @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  releaseTag   String                          @map("release_tag") @db.VarChar(50)
-  
+  id         String   @id @default(uuid())
+  businessId String   @map("business_id") @db.Uuid
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  releaseTag String   @map("release_tag") @db.VarChar(50)
+
   definitionId String                          @map("definition_id")
   definition   CertificationWorkflowDefinition @relation(fields: [definitionId], references: [id])
-  
-  status       String                          @default("PENDING") // PENDING, RUNNING, COMPLETED, FAILED
-  progress     Float                           @default(0.0)
-  currentStage String                          @default("INITIALIZING") @map("current_stage")
-  
+
+  status       String @default("PENDING") // PENDING, RUNNING, COMPLETED, FAILED
+  progress     Float  @default(0.0)
+  currentStage String @default("INITIALIZING") @map("current_stage")
+
   // Execution Telemetry History array: stageId, startedAt, finishedAt, duration, retryCount, status, logs, tokens, model, cost, outputChecksum
-  executionHistory Json                        @map("execution_history")
-  
-  createdAt    DateTime                        @default(now()) @map("created_at")
-  updatedAt    DateTime                        @updatedAt @map("updated_at")
+  executionHistory Json @map("execution_history")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("certification_workflows")
 }
 
 // 18. Dynamic QA Agent Registry
 model QAAgentRegistry {
-  id            String   @id @default(uuid())
-  agentKey      String   @unique @map("agent_key") @db.VarChar(100) // e.g. "seo_crawler", "wcag_accessibility"
-  name          String   @db.VarChar(150)
-  category      String   @db.VarChar(100) // PERFORMANCE, SEO, ACCESSIBILITY, SECURITY, BRAND, UX
-  executionOrder Int     @map("execution_order")
-  isEnabled     Boolean  @default(true) @map("is_enabled")
-  version       String   @db.VarChar(50)
-  timeoutMs     Int      @default(10000) @map("timeout_ms")
-  configuration Json     // Custom configuration options (parameters, thresholds)
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id             String   @id @default(uuid())
+  agentKey       String   @unique @map("agent_key") @db.VarChar(100) // e.g. "seo_crawler", "wcag_accessibility"
+  name           String   @db.VarChar(150)
+  category       String   @db.VarChar(100) // PERFORMANCE, SEO, ACCESSIBILITY, SECURITY, BRAND, UX
+  executionOrder Int      @map("execution_order")
+  isEnabled      Boolean  @default(true) @map("is_enabled")
+  version        String   @db.VarChar(50)
+  timeoutMs      Int      @default(10000) @map("timeout_ms")
+  configuration  Json // Custom configuration options (parameters, thresholds)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
 
   @@map("qa_agent_registries")
 }
 
 // 19. Certification Profiles & Weighted Scoring Rules
 model CertificationProfile {
-  id           String                 @id @default(uuid())
-  businessId   String?                @map("business_id") @db.Uuid // Nullable for global platform templates
-  business     Business?              @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  name         String                 @db.VarChar(100) // e.g. "Ecommerce", "Standard", "Enterprise"
-  isActive     Boolean                @default(false) @map("is_active")
-  agentWeights Json                   // Key-value weights map: { "seo_crawler": 0.3, "wcag_accessibility": 0.2 }
-  thresholds   Json                   // Key-value criteria: { "minSeoScore": 80.0, "minOverall": 75.0 }
+  id             String                  @id @default(uuid())
+  businessId     String?                 @map("business_id") @db.Uuid // Nullable for global platform templates
+  business       Business?               @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name           String                  @db.VarChar(100) // e.g. "Ecommerce", "Standard", "Enterprise"
+  isActive       Boolean                 @default(false) @map("is_active")
+  agentWeights   Json // Key-value weights map: { "seo_crawler": 0.3, "wcag_accessibility": 0.2 }
+  thresholds     Json // Key-value criteria: { "minSeoScore": 80.0, "minOverall": 75.0 }
   certifications BoutiqueCertification[]
-  createdAt    DateTime               @default(now()) @map("created_at")
-  updatedAt    DateTime               @updatedAt @map("updated_at")
+  createdAt      DateTime                @default(now()) @map("created_at")
+  updatedAt      DateTime                @updatedAt @map("updated_at")
 
   @@unique([businessId, name])
   @@map("certification_profiles")
@@ -2230,26 +2235,26 @@ model CertificationProfile {
 
 // 20. Boutique Certification Reports
 model BoutiqueCertification {
-  id                 String               @id @default(uuid())
-  businessId         String               @map("business_id") @db.Uuid
-  business           Business             @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  targetType         String               @default("WEBSITE") // WEBSITE, MOBILE_APP, LANDING_PAGE, TEMPLATE, COMPONENT
-  targetId           String               @map("target_id")
-  releaseTag         String               @map("release_tag") @db.VarChar(50)
-  
-  profileId          String               @map("profile_id")
-  profile            CertificationProfile @relation(fields: [profileId], references: [id])
-  
-  overallScore       Float                @map("overall_score")
-  scoresMap          Json                 // Dynamic mapped scores per agent: { "seo_crawler": 95.0, "performance_agent": 87.0 }
-  agentRuns          Json                 // Detailed agent metrics: executionTime, tokens, model, cost, warnings, errors, scoreContribution
-  
-  issues             Json                 // List of issues with Auto-Fix Safety Levels
-  suggestions        Json                 // Optimization recommendations
-  visualArtifacts    Json                 // Headless review screenshots
-  
-  status             CertificationStatus  @default(DRAFT)
-  createdAt          DateTime             @default(now()) @map("created_at")
+  id         String   @id @default(uuid())
+  businessId String   @map("business_id") @db.Uuid
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  targetType String   @default("WEBSITE") // WEBSITE, MOBILE_APP, LANDING_PAGE, TEMPLATE, COMPONENT
+  targetId   String   @map("target_id")
+  releaseTag String   @map("release_tag") @db.VarChar(50)
+
+  profileId String               @map("profile_id")
+  profile   CertificationProfile @relation(fields: [profileId], references: [id])
+
+  overallScore Float @map("overall_score")
+  scoresMap    Json // Dynamic mapped scores per agent: { "seo_crawler": 95.0, "performance_agent": 87.0 }
+  agentRuns    Json // Detailed agent metrics: executionTime, tokens, model, cost, warnings, errors, scoreContribution
+
+  issues          Json // List of issues with Auto-Fix Safety Levels
+  suggestions     Json // Optimization recommendations
+  visualArtifacts Json // Headless review screenshots
+
+  status    CertificationStatus @default(DRAFT)
+  createdAt DateTime            @default(now()) @map("created_at")
 
   @@unique([businessId, targetId, releaseTag])
   @@map("boutique_certifications")
@@ -2257,18 +2262,18 @@ model BoutiqueCertification {
 
 // 21. Auto-Fix Queue Mappings
 model AutoFixQueueItem {
-  id             String        @id @default(uuid())
-  businessId     String        @map("business_id") @db.Uuid
-  business       Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  releaseTag     String        @map("release_tag") @db.VarChar(50)
-  issueKey       String        @map("issue_key") @db.VarChar(100)
-  safetyLevel    SafetyLevel   @default(SUGGESTED)
-  description    String        @db.Text
-  proposedChange Json          // Target database records and fields modifications
-  status         QueueStatus   @default(PENDING) // PENDING, APPROVED, REJECTED, APPLIED
-  reviewedBy     String?       @map("reviewed_by")
-  reviewedAt     DateTime?     @map("reviewed_at")
-  createdAt      DateTime      @default(now()) @map("created_at")
+  id             String      @id @default(uuid())
+  businessId     String      @map("business_id") @db.Uuid
+  business       Business    @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  releaseTag     String      @map("release_tag") @db.VarChar(50)
+  issueKey       String      @map("issue_key") @db.VarChar(100)
+  safetyLevel    SafetyLevel @default(SUGGESTED)
+  description    String      @db.Text
+  proposedChange Json // Target database records and fields modifications
+  status         QueueStatus @default(PENDING) // PENDING, APPROVED, REJECTED, APPLIED
+  reviewedBy     String?     @map("reviewed_by")
+  reviewedAt     DateTime?   @map("reviewed_at")
+  createdAt      DateTime    @default(now()) @map("created_at")
 
   @@map("autofix_queue_items")
 }
@@ -2304,4 +2309,431 @@ enum QueueStatus {
   APPROVED
   REJECTED
   APPLIED
+}
+
+// ==================================================
+// PHASE 8B: ENTERPRISE MARKETPLACE SCHEMAS
+// ==================================================
+
+enum MarketplacePackageStatus {
+  DRAFT
+  IN_MODERATION
+  APPROVED
+  REJECTED
+}
+
+enum MarketplaceLicenseStatus {
+  ACTIVE
+  EXPIRED
+  SUSPENDED
+}
+
+enum PublisherRole {
+  DEVELOPER
+  ADMIN
+}
+
+model MarketplacePublisher {
+  id         String               @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  ownerId    String               @map("owner_id") @db.Uuid
+  owner      Owner                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  name       String               @db.VarChar(255)
+  email      String               @unique @db.VarChar(255)
+  website    String?              @db.VarChar(255)
+  role       PublisherRole        @default(DEVELOPER)
+  isVerified Boolean              @default(false) @map("is_verified")
+  packages   MarketplacePackage[]
+  createdAt  DateTime             @default(now()) @map("created_at")
+  updatedAt  DateTime             @updatedAt @map("updated_at")
+
+  @@map("marketplace_publishers")
+}
+
+model MarketplacePackage {
+  id            String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  publisherId   String                    @map("publisher_id") @db.Uuid
+  publisher     MarketplacePublisher      @relation(fields: [publisherId], references: [id], onDelete: Cascade)
+  name          String                    @db.VarChar(255)
+  slug          String                    @unique @db.VarChar(150)
+  description   String                    @db.Text
+  status        MarketplacePackageStatus  @default(DRAFT)
+  ratingsAvg    Float                     @default(0.0) @map("ratings_avg")
+  reviewsCount  Int                       @default(0) @map("reviews_count")
+  downloads     Int                       @default(0)
+  versions      MarketplaceVersion[]
+  installations MarketplaceInstallation[]
+  licenses      MarketplaceLicense[]
+  reviews       MarketplaceReview[]
+  createdAt     DateTime                  @default(now()) @map("created_at")
+  updatedAt     DateTime                  @updatedAt @map("updated_at")
+
+  @@index([status, createdAt])
+  @@map("marketplace_packages")
+}
+
+model MarketplaceVersion {
+  id            String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  packageId     String                    @map("package_id") @db.Uuid
+  package       MarketplacePackage        @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  version       String                    @db.VarChar(50) // SemVer
+  manifestJson  Json                      @map("manifest_json")
+  downloadUrl   String                    @map("download_url") @db.VarChar(512)
+  checksum      String                    @db.VarChar(256)
+  capabilities  MarketplaceCapability[]
+  dependencies  MarketplaceDependency[]
+  installations MarketplaceInstallation[]
+  createdAt     DateTime                  @default(now()) @map("created_at")
+
+  @@unique([packageId, version])
+  @@map("marketplace_versions")
+}
+
+model MarketplaceCapability {
+  id           String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  versionId    String             @map("version_id") @db.Uuid
+  version      MarketplaceVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  type         String             @db.VarChar(100) // e.g. "web-component", "ai-agent"
+  handlerPath  String             @map("handler_path") @db.VarChar(255)
+  configSchema Json               @map("config_schema")
+
+  @@index([type])
+  @@map("marketplace_capabilities")
+}
+
+model MarketplaceDependency {
+  id                String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  versionId         String             @map("version_id") @db.Uuid
+  version           MarketplaceVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  dependencySlug    String             @map("dependency_slug") @db.VarChar(150)
+  versionConstraint String             @map("version_constraint") @db.VarChar(100)
+
+  @@map("marketplace_dependencies")
+}
+
+model MarketplaceInstallation {
+  id                 String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  businessId         String             @map("business_id") @db.Uuid
+  business           Business           @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  packageId          String             @map("package_id") @db.Uuid
+  package            MarketplacePackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  installedVersionId String             @map("installed_version_id") @db.Uuid
+  installedVersion   MarketplaceVersion @relation(fields: [installedVersionId], references: [id], onDelete: Cascade)
+  isEnabled          Boolean            @default(true) @map("is_enabled")
+  settingsJson       Json?              @map("settings_json")
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+
+  @@unique([businessId, packageId])
+  @@map("marketplace_installations")
+}
+
+model MarketplaceLicense {
+  id         String                   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  businessId String                   @map("business_id") @db.Uuid
+  business   Business                 @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  packageId  String                   @map("package_id") @db.Uuid
+  package    MarketplacePackage       @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  licenseKey String                   @unique @map("license_key") @db.VarChar(255)
+  status     MarketplaceLicenseStatus @default(ACTIVE)
+  expiresAt  DateTime?                @map("expires_at")
+  createdAt  DateTime                 @default(now()) @map("created_at")
+
+  @@map("marketplace_licenses")
+}
+
+model MarketplaceReview {
+  id         String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  packageId  String             @map("package_id") @db.Uuid
+  package    MarketplacePackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  businessId String             @map("business_id") @db.Uuid
+  rating     Int
+  comment    String?            @db.Text
+  createdAt  DateTime           @default(now()) @map("created_at")
+
+  @@unique([businessId, packageId])
+  @@map("marketplace_reviews")
+}
+
+enum CmsStandardStatus {
+  DRAFT
+  TESTING
+  PUBLISHED
+  DEPRECATED
+  ARCHIVED
+}
+
+model CmsStandard {
+  id                 String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  category           String                 @db.VarChar(100)
+  key                String                 @unique @db.VarChar(150)
+  name               String                 @db.VarChar(255)
+  status             CmsStandardStatus      @default(DRAFT)
+  version            Int                    @default(1)
+  isEnabled          Boolean                @default(true) @map("is_enabled")
+  parentId           String?                @map("parent_id") @db.Uuid
+  parent             CmsStandard?           @relation("StandardInheritance", fields: [parentId], references: [id])
+  children           CmsStandard[]          @relation("StandardInheritance")
+  config             Json
+  isDeleted          Boolean                @default(false) @map("is_deleted")
+  versions           CmsStandardVersion[]
+  blueprintTemplates CmsBlueprintTemplate[]
+  builderProfiles    CmsBuilderProfile[]
+  createdAt          DateTime               @default(now()) @map("created_at")
+  updatedAt          DateTime               @updatedAt @map("updated_at")
+
+  @@map("cms_standards")
+}
+
+model CmsStandardVersion {
+  id          String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  standardId  String            @map("standard_id") @db.Uuid
+  standard    CmsStandard       @relation(fields: [standardId], references: [id], onDelete: Cascade)
+  version     Int
+  config      Json
+  status      CmsStandardStatus
+  description String?           @db.Text
+  createdBy   String            @map("created_by") @db.Uuid
+  createdAt   DateTime          @default(now()) @map("created_at")
+
+  @@unique([standardId, version])
+  @@map("cms_standard_versions")
+}
+
+model CmsBlueprintTemplate {
+  id                String                        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  key               String                        @unique @db.VarChar(150)
+  name              String                        @db.VarChar(255)
+  status            CmsStandardStatus             @default(DRAFT)
+  version           Int                           @default(1)
+  standardId        String?                       @map("standard_id") @db.Uuid
+  standard          CmsStandard?                  @relation(fields: [standardId], references: [id])
+  pages             Json
+  components        Json
+  apis              Json
+  databaseModels    Json
+  features          Json
+  isEnabled         Boolean                       @default(true) @map("is_enabled")
+  isDeleted         Boolean                       @default(false) @map("is_deleted")
+  versions          CmsBlueprintTemplateVersion[]
+  blueprintPages    CmsBlueprintPage[]
+  blueprintApis     CmsBlueprintApi[]
+  blueprintFeatures CmsBlueprintFeature[]
+  createdAt         DateTime                      @default(now()) @map("created_at")
+  updatedAt         DateTime                      @updatedAt @map("updated_at")
+
+  @@map("cms_blueprint_templates")
+}
+
+model CmsBlueprintTemplateVersion {
+  id                  String               @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  blueprintTemplateId String               @map("blueprint_template_id") @db.Uuid
+  blueprintTemplate   CmsBlueprintTemplate @relation(fields: [blueprintTemplateId], references: [id], onDelete: Cascade)
+  version             Int
+  pages               Json
+  components          Json
+  apis                Json
+  databaseModels      Json
+  features            Json
+  status              CmsStandardStatus
+  description         String?              @db.Text
+  createdBy           String               @map("created_by") @db.Uuid
+  createdAt           DateTime             @default(now()) @map("created_at")
+
+  @@unique([blueprintTemplateId, version])
+  @@map("cms_blueprint_template_versions")
+}
+
+model CmsBuilderProfile {
+  id              String                     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  key             String                     @unique @db.VarChar(150)
+  name            String                     @db.VarChar(255)
+  status          CmsStandardStatus          @default(DRAFT)
+  version         Int                        @default(1)
+  standardId      String?                    @map("standard_id") @db.Uuid
+  standard        CmsStandard?               @relation(fields: [standardId], references: [id])
+  framework       String                     @db.VarChar(100)
+  promptTemplate  String                     @db.Text
+  folderStructure Json
+  limitations     Json
+  isEnabled       Boolean                    @default(true) @map("is_enabled")
+  isDeleted       Boolean                    @default(false) @map("is_deleted")
+  versions        CmsBuilderProfileVersion[]
+  createdAt       DateTime                   @default(now()) @map("created_at")
+  updatedAt       DateTime                   @updatedAt @map("updated_at")
+
+  @@map("cms_builder_profiles")
+}
+
+model CmsBuilderProfileVersion {
+  id               String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  builderProfileId String            @map("builder_profile_id") @db.Uuid
+  builderProfile   CmsBuilderProfile @relation(fields: [builderProfileId], references: [id], onDelete: Cascade)
+  version          Int
+  framework        String            @db.VarChar(100)
+  promptTemplate   String            @db.Text
+  folderStructure  Json
+  limitations      Json
+  status           CmsStandardStatus
+  description      String?           @db.Text
+  createdBy        String            @map("created_by") @db.Uuid
+  createdAt        DateTime          @default(now()) @map("created_at")
+
+  @@unique([builderProfileId, version])
+  @@map("cms_builder_profile_versions")
+}
+
+model CmsStandardAuditLog {
+  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  standardId String?  @map("standard_id") @db.Uuid
+  action     String   @db.VarChar(50)
+  userId     String   @map("user_id") @db.Uuid
+  oldValue   Json?    @map("old_value")
+  newValue   Json?    @map("new_value")
+  ipAddress  String   @map("ip_address") @db.VarChar(45)
+  reason     String?  @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("cms_standard_audit_logs")
+}
+
+enum CmsRequirementStatus {
+  DRAFT
+  REVIEW
+  APPROVED
+  ACTIVE
+  DEPRECATED
+  ARCHIVED
+}
+
+enum CmsRequirementRelationType {
+  DEPENDS_ON
+  REQUIRES
+  CONFLICTS_WITH
+  OPTIONAL_WITH
+  RECOMMENDED_WITH
+  REPLACES
+  DEPRECATED_BY
+}
+
+model CmsRequirement {
+  id                  String                       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  key                 String                       @unique @db.VarChar(150)
+  name                String                       @db.VarChar(255)
+  category            String                       @db.VarChar(100)
+  description         String?                      @db.Text
+  status              CmsRequirementStatus         @default(DRAFT)
+  version             Int                          @default(1)
+  priority            Int                          @default(3)
+  criticality         Int                          @default(3)
+  businessValue       Int                          @default(3) @map("business_value")
+  developmentCost     Int                          @default(3) @map("development_cost")
+  aiComplexity        Int                          @default(3) @map("ai_complexity")
+  verificationWeight  Float                        @default(1.0) @map("verification_weight")
+  certificationWeight Float                        @default(1.0) @map("certification_weight")
+  configSchema        Json                         @map("config_schema")
+  isDeleted           Boolean                      @default(false) @map("is_deleted")
+  versions            CmsRequirementVersion[]
+  templateJoins       CmsTemplateRequirementJoin[]
+  blueprintFeatures   CmsBlueprintFeature[]
+  sourceRelations     CmsRequirementRelation[]     @relation("SourceRelations")
+  targetRelations     CmsRequirementRelation[]     @relation("TargetRelations")
+  createdAt           DateTime                     @default(now()) @map("created_at")
+  updatedAt           DateTime                     @updatedAt @map("updated_at")
+
+  @@map("cms_requirements")
+}
+
+model CmsRequirementVersion {
+  id            String               @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  requirementId String               @map("requirement_id") @db.Uuid
+  requirement   CmsRequirement       @relation(fields: [requirementId], references: [id], onDelete: Cascade)
+  version       Int
+  configSchema  Json                 @map("config_schema")
+  status        CmsRequirementStatus
+  description   String?              @db.Text
+  createdBy     String               @map("created_by") @db.Uuid
+  createdAt     DateTime             @default(now()) @map("created_at")
+
+  @@unique([requirementId, version])
+  @@map("cms_requirement_versions")
+}
+
+model CmsRequirementRelation {
+  id                  String                     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  sourceRequirementId String                     @map("source_requirement_id") @db.Uuid
+  sourceRequirement   CmsRequirement             @relation("SourceRelations", fields: [sourceRequirementId], references: [id], onDelete: Cascade)
+  targetRequirementId String                     @map("target_requirement_id") @db.Uuid
+  targetRequirement   CmsRequirement             @relation("TargetRelations", fields: [targetRequirementId], references: [id], onDelete: Cascade)
+  type                CmsRequirementRelationType
+
+  @@unique([sourceRequirementId, targetRequirementId, type])
+  @@map("cms_requirement_relations")
+}
+
+model CmsRequirementTemplate {
+  id           String                       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  key          String                       @unique @db.VarChar(150)
+  name         String                       @db.VarChar(255)
+  description  String?                      @db.Text
+  requirements CmsTemplateRequirementJoin[]
+  createdAt    DateTime                     @default(now()) @map("created_at")
+  updatedAt    DateTime                     @updatedAt @map("updated_at")
+
+  @@map("cms_requirement_templates")
+}
+
+model CmsTemplateRequirementJoin {
+  id            String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  templateId    String                 @map("template_id") @db.Uuid
+  template      CmsRequirementTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  requirementId String                 @map("requirement_id") @db.Uuid
+  requirement   CmsRequirement         @relation(fields: [requirementId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, requirementId])
+  @@map("cms_template_requirement_joins")
+}
+
+model CmsBlueprintPage {
+  id                  String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  blueprintTemplateId String                  @map("blueprint_template_id") @db.Uuid
+  blueprintTemplate   CmsBlueprintTemplate    @relation(fields: [blueprintTemplateId], references: [id], onDelete: Cascade)
+  route               String                  @db.VarChar(255)
+  title               String                  @db.VarChar(255)
+  components          CmsBlueprintComponent[]
+
+  @@unique([blueprintTemplateId, route])
+  @@map("cms_blueprint_pages")
+}
+
+model CmsBlueprintComponent {
+  id            String           @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  pageId        String           @map("page_id") @db.Uuid
+  page          CmsBlueprintPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  componentName String           @map("component_name") @db.VarChar(150)
+  propsSchema   Json?            @map("props_schema")
+
+  @@map("cms_blueprint_components")
+}
+
+model CmsBlueprintApi {
+  id                  String               @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  blueprintTemplateId String               @map("blueprint_template_id") @db.Uuid
+  blueprintTemplate   CmsBlueprintTemplate @relation(fields: [blueprintTemplateId], references: [id], onDelete: Cascade)
+  path                String               @db.VarChar(255)
+  method              String               @db.VarChar(20)
+  responseSchema      Json?                @map("response_schema")
+
+  @@unique([blueprintTemplateId, path, method])
+  @@map("cms_blueprint_apis")
+}
+
+model CmsBlueprintFeature {
+  id                  String               @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  blueprintTemplateId String               @map("blueprint_template_id") @db.Uuid
+  blueprintTemplate   CmsBlueprintTemplate @relation(fields: [blueprintTemplateId], references: [id], onDelete: Cascade)
+  requirementId       String               @map("requirement_id") @db.Uuid
+  requirement         CmsRequirement       @relation(fields: [requirementId], references: [id], onDelete: Cascade)
+
+  @@unique([blueprintTemplateId, requirementId])
+  @@map("cms_blueprint_features")
 }

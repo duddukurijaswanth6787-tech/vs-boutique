@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import api from '../../../../../services/api';
 import { 
   Search, 
   Plus, 
@@ -140,10 +141,61 @@ const getBlueprintStats = (b) => {
 };
 
 export default function WebsiteBlueprint() {
-  const [blueprints, setBlueprints] = useState(INITIAL_BLUEPRINTS);
-  const [selectedId, setSelectedId] = useState(INITIAL_BLUEPRINTS[0]?.id || null);
+  const [blueprints, setBlueprints] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState('all');
+
+  useEffect(() => {
+    fetchBlueprints();
+  }, [selectedId]);
+
+  const fetchBlueprints = async () => {
+    try {
+      const res = await api.get('/api/v1/cms/blueprints');
+      if (res.data?.success) {
+        const dbBlueprints = res.data.blueprints.map(b => ({
+          id: b.id,
+          name: b.name,
+          key: b.key,
+          description: b.description || 'System compiled blueprint template.',
+          businessType: b.standard?.category || 'General',
+          version: `v${b.version}.0.0`,
+          status: b.status === 'PUBLISHED' ? 'Active' : 'Draft',
+          lastUpdated: new Date(b.updatedAt).toLocaleDateString(),
+          pages: b.pages || { core: {}, business: {}, legal: {} },
+          components: b.components || {},
+          apis: b.apis || {},
+          databaseModels: b.databaseModels || {},
+          features: b.features || {},
+          cmsFields: b.cmsFields || { required: {}, optional: {}, hidden: {} },
+          security: b.security || { sslRequired: true, cspRules: true },
+          accessibility: b.accessibility || { altTagsRequired: true },
+          seo: b.seo || { metaTagsRequired: true },
+          performance: b.performance || { maxBundleSizeKb: 2048 }
+        }));
+        setBlueprints(dbBlueprints);
+        if (dbBlueprints.length > 0 && !selectedId) {
+          setSelectedId(dbBlueprints[0].id);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch blueprints:', err);
+    }
+  };
+
+  const handleCompileBlueprint = async () => {
+    if (!selectedId) return;
+    try {
+      const res = await api.post(`/api/v1/cms/blueprints/${selectedId}/compile`);
+      if (res.data?.success) {
+        alert('Blueprint compiled and sitemap normalized successfully!');
+        fetchBlueprints();
+      }
+    } catch (err) {
+      alert(`Compilation failed: ${err.response?.data?.message || err.message}`);
+    }
+  };
 
   // Active blueprint record
   const activeBlueprint = blueprints.find(b => b.id === selectedId) || null;
@@ -467,6 +519,12 @@ export default function WebsiteBlueprint() {
                 </div>
 
                 <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
+                  <button 
+                    onClick={handleCompileBlueprint}
+                    className="px-3 py-2 bg-primary text-white rounded-xl hover:bg-primary-light transition-all duration-200 flex items-center gap-1.5 text-xs font-bold shadow-md shadow-primary/10"
+                  >
+                    <Zap size={13} /> Compile
+                  </button>
                   <button 
                     onClick={() => handleDuplicate(activeBlueprint.id)}
                     className="px-3 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-600 hover:text-gray-900 hover:border-gray-300 transition-all duration-200 flex items-center gap-1.5 text-xs font-bold"
