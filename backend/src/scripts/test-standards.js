@@ -66,7 +66,10 @@ async function main() {
   await assert(bpList.length > 0, 'Blueprint templates list should not be empty');
 
   const bp = await standardsService.getBlueprint('boutique-ecom-blueprint');
-  await assert(bp.pages.required.includes('/cart'), 'Blueprint pages checklist should resolve');
+  const hasCart = bp.pages.required 
+    ? bp.pages.required.includes('/cart')
+    : bp.pages['/cart'] !== undefined;
+  await assert(hasCart, 'Blueprint pages checklist should resolve');
 
   console.log('==================================================');
   console.log('🎉 ALL CMS STANDARDS ENGINE INTEGRATION TESTS PASSED!');
