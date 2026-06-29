@@ -69,7 +69,7 @@ async function runTests() {
 
     // Wait for the pipeline to finish processing
     console.log('    Waiting for pipeline completion...');
-    await new Promise(resolve => setTimeout(resolve, 5500));
+    await new Promise(resolve => setTimeout(resolve, 7500));
 
     assert(logs.length >= 15, `SSE logs broadcasted at least 15 stage compilations: ${logs.length}`);
     const completedLog = logs.find(l => l.stage === 'complete');

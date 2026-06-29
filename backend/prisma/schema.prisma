@@ -1851,6 +1851,10 @@ model Business {
   contentItems  UniversalContent[]
   assets        AssetLibrary[]
   themes        BoutiqueTheme[]
+  certifications         BoutiqueCertification[]
+  autofixQueue           AutoFixQueueItem[]
+  certificationWorkflows CertificationWorkflow[]
+  certificationProfiles  CertificationProfile[]
   createdAt     DateTime           @default(now()) @map("created_at")
   updatedAt     DateTime           @updatedAt @map("updated_at")
 
@@ -2147,4 +2151,157 @@ enum UserRole {
   EMPLOYEE
   CUSTOMER
   GUEST
+}
+
+// 16. Workflow Definitions
+model CertificationWorkflowDefinition {
+  id             String                  @id @default(uuid())
+  name           String                  @db.VarChar(100)
+  description    String?                 @db.Text
+  version        String                  @db.VarChar(50) // e.g. "v1.0.0", "v1.1.0"
+  isEnabled      Boolean                 @default(true) @map("is_enabled")
+  targetType     String                  @default("WEBSITE") @map("target_type") // WEBSITE, MOBILE_APP, LANDING_PAGE
+  stages         Json                    // Array of stage specs: stageId, stageName, executionOrder, agentKey, retryPolicy, timeout, dependsOn, parallel, outputSchema
+  rollbackPolicy Json                    @map("rollback_policy")
+  workflows      CertificationWorkflow[]
+  createdAt      DateTime                @default(now()) @map("created_at")
+  updatedAt      DateTime                @updatedAt @map("updated_at")
+
+  @@unique([name, version])
+  @@map("certification_workflow_definitions")
+}
+
+// 17. Certification Workflows Trackers & Execution History
+model CertificationWorkflow {
+  id           String                          @id @default(uuid())
+  businessId   String                          @map("business_id") @db.Uuid
+  business     Business                        @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  releaseTag   String                          @map("release_tag") @db.VarChar(50)
+  
+  definitionId String                          @map("definition_id")
+  definition   CertificationWorkflowDefinition @relation(fields: [definitionId], references: [id])
+  
+  status       String                          @default("PENDING") // PENDING, RUNNING, COMPLETED, FAILED
+  progress     Float                           @default(0.0)
+  currentStage String                          @default("INITIALIZING") @map("current_stage")
+  
+  // Execution Telemetry History array: stageId, startedAt, finishedAt, duration, retryCount, status, logs, tokens, model, cost, outputChecksum
+  executionHistory Json                        @map("execution_history")
+  
+  createdAt    DateTime                        @default(now()) @map("created_at")
+  updatedAt    DateTime                        @updatedAt @map("updated_at")
+
+  @@map("certification_workflows")
+}
+
+// 18. Dynamic QA Agent Registry
+model QAAgentRegistry {
+  id            String   @id @default(uuid())
+  agentKey      String   @unique @map("agent_key") @db.VarChar(100) // e.g. "seo_crawler", "wcag_accessibility"
+  name          String   @db.VarChar(150)
+  category      String   @db.VarChar(100) // PERFORMANCE, SEO, ACCESSIBILITY, SECURITY, BRAND, UX
+  executionOrder Int     @map("execution_order")
+  isEnabled     Boolean  @default(true) @map("is_enabled")
+  version       String   @db.VarChar(50)
+  timeoutMs     Int      @default(10000) @map("timeout_ms")
+  configuration Json     // Custom configuration options (parameters, thresholds)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("qa_agent_registries")
+}
+
+// 19. Certification Profiles & Weighted Scoring Rules
+model CertificationProfile {
+  id           String                 @id @default(uuid())
+  businessId   String?                @map("business_id") @db.Uuid // Nullable for global platform templates
+  business     Business?              @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name         String                 @db.VarChar(100) // e.g. "Ecommerce", "Standard", "Enterprise"
+  isActive     Boolean                @default(false) @map("is_active")
+  agentWeights Json                   // Key-value weights map: { "seo_crawler": 0.3, "wcag_accessibility": 0.2 }
+  thresholds   Json                   // Key-value criteria: { "minSeoScore": 80.0, "minOverall": 75.0 }
+  certifications BoutiqueCertification[]
+  createdAt    DateTime               @default(now()) @map("created_at")
+  updatedAt    DateTime               @updatedAt @map("updated_at")
+
+  @@unique([businessId, name])
+  @@map("certification_profiles")
+}
+
+// 20. Boutique Certification Reports
+model BoutiqueCertification {
+  id                 String               @id @default(uuid())
+  businessId         String               @map("business_id") @db.Uuid
+  business           Business             @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  targetType         String               @default("WEBSITE") // WEBSITE, MOBILE_APP, LANDING_PAGE, TEMPLATE, COMPONENT
+  targetId           String               @map("target_id")
+  releaseTag         String               @map("release_tag") @db.VarChar(50)
+  
+  profileId          String               @map("profile_id")
+  profile            CertificationProfile @relation(fields: [profileId], references: [id])
+  
+  overallScore       Float                @map("overall_score")
+  scoresMap          Json                 // Dynamic mapped scores per agent: { "seo_crawler": 95.0, "performance_agent": 87.0 }
+  agentRuns          Json                 // Detailed agent metrics: executionTime, tokens, model, cost, warnings, errors, scoreContribution
+  
+  issues             Json                 // List of issues with Auto-Fix Safety Levels
+  suggestions        Json                 // Optimization recommendations
+  visualArtifacts    Json                 // Headless review screenshots
+  
+  status             CertificationStatus  @default(DRAFT)
+  createdAt          DateTime             @default(now()) @map("created_at")
+
+  @@unique([businessId, targetId, releaseTag])
+  @@map("boutique_certifications")
+}
+
+// 21. Auto-Fix Queue Mappings
+model AutoFixQueueItem {
+  id             String        @id @default(uuid())
+  businessId     String        @map("business_id") @db.Uuid
+  business       Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  releaseTag     String        @map("release_tag") @db.VarChar(50)
+  issueKey       String        @map("issue_key") @db.VarChar(100)
+  safetyLevel    SafetyLevel   @default(SUGGESTED)
+  description    String        @db.Text
+  proposedChange Json          // Target database records and fields modifications
+  status         QueueStatus   @default(PENDING) // PENDING, APPROVED, REJECTED, APPLIED
+  reviewedBy     String?       @map("reviewed_by")
+  reviewedAt     DateTime?     @map("reviewed_at")
+  createdAt      DateTime      @default(now()) @map("created_at")
+
+  @@map("autofix_queue_items")
+}
+
+// 22. Chatbot QA Conversation threads
+model CertificationChat {
+  id              String   @id @default(uuid())
+  certificationId String   @map("certification_id")
+  role            String   @default("user") // user, assistant
+  message         String   @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("certification_chat_messages")
+}
+
+enum CertificationStatus {
+  DRAFT
+  REVIEWING
+  NEEDS_FIXES
+  APPROVED
+  CERTIFIED
+  PUBLISHED
+}
+
+enum SafetyLevel {
+  SAFE_AUTO_FIX
+  SUGGESTED
+  MANUAL_APPROVAL_REQUIRED
+}
+
+enum QueueStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  APPLIED
 }

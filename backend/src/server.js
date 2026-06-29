@@ -176,6 +176,7 @@ app.use('/exchanges', require('./modules/delivery/routes/delivery.routes').custo
 app.use('/owner/exchanges', require('./modules/delivery/routes/delivery.routes').ownerExchangesRouter);
 app.use('/api/v1/cms/orchestrator', require('./modules/ai-core/routes/ai.routes'));
 app.use('/api/v1/cms/generator', require('./modules/website-generator/routes/generator.routes'));
+app.use('/api/v1/cms/certification', require('./modules/website-certification/routes/certification.routes'));
 
 /**
  * @swagger

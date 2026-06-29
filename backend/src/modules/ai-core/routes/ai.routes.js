@@ -31,6 +31,20 @@ router.post('/session', protect, async (req, res) => {
   }
 });
 
+// 1.5. List latest active requirement sessions
+router.get('/session', protect, async (req, res) => {
+  const limit = parseInt(req.query.limit) || 10;
+  try {
+    const sessions = await prisma.aISession.findMany({
+      take: limit,
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json({ success: true, sessions });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // 2. Query session completion status and telemetry metrics
 router.get('/session/:sessionId', protect, async (req, res) => {
   const { sessionId } = req.params;
