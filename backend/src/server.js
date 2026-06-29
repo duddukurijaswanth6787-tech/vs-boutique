@@ -183,6 +183,7 @@ app.use('/api/v1/cms/standards', require('./modules/cms-standards/routes/standar
 app.use('/api/v1/cms/requirements', require('./modules/cms-requirements/routes/requirements.routes'));
 app.use('/api/v1/cms/blueprints', require('./modules/cms-blueprints/routes/blueprints.routes'));
 app.use('/api/v1/cms/projects', require('./modules/cms-uploads/routes/uploads.routes'));
+app.use('/api/v1/cms/projects', require('./modules/cms-verification/routes/verification.routes'));
 
 
 /**

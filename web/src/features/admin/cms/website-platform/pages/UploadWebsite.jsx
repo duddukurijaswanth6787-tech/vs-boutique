@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../../../services/api';
-import { Upload, ShieldCheck, AlertCircle, FileText, CheckCircle, RefreshCw, Server, ArrowRight, Activity, Clock } from 'lucide-react';
+import { Upload, ShieldCheck, AlertCircle, FileText, CheckCircle, RefreshCw, Server, ArrowRight, Activity, Clock, ShieldAlert, Award } from 'lucide-react';
 
 export default function UploadWebsite() {
   const [blueprints, setBlueprints] = useState([]);
@@ -12,6 +12,7 @@ export default function UploadWebsite() {
   const [uploadError, setUploadError] = useState('');
 
   const [isLoading, setIsLoading] = useState(true);
+  const [activeReport, setActiveReport] = useState(null); // Selected verification report modal
 
   useEffect(() => {
     fetchInitialData();
@@ -101,6 +102,15 @@ export default function UploadWebsite() {
       setUploadError(err.response?.data?.message || err.message);
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const triggerVerification = async (uploadId) => {
+    try {
+      await api.post('/api/v1/cms/projects/verify', { uploadId });
+      fetchUploads();
+    } catch (err) {
+      alert(`Verification failed to initiate: ${err.message}`);
     }
   };
 
@@ -240,6 +250,7 @@ export default function UploadWebsite() {
                         <th className="p-4 pl-6">Archive Package</th>
                         <th className="p-4">Virus Scan</th>
                         <th className="p-4">Sandbox Status</th>
+                        <th className="p-4">Compliance Audit</th>
                         <th className="p-4 pr-6 text-right">Submitted</th>
                       </tr>
                     </thead>
@@ -267,16 +278,35 @@ export default function UploadWebsite() {
                                 <span className="text-[10px] text-gray-400 font-mono">{u.progressPercent}%</span>
                               </div>
                               {u.sandboxPath && (
-                                <div className="text-[9px] text-gray-400 truncate max-w-[200px]" title={u.sandboxPath}>
+                                <div className="text-[9px] text-gray-400 truncate max-w-[150px]" title={u.sandboxPath}>
                                   Path: ...{u.sandboxPath.slice(-30)}
                                 </div>
                               )}
                               {u.errorDetails && (
-                                <div className="text-[9px] text-red-500 font-bold leading-normal max-w-[200px]">
+                                <div className="text-[9px] text-red-500 font-bold leading-normal max-w-[150px]">
                                   {u.errorDetails}
                                 </div>
                               )}
                             </div>
+                          </td>
+                          <td className="p-4">
+                            {u.verificationReport ? (
+                              <button
+                                onClick={() => setActiveReport(u.verificationReport)}
+                                className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-lg transition-colors flex items-center gap-1"
+                              >
+                                <Award className="w-3.5 h-3.5 text-primary" /> View Report ({u.verificationReport.score}%)
+                              </button>
+                            ) : u.status === 'COMPLETED' ? (
+                              <button
+                                onClick={() => triggerVerification(u.id)}
+                                className="px-3 py-1.5 bg-primary hover:bg-primary-light text-white font-bold rounded-lg transition-colors flex items-center gap-1"
+                              >
+                                <ShieldCheck className="w-3.5 h-3.5" /> Verify AST
+                              </button>
+                            ) : (
+                              <span className="text-gray-400 font-bold">-</span>
+                            )}
                           </td>
                           <td className="p-4 pr-6 text-right text-gray-400 whitespace-nowrap">
                             {new Date(u.createdAt).toLocaleTimeString()}
@@ -287,6 +317,133 @@ export default function UploadWebsite() {
                   </table>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* COMPLIANCE AUDIT REPORT MODAL */}
+      {activeReport && (
+        <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl border border-gray-150 shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+              <div>
+                <h3 className="font-bold text-gray-800 text-base flex items-center gap-2">
+                  <Award className="w-5 h-5 text-primary" />
+                  Codebase Compliance Audit
+                </h3>
+                <p className="text-xs text-gray-400 mt-0.5">Verification Signature: {activeReport.uploadId}</p>
+              </div>
+              <button
+                onClick={() => setActiveReport(null)}
+                className="text-xs text-gray-400 hover:text-gray-600 font-bold bg-white border border-gray-200 hover:border-gray-300 px-3 py-1.5 rounded-lg transition-all"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto space-y-6 flex-grow">
+              {/* Score card banner */}
+              <div className="p-5 bg-primary/5 rounded-2xl border border-primary/10 flex items-center justify-between">
+                <div>
+                  <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Calculated Score</div>
+                  <div className="text-3xl font-black text-primary mt-1">{activeReport.score}%</div>
+                </div>
+                <div>
+                  {activeReport.isValid ? (
+                    <span className="px-3.5 py-1.5 bg-green-50 text-green-700 border border-green-200 rounded-xl font-bold flex items-center gap-1.5">
+                      <CheckCircle className="w-4 h-4" /> Compliant
+                    </span>
+                  ) : (
+                    <span className="px-3.5 py-1.5 bg-red-50 text-red-700 border border-red-200 rounded-xl font-bold flex items-center gap-1.5">
+                      <ShieldAlert className="w-4 h-4" /> Non-Compliant
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Checked sitemap pages */}
+              <div className="space-y-2.5">
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Pages Sitemap Status:</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {activeReport.details.pages.map((p, i) => (
+                    <div key={i} className="p-3 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">
+                      <span className="font-mono text-xs text-gray-700">{p.route}</span>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                        p.status === 'PASSED' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+                      }`}>{p.status}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Injected components */}
+              <div className="space-y-2.5">
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">React Component Signatures:</span>
+                <div className="flex flex-wrap gap-2">
+                  {activeReport.details.components.map((c, i) => (
+                    <span key={i} className={`px-2.5 py-1 rounded text-xs font-mono font-semibold border ${
+                      c.status === 'PASSED' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-red-50 text-red-700 border-red-100'
+                    }`}>
+                      {c.componentName}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* API routes */}
+              <div className="space-y-2.5">
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">API Controller Actions:</span>
+                <div className="space-y-2">
+                  {activeReport.details.apis.map((a, i) => (
+                    <div key={i} className="p-2.5 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between font-mono text-xs">
+                      <span className="text-gray-700 font-bold">{a.method} {a.path}</span>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                        a.status === 'PASSED' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+                      }`}>{a.status}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Env vars */}
+              <div className="space-y-2.5">
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Environment Variables Config:</span>
+                <div className="flex flex-wrap gap-2">
+                  {activeReport.details.envs.map((env, i) => (
+                    <span key={i} className={`px-2.5 py-1 rounded text-xs font-mono font-semibold border ${
+                      env.status === 'PASSED' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-red-50 text-red-700 border-red-100'
+                    }`}>
+                      {env.variable}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Security and SEO rules */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Security Headers:</span>
+                  <div className={`p-3 rounded-xl border text-xs leading-relaxed ${
+                    activeReport.details.security.passed ? 'bg-green-50 text-green-700 border-green-100' : 'bg-red-50 text-red-700 border-red-100'
+                  }`}>
+                    {activeReport.details.security.passed 
+                      ? 'All required Content-Security-Policy (CSP) headers verified.' 
+                      : activeReport.details.security.issues.join(' ')}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">SEO Meta Headers:</span>
+                  <div className={`p-3 rounded-xl border text-xs leading-relaxed ${
+                    activeReport.details.seo.passed ? 'bg-green-50 text-green-700 border-green-100' : 'bg-red-50 text-red-700 border-red-100'
+                  }`}>
+                    {activeReport.details.seo.passed 
+                      ? 'OpenGraph metadata and og tags verified.' 
+                      : activeReport.details.seo.issues.join(' ')}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
