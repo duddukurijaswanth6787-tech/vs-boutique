@@ -59,7 +59,10 @@ class PaymentsController {
   }
 
   async webhook(req, res) {
-    const secret = process.env.RAZORPAY_WEBHOOK_SECRET || 'webhook_secret_placeholder';
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    if (!secret) {
+      return res.status(500).send('Webhook secret not configured');
+    }
     const signature = req.headers['x-razorpay-signature'];
 
     try {

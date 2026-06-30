@@ -29,7 +29,7 @@ class ProviderService extends IProviderService {
   async validateConnection(providerName = null) {
     const provider = providerFactory.getProvider(providerName);
     if (!provider.apiKey) {
-      return { status: 'Warning', message: 'API Key not configured. Using Mock fallback responses.' };
+      return { status: 'Warning', message: 'API Key not configured.' };
     }
     try {
       await provider.countTokens('Health Check');

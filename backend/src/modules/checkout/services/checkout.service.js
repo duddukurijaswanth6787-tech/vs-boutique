@@ -5,19 +5,19 @@ const commerceServiceModule = require('../../commerce/services/commerce.service'
 const commerceService = commerceServiceModule.commerceService;
 const CommerceError = commerceServiceModule.CommerceError;
 const prisma = require('../../../utils/prisma');
-const { notificationsService } = require('../../notifications/services/notifications.service');
+const { eventBus, Events } = require('../../../services/eventBus');
+const { parseDecimal } = require('../../../utils/parseDecimal');
+
+if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+  throw new Error('Razorpay credentials not configured. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET environment variables.');
+}
 
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder',
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
 class CheckoutService {
-  parseDecimal(val) {
-    if (val === null || val === undefined) return 0;
-    return typeof val === 'number' ? val : parseFloat(val.toString().replace(/[^0-9.-]/g, '')) || 0;
-  }
-
   async validateCartItems(cart) {
     if (!cart || !cart.items || cart.items.length === 0) {
       throw new CommerceError('Cart is empty', 'EMPTY_CART', 400);
@@ -37,7 +37,7 @@ class CheckoutService {
 
       if (!boutiqueId) boutiqueId = product.boutiqueId;
 
-      let unitPrice = this.parseDecimal(product.basePrice);
+      let unitPrice = parseDecimal(product.basePrice);
       let variantName = null;
       let sku = null;
       let imageUrl = null;
@@ -49,7 +49,7 @@ class CheckoutService {
         if (!variant) {
           throw new CommerceError(`Variant not found for "${product.name}"`, 'VARIANT_UNAVAILABLE', 400);
         }
-        unitPrice = variant.price ? this.parseDecimal(variant.price) : unitPrice;
+        unitPrice = variant.price ? parseDecimal(variant.price) : unitPrice;
         variantName = variant.name;
         sku = variant.sku;
 
@@ -80,7 +80,7 @@ class CheckoutService {
         sku,
         quantity: cartItem.quantity,
         unitPrice,
-        totalPrice: this.parseDecimal(unitPrice * cartItem.quantity),
+        totalPrice: parseDecimal(unitPrice * cartItem.quantity),
         imageUrl: primaryImage ? primaryImage.url : null
       });
     }
@@ -124,8 +124,8 @@ class CheckoutService {
           userId,
           boutiqueId: result.boutiqueId,
           shippingAddressId: shippingAddressId || null,
-          subtotal: this.parseDecimal(result.subtotal),
-          totalAmount: this.parseDecimal(result.subtotal),
+          subtotal: parseDecimal(result.subtotal),
+          totalAmount: parseDecimal(result.subtotal),
           status: 'PENDING',
           paymentStatus: 'PENDING',
           customerNote: customerNote || null,
@@ -138,8 +138,8 @@ class CheckoutService {
               variantName: item.variantName,
               sku: item.sku,
               quantity: item.quantity,
-              unitPrice: this.parseDecimal(item.unitPrice),
-              totalPrice: this.parseDecimal(item.totalPrice),
+              unitPrice: parseDecimal(item.unitPrice),
+              totalPrice: parseDecimal(item.totalPrice),
               imageUrl: item.imageUrl
             }))
           }
@@ -160,29 +160,8 @@ class CheckoutService {
       return commerceOrder;
     });
 
-    await notificationsService.createCustomerNotification({
-      customerId: userId,
-      type: 'ORDER_PLACED',
-      title: 'Order Placed Successfully',
-      message: `Your order ${order.orderId} has been placed. Complete payment to confirm.`,
-      entityType: 'commerce_order',
-      entityId: order.orderId,
-    });
-
     const boutique = await checkoutRepository.findBoutiqueUnique(order.boutiqueId);
-    if (boutique && boutique.ownerId) {
-      await notificationsService.createAdminNotification({
-        recipientType: 'OWNER',
-        recipientId: boutique.ownerId,
-        boutiqueId: order.boutiqueId,
-        type: 'NEW_ORDER',
-        priority: 'HIGH',
-        title: 'New Order Received',
-        message: `Order ${order.orderId} has been placed and is pending payment.`,
-        entityType: 'commerce_order',
-        entityId: order.orderId,
-      });
-    }
+    eventBus.emit(Events.ORDER_PLACED, { userId, boutique, order });
 
     return order;
   }
@@ -203,7 +182,7 @@ class CheckoutService {
     }
 
     const razorpayOrder = await razorpay.orders.create({
-      amount: Math.round(this.parseDecimal(order.totalAmount) * 100),
+      amount: Math.round(parseDecimal(order.totalAmount) * 100),
       currency: 'INR',
       receipt: `receipt_${order.orderId}`
     });
@@ -226,8 +205,12 @@ class CheckoutService {
 
   async verifyPayment(userId, razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId) {
     const sign = razorpay_order_id + '|' + razorpay_payment_id;
+    const hmacSecret = process.env.RAZORPAY_KEY_SECRET;
+    if (!hmacSecret) {
+      throw new Error('Payment verification not configured (RAZORPAY_KEY_SECRET missing)');
+    }
     const expectedSign = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder')
+      .createHmac('sha256', hmacSecret)
       .update(sign.toString())
       .digest('hex');
 
@@ -237,28 +220,8 @@ class CheckoutService {
         await prisma.$transaction(async (tx) => {
           await commerceService.failPayment(tx, order.id, 'Invalid payment signature');
         });
-        await notificationsService.createCustomerNotification({
-          customerId: order.userId,
-          type: 'PAYMENT_FAILED',
-          title: 'Payment Failed',
-          message: `Your payment for order ${order.orderId} could not be processed. Please try again.`,
-          entityType: 'commerce_order',
-          entityId: order.orderId,
-        });
         const failBoutique = await checkoutRepository.findBoutiqueUnique(order.boutiqueId);
-        if (failBoutique && failBoutique.ownerId) {
-          await notificationsService.createAdminNotification({
-            recipientType: 'OWNER',
-            recipientId: failBoutique.ownerId,
-            boutiqueId: order.boutiqueId,
-            type: 'PAYMENT_FAILED',
-            priority: 'HIGH',
-            title: 'Payment Failed',
-            message: `Payment for order ${order.orderId} failed. Customer may need assistance.`,
-            entityType: 'commerce_order',
-            entityId: order.orderId,
-          });
-        }
+        eventBus.emit(Events.PAYMENT_FAILED, { userId: order.userId, boutique: failBoutique, order, error: 'Invalid payment signature' });
       }
       throw new CommerceError('Invalid payment signature', 'INVALID_SIGNATURE', 400);
     }
@@ -304,50 +267,15 @@ class CheckoutService {
       await commerceService.createOrderHistory(tx, order.id, 'PENDING', 'CONFIRMED', 'Payment verified — order confirmed', 'system');
     });
 
-    await notificationsService.createCustomerNotification({
-      customerId: order.userId,
-      type: 'PAYMENT_SUCCESS',
-      title: 'Payment Successful',
-      message: `Your payment for order ${order.orderId} has been received. Your order is confirmed.`,
-      entityType: 'commerce_order',
-      entityId: order.orderId,
-    });
-
     const paidBoutique = await checkoutRepository.findBoutiqueUnique(order.boutiqueId);
-    if (paidBoutique && paidBoutique.ownerId) {
-      await notificationsService.createAdminNotification({
-        recipientType: 'OWNER',
-        recipientId: paidBoutique.ownerId,
-        boutiqueId: order.boutiqueId,
-        type: 'PAYMENT_RECEIVED',
-        priority: 'NORMAL',
-        title: 'Payment Received',
-        message: `Payment for order ${order.orderId} has been received. Order is confirmed.`,
-        entityType: 'commerce_order',
-        entityId: order.orderId,
-      });
-    }
+    eventBus.emit(Events.PAYMENT_SUCCESS, { userId: order.userId, boutique: paidBoutique, order });
 
-    // Correctly fetch variants here using the loaded items array
     const variantIds = items.filter(i => i.variantId).map(i => i.variantId);
     if (variantIds.length > 0) {
       const invVariants = await checkoutRepository.findProductVariantsForAlert(variantIds);
       for (const v of invVariants) {
         if (v.inventory && v.inventory.trackInventory && v.inventory.quantity <= (v.inventory.lowStockThreshold || 5)) {
-          const invBoutique = await checkoutRepository.findBoutiqueUnique(v.product.boutiqueId);
-          if (invBoutique && invBoutique.ownerId) {
-            await notificationsService.createAdminNotification({
-              recipientType: 'OWNER',
-              recipientId: invBoutique.ownerId,
-              boutiqueId: v.product.boutiqueId,
-              type: 'LOW_STOCK',
-              priority: 'HIGH',
-              title: 'Low Stock Alert',
-              message: `"${v.product.name}" (${v.sku || 'variant'}) is running low: ${v.inventory.quantity} left.`,
-              entityType: 'product_variant',
-              entityId: v.id,
-            });
-          }
+          eventBus.emit(Events.LOW_STOCK, { boutique: v.product.boutiqueId, variant: v, product: v.product });
         }
       }
     }

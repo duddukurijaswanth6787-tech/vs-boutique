@@ -35,7 +35,7 @@ class SubscriptionsController {
     }
   };
 
-  // Upgrade/renew subscription (mock or manual)
+  // Upgrade/renew subscription (requires payment flow)
   upgradeSubscription = async (req, res) => {
     try {
       const boutiqueId = req.user.assignedBoutiqueId;

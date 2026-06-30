@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
@@ -9,6 +10,8 @@ if (missingEnvVars.length > 0) {
   console.error(`CRITICAL ERROR: Missing required environment variables: ${missingEnvVars.join(', ')}`);
   process.exit(1);
 }
+
+require('./services/notificationListener');
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -58,6 +61,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Middleware
 app.disable('x-powered-by');
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginResourcePolicy: { policy: 'cross-origin' }
+}));
 const allowedOriginsRegex = /^(https?:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+)(:\d+)?)$/;
 app.use(cors({
   origin: (origin, callback) => {
@@ -69,12 +76,6 @@ app.use(cors({
   },
   credentials: true
 }));
-app.use((req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  next();
-});
 app.use(express.json());
 
 // Disable caching for development to avoid 304 confusion
@@ -184,6 +185,7 @@ app.use('/api/v1/cms/requirements', require('./modules/cms-requirements/routes/r
 app.use('/api/v1/cms/blueprints', require('./modules/cms-blueprints/routes/blueprints.routes'));
 app.use('/api/v1/cms/projects', require('./modules/cms-uploads/routes/uploads.routes'));
 app.use('/api/v1/cms/projects', require('./modules/cms-verification/routes/verification.routes'));
+app.use('/api/v1/cms/deployment', require('./modules/cms-deployment/routes/deployment.routes'));
 
 
 /**
@@ -314,15 +316,50 @@ app.post('/upload', uploadLimiter, protect, authorize('owner', 'super-admin'), (
 });
 
 app.get('/', (req, res) => {
-    res.send('VS Boutique API is running...');
+    res.json({
+        success: true,
+        message: 'VS Boutique API is running...',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// 404 handler — unmatched routes
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: `Route not found: ${req.method} ${req.originalUrl}`
+    });
 });
 
 // Global Error Handler Middleware
 app.use(errorLogger);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
     logServerStartup(app, PORT);
 });
-// Server initialized.
+
+// Graceful shutdown
+function shutdown(signal) {
+    console.log(`\n${signal} received — starting graceful shutdown...`);
+    server.close(() => {
+        console.log('HTTP server closed.');
+        prisma.$disconnect().then(() => {
+            console.log('Database connections closed.');
+            process.exit(0);
+        }).catch((err) => {
+            console.error('Error disconnecting Prisma:', err);
+            process.exit(1);
+        });
+    });
+
+    // Force exit after 15s if graceful shutdown hangs
+    setTimeout(() => {
+        console.error('Forced shutdown after timeout.');
+        process.exit(1);
+    }, 15000);
+}
+
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
 

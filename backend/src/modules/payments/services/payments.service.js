@@ -3,21 +3,19 @@ const crypto = require('crypto');
 const paymentsRepository = require('../repositories/payments.repository');
 const { logAction } = require('../../../services/auditService');
 const { validateSubscriptionLimit } = require('../../../services/subscriptionService');
+const { parseDecimal } = require('../../../utils/parseDecimal');
 const prisma = require('../../../utils/prisma');
 
+if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+  throw new Error('Razorpay credentials not configured. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET environment variables.');
+}
+
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder',
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
 class PaymentsService {
-  parseDecimalVal(val) {
-    if (val === null || val === undefined || val === '') return 0.00;
-    if (typeof val === 'number') return val;
-    const parsed = parseFloat(val.toString().replace(/[^0-9.]/g, ''));
-    return isNaN(parsed) ? 0.00 : parsed;
-  }
-
   mapPaymentResponse(payment) {
     if (!payment) return null;
     return {
@@ -94,15 +92,15 @@ class PaymentsService {
           razorpay_payment_id,
           razorpay_signature,
           method: method || payment.method,
-          commissionAmount: this.parseDecimalVal(commission),
-          netAmount: this.parseDecimalVal(netAmount)
+          commissionAmount: parseDecimal(commission),
+          netAmount: parseDecimal(netAmount)
         }
       });
 
       await tx.boutique.update({
         where: { id: payment.boutiqueId },
         data: {
-          walletBalance: { increment: this.parseDecimalVal(netAmount) }
+          walletBalance: { increment: parseDecimal(netAmount) }
         }
       });
 
@@ -120,8 +118,8 @@ class PaymentsService {
             await tx.order.update({
               where: { id: payment.orderId },
               data: {
-                advancePaid: this.parseDecimalVal(newAdvance),
-                remainingAmount: this.parseDecimalVal(Number(orderRecord.price) - newAdvance),
+                advancePaid: parseDecimal(newAdvance),
+                remainingAmount: parseDecimal(Number(orderRecord.price) - newAdvance),
                 paymentStatus: newPaymentStatus,
                 orderHistories: {
                   create: {
@@ -159,7 +157,7 @@ class PaymentsService {
     await paymentsRepository.createPayment({
       orderId,
       boutiqueId,
-      amount: this.parseDecimalVal(amount),
+      amount: parseDecimal(amount),
       razorpay_order_id: rzpOrder.id,
       receipt: options.receipt,
       status: 'pending',
@@ -214,8 +212,12 @@ class PaymentsService {
 
   async verifyPayment(userId, razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId) {
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const hmacSecret = process.env.RAZORPAY_KEY_SECRET;
+    if (!hmacSecret) {
+      throw { status: 500, message: 'Payment verification not configured (RAZORPAY_KEY_SECRET missing)' };
+    }
     const expectedSign = crypto
-      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder')
+      .createHmac("sha256", hmacSecret)
       .update(sign.toString())
       .digest("hex");
 
@@ -285,7 +287,7 @@ class PaymentsService {
       await tx.boutique.update({
         where: { id: payment.boutiqueId },
         data: {
-          walletBalance: { decrement: this.parseDecimalVal(refundNetAmount) }
+          walletBalance: { decrement: parseDecimal(refundNetAmount) }
         }
       });
 
@@ -299,8 +301,8 @@ class PaymentsService {
         await tx.order.update({
           where: { id: payment.orderId },
           data: {
-            advancePaid: this.parseDecimalVal(newAdvance),
-            remainingAmount: this.parseDecimalVal(Number(order.price) - newAdvance),
+            advancePaid: parseDecimal(newAdvance),
+            remainingAmount: parseDecimal(Number(order.price) - newAdvance),
             paymentStatus: newPaymentStatus,
             orderHistories: {
               create: {
@@ -368,7 +370,7 @@ class PaymentsService {
     const settings = await this.getPlatformSettings();
 
     const updatedSettings = await paymentsRepository.updatePlatformSettings(settings.id, {
-      globalCommissionRate: this.parseDecimalVal(globalCommissionRate),
+      globalCommissionRate: parseDecimal(globalCommissionRate),
       categoryCommissions: categoryCommissions || {}
     });
 
@@ -385,7 +387,7 @@ class PaymentsService {
     if (!boutique) throw { status: 404, message: 'Boutique not found' };
 
     const updatedBoutique = await paymentsRepository.updateBoutique(boutiqueId, {
-      commissionRate: this.parseDecimalVal(commissionRate)
+      commissionRate: parseDecimal(commissionRate)
     });
 
     await logAction('UPDATE_BOUTIQUE_COMMISSION', 'Boutique', boutiqueId, userId, {
@@ -430,7 +432,7 @@ class PaymentsService {
     const boutique = await paymentsRepository.findBoutiqueUnique(boutiqueId);
     if (!boutique) throw { status: 404, message: 'Boutique not found' };
 
-    const payoutAmount = this.parseDecimalVal(amount);
+    const payoutAmount = parseDecimal(amount);
     if (Number(boutique.walletBalance) < Number(payoutAmount)) {
       throw { status: 400, message: 'Insufficient boutique wallet balance for this payout' };
     }
@@ -493,7 +495,7 @@ class PaymentsService {
       throw { status: 400, message: 'This payout has already been released' };
     }
 
-    const payoutAmount = this.parseDecimalVal(payout.amount);
+    const payoutAmount = parseDecimal(payout.amount);
 
     const result = await prisma.$transaction(async (tx) => {
       let updatedPayout;

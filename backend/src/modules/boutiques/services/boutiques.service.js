@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const { parseDecimal } = require('../../../utils/parseDecimal');
 const boutiquesRepository = require('../repositories/boutiques.repository');
 const { logAction } = require('../../../services/auditService');
 
@@ -19,26 +20,11 @@ class BoutiquesService {
     return isNaN(parsed) ? 0 : parsed;
   }
 
-  parseStartingPrice(val) {
-    if (val === null || val === undefined) return 0.00;
-    if (typeof val === 'number') return val;
-    const cleaned = val.toString().replace(/[^0-9.]/g, '');
-    const parsed = parseFloat(cleaned);
-    return isNaN(parsed) ? 0.00 : parsed;
-  }
-
   parseIntVal(val) {
     if (val === null || val === undefined || val === '') return 0;
     if (typeof val === 'number') return Math.floor(val);
     const parsed = parseInt(val.toString().replace(/[^0-9]/g, ''), 10);
     return isNaN(parsed) ? 0 : parsed;
-  }
-
-  parseDecimalVal(val) {
-    if (val === null || val === undefined || val === '') return 0.00;
-    if (typeof val === 'number') return val;
-    const parsed = parseFloat(val.toString().replace(/[^0-9.]/g, ''));
-    return isNaN(parsed) ? 0.00 : parsed;
   }
 
   mapBoutiqueResponse(boutique, designs = []) {
@@ -281,7 +267,7 @@ class BoutiquesService {
       homeVisitAvailable: !!boutiqueData.homeVisitAvailable,
       appointmentBookingAvailable: !!boutiqueData.appointmentBookingAvailable,
       rushOrderAvailable: !!boutiqueData.rushOrderAvailable,
-      startingPrice: this.parseStartingPrice(boutiqueData.startingPrice),
+      startingPrice: parseDecimal(boutiqueData.startingPrice),
       turnaroundTime: boutiqueData.turnaroundTime || '',
       logoUrl: boutiqueData.media?.logo || '',
       coverImageUrl: boutiqueData.media?.coverImage || '',
@@ -295,7 +281,7 @@ class BoutiquesService {
       internalNotes: boutiqueData.internalNotes || '',
       isDeleted: !!boutiqueData.isDeleted,
       deletedAt: boutiqueData.deletedAt ? new Date(boutiqueData.deletedAt) : null,
-      rating: this.parseDecimalVal(boutiqueData.rating) || 0.00,
+      rating: parseDecimal(boutiqueData.rating) || 0.00,
       reviewsCount: this.parseIntVal(boutiqueData.reviewsCount)
     };
 
@@ -342,10 +328,10 @@ class BoutiquesService {
     const prismaData = {
       ...updateData,
       experienceYears: updateData.experienceYears !== undefined ? this.parseExperienceYears(updateData.experienceYears) : undefined,
-      startingPrice: updateData.startingPrice !== undefined ? this.parseStartingPrice(updateData.startingPrice) : undefined,
+      startingPrice: updateData.startingPrice !== undefined ? parseDecimal(updateData.startingPrice) : undefined,
       happyClients: updateData.happyClients !== undefined ? this.parseIntVal(updateData.happyClients) : undefined,
       totalDesigns: updateData.totalDesigns !== undefined ? this.parseIntVal(updateData.totalDesigns) : undefined,
-      rating: updateData.rating !== undefined ? this.parseDecimalVal(updateData.rating) : undefined,
+      rating: updateData.rating !== undefined ? parseDecimal(updateData.rating) : undefined,
       reviewsCount: updateData.reviewsCount !== undefined ? this.parseIntVal(updateData.reviewsCount) : undefined,
       version: boutique.version + 1
     };

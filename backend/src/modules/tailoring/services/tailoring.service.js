@@ -1,6 +1,6 @@
 const repository = require('../repositories/tailoring.repository');
 const prisma = require('../../../utils/prisma');
-const notificationsService = require('../../notifications/services/notifications.service');
+const { eventBus, Events } = require('../../../services/eventBus');
 const { validateSubscriptionLimit, withSubscriptionGuard } = require('../../../services/subscriptionService');
 
 class TailoringService {
@@ -37,17 +37,7 @@ class TailoringService {
 
     const bookBoutique = await repository.findBoutiqueById(boutiqueId);
     if (bookBoutique && bookBoutique.ownerId) {
-      await notificationsService.createAdminNotification({
-        recipientType: 'OWNER',
-        recipientId: bookBoutique.ownerId,
-        boutiqueId,
-        type: 'NEW_BOOKING',
-        priority: 'NORMAL',
-        title: 'New Booking Request',
-        message: `${customerName} has requested a ${(bookingType || 'STORE_VISIT').replace(/_/g, ' ').toLowerCase()} appointment on ${new Date(bookingDate).toLocaleDateString()}.`,
-        entityType: 'booking',
-        entityId: booking.id,
-      });
+      eventBus.emit(Events.BOOKING_CREATED, { booking, boutique: bookBoutique });
     }
 
     return booking;
@@ -181,31 +171,14 @@ class TailoringService {
     if (status === 'Accepted') {
       const customer = await repository.findUserByPhone(booking.customerMobile);
       if (customer) {
-        await notificationsService.createCustomerNotification({
-          customerId: customer.id,
-          type: 'BOOKING_CONFIRMED',
-          title: 'Booking Confirmed',
-          message: `Your ${booking.bookingType.replace(/_/g, ' ').toLowerCase()} appointment on ${new Date(booking.bookingDate).toLocaleDateString()} has been confirmed.`,
-          entityType: 'booking',
-          entityId: booking.id,
-        });
+        eventBus.emit(Events.BOOKING_CONFIRMED, { customerId: customer.id, booking, boutique: await repository.findBoutiqueById(booking.boutiqueId) });
       }
     }
 
     if (status === 'Rejected') {
       const bkBoutique = await repository.findBoutiqueById(booking.boutiqueId);
       if (bkBoutique && bkBoutique.ownerId) {
-        await notificationsService.createAdminNotification({
-          recipientType: 'OWNER',
-          recipientId: bkBoutique.ownerId,
-          boutiqueId: booking.boutiqueId,
-          type: 'BOOKING_CANCELLED',
-          priority: 'NORMAL',
-          title: 'Booking Rejected',
-          message: `Booking for ${booking.customerName} on ${new Date(booking.bookingDate).toLocaleDateString()} has been rejected.`,
-          entityType: 'booking',
-          entityId: booking.id,
-        });
+        eventBus.emit(Events.BOOKING_REJECTED, { booking, boutique: bkBoutique });
       }
     }
 

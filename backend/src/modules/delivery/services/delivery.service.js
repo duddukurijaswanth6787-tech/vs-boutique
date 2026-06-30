@@ -1,5 +1,5 @@
+const { eventBus, Events } = require('../../../services/eventBus');
 const repository = require('../repositories/delivery.repository');
-const notificationsService = require('../../notifications/services/notifications.service');
 
 // Exceptions
 class DeliveryTrackingError extends Error {
@@ -284,34 +284,10 @@ class DeliveryService {
       return returnReq;
     });
 
-    // Notify Customer
-    await notificationsService.createCustomerNotification({
-      customerId: userId,
-      type: 'RETURN_REQUESTED',
-      title: 'Return Request Submitted',
-      message: `Your return request ${result.returnNumber} has been submitted and is under review.`,
-      entityType: 'return',
-      entityId: result.returnNumber,
-    });
-
-    // Notify Owner
+    // Notify Customer & Owner
     const returnOrder = await repository.findOrderById(orderId);
-    if (returnOrder) {
-      const returnBoutique = await repository.findBoutiqueById(returnOrder.boutiqueId);
-      if (returnBoutique && returnBoutique.ownerId) {
-        await notificationsService.createAdminNotification({
-          recipientType: 'OWNER',
-          recipientId: returnBoutique.ownerId,
-          boutiqueId: returnOrder.boutiqueId,
-          type: 'ORDER_RETURN_REQUEST',
-          priority: 'HIGH',
-          title: 'Return Request Received',
-          message: `Return ${result.returnNumber} has been requested for order item - ${result.reason}.`,
-          entityType: 'return',
-          entityId: result.returnNumber,
-        });
-      }
-    }
+    const returnBoutique = returnOrder ? await repository.findBoutiqueById(returnOrder.boutiqueId) : null;
+    eventBus.emit(Events.RETURN_REQUESTED, { userId, returnReq: result, boutique: returnBoutique });
 
     return result;
   }
@@ -400,33 +376,8 @@ class DeliveryService {
     const updated = await repository.updateReturnRequest(returnId, updateData, historyData, onRefunded);
 
     if (newStatus === 'APPROVED' || newStatus === 'REJECTED') {
-      await notificationsService.createCustomerNotification({
-        customerId: ret.customerId,
-        type: newStatus === 'APPROVED' ? 'RETURN_APPROVED' : 'RETURN_REJECTED',
-        title: newStatus === 'APPROVED' ? 'Return Approved' : 'Return Rejected',
-        message: newStatus === 'APPROVED'
-          ? `Your return request ${ret.returnNumber} has been approved. We'll arrange pickup shortly.`
-          : `Your return request ${ret.returnNumber} has been rejected. Please contact support for details.`,
-        entityType: 'return',
-        entityId: ret.returnNumber,
-      });
-
       const rBoutique = await repository.findBoutiqueById(ret.order.boutiqueId);
-      if (rBoutique && rBoutique.ownerId) {
-        await notificationsService.createAdminNotification({
-          recipientType: 'OWNER',
-          recipientId: rBoutique.ownerId,
-          boutiqueId: ret.order.boutiqueId,
-          type: newStatus === 'APPROVED' ? 'ORDER_RETURN_APPROVED' : 'ORDER_RETURN_REJECTED',
-          priority: 'NORMAL',
-          title: newStatus === 'APPROVED' ? 'Return Approved' : 'Return Rejected',
-          message: newStatus === 'APPROVED'
-            ? `Return ${ret.returnNumber} has been approved.`
-            : `Return ${ret.returnNumber} has been rejected.`,
-          entityType: 'return',
-          entityId: ret.returnNumber,
-        });
-      }
+      eventBus.emit(Events.RETURN_STATUS_CHANGED, { customerId: ret.customerId, returnReq: ret, newStatus, boutique: rBoutique });
     }
 
     return updated;
@@ -502,34 +453,10 @@ class DeliveryService {
       return exchangeReq;
     });
 
-    // Notify Customer
-    await notificationsService.createCustomerNotification({
-      customerId: userId,
-      type: 'EXCHANGE_REQUESTED',
-      title: 'Exchange Request Submitted',
-      message: `Your exchange request ${result.exchangeNumber} has been submitted and is under review.`,
-      entityType: 'exchange',
-      entityId: result.exchangeNumber,
-    });
-
-    // Notify Owner
+    // Notify Customer & Owner
     const excOrder = await repository.findOrderById(orderId);
-    if (excOrder) {
-      const excBoutique = await repository.findBoutiqueById(excOrder.boutiqueId);
-      if (excBoutique && excBoutique.ownerId) {
-        await notificationsService.createAdminNotification({
-          recipientType: 'OWNER',
-          recipientId: excBoutique.ownerId,
-          boutiqueId: excOrder.boutiqueId,
-          type: 'ORDER_EXCHANGE_REQUEST',
-          priority: 'HIGH',
-          title: 'Exchange Request Received',
-          message: `Exchange ${result.exchangeNumber} has been requested - ${result.reason}.`,
-          entityType: 'exchange',
-          entityId: result.exchangeNumber,
-        });
-      }
-    }
+    const excBoutique = excOrder ? await repository.findBoutiqueById(excOrder.boutiqueId) : null;
+    eventBus.emit(Events.EXCHANGE_REQUESTED, { userId, exchange: result, boutique: excBoutique });
 
     return result;
   }
@@ -575,33 +502,8 @@ class DeliveryService {
     const updated = await repository.updateExchangeRequest(exchangeId, updateData, historyData);
 
     if (newStatus === 'APPROVED' || newStatus === 'SHIPPED') {
-      await notificationsService.createCustomerNotification({
-        customerId: exc.customerId,
-        type: newStatus === 'APPROVED' ? 'EXCHANGE_APPROVED' : 'EXCHANGE_SHIPPED',
-        title: newStatus === 'APPROVED' ? 'Exchange Approved' : 'Exchange Shipped',
-        message: newStatus === 'APPROVED'
-          ? `Your exchange request ${exc.exchangeNumber} has been approved. We'll process the replacement.`
-          : `Your replacement for exchange ${exc.exchangeNumber} has been shipped!`,
-        entityType: 'exchange',
-        entityId: exc.exchangeNumber,
-      });
-
       const eBoutique = await repository.findBoutiqueById(exc.order.boutiqueId);
-      if (eBoutique && eBoutique.ownerId) {
-        await notificationsService.createAdminNotification({
-          recipientType: 'OWNER',
-          recipientId: eBoutique.ownerId,
-          boutiqueId: exc.order.boutiqueId,
-          type: newStatus === 'APPROVED' ? 'ORDER_EXCHANGE_APPROVED' : 'ORDER_EXCHANGE_SHIPPED',
-          priority: 'NORMAL',
-          title: newStatus === 'APPROVED' ? 'Exchange Approved' : 'Exchange Shipped',
-          message: newStatus === 'APPROVED'
-            ? `Exchange ${exc.exchangeNumber} has been approved.`
-            : `Replacement for exchange ${exc.exchangeNumber} has been shipped.`,
-          entityType: 'exchange',
-          entityId: exc.exchangeNumber,
-        });
-      }
+      eventBus.emit(Events.EXCHANGE_STATUS_CHANGED, { customerId: exc.customerId, exchange: exc, newStatus, boutique: eBoutique });
     }
 
     return updated;

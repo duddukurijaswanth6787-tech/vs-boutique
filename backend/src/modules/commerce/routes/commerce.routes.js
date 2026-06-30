@@ -15,9 +15,6 @@ const ownerMiddleware = [
 // Router 1: customerCommerceRouter (mounted at /orders combined router)
 const customerCommerceRouter = express.Router();
 
-customerCommerceRouter.get('/my', protect, commerceController.getCustomerOrders);
-customerCommerceRouter.get('/my/:id', protect, commerceController.getCustomerOrderById);
-customerCommerceRouter.post('/:id/cancel', protect, commerceController.cancelCustomerOrder);
 customerCommerceRouter.get('/:id/timeline', protect, commerceController.getOrderTimeline);
 
 

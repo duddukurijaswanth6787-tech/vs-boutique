@@ -36,4 +36,25 @@ const logAction = async (actionType, entityType, entityId, performedBy, changes 
     }
 };
 
-module.exports = { logAction };
+const getAuditLogs = async (entityType, entityId, options = {}) => {
+    const { limit = 50, offset = 0, actionType } = options;
+    const where = {};
+    if (entityType) where.entityType = entityType;
+    if (entityId) where.entityId = entityId;
+    if (actionType) where.actionType = { startsWith: actionType };
+
+    const [logs, total] = await Promise.all([
+        prisma.auditLog.findMany({
+            where,
+            orderBy: { timestamp: 'desc' },
+            take: limit,
+            skip: offset,
+            include: { owner: { select: { ownerName: true, email: true } } }
+        }),
+        prisma.auditLog.count({ where })
+    ]);
+
+    return { logs, total, limit, offset };
+};
+
+module.exports = { logAction, getAuditLogs };

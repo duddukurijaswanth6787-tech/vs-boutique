@@ -47,10 +47,7 @@ class MarketplaceService {
       throw new Error('Invalid version format. Must follow semantic versioning (e.g. 1.0.0)');
     }
 
-    // 1. Sandbox manifest validation
     this.validateManifest(manifestJson);
-
-    // 2. Cryptographic signature and checksum mock verification
     this.verifyPackageSignature(checksum, manifestJson);
 
     return await prisma.$transaction(async (tx) => {
@@ -66,7 +63,7 @@ class MarketplaceService {
             name,
             slug,
             description,
-            status: 'APPROVED' // Auto-approve in test environment
+            status: 'PENDING'
           }
         });
       }

@@ -1,15 +1,9 @@
+const { parseDecimalOrNull } = require('../../../utils/parseDecimal');
+const { eventBus, Events } = require('../../../services/eventBus');
 const repository = require('../repositories/measurements.repository');
-const notificationsService = require('../../notifications/services/notifications.service');
 const { validateSubscriptionLimit } = require('../../../services/subscriptionService');
 
 class MeasurementsService {
-  parseDecimalVal(val) {
-    if (val === null || val === undefined || val === '') return null;
-    if (typeof val === 'number') return val;
-    const parsed = parseFloat(val.toString().replace(/[^0-9.]/g, ''));
-    return isNaN(parsed) ? null : parsed;
-  }
-
   mapMeasurementResponse(m, originalUserId) {
     if (!m) return null;
     return {
@@ -37,12 +31,12 @@ class MeasurementsService {
 
   async updateCustomerSelfMeasurement(userId, measurements, notes) {
     const parsed = {
-      chest: this.parseDecimalVal(measurements?.chest),
-      waist: this.parseDecimalVal(measurements?.waist),
-      length: this.parseDecimalVal(measurements?.length),
-      shoulder: this.parseDecimalVal(measurements?.shoulder),
-      sleeveLength: this.parseDecimalVal(measurements?.sleeveLength),
-      neck: this.parseDecimalVal(measurements?.neck),
+      chest: parseDecimalOrNull(measurements?.chest),
+      waist: parseDecimalOrNull(measurements?.waist),
+      length: parseDecimalOrNull(measurements?.length),
+      shoulder: parseDecimalOrNull(measurements?.shoulder),
+      sleeveLength: parseDecimalOrNull(measurements?.sleeveLength),
+      neck: parseDecimalOrNull(measurements?.neck),
       notes: notes || ''
     };
 
@@ -89,12 +83,12 @@ class MeasurementsService {
     }
 
     const parsedData = {
-      chest: this.parseDecimalVal(measurements?.chest),
-      waist: this.parseDecimalVal(measurements?.waist),
-      length: this.parseDecimalVal(measurements?.length),
-      shoulder: this.parseDecimalVal(measurements?.shoulder),
-      sleeveLength: this.parseDecimalVal(measurements?.sleeveLength),
-      neck: this.parseDecimalVal(measurements?.neck),
+      chest: parseDecimalOrNull(measurements?.chest),
+      waist: parseDecimalOrNull(measurements?.waist),
+      length: parseDecimalOrNull(measurements?.length),
+      shoulder: parseDecimalOrNull(measurements?.shoulder),
+      sleeveLength: parseDecimalOrNull(measurements?.sleeveLength),
+      neck: parseDecimalOrNull(measurements?.neck),
       notes: notes || ''
     };
 
@@ -103,17 +97,7 @@ class MeasurementsService {
     if (targetBoutiqueId) {
       const mBoutique = await repository.findBoutiqueById(targetBoutiqueId);
       if (mBoutique && mBoutique.ownerId) {
-        await notificationsService.createAdminNotification({
-          recipientType: 'OWNER',
-          recipientId: mBoutique.ownerId,
-          boutiqueId: targetBoutiqueId,
-          type: 'NEW_MEASUREMENT',
-          priority: 'LOW',
-          title: 'New Measurements Recorded',
-          message: `Measurements for customer ${user.name || user.phone} have been recorded.`,
-          entityType: 'measurement',
-          entityId: updated.id,
-        });
+        eventBus.emit(Events.MEASUREMENT_SUBMITTED, { measurements: updated, boutique: mBoutique });
       }
     }
 

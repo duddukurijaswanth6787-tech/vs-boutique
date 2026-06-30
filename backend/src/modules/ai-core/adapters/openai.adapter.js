@@ -12,8 +12,7 @@ class OpenAIAdapter extends ProviderAdapter {
 
   async generate(systemPrompt, userPrompt, schema = null) {
     if (!this.apiKey) {
-      logger.warn('OpenAI API Key is missing. Operating in mock response mode.');
-      return this._mockResponse(systemPrompt, userPrompt, schema);
+      throw new Error('OpenAI API Key is not configured. Set OPENAI_API_KEY environment variable.');
     }
 
     const url = 'https://api.openai.com/v1/chat/completions';
@@ -58,15 +57,14 @@ class OpenAIAdapter extends ProviderAdapter {
 
       return contentText.trim();
     } catch (err) {
-      logger.error('OpenAI API execution failed, falling back to mock.', { error: err.message });
-      return this._mockResponse(systemPrompt, userPrompt, schema);
+      logger.error('OpenAI API execution failed.', { error: err.message });
+      throw err;
     }
   }
 
   async stream(systemPrompt, userPrompt, onChunk) {
     if (!this.apiKey) {
-      logger.warn('OpenAI API Key is missing. Using Mock streaming mode.');
-      return this._mockStream(systemPrompt, userPrompt, onChunk, true);
+      throw new Error('OpenAI API Key is not configured. Set OPENAI_API_KEY environment variable.');
     }
 
     const url = 'https://api.openai.com/v1/chat/completions';
@@ -129,20 +127,9 @@ class OpenAIAdapter extends ProviderAdapter {
       }
       return fullContent;
     } catch (err) {
-      logger.error('OpenAI streaming failed, falling back to mock stream.', { error: err.message });
-      return this._mockStream(systemPrompt, userPrompt, onChunk, true);
+      logger.error('OpenAI streaming failed.', { error: err.message });
+      throw err;
     }
-  }
-
-  async _mockStream(systemPrompt, userPrompt, onChunk, schema = null) {
-    const fullText = this._mockResponse(systemPrompt, userPrompt, schema);
-    const chunkSize = 20;
-    for (let i = 0; i < fullText.length; i += chunkSize) {
-      const chunk = fullText.substring(i, i + chunkSize);
-      onChunk(chunk);
-      await new Promise(resolve => setTimeout(resolve, 5));
-    }
-    return fullText;
   }
 
   async countTokens(text) {
@@ -153,32 +140,6 @@ class OpenAIAdapter extends ProviderAdapter {
     const inputCost = (tokensCount.input || 0) * (5.00 / 1000000);
     const outputCost = (tokensCount.output || 0) * (15.00 / 1000000);
     return Number((inputCost + outputCost).toFixed(6));
-  }
-
-  _mockResponse(systemPrompt, userPrompt, schema) {
-    logger.info('Compiling mock fallback output payload for OpenAI.');
-    const promptStr = String(userPrompt || '') + ' ' + String(systemPrompt || '');
-    
-    if (promptStr.includes('Validation') || promptStr.includes('validation')) {
-      return JSON.stringify({
-        score: 97,
-        compliancePassed: true,
-        auditsPassed: 12,
-        errors: []
-      });
-    }
-
-    return JSON.stringify({
-      name: 'Mock Custom Standard (OpenAI)',
-      businessType: 'Boutique',
-      sitemap: ['Home', 'Shop', 'Contact Us'],
-      cmsFields: { logo: true, tagline: true },
-      apis: ['products', 'cart'],
-      styling: { primaryColor: '#4f46e5', font: 'Inter' },
-      performance: { bundleLimitMb: 2, imageLazyLoad: true },
-      accessibility: { wcagCompliance: 'WCAG AA' },
-      seo: { metaTags: true, openGraph: true }
-    });
   }
 }
 

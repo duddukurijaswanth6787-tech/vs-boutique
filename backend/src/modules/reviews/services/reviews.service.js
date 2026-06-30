@@ -2,7 +2,7 @@ const prisma = require('../../../utils/prisma');
 const reviewsRepository = require('../repositories/reviews.repository');
 const { logAction } = require('../../../services/auditService');
 const { validateSubscriptionLimit } = require('../../../services/subscriptionService');
-const { notificationsService } = require('../../notifications/services/notifications.service');
+const { eventBus, Events } = require('../../../services/eventBus');
 
 class ProductReviewError extends Error {
   constructor(message, status = 400, code = 'REVIEW_ERROR') {
@@ -411,17 +411,7 @@ class ReviewsService {
     if (product && product.boutiqueId) {
       const rBoutique = await reviewsRepository.findBoutiqueUnique(product.boutiqueId);
       if (rBoutique && rBoutique.ownerId) {
-        notificationsService.createAdminNotification({
-          recipientType: 'OWNER',
-          recipientId: rBoutique.ownerId,
-          boutiqueId: product.boutiqueId,
-          type: 'NEW_REVIEW',
-          priority: 'LOW',
-          title: 'New Product Review',
-          message: `${populatedReview.user?.name || 'A customer'} reviewed "${product.name}" with ${rating} stars.`,
-          entityType: 'product_review',
-          entityId: populatedReview.id,
-        }).catch(() => {});
+        eventBus.emit(Events.REVIEW_SUBMITTED, { review: populatedReview, boutique: rBoutique });
       }
     }
 
@@ -464,14 +454,7 @@ class ReviewsService {
 
     const updated = await reviewsRepository.updateProductReview(reviewId, { reply });
 
-    await notificationsService.createCustomerNotification({
-      customerId: review.userId,
-      type: 'REVIEW_REPLY',
-      title: 'Response to Your Review',
-      message: `The boutique has replied to your review on ${review.product?.name || 'a product'}.`,
-      entityType: 'product_review',
-      entityId: review.id,
-    });
+    eventBus.emit(Events.REVIEW_REPLIED, { review, reply });
 
     return updated;
   }

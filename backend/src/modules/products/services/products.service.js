@@ -3,6 +3,7 @@ const { s3 } = require('../../../utils/s3');
 const productsRepository = require('../repositories/products.repository');
 const { logAction } = require('../../../services/auditService');
 const { withSubscriptionGuard } = require('../../../services/subscriptionService');
+const { parseDecimalOrNull } = require('../../../utils/parseDecimal');
 
 const MAX_PRODUCT_IMAGES = 20;
 
@@ -11,14 +12,6 @@ function isValidUuid(id) {
 }
 
 class ProductsService {
-  // ── Helpers ─────────────────────────────────────────────────────────
-  parseDecimal(val) {
-    if (val === null || val === undefined || val === '') return null;
-    if (typeof val === 'number') return val;
-    const parsed = parseFloat(val.toString().replace(/[^0-9.]/g, ''));
-    return isNaN(parsed) ? null : parsed;
-  }
-
   mapProductResponse(product) {
     if (!product) return null;
     const mapped = {
@@ -59,10 +52,10 @@ class ProductsService {
     if (!isUpdate) {
       if (!body.name) errors.push('Product name is required');
       if (body.basePrice === undefined || body.basePrice === null) errors.push('Base price is required');
-      if (this.parseDecimal(body.basePrice) === null) errors.push('Base price must be a valid number');
+      if (parseDecimalOrNull(body.basePrice) === null) errors.push('Base price must be a valid number');
     } else {
       if (body.name !== undefined && !body.name) errors.push('Product name cannot be empty');
-      if (body.basePrice !== undefined && this.parseDecimal(body.basePrice) === null) errors.push('Base price must be a valid number');
+      if (body.basePrice !== undefined && parseDecimalOrNull(body.basePrice) === null) errors.push('Base price must be a valid number');
     }
     return errors;
   }
@@ -255,13 +248,13 @@ class ProductsService {
           data: {
             boutiqueId,
             name, description, shortDescription, sku, barcode,
-            basePrice: this.parseDecimal(basePrice),
-            compareAtPrice: this.parseDecimal(compareAtPrice),
-            costPrice: this.parseDecimal(costPrice),
+            basePrice: parseDecimalOrNull(basePrice),
+            compareAtPrice: parseDecimalOrNull(compareAtPrice),
+            costPrice: parseDecimalOrNull(costPrice),
             productType: productType || 'READY_MADE',
             deliveryType: deliveryType || 'STANDARD',
-            weight: this.parseDecimal(weight), length: this.parseDecimal(length),
-            width: this.parseDecimal(width), height: this.parseDecimal(height),
+            weight: parseDecimalOrNull(weight), length: parseDecimalOrNull(length),
+            width: parseDecimalOrNull(width), height: parseDecimalOrNull(height),
             categoryId: categoryId || null,
             subCategoryId: subCategoryId || null,
             brandId: brandId || null,
@@ -313,15 +306,15 @@ class ProductsService {
     if (shortDescription !== undefined) data.shortDescription = shortDescription;
     if (sku !== undefined) data.sku = sku;
     if (barcode !== undefined) data.barcode = barcode;
-    if (basePrice !== undefined) data.basePrice = this.parseDecimal(basePrice);
-    if (compareAtPrice !== undefined) data.compareAtPrice = this.parseDecimal(compareAtPrice);
-    if (costPrice !== undefined) data.costPrice = this.parseDecimal(costPrice);
+    if (basePrice !== undefined) data.basePrice = parseDecimalOrNull(basePrice);
+    if (compareAtPrice !== undefined) data.compareAtPrice = parseDecimalOrNull(compareAtPrice);
+    if (costPrice !== undefined) data.costPrice = parseDecimalOrNull(costPrice);
     if (productType !== undefined) data.productType = productType;
     if (deliveryType !== undefined) data.deliveryType = deliveryType;
-    if (weight !== undefined) data.weight = this.parseDecimal(weight);
-    if (length !== undefined) data.length = this.parseDecimal(length);
-    if (width !== undefined) data.width = this.parseDecimal(width);
-    if (height !== undefined) data.height = this.parseDecimal(height);
+    if (weight !== undefined) data.weight = parseDecimalOrNull(weight);
+    if (length !== undefined) data.length = parseDecimalOrNull(length);
+    if (width !== undefined) data.width = parseDecimalOrNull(width);
+    if (height !== undefined) data.height = parseDecimalOrNull(height);
     if (status !== undefined) data.status = status;
     if (categoryId !== undefined) data.categoryId = categoryId;
     if (subCategoryId !== undefined) data.subCategoryId = subCategoryId;
@@ -522,8 +515,8 @@ class ProductsService {
       const variant = await productsRepository.createVariant({
         productId, sku, name,
         attributes: attributes || undefined,
-        price: this.parseDecimal(price),
-        compareAtPrice: this.parseDecimal(compareAtPrice),
+        price: parseDecimalOrNull(price),
+        compareAtPrice: parseDecimalOrNull(compareAtPrice),
         sortOrder: sortOrder ?? 0
       });
 
@@ -547,8 +540,8 @@ class ProductsService {
     if (sku !== undefined) data.sku = sku;
     if (name !== undefined) data.name = name;
     if (attributes !== undefined) data.attributes = attributes;
-    if (price !== undefined) data.price = this.parseDecimal(price);
-    if (compareAtPrice !== undefined) data.compareAtPrice = this.parseDecimal(compareAtPrice);
+    if (price !== undefined) data.price = parseDecimalOrNull(price);
+    if (compareAtPrice !== undefined) data.compareAtPrice = parseDecimalOrNull(compareAtPrice);
     if (status !== undefined) data.status = status;
     if (sortOrder !== undefined) data.sortOrder = sortOrder;
 
@@ -653,8 +646,8 @@ class ProductsService {
     if (filterBoutique) where.boutiqueId = filterBoutique;
     if (minPrice || maxPrice) {
       where.basePrice = {};
-      if (minPrice) where.basePrice.gte = this.parseDecimal(minPrice);
-      if (maxPrice) where.basePrice.lte = this.parseDecimal(maxPrice);
+      if (minPrice) where.basePrice.gte = parseDecimalOrNull(minPrice);
+      if (maxPrice) where.basePrice.lte = parseDecimalOrNull(maxPrice);
     }
 
     let orderBy = { createdAt: 'desc' };

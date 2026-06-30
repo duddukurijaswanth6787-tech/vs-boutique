@@ -185,7 +185,7 @@ async function testCreatePayment() {
   cleanup.push(() => prisma.commerceOrder.deleteMany({ where: { id: order.id } }));
 
   await prisma.$transaction(async (tx) => {
-    const payment = await createPayment(tx, order.id, 500, 'card', 'rzp_test_123');
+    const payment = await createPayment(tx, order.id, 500, 'card', `rzp_test_${Date.now()}`);
     if (!payment || payment.status !== 'PENDING') throw new Error('Payment creation failed');
     if (Number(payment.amount) !== 500) throw new Error(`Expected amount=500, got ${payment.amount}`);
     console.log(`  PASS: Created payment id=${payment.id}, amount=${payment.amount}`);
@@ -302,7 +302,7 @@ async function testCheckoutLifecycle() {
   if (inv2.reservedQuantity !== 2) throw new Error(`Expected reserved=2, got ${inv2.reservedQuantity}`);
 
   // Step 3: Create payment record (simulates create-payment)
-  const payment = await prisma.$transaction(tx => createPayment(tx, mockOrder.id, 2000, 'card', 'rzp_test'));
+  const payment = await prisma.$transaction(tx => createPayment(tx, mockOrder.id, 2000, 'card', `rzp_test_${Date.now()}`));
   console.log(`  Payment created: id=${payment.id}, status=${payment.status}`);
 
   // Step 4: Verify payment (deducts inventory — simulates verify-payment)

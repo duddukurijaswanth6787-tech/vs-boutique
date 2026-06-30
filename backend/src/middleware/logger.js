@@ -54,9 +54,11 @@ async function logSystemHealth(prisma) {
 
 // Request and Response Timing Middleware
 const requestLogger = (req, res, next) => {
-    if (process.env.NODE_ENV === 'production') return next();
+    const isProduction = process.env.NODE_ENV === 'production';
 
-    activeRequestsCount++;
+    if (!isProduction) {
+        activeRequestsCount++;
+    }
     const start = Date.now();
     const timestamp = getTimestamp();
 
@@ -84,40 +86,58 @@ const requestLogger = (req, res, next) => {
         return oldEnd.apply(res, arguments);
     };
 
-    let userRole = 'ANONYMOUS';
-    let username = 'Guest';
-    if (req.user) {
-        userRole = (req.user.role || 'Unknown').toUpperCase();
-        username = req.user.username || req.user.ownerName || req.user.name || 'User';
-    } else if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        try {
-            const token = req.headers.authorization.split(' ')[1];
-            const decoded = jwt.decode(token);
-            if (decoded) {
-                userRole = (decoded.role || 'Unknown').toUpperCase();
-                username = decoded.username || decoded.ownerName || decoded.name || 'User';
-            }
-        } catch (e) {}
-    }
+    if (!isProduction) {
+        let userRole = 'ANONYMOUS';
+        let username = 'Guest';
+        if (req.user) {
+            userRole = (req.user.role || 'Unknown').toUpperCase();
+            username = req.user.username || req.user.ownerName || req.user.name || 'User';
+        } else if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            try {
+                const token = req.headers.authorization.split(' ')[1];
+                const decoded = jwt.decode(token);
+                if (decoded) {
+                    userRole = (decoded.role || 'Unknown').toUpperCase();
+                    username = decoded.username || decoded.ownerName || decoded.name || 'User';
+                }
+            } catch (e) {}
+        }
 
-    console.log(chalk.blue(`[${timestamp}] ${req.method} ${req.originalUrl} [${userRole}:${username}]`));
+        console.log(chalk.blue(`[${timestamp}] ${req.method} ${req.originalUrl} [${userRole}:${username}]`));
 
-    if (req.body && Object.keys(req.body).length > 0) {
-        const loggedBody = { ...req.body };
-        if (loggedBody.password) loggedBody.password = '********';
-        console.log(chalk.blue(`Body: `) + chalk.white(JSON.stringify(loggedBody)));
-    }
+        if (req.body && Object.keys(req.body).length > 0) {
+            const loggedBody = { ...req.body };
+            if (loggedBody.password) loggedBody.password = '********';
+            console.log(chalk.blue(`Body: `) + chalk.white(JSON.stringify(loggedBody)));
+        }
 
-    if (req.params && Object.keys(req.params).length > 0) {
-        console.log(chalk.blue(`Params: `) + chalk.white(JSON.stringify(req.params)));
-    }
-    if (req.query && Object.keys(req.query).length > 0) {
-        console.log(chalk.blue(`Query: `) + chalk.white(JSON.stringify(req.query)));
+        if (req.params && Object.keys(req.params).length > 0) {
+            console.log(chalk.blue(`Params: `) + chalk.white(JSON.stringify(req.params)));
+        }
+        if (req.query && Object.keys(req.query).length > 0) {
+            console.log(chalk.blue(`Query: `) + chalk.white(JSON.stringify(req.query)));
+        }
     }
 
     res.on('finish', () => {
-        activeRequestsCount = Math.max(0, activeRequestsCount - 1);
+        if (!isProduction) {
+            activeRequestsCount = Math.max(0, activeRequestsCount - 1);
+        }
         const duration = Date.now() - start;
+
+        if (isProduction) {
+            const level = res.statusCode >= 500 ? 'ERROR' : res.statusCode >= 400 ? 'WARN' : 'INFO';
+            console.log(JSON.stringify({
+                level,
+                timestamp,
+                method: req.method,
+                url: req.originalUrl,
+                status: res.statusCode,
+                duration,
+                size: responseSize
+            }));
+            return;
+        }
 
         let sizeStr = `${responseSize} B`;
         if (responseSize >= 1048576) {
@@ -154,19 +174,39 @@ const requestLogger = (req, res, next) => {
     next();
 };
 
-// Global uncaught exceptions logger
+// Global error handler middleware
 const errorLogger = (err, req, res, next) => {
-    console.error(chalk.red(`\n❌ ERROR`));
-    console.error(chalk.red(`Time:   `) + chalk.white(getTimestamp()));
-    console.error(chalk.red(`Route:  `) + chalk.white(req.originalUrl));
-    console.error(chalk.red(`Method: `) + chalk.white(req.method));
-    console.error(chalk.red(`Status: `) + chalk.white(500));
-    console.error(chalk.red(`\nMessage:\n${err.message}`));
-    if (err.stack) {
-        console.error(chalk.red(`\nStack:\n${err.stack}`));
+    const isProduction = process.env.NODE_ENV === 'production';
+    const timestamp = getTimestamp();
+
+    if (isProduction) {
+        console.error(JSON.stringify({
+            level: 'ERROR',
+            timestamp,
+            message: err.message,
+            stack: err.stack,
+            route: req.originalUrl,
+            method: req.method
+        }));
+    } else {
+        console.error(chalk.red(`\n❌ ERROR`));
+        console.error(chalk.red(`Time:   `) + chalk.white(timestamp));
+        console.error(chalk.red(`Route:  `) + chalk.white(req.originalUrl));
+        console.error(chalk.red(`Method: `) + chalk.white(req.method));
+        console.error(chalk.red(`Status: `) + chalk.white(err.statusCode || 500));
+        console.error(chalk.red(`\nMessage:\n${err.message}`));
+        if (err.stack) {
+            console.error(chalk.red(`\nStack:\n${err.stack}`));
+        }
+        console.error(chalk.red('----------------------------------------\n'));
     }
-    console.error(chalk.red('----------------------------------------\n'));
-    next(err);
+
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).json({
+        success: false,
+        message: isProduction ? 'Internal server error' : err.message,
+        ...(err.errors && { errors: err.errors })
+    });
 };
 
 // Dynamic routes mapper
@@ -270,9 +310,13 @@ function registerPrismaLogger(prismaClient) {
 
 // Start health timer
 function startSystemHealthMonitor(prisma) {
-    if (process.env.NODE_ENV === 'production') return;
+    const isProduction = process.env.NODE_ENV === 'production';
     setInterval(() => {
-        logSystemHealth(prisma);
+        if (isProduction) {
+            logSystemHealth(prisma).then(() => {}).catch(() => {});
+        } else {
+            logSystemHealth(prisma);
+        }
     }, 5 * 60 * 1000); // 5 minutes
 }
 

@@ -1,6 +1,7 @@
+const { parseDecimal } = require('../../../utils/parseDecimal');
 const commerceRepository = require('../repositories/commerce.repository');
 const prisma = require('../../../utils/prisma');
-const { notificationsService } = require('../../notifications/services/notifications.service');
+const { eventBus, Events } = require('../../../services/eventBus');
 
 class CommerceError extends Error {
   constructor(message, code = 'COMMERCE_ERROR', status = 400) {
@@ -11,11 +12,6 @@ class CommerceError extends Error {
 }
 
 class CommerceService {
-  parseDecimal(val) {
-    if (val === null || val === undefined) return 0;
-    return typeof val === 'number' ? val : parseFloat(val.toString().replace(/[^0-9.-]/g, '')) || 0;
-  }
-
   // ── Low-Level Services ──────────────────────────────────────────────
   async generateOrderNumber(tx = prisma) {
     const today = new Date().toISOString().slice(0, 10);
@@ -112,7 +108,7 @@ class CommerceService {
   async createPayment(tx, commerceOrderId, amount, method, razorpayOrderId) {
     return commerceRepository.createPayment({
       commerceOrderId,
-      amount: this.parseDecimal(amount),
+      amount: parseDecimal(amount),
       method: method || null,
       status: 'PENDING',
       razorpayOrderId: razorpayOrderId || null
@@ -340,31 +336,12 @@ class CommerceService {
       histories: { orderBy: { createdAt: 'asc' } }
     });
 
-    if (targetStatus === 'SHIPPED' || targetStatus === 'DELIVERED') {
-      await notificationsService.createCustomerNotification({
-        customerId: order.userId,
-        type: targetStatus === 'SHIPPED' ? 'ORDER_SHIPPED' : 'ORDER_DELIVERED',
-        title: targetStatus === 'SHIPPED' ? 'Order Shipped' : 'Order Delivered',
-        message: targetStatus === 'SHIPPED'
-          ? `Your order ${updated.orderId} has been shipped!`
-          : `Your order ${updated.orderId} has been delivered. Thank you!`,
-        entityType: 'commerce_order',
-        entityId: updated.orderId,
-      });
-    }
-
-    if (targetStatus === 'CANCELLED') {
-      await notificationsService.createAdminNotification({
-        recipientType: 'SUPER_ADMIN',
-        recipientId: user.id,
-        boutiqueId: order.boutiqueId,
-        type: 'ORDER_CANCELLED',
-        priority: 'HIGH',
-        title: 'Order Cancelled',
-        message: `Order ${updated.orderId} has been cancelled.`,
-        entityType: 'commerce_order',
-        entityId: updated.orderId,
-      });
+    if (targetStatus === 'SHIPPED') {
+      eventBus.emit(Events.ORDER_SHIPPED, { userId: order.userId, user, order: updated, boutique: { id: order.boutiqueId } });
+    } else if (targetStatus === 'DELIVERED') {
+      eventBus.emit(Events.ORDER_DELIVERED, { userId: order.userId, user, order: updated, boutique: { id: order.boutiqueId } });
+    } else if (targetStatus === 'CANCELLED') {
+      eventBus.emit(Events.ORDER_CANCELLED, { user, order: updated, boutiqueId: order.boutiqueId });
     }
 
     return updated;

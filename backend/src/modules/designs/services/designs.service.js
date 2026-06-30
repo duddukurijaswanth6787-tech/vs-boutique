@@ -1,3 +1,4 @@
+const { parseDecimal } = require('../../../utils/parseDecimal');
 const repository = require('../repositories/designs.repository');
 const { logAction } = require('../../../services/auditService');
 const { validateSubscriptionLimit, withSubscriptionGuard } = require('../../../services/subscriptionService');
@@ -11,13 +12,6 @@ class DesignsService {
       _id: design.id,
       price: Number(design.price) || 0
     };
-  }
-
-  parseDecimalVal(val) {
-    if (val === null || val === undefined || val === '') return 0.00;
-    if (typeof val === 'number') return val;
-    const parsed = parseFloat(val.toString().replace(/[^0-9.]/g, ''));
-    return isNaN(parsed) ? 0.00 : parsed;
   }
 
   async listDesigns(boutiqueId) {
@@ -36,7 +30,7 @@ class DesignsService {
     const newDesign = await withSubscriptionGuard(boutiqueId, feature, async (tx) => {
       return repository.createDesign(tx, {
         ...allowedData,
-        price: this.parseDecimalVal(price),
+        price: parseDecimal(price),
         boutiqueId
       });
     });
@@ -61,7 +55,7 @@ class DesignsService {
 
     const updated = await repository.updateDesign(id, {
       ...allowedData,
-      price: price !== undefined ? this.parseDecimalVal(price) : undefined
+      price: price !== undefined ? parseDecimal(price) : undefined
     });
 
     await logAction('UPDATE_DESIGN', 'Design', updated.id, userId);

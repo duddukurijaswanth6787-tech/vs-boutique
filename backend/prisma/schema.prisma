@@ -1862,6 +1862,10 @@ model Business {
 
   marketplaceInstallations MarketplaceInstallation[]
   marketplaceLicenses      MarketplaceLicense[]
+  deploymentEnvironments   DeploymentEnvironment[]
+  deployments              Deployment[]
+  deploymentDomains        DeploymentDomain[]
+  cmsUploads               CmsUpload[]
 
   @@map("businesses")
 }
@@ -2118,19 +2122,6 @@ model ImmutableRelease {
 
   @@unique([businessId, releaseTag, environment])
   @@map("immutable_releases")
-}
-
-// 14. Marketplace Installed Catalog
-model MarketplaceInstall {
-  id         String   @id @default(uuid())
-  businessId String   @map("business_id") @db.Uuid
-  itemKey    String   @map("item_key") @db.VarChar(100) // componentId, themeId, pluginId
-  type       String   @db.VarChar(50) // COMPONENT, THEME, PLUGIN, WORKFLOW
-  version    String   @db.VarChar(50)
-  createdAt  DateTime @default(now()) @map("created_at")
-
-  @@unique([businessId, itemKey])
-  @@map("marketplace_installs")
 }
 
 // 15. AI Learning Records
@@ -2736,4 +2727,202 @@ model CmsBlueprintFeature {
 
   @@unique([blueprintTemplateId, requirementId])
   @@map("cms_blueprint_features")
+}
+
+// ========================================================
+// PHASE 9: PRODUCTION DEPLOYMENT PLATFORM
+// ========================================================
+
+enum DeploymentEnvironmentType {
+  DEVELOPMENT
+  TESTING
+  STAGING
+  PRODUCTION
+}
+
+enum DeploymentStatus {
+  PENDING
+  BUILDING
+  BUILD_FAILED
+  VALIDATING
+  VALIDATION_FAILED
+  PACKAGING
+  UPLOADING
+  DEPLOYING
+  DEPLOYED
+  FAILED
+  ROLLED_BACK
+  CANCELLED
+}
+
+enum DeploymentDomainStatus {
+  PENDING_VERIFICATION
+  VERIFYING_DNS
+  DNS_VERIFIED
+  SSL_PENDING
+  SSL_ACTIVE
+  SSL_FAILED
+  ACTIVE
+  FAILED
+  PROPAGATING
+}
+
+enum DeploymentDomainType {
+  CUSTOM
+  SUBDOMAIN
+}
+
+model DeploymentEnvironment {
+  id                String                      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name              String                      @db.VarChar(100)
+  type              DeploymentEnvironmentType   @default(DEVELOPMENT)
+  businessId        String                      @map("business_id") @db.Uuid
+  business          Business                    @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  isActive          Boolean                     @default(true) @map("is_active")
+  sortOrder         Int                         @default(0) @map("sort_order")
+  deployments       Deployment[]
+  domains           DeploymentDomain[]
+  variables         DeploymentEnvironmentVariable[]
+  createdAt         DateTime                    @default(now()) @map("created_at")
+  updatedAt         DateTime                    @updatedAt @map("updated_at")
+
+  @@unique([businessId, name])
+  @@map("deployment_environments")
+}
+
+model Deployment {
+  id                String                      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  businessId        String                      @map("business_id") @db.Uuid
+  business          Business                    @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  environmentId     String?                     @map("environment_id") @db.Uuid
+  environment       DeploymentEnvironment?      @relation(fields: [environmentId], references: [id])
+  version           String                      @db.VarChar(50)
+  blueprintVersion  String?                     @map("blueprint_version") @db.VarChar(50)
+  requirementVersion String?                    @map("requirement_version") @db.VarChar(50)
+  commitHash        String?                     @map("commit_hash") @db.VarChar(64)
+  builder           String?                     @default("manual") @db.VarChar(100)
+  status            DeploymentStatus            @default(PENDING)
+  duration          Int?                        @default(0)
+  logs              Json?
+  metadata          Json?
+  artifactUrl       String?                     @map("artifact_url") @db.VarChar(512)
+  artifactChecksum  String?                     @map("artifact_checksum") @db.VarChar(64)
+  deployedBy        String?                     @map("deployed_by") @db.Uuid
+  rollbackTargetId  String?                     @map("rollback_target_id") @db.Uuid
+  rollbackTarget    Deployment?                 @relation("RollbackTarget", fields: [rollbackTargetId], references: [id])
+  rollbacks         Deployment[]                @relation("RollbackTarget")
+  buildLogs         DeploymentBuildLog[]
+  artifacts         DeploymentArtifact[]
+  isDeleted         Boolean                     @default(false) @map("is_deleted")
+  createdAt         DateTime                    @default(now()) @map("created_at")
+  updatedAt         DateTime                    @updatedAt @map("updated_at")
+
+  @@index([businessId, status])
+  @@index([businessId, environmentId])
+  @@index([businessId, createdAt])
+  @@map("deployments")
+}
+
+model DeploymentBuildLog {
+  id            String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  deploymentId  String    @map("deployment_id") @db.Uuid
+  deployment    Deployment @relation(fields: [deploymentId], references: [id], onDelete: Cascade)
+  level         String    @default("INFO") @db.VarChar(20)
+  message       String    @db.Text
+  metadata      Json?
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  @@index([deploymentId, createdAt])
+  @@map("deployment_build_logs")
+}
+
+model DeploymentArtifact {
+  id            String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  deploymentId  String    @map("deployment_id") @db.Uuid
+  deployment    Deployment @relation(fields: [deploymentId], references: [id], onDelete: Cascade)
+  name          String    @db.VarChar(255)
+  type          String    @db.VarChar(100)
+  url           String    @db.VarChar(512)
+  size          Int       @default(0)
+  checksum      String?   @db.VarChar(64)
+  metadata      Json?
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  @@map("deployment_artifacts")
+}
+
+model DeploymentDomain {
+  id                String                      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  businessId        String                      @map("business_id") @db.Uuid
+  business          Business                    @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  environmentId     String?                     @map("environment_id") @db.Uuid
+  environment       DeploymentEnvironment?      @relation(fields: [environmentId], references: [id])
+  domain            String                      @db.VarChar(255)
+  type              DeploymentDomainType        @default(SUBDOMAIN)
+  status            DeploymentDomainStatus      @default(PENDING_VERIFICATION)
+  dnsVerified       Boolean                     @default(false) @map("dns_verified")
+  sslEnabled        Boolean                     @default(true) @map("ssl_enabled")
+  sslStatus         String                      @default("PENDING") @map("ssl_status") @db.VarChar(50)
+  sslExpiresAt      DateTime?                   @map("ssl_expires_at")
+  cnameTarget       String?                     @map("cname_target") @db.VarChar(255)
+  txtRecord         String?                     @map("txt_record") @db.VarChar(255)
+  propagationStatus String                      @default("UNKNOWN") @map("propagation_status") @db.VarChar(50)
+  lastCheckedAt     DateTime?                   @map("last_checked_at")
+  isPrimary         Boolean                     @default(false) @map("is_primary")
+  isDeleted         Boolean                     @default(false) @map("is_deleted")
+  createdAt         DateTime                    @default(now()) @map("created_at")
+  updatedAt         DateTime                    @updatedAt @map("updated_at")
+
+  @@unique([businessId, domain])
+  @@index([businessId, status])
+  @@map("deployment_domains")
+}
+
+model DeploymentEnvironmentVariable {
+  id              String                      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  environmentId   String                      @map("environment_id") @db.Uuid
+  environment     DeploymentEnvironment       @relation(fields: [environmentId], references: [id], onDelete: Cascade)
+  key             String                      @db.VarChar(255)
+  encryptedValue  String                      @map("encrypted_value") @db.Text
+  isSecret        Boolean                     @default(false) @map("is_secret")
+  version         Int                         @default(1)
+  createdBy       String?                     @map("created_by") @db.Uuid
+  createdAt       DateTime                    @default(now()) @map("created_at")
+  updatedAt       DateTime                    @updatedAt @map("updated_at")
+
+  @@unique([environmentId, key])
+  @@map("deployment_environment_variables")
+}
+
+model DeploymentVariableHistory {
+  id              String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  variableId      String    @map("variable_id") @db.Uuid
+  key             String    @db.VarChar(255)
+  encryptedValue  String    @map("encrypted_value") @db.Text
+  isSecret        Boolean   @default(false) @map("is_secret")
+  version         Int
+  changedBy       String?   @map("changed_by") @db.Uuid
+  changedAt       DateTime  @default(now()) @map("changed_at")
+
+  @@index([variableId, version])
+  @@map("deployment_variable_histories")
+}
+
+model CmsUpload {
+  id                  String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  businessId          String   @map("business_id") @db.Uuid
+  business            Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  filename            String   @db.VarChar(255)
+  sizeBytes           Int      @map("size_bytes")
+  blueprintId         String?  @map("blueprint_id") @db.VarChar(100)
+  status              String   @default("PENDING") @db.VarChar(20)
+  progressPercent     Int      @default(0) @map("progress_percent")
+  virusScanResult     String?  @map("virus_scan_result") @db.VarChar(20)
+  sandboxPath         String?  @map("sandbox_path") @db.VarChar(512)
+  errorDetails        String?  @map("error_details") @db.Text
+  createdBy           String?  @map("created_by") @db.Uuid
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("cms_uploads")
 }

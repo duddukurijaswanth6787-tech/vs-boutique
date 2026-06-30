@@ -42,8 +42,8 @@ class OllamaAdapter extends ProviderAdapter {
 
       return contentText.trim();
     } catch (err) {
-      logger.warn('Ollama local API connection failed, falling back to mock.', { error: err.message });
-      return this._mockResponse(systemPrompt, userPrompt, schema);
+      logger.error('Ollama local API connection failed.', { error: err.message });
+      throw err;
     }
   }
 
@@ -93,26 +93,14 @@ class OllamaAdapter extends ProviderAdapter {
               fullContent += chunk;
             }
           } catch (e) {
-            // Partial JSON chunk
           }
         }
       }
       return fullContent;
     } catch (err) {
-      logger.warn('Ollama streaming failed, falling back to mock stream.', { error: err.message });
-      return this._mockStream(systemPrompt, userPrompt, onChunk, true);
+      logger.error('Ollama streaming failed.', { error: err.message });
+      throw err;
     }
-  }
-
-  async _mockStream(systemPrompt, userPrompt, onChunk, schema = null) {
-    const fullText = this._mockResponse(systemPrompt, userPrompt, schema);
-    const chunkSize = 20;
-    for (let i = 0; i < fullText.length; i += chunkSize) {
-      const chunk = fullText.substring(i, i + chunkSize);
-      onChunk(chunk);
-      await new Promise(resolve => setTimeout(resolve, 5));
-    }
-    return fullText;
   }
 
   async countTokens(text) {
@@ -121,32 +109,6 @@ class OllamaAdapter extends ProviderAdapter {
 
   async estimateCost(tokensCount) {
     return 0.00;
-  }
-
-  _mockResponse(systemPrompt, userPrompt, schema) {
-    logger.info('Compiling mock fallback output payload for Ollama.');
-    const promptStr = String(userPrompt || '') + ' ' + String(systemPrompt || '');
-    
-    if (promptStr.includes('Validation') || promptStr.includes('validation')) {
-      return JSON.stringify({
-        score: 94,
-        compliancePassed: true,
-        auditsPassed: 12,
-        errors: []
-      });
-    }
-
-    return JSON.stringify({
-      name: 'Mock Custom Standard (Ollama)',
-      businessType: 'Boutique',
-      sitemap: ['Home', 'Shop', 'Contact Us'],
-      cmsFields: { logo: true, tagline: true },
-      apis: ['products', 'cart'],
-      styling: { primaryColor: '#10b981', font: 'Inter' },
-      performance: { bundleLimitMb: 2, imageLazyLoad: true },
-      accessibility: { wcagCompliance: 'WCAG AA' },
-      seo: { metaTags: true, openGraph: true }
-    });
   }
 }
 

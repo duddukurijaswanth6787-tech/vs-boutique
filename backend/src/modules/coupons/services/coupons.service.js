@@ -1,3 +1,4 @@
+const { parseDecimal } = require('../../../utils/parseDecimal');
 const couponsRepository = require('../repositories/coupons.repository');
 
 class CouponError extends Error {
@@ -6,11 +7,6 @@ class CouponError extends Error {
     this.status = status;
     this.code = code;
   }
-}
-
-function parseDecimal(value) {
-  if (value == null) return null;
-  return Number(value);
 }
 
 class CouponsService {

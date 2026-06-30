@@ -12,8 +12,7 @@ class GeminiAdapter extends ProviderAdapter {
 
   async generate(systemPrompt, userPrompt, schema = null) {
     if (!this.apiKey) {
-      logger.warn('Gemini API Key is missing. Operating in mock response mode.');
-      return this._mockResponse(systemPrompt, userPrompt, schema);
+      throw new Error('Gemini API Key is not configured. Set GEMINI_API_KEY environment variable.');
     }
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent?key=${this.apiKey}`;
@@ -59,15 +58,14 @@ class GeminiAdapter extends ProviderAdapter {
 
       return cleanedText.trim();
     } catch (err) {
-      logger.error('Gemini API execution failed, falling back to mock parser.', { error: err.message });
-      return this._mockResponse(systemPrompt, userPrompt, schema);
+      logger.error('Gemini API execution failed.', { error: err.message });
+      throw err;
     }
   }
 
   async stream(systemPrompt, userPrompt, onChunk) {
     if (!this.apiKey) {
-      logger.warn('Gemini API Key is missing. Using Mock streaming mode.');
-      return this._mockStream(systemPrompt, userPrompt, onChunk, true);
+      throw new Error('Gemini API Key is not configured. Set GEMINI_API_KEY environment variable.');
     }
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:streamGenerateContent?key=${this.apiKey}`;
@@ -115,20 +113,9 @@ class GeminiAdapter extends ProviderAdapter {
       }
       return fullContent;
     } catch (err) {
-      logger.error('Gemini streaming failed, falling back to mock stream.', { error: err.message });
-      return this._mockStream(systemPrompt, userPrompt, onChunk, true);
+      logger.error('Gemini streaming failed.', { error: err.message });
+      throw err;
     }
-  }
-
-  async _mockStream(systemPrompt, userPrompt, onChunk, schema = null) {
-    const fullText = this._mockResponse(systemPrompt, userPrompt, schema);
-    const chunkSize = 20;
-    for (let i = 0; i < fullText.length; i += chunkSize) {
-      const chunk = fullText.substring(i, i + chunkSize);
-      onChunk(chunk);
-      await new Promise(resolve => setTimeout(resolve, 5));
-    }
-    return fullText;
   }
 
   async countTokens(text) {
@@ -164,31 +151,6 @@ class GeminiAdapter extends ProviderAdapter {
     const outputCost = (tokensCount.output || 0) * outputRate;
 
     return Number((inputCost + outputCost).toFixed(6));
-  }
-
-  _mockResponse(systemPrompt, userPrompt, schema) {
-    logger.info('Compiling mock fallback output payload.');
-    const promptStr = String(userPrompt || '') + ' ' + String(systemPrompt || '');
-    
-    if (promptStr.includes('Validation') || promptStr.includes('validation')) {
-      return JSON.stringify({
-        score: 96,
-        compliancePassed: true,
-        auditsPassed: 12,
-        errors: []
-      });
-    }
-
-    return JSON.stringify({
-      name: 'Tiny Tucks Boutique AI Standard',
-      businessType: 'Boutique',
-      sitemap: ['Home', 'Shop', 'Product Detail', 'Contact Us'],
-      cmsFields: { branding: { logo: true, tagline: true }, styling: { primaryColor: '#4f46e5', font: 'Inter' } },
-      apis: { integrations: ['Stripe'], sdks: ['products', 'cart'] },
-      performance: { lighthouseVitalsTarget: '90+', bundleLimitMb: 2, imageLazyLoad: true },
-      accessibility: { wcagCompliance: 'WCAG AA' },
-      seo: { metaTags: true }
-    });
   }
 }
 

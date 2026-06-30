@@ -14,7 +14,7 @@ class ProviderFactory {
   _initializeProviders() {
     logger.info('Initializing AI Provider Adapters...');
     this.providers.set('gemini', new GeminiAdapter(config.gemini));
-    this.providers.set('claude', new ClaudeAdapter(config.openai)); // Claude fallback uses placeholder config keys
+    this.providers.set('claude', new ClaudeAdapter(config.claude || config.openai))
     this.providers.set('openai', new OpenAIAdapter(config.openai));
     this.providers.set('ollama', new OllamaAdapter({}));
   }

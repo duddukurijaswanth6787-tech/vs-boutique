@@ -3,18 +3,16 @@ const Razorpay = require('razorpay');
 const subscriptionsRepository = require('../repositories/subscriptions.repository');
 const { logAction } = require('../../../services/auditService');
 const { syncSubscriptionUsage, getActiveSubscription } = require('../../../services/subscriptionService');
+const parseDecimal = require('../../../utils/parseDecimal');
+
+if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+  throw new Error('Razorpay credentials not configured. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET environment variables.');
+}
 
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder',
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
-
-const parseDecimalVal = (val) => {
-  if (val === null || val === undefined || val === '') return 0.00;
-  if (typeof val === 'number') return val;
-  const parsed = parseFloat(val.toString().replace(/[^0-9.]/g, ''));
-  return isNaN(parsed) ? 0.00 : parsed;
-};
 
 const parsePlanPayload = (body) => {
   const parseNum = (val, def = 0) => {
@@ -261,30 +259,10 @@ class SubscriptionsService {
     };
 
     let order;
-    let isMock = false;
-
-    if (process.env.RAZORPAY_KEY_ID === 'rzp_test_your_key_id' || 
-        process.env.RAZORPAY_KEY_ID?.includes('placeholder') || 
-        !process.env.RAZORPAY_KEY_SECRET || 
-        process.env.RAZORPAY_KEY_SECRET === 'your_key_secret') {
-      isMock = true;
-    }
-
-    if (!isMock) {
-      try {
-        order = await razorpay.orders.create(options);
-      } catch (razorpayErr) {
-        console.warn('⚠️ Razorpay order creation failed. Falling back to mock.', razorpayErr.message);
-        isMock = true;
-      }
-    }
-
-    if (isMock) {
-      order = {
-        id: `order_mock_${Math.random().toString(36).substring(2, 11)}`,
-        amount: amountInPaise,
-        currency: 'INR'
-      };
+    try {
+      order = await razorpay.orders.create(options);
+    } catch (razorpayErr) {
+      throw new Error(`Razorpay order creation failed: ${razorpayErr.message}`);
     }
 
     return {
@@ -295,8 +273,7 @@ class SubscriptionsService {
         currency: order.currency,
         planId: plan.id,
         planName: plan.name,
-        keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
-        isMock
+        keyId: process.env.RAZORPAY_KEY_ID
       }
     };
   }
@@ -310,21 +287,19 @@ class SubscriptionsService {
       throw { status: 400, message: 'Missing payment details' };
     }
 
-    const isMock = razorpay_order_id.startsWith('order_mock_') || 
-                   process.env.RAZORPAY_KEY_ID === 'rzp_test_your_key_id' || 
-                   process.env.RAZORPAY_KEY_ID?.includes('placeholder');
+    if (!razorpay_signature) {
+      throw { status: 400, message: 'Missing signature details' };
+    }
+    const hmacSecret = process.env.RAZORPAY_KEY_SECRET;
+    if (!hmacSecret) {
+      throw { status: 500, message: 'Payment verification not configured (RAZORPAY_KEY_SECRET missing)' };
+    }
+    const hmac = crypto.createHmac('sha256', hmacSecret);
+    hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
+    const generated_signature = hmac.digest('hex');
 
-    if (!isMock) {
-      if (!razorpay_signature) {
-        throw { status: 400, message: 'Missing signature details' };
-      }
-      const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder');
-      hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
-      const generated_signature = hmac.digest('hex');
-
-      if (generated_signature !== razorpay_signature) {
-        throw { status: 400, message: 'Payment signature verification failed' };
-      }
+    if (generated_signature !== razorpay_signature) {
+      throw { status: 400, message: 'Payment signature verification failed' };
     }
 
     const plan = await subscriptionsRepository.findPlanById(planId);
@@ -336,7 +311,7 @@ class SubscriptionsService {
     const isTrial = activeSub.status === 'TRIAL';
 
     const result = await subscriptionsRepository.upgradeSubscriptionTransaction(
-      activeSub, plan, razorpay_order_id, razorpay_payment_id, isMock, isTrial
+      activeSub, plan, razorpay_order_id, razorpay_payment_id, isTrial
     );
 
     await logAction('UPGRADE_SUBSCRIPTION', 'BoutiqueSubscription', activeSub.id, userId, {
@@ -349,25 +324,7 @@ class SubscriptionsService {
   }
 
   async upgradeSubscription(boutiqueId, planName, userId) {
-    if (!boutiqueId) throw { status: 400, message: 'Owner has no assigned boutique' };
-    if (!['STARTER', 'PRO', 'ENTERPRISE'].includes(planName)) {
-      throw { status: 400, message: 'Invalid plan selected' };
-    }
-
-    const plan = await subscriptionsRepository.findPlanByNameAndStatus(planName);
-    if (!plan) throw { status: 404, message: 'Plan template not found' };
-
-    const activeSub = await subscriptionsRepository.findSubscriptionByBoutiqueId(boutiqueId);
-    if (!activeSub) throw { status: 404, message: 'Active subscription not found' };
-
-    const result = await subscriptionsRepository.mockUpgradeSubscriptionTransaction(activeSub, plan, planName, boutiqueId);
-
-    await logAction('UPGRADE_SUBSCRIPTION', 'BoutiqueSubscription', activeSub.id, userId, {
-      from: activeSub.plan.name,
-      to: planName
-    });
-
-    return { success: true, data: result.updatedSub };
+    throw { status: 400, message: 'Direct upgrade without payment is not supported. Use the payment flow.' };
   }
 
   async cancelSubscription(boutiqueId, userId) {

@@ -123,7 +123,7 @@ class SubscriptionsRepository {
     });
   }
 
-  async upgradeSubscriptionTransaction(activeSub, plan, razorpay_order_id, razorpay_payment_id, isMock, isTrial) {
+  async upgradeSubscriptionTransaction(activeSub, plan, razorpay_order_id, razorpay_payment_id, isTrial) {
     return prisma.$transaction(async (tx) => {
       const now = new Date();
       const nextMonth = new Date();
@@ -151,45 +151,8 @@ class SubscriptionsRepository {
           subscriptionId: activeSub.id,
           amount: plan.monthlyPrice || plan.price,
           paymentStatus: 'PAID',
-          paymentMethod: isMock ? 'RAZORPAY_MOCK' : 'RAZORPAY',
+          paymentMethod: 'RAZORPAY',
           invoiceUrl: `/invoices/razorpay_${razorpay_payment_id}.pdf`
-        }
-      });
-
-      return { updatedSub, bill };
-    });
-  }
-
-  async mockUpgradeSubscriptionTransaction(activeSub, plan, planName, boutiqueId) {
-    return prisma.$transaction(async (tx) => {
-      const now = new Date();
-      const nextMonth = new Date();
-      nextMonth.setDate(now.getDate() + 30);
-      const isTrial = activeSub.status === 'TRIAL';
-
-      const updatedSub = await tx.boutiqueSubscription.update({
-        where: { id: activeSub.id },
-        data: {
-          planId: plan.id,
-          status: 'ACTIVE',
-          startDate: now,
-          endDate: nextMonth,
-          trialEndsAt: null,
-          convertedAt: isTrial ? now : undefined,
-          trialEndedAt: isTrial ? now : undefined,
-          gatewayCustomerId: `mock_cust_${boutiqueId.substring(0, 8)}`,
-          gatewaySubscriptionId: `mock_sub_${Date.now()}`,
-          gatewayPaymentId: `mock_pay_${Date.now()}`
-        }
-      });
-
-      const bill = await tx.subscriptionBillingHistory.create({
-        data: {
-          subscriptionId: activeSub.id,
-          amount: plan.monthlyPrice || plan.price,
-          paymentStatus: 'PAID',
-          paymentMethod: 'MOCK_PAYMENT',
-          invoiceUrl: `/invoices/mock_inv_${Date.now()}.pdf`
         }
       });
 

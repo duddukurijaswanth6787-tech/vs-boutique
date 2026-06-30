@@ -17,6 +17,13 @@ module.exports = {
     temperature: 0.2,
     maxTokens: 2048
   },
+
+  claude: {
+    apiKey: process.env.CLAUDE_API_KEY || '',
+    model: process.env.CLAUDE_MODEL || 'claude-3-5-sonnet-20260620',
+    temperature: parseFloat(process.env.CLAUDE_TEMP || '0.2'),
+    maxTokens: parseInt(process.env.CLAUDE_MAX_TOKENS || '2048', 10)
+  },
   
   costs: {
     gemini: {

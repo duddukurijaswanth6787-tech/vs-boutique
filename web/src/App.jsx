@@ -12,7 +12,6 @@ import { ReviewProvider } from './context/ReviewContext';
 import { ReturnsProvider } from './context/ReturnsContext';
 import { NotificationProvider } from './context/NotificationContext';
 import { AdminNotificationProvider } from './context/AdminNotificationContext';
-import CustomerAddresses from './features/customer/pages/Addresses/CustomerAddresses';
 import Login from './features/auth/login/pages/Login';
 import OwnerDashboard from './features/owner/pages/Dashboard/OwnerDashboard';
 import OwnerLayout from './components/OwnerLayout';
@@ -21,13 +20,8 @@ import OwnerDesigns from './features/owner/pages/Designs/OwnerDesigns';
 import OwnerServices from './features/owner/pages/Services/OwnerServices';
 import OwnerGallery from './features/owner/pages/Gallery/OwnerGallery';
 import OwnerAnalytics from './features/owner/pages/Analytics/OwnerAnalytics';
-import CustomerHome from './features/customer/pages/Home/CustomerHome';
-import CustomerBoutiqueDetails from './features/customer/pages/Boutique/CustomerBoutiqueDetails';
-import ProductCatalog from './features/admin/pages/Products/ProductCatalog';
-import WishlistPage from './features/customer/pages/Wishlist/WishlistPage';
 
 // Lazy load pages
-const Dashboard = lazy(() => import('./features/admin/pages/Dashboard/Dashboard'));
 const Boutiques = lazy(() => import('./features/admin/pages/Boutiques/Boutiques'));
 const BoutiqueDetails = lazy(() => import('./features/admin/pages/Boutiques/BoutiqueDetails'));
 const ResetPassword = lazy(() => import('./features/auth/password-reset/pages/ResetPassword'));
@@ -67,20 +61,6 @@ const AdminCoupons = lazy(() => import('./features/admin/pages/Coupons/AdminCoup
 const AdminProductReviews = lazy(() => import('./features/admin/pages/Products/AdminProductReviews'));
 const AdminCommerceOrders = lazy(() => import('./features/admin/pages/CommerceOrders/AdminCommerceOrders'));
 const AdminDeliveryTracking = lazy(() => import('./features/admin/pages/DeliveryTracking/AdminDeliveryTracking'));
-const CustomerShop = lazy(() => import('./features/customer/pages/Shop/CustomerShop'));
-const CustomerProductDetail = lazy(() => import('./features/customer/pages/Shop/CustomerProductDetail'));
-const CustomerCart = lazy(() => import('./features/customer/pages/Cart/CustomerCart'));
-const CustomerCheckout = lazy(() => import('./features/customer/pages/Checkout/CustomerCheckout'));
-const CustomerOrders = lazy(() => import('./features/customer/pages/Orders/CustomerOrders'));
-const CustomerOrderDetail = lazy(() => import('./features/customer/pages/Orders/CustomerOrderDetail'));
-const CustomerWishlist = lazy(() => import('./features/customer/pages/Wishlist/CustomerWishlist'));
-const CustomerProfile = lazy(() => import('./features/customer/pages/Profile/CustomerProfile'));
-const CustomTailoring = lazy(() => import('./features/customer/pages/Tailoring/CustomTailoring'));
-const CustomerBookings = lazy(() => import('./features/customer/pages/Boutique/CustomerBookings'));
-const CustomerReturns = lazy(() => import('./features/customer/pages/Returns/CustomerReturns'));
-const CustomerNotifications = lazy(() => import('./features/customer/pages/Notifications/CustomerNotifications'));
-const CustomerMeasurements = lazy(() => import('./features/customer/pages/Measurements/CustomerMeasurements'));
-const OrderSuccess = lazy(() => import('./features/customer/pages/Checkout/OrderSuccess'));
 const CustomerPrivacy = lazy(() => import('./features/shared/info/pages/CustomerPrivacy'));
 const CustomerTerms = lazy(() => import('./features/shared/info/pages/CustomerTerms'));
 const CustomerRefund = lazy(() => import('./features/shared/info/pages/CustomerRefund'));
@@ -89,7 +69,6 @@ const CustomerAbout = lazy(() => import('./features/shared/info/pages/CustomerAb
 const CustomerContact = lazy(() => import('./features/shared/info/pages/CustomerContact'));
 const CustomerHelp = lazy(() => import('./features/shared/help/pages/CustomerHelp'));
 const DesignSystemShowcase = lazy(() => import('./features/shared/info/pages/DesignSystemShowcase'));
-const CustomerHomePreview = lazy(() => import('./features/customer/pages/Home/CustomerHomePreview'));
 const LiveWebsiteControl = lazy(() => import('./features/admin/pages/LiveWebsite/LiveWebsiteControl'));
 const StudioApp = lazy(() => import('./studio/StudioApp'));
 
