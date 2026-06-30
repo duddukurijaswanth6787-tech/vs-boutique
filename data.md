@@ -1,6 +1,6 @@
 # VS Boutique - Database Import & Setup Instructions
 
-Welcome! This file contains the instructions for setting up the local database for VS Boutique on your personal laptop.
+Welcome! This file contains the instructions for setting up the local database for VS Boutique on your office laptop.
 
 You can feed this file to the **Antigravity** agent, and the agent can automatically execute the setup for you.
 
