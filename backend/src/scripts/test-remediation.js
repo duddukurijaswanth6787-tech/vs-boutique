@@ -130,6 +130,24 @@ async function runRemediation() {
       assert.strictEqual(result.success, true);
     }
 
+    // Test Rollback support
+    if (pendingSafeFixes.length > 0) {
+      const testFixId = pendingSafeFixes[0].id;
+      console.log(`Testing rollback for Fix ID: ${testFixId}...`);
+      const rbResult = await certificationService.rollbackAutoFix(testFixId, 'remediation-runner');
+      assert.strictEqual(rbResult.success, true);
+      
+      const rolledBackItem = await prisma.autoFixQueueItem.findUnique({
+        where: { id: testFixId }
+      });
+      assert.strictEqual(rolledBackItem.status, 'PENDING', 'Item status should revert to PENDING.');
+
+      // Re-apply it so the rest of the test flow (re-audit) completes cleanly!
+      console.log('Re-applying rolled back item...');
+      const reApplyResult = await certificationService.applyAutoFix(testFixId, 'remediation-runner');
+      assert.strictEqual(reApplyResult.success, true);
+    }
+
     // Inspect the release payload dump
     const updatedRelease = await prisma.immutableRelease.findFirst({
       where: { businessId, releaseTag }

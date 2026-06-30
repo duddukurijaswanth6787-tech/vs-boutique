@@ -253,6 +253,17 @@ class CertificationService {
           // Process and save Auto-Fix Queue Items
           for (const rec of consolidatedSuggestions) {
             const issue = consolidatedIssues.find(i => i.key === rec.issueKey || i.issueKey === rec.issueKey) || {};
+            const proposedChange = rec.proposedChange || {};
+            
+            // Enrich with platform/builder-specific prompts
+            proposedChange.prompts = {
+              lovable: `[Lovable] Fix accessibility/layout issue in UI: ${rec.description}. Action payload: ${JSON.stringify(proposedChange)}`,
+              bolt: `[Bolt] Apply project-level corrections: ${rec.description}. Change manifest: ${JSON.stringify(proposedChange)}`,
+              v0: `[v0] Rebuild or patch component markup to satisfy quality check: ${rec.description}`,
+              cursor: `[Cursor] Open relevant file and edit: ${rec.description}`,
+              claudeCode: `[Claude Code] Execute AST/regex replacement for: ${rec.description}`
+            };
+
             await prisma.autoFixQueueItem.create({
               data: {
                 businessId,
@@ -260,7 +271,7 @@ class CertificationService {
                 issueKey: rec.issueKey,
                 safetyLevel: issue.safetyLevel || 'SUGGESTED',
                 description: rec.description,
-                proposedChange: rec.proposedChange,
+                proposedChange,
                 status: 'PENDING'
               }
             });
@@ -434,6 +445,28 @@ class CertificationService {
 
     const change = item.proposedChange || {};
 
+    // 1. Back up database component node properties before editing
+    if (change.componentId) {
+      const exists = await prisma.pageComponentNode.findUnique({
+        where: { id: change.componentId }
+      });
+      if (exists) {
+        if (change.action === 'bind_alt_key') {
+          change.originalContentKeysBind = exists.contentKeysBind || [];
+        } else if (change.action === 'set_style_tokens') {
+          change.originalStyleTokens = exists.styleTokens;
+        }
+      }
+    }
+
+    // 2. Back up release payloadDump before patching
+    const activeRelease = await prisma.immutableRelease.findFirst({
+      where: { businessId: item.businessId, releaseTag: item.releaseTag }
+    });
+    if (activeRelease && activeRelease.payloadDump) {
+      change.originalPayloadDump = activeRelease.payloadDump;
+    }
+
     // Safely update targets without touching compiled bundles directly
     if (change.action === 'bind_alt_key') {
       // Modify page component nodes bindings if exists
@@ -563,6 +596,7 @@ class CertificationService {
       where: { id: queueItemId },
       data: {
         status: 'APPLIED',
+        proposedChange: change,
         reviewedBy: reviewerId,
         reviewedAt: new Date()
       }
@@ -571,6 +605,61 @@ class CertificationService {
     this.publishEvent('AutoFixApplied', { queueItemId, releaseTag: item.releaseTag });
 
     return { success: true, message: `Successfully applied fix: ${item.description}` };
+  }
+
+  /**
+   * Rollback an applied Auto-Fix queue item.
+   */
+  async rollbackAutoFix(queueItemId, reviewerId = 'admin') {
+    const item = await prisma.autoFixQueueItem.findUnique({
+      where: { id: queueItemId }
+    });
+
+    if (!item || item.status !== 'APPLIED') {
+      throw new Error('Queue item not found or not in APPLIED status.');
+    }
+
+    const change = item.proposedChange || {};
+
+    // Restore database component nodes
+    if (change.action === 'bind_alt_key' && change.originalContentKeysBind !== undefined) {
+      await prisma.pageComponentNode.update({
+        where: { id: change.componentId },
+        data: { contentKeysBind: change.originalContentKeysBind }
+      });
+    } else if (change.action === 'set_style_tokens' && change.originalStyleTokens !== undefined) {
+      await prisma.pageComponentNode.update({
+        where: { id: change.componentId },
+        data: { styleTokens: change.originalStyleTokens }
+      });
+    }
+
+    // Restore release payloadDump
+    if (change.originalPayloadDump !== undefined) {
+      const release = await prisma.immutableRelease.findFirst({
+        where: { businessId: item.businessId, releaseTag: item.releaseTag }
+      });
+      if (release) {
+        await prisma.immutableRelease.update({
+          where: { id: release.id },
+          data: { payloadDump: change.originalPayloadDump }
+        });
+      }
+    }
+
+    // Update queue item status back to PENDING
+    await prisma.autoFixQueueItem.update({
+      where: { id: queueItemId },
+      data: {
+        status: 'PENDING',
+        reviewedBy: reviewerId,
+        reviewedAt: new Date()
+      }
+    });
+
+    this.publishEvent('AutoFixRolledBack', { queueItemId, releaseTag: item.releaseTag });
+
+    return { success: true, message: `Successfully rolled back fix: ${item.description}` };
   }
 
   emitLog(channel, stage, message, progress) {

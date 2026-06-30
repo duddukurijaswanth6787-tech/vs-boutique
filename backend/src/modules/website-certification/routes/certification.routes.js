@@ -117,7 +117,21 @@ router.get('/history', protect, async (req, res) => {
   }
 });
 
-// 5. Apply Approved Auto-Fix
+// 5. Fetch Auto-Fix Queue
+router.get('/autofix/queue', protect, async (req, res) => {
+  try {
+    const { businessId } = await getBusinessContext(req);
+    const queue = await prisma.autoFixQueueItem.findMany({
+      where: { businessId },
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json({ success: true, queue });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// 6. Apply Approved Auto-Fix
 router.post('/autofix', protect, async (req, res) => {
   const { queueItemId } = req.body;
   if (!queueItemId) {
@@ -126,6 +140,21 @@ router.post('/autofix', protect, async (req, res) => {
 
   try {
     const result = await certificationService.applyAutoFix(queueItemId, req.user?.id || 'admin');
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// 7. Rollback Applied Auto-Fix
+router.post('/autofix/rollback', protect, async (req, res) => {
+  const { queueItemId } = req.body;
+  if (!queueItemId) {
+    return res.status(400).json({ success: false, message: 'queueItemId is required.' });
+  }
+
+  try {
+    const result = await certificationService.rollbackAutoFix(queueItemId, req.user?.id || 'admin');
     res.json(result);
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
