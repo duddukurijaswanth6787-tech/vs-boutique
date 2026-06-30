@@ -2926,3 +2926,277 @@ model CmsUpload {
 
   @@map("cms_uploads")
 }
+
+// ============================================================
+// CMS PROMPT LIBRARY — Phase 10
+// ============================================================
+
+model CmsAiBuilder {
+  id               String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  key              String   @unique @db.VarChar(100)
+  name             String   @db.VarChar(255)
+  logo             String?  @db.VarChar(512)
+  provider         String   @db.VarChar(100)
+  model            String   @db.VarChar(255)
+  promptFormat     String   @default("markdown") @db.VarChar(50)
+  systemPrompt     String?  @db.Text
+  temperature      Float    @default(0.7)
+  maxTokens        Int      @default(4096)
+  supportsMarkdown Boolean  @default(true) @map("supports_markdown")
+  supportsStreaming Boolean @default(false) @map("supports_streaming")
+  supportsFiles    Boolean  @default(false) @map("supports_files")
+  supportsImages   Boolean  @default(false) @map("supports_images")
+  supportsThinking Boolean  @default(false) @map("supports_thinking")
+  status           String       @default("ACTIVE") @db.VarChar(20)
+  displayOrder     Int          @default(0) @map("display_order")
+  prompts          CmsPrompt[]
+  executions       CmsPromptExecution[]
+  createdAt        DateTime     @default(now()) @map("created_at")
+  updatedAt        DateTime     @updatedAt @map("updated_at")
+
+  @@map("cms_ai_builders")
+}
+
+model CmsPromptCategory {
+  id           String         @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  key          String         @unique @db.VarChar(100)
+  name         String         @db.VarChar(255)
+  description  String?        @db.Text
+  icon         String?        @db.VarChar(100)
+  displayOrder Int            @default(0) @map("display_order")
+  prompts      CmsPrompt[]
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  @@map("cms_prompt_categories")
+}
+
+model CmsPromptTag {
+  id        String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  key       String       @unique @db.VarChar(100)
+  name      String       @db.VarChar(255)
+  prompts   CmsPromptTagPrompt[]
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  @@map("cms_prompt_tags")
+}
+
+model CmsPromptTagPrompt {
+  id        String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  promptId  String    @map("prompt_id") @db.Uuid
+  prompt    CmsPrompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  tagId     String    @map("tag_id") @db.Uuid
+  tag       CmsPromptTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([promptId, tagId])
+  @@map("cms_prompt_tag_prompts")
+}
+
+model CmsPrompt {
+  id                   String           @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  title                String           @db.VarChar(500)
+  description          String?          @db.Text
+  promptType           String           @db.VarChar(100)
+  categoryId           String?          @map("category_id") @db.Uuid
+  category             CmsPromptCategory? @relation(fields: [categoryId], references: [id])
+  builderId            String?          @map("builder_id") @db.Uuid
+  builder              CmsAiBuilder?    @relation(fields: [builderId], references: [id])
+  instructions         String?          @db.Text
+  rules                String?          @db.Text
+  outputFormat         String?          @db.Text
+  expectedFiles        Json?
+  expectedFolderStructure Json?
+  codingStandards      String?          @db.Text
+  framework            String?          @db.VarChar(255)
+  libraries            Json?
+  dependencies         Json?
+  apiRequirements      String?          @db.Text
+  dbRequirements       String?          @db.Text
+  responsiveRules      String?          @db.Text
+  performanceRules     String?          @db.Text
+  securityRules        String?          @db.Text
+  accessibilityRules   String?          @db.Text
+  seoRules             String?          @db.Text
+  testingRules         String?          @db.Text
+  acceptanceCriteria   String?          @db.Text
+  variables            Json?
+  templateContent      String?          @db.Text
+  version              Int              @default(1)
+  isDeleted            Boolean          @default(false) @map("is_deleted")
+  businessId           String?          @map("business_id") @db.Uuid
+  createdBy            String?          @map("created_by") @db.Uuid
+  updatedBy            String?          @map("updated_by") @db.Uuid
+  createdAt            DateTime         @default(now()) @map("created_at")
+  updatedAt            DateTime         @updatedAt @map("updated_at")
+
+  versions             CmsPromptVersion[]
+  tags                 CmsPromptTagPrompt[]
+  favorites            CmsPromptFavorite[]
+  history              CmsPromptHistory[]
+  executions           CmsPromptExecution[]
+  collectionItems      CmsPromptCollectionItem[]
+  ratings              CmsPromptRating[]
+  usageAnalytics       CmsPromptUsageAnalytics[]
+  auditLogs            CmsPromptAuditLog[]
+
+  @@index([businessId, isDeleted])
+  @@index([promptType, isDeleted])
+  @@index([categoryId])
+  @@index([createdAt])
+  @@map("cms_prompts")
+}
+
+model CmsPromptVersion {
+  id               String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  promptId         String    @map("prompt_id") @db.Uuid
+  prompt           CmsPrompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  version          Int
+  title            String    @db.VarChar(500)
+  description      String?   @db.Text
+  instructions     String?   @db.Text
+  rules            String?   @db.Text
+  outputFormat     String?   @db.Text
+  expectedFiles    Json?
+  expectedFolderStructure Json?
+  codingStandards  String?   @db.Text
+  templateContent  String?   @db.Text
+  variables        Json?
+  changeNotes      String?   @db.Text
+  createdBy        String?   @map("created_by") @db.Uuid
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  @@unique([promptId, version])
+  @@index([promptId])
+  @@map("cms_prompt_versions")
+}
+
+model CmsPromptVariable {
+  id           String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  key          String   @db.VarChar(100)
+  label        String   @db.VarChar(255)
+  description  String?  @db.Text
+  defaultValue String?  @map("default_value") @db.Text
+  variableType String   @default("string") @map("variable_type") @db.VarChar(50)
+  options      Json?
+  required     Boolean  @default(false)
+  displayOrder Int      @default(0) @map("display_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@unique([key])
+  @@map("cms_prompt_variables")
+}
+
+model CmsPromptExecution {
+  id               String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  promptId         String    @map("prompt_id") @db.Uuid
+  prompt           CmsPrompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  builderId        String?   @map("builder_id") @db.Uuid
+  builder          CmsAiBuilder? @relation(fields: [builderId], references: [id])
+  renderedContent  String?   @map("rendered_content") @db.Text
+  variables        Json?
+  status           String    @default("PENDING") @db.VarChar(20)
+  startedAt        DateTime? @map("started_at")
+  completedAt      DateTime? @map("completed_at")
+  error            String?   @db.Text
+  durationMs       Int?      @map("duration_ms")
+  performedBy      String?   @map("performed_by") @db.Uuid
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  @@index([promptId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("cms_prompt_executions")
+}
+
+model CmsPromptFavorite {
+  id        String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  promptId  String    @map("prompt_id") @db.Uuid
+  prompt    CmsPrompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  userId    String    @map("user_id") @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@unique([promptId, userId])
+  @@map("cms_prompt_favorites")
+}
+
+model CmsPromptHistory {
+  id        String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  promptId  String    @map("prompt_id") @db.Uuid
+  prompt    CmsPrompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  action    String    @db.VarChar(50)
+  snapshot  Json?
+  userId    String?   @map("user_id") @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([promptId, createdAt])
+  @@map("cms_prompt_histories")
+}
+
+model CmsPromptCollection {
+  id          String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name        String                  @db.VarChar(255)
+  description String?                 @db.Text
+  userId      String?                 @map("user_id") @db.Uuid
+  isDeleted   Boolean                 @default(false) @map("is_deleted")
+  items       CmsPromptCollectionItem[]
+  createdAt   DateTime                @default(now()) @map("created_at")
+  updatedAt   DateTime                @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("cms_prompt_collections")
+}
+
+model CmsPromptCollectionItem {
+  id           String               @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  collectionId String               @map("collection_id") @db.Uuid
+  collection   CmsPromptCollection  @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  promptId     String               @map("prompt_id") @db.Uuid
+  prompt       CmsPrompt            @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  displayOrder Int                  @default(0) @map("display_order")
+
+  @@unique([collectionId, promptId])
+  @@map("cms_prompt_collection_items")
+}
+
+model CmsPromptRating {
+  id        String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  promptId  String    @map("prompt_id") @db.Uuid
+  prompt    CmsPrompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  userId    String    @map("user_id") @db.Uuid
+  rating    Int
+  comment   String?   @db.Text
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@unique([promptId, userId])
+  @@map("cms_prompt_ratings")
+}
+
+model CmsPromptUsageAnalytics {
+  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  promptId   String   @map("prompt_id") @db.Uuid
+  prompt     CmsPrompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  action     String   @db.VarChar(50)
+  userId     String?  @map("user_id") @db.Uuid
+  metadata   Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([promptId, action])
+  @@index([createdAt])
+  @@map("cms_prompt_usage_analytics")
+}
+
+model CmsPromptAuditLog {
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  promptId   String    @map("prompt_id") @db.Uuid
+  prompt     CmsPrompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  action     String    @db.VarChar(50)
+  field      String?   @db.VarChar(100)
+  oldValue   Json?
+  newValue   Json?
+  performedBy String?  @map("performed_by") @db.Uuid
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@index([promptId, createdAt])
+  @@map("cms_prompt_audit_logs")
+}

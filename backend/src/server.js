@@ -186,6 +186,7 @@ app.use('/api/v1/cms/blueprints', require('./modules/cms-blueprints/routes/bluep
 app.use('/api/v1/cms/projects', require('./modules/cms-uploads/routes/uploads.routes'));
 app.use('/api/v1/cms/projects', require('./modules/cms-verification/routes/verification.routes'));
 app.use('/api/v1/cms/deployment', require('./modules/cms-deployment/routes/deployment.routes'));
+app.use('/api/v1/cms/prompts', require('./modules/cms-prompts/routes/prompts.routes'));
 
 
 /**

@@ -78,7 +78,7 @@ const WebsiteBlueprint = lazy(() => import('./features/admin/cms/website-platfor
 const WebsiteStandards = lazy(() => import('./features/admin/cms/standards/pages/StandardsDashboard'));
 const RequirementsSelector = lazy(() => import('./features/admin/cms/requirements/pages/RequirementsSelector'));
 const WebsiteDevelopmentKit = lazy(() => import('./features/admin/cms/website-platform/pages/WebsiteDevelopmentKit'));
-const PromptLibrary = lazy(() => import('./features/admin/cms/website-platform/pages/PromptLibrary'));
+const PromptLibrary = lazy(() => import('./features/admin/cms/prompts/pages/PromptLibrary'));
 const AIRequirementGenerator = lazy(() => import('./features/admin/cms/website-platform/pages/AIRequirementGenerator'));
 const AIWebsiteGenerator = lazy(() => import('./features/admin/cms/website-platform/pages/AIWebsiteGenerator'));
 const UploadWebsite = lazy(() => import('./features/admin/cms/website-platform/pages/UploadWebsite'));
