@@ -82,7 +82,12 @@ const PromptLibrary = lazy(() => import('./features/admin/cms/prompts/pages/Prom
 const AIRequirementGenerator = lazy(() => import('./features/admin/cms/website-platform/pages/AIRequirementGenerator'));
 const AIWebsiteGenerator = lazy(() => import('./features/admin/cms/website-platform/pages/AIWebsiteGenerator'));
 const UploadWebsite = lazy(() => import('./features/admin/cms/website-platform/pages/UploadWebsite'));
-const TemplateLibrary = lazy(() => import('./features/admin/cms/website-platform/pages/TemplateLibrary'));
+const TemplateLibrary = lazy(() => import('./features/admin/cms/templates/pages/TemplateLibrary'));
+const TemplateDetail = lazy(() => import('./features/admin/cms/templates/pages/TemplateDetail'));
+const TemplatePublish = lazy(() => import('./features/admin/cms/templates/pages/TemplatePublish'));
+const TemplateVersions = lazy(() => import('./features/admin/cms/templates/pages/TemplateVersions'));
+const TemplateDeployments = lazy(() => import('./features/admin/cms/templates/pages/TemplateDeployments'));
+const TemplateAnalytics = lazy(() => import('./features/admin/cms/templates/pages/TemplateAnalytics'));
 const AICertification = lazy(() => import('./features/admin/cms/ai-certification/pages/AICertification'));
 const MarketplaceHome = lazy(() => import('./features/admin/cms/marketplace/pages/MarketplaceHome'));
 const ValidationReports = lazy(() => import('./features/admin/cms/ai-certification/pages/ValidationReports'));
@@ -495,6 +500,46 @@ function AppRoutes() {
         element={
           <ProtectedRoute allowedRoles={['super-admin']}>
             <AdminLayout><TemplateLibrary /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/templates/new" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><TemplatePublish /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/templates/analytics" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><TemplateAnalytics /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/templates/:id" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><TemplateDetail /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/templates/:id/versions" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><TemplateVersions /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/templates/:id/deployments" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><TemplateDeployments /></AdminLayout>
           </ProtectedRoute>
         } 
       />

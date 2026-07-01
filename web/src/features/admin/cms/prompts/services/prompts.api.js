@@ -62,5 +62,21 @@ export const promptsApi = {
     return request(`/collections/${collectionId}/items/${promptId}`, { method: 'DELETE' });
   },
 
-  importPrompt(data) { return request('/import', { method: 'POST', body: JSON.stringify(data) }); }
+  importPrompt(data) { return request('/import', { method: 'POST', body: JSON.stringify(data) }); },
+
+  // CMS Engine Integration
+  getIntegrations(engine) { return request(`/integrations/${engine}`); },
+  linkToReference(promptId, referenceType, referenceId) {
+    return request('/integrations/link', { method: 'POST', body: JSON.stringify({ promptId, referenceType, referenceId }) });
+  },
+  unlinkFromReference(promptId) {
+    return request('/integrations/unlink', { method: 'POST', body: JSON.stringify({ promptId }) });
+  },
+  getStandardsPrompts() { return request('/integrations/standards'); },
+  getRequirementsPrompts() { return request('/integrations/requirements'); },
+  getBlueprintsPrompts() { return request('/integrations/blueprints'); },
+  getVerificationPrompts() { return request('/integrations/verification'); },
+  getCertificationPrompts() { return request('/integrations/certification'); },
+  getAIFixPrompts() { return request('/integrations/ai-fix'); },
+  getDeploymentPrompts() { return request('/integrations/deployment'); }
 };

@@ -3024,6 +3024,8 @@ model CmsPrompt {
   version              Int              @default(1)
   isDeleted            Boolean          @default(false) @map("is_deleted")
   businessId           String?          @map("business_id") @db.Uuid
+  referenceType        String?          @map("reference_type") @db.VarChar(50)
+  referenceId          String?          @map("reference_id") @db.Uuid
   createdBy            String?          @map("created_by") @db.Uuid
   updatedBy            String?          @map("updated_by") @db.Uuid
   createdAt            DateTime         @default(now()) @map("created_at")
@@ -3042,6 +3044,7 @@ model CmsPrompt {
   @@index([businessId, isDeleted])
   @@index([promptType, isDeleted])
   @@index([categoryId])
+  @@index([referenceType, referenceId])
   @@index([createdAt])
   @@map("cms_prompts")
 }
@@ -3199,4 +3202,203 @@ model CmsPromptAuditLog {
 
   @@index([promptId, createdAt])
   @@map("cms_prompt_audit_logs")
+}
+
+// ==========================================
+// CMS ENTERPRISE TEMPLATE LIBRARY — Phase 11
+// Separate bounded context from Prompt Library
+// ==========================================
+
+model CmsTemplate {
+  id              String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name            String   @db.VarChar(500)
+  description     String?  @db.Text
+  industry        String?  @db.VarChar(100)
+  status          String   @default("DRAFT") @db.VarChar(50)
+  tier            String   @default("FREE") @db.VarChar(50)
+  version         Int      @default(1)
+  isFeatured      Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  isDeleted       Boolean  @default(false) @map("is_deleted")
+
+  // Preview assets
+  thumbnail       String?  @db.Text
+  previewImage    String?  @map("preview_image") @db.Text
+  previewVideo    String?  @map("preview_video") @db.Text
+  liveDemoUrl     String?  @map("live_demo_url") @db.Text
+  zipArtifact     String?  @map("zip_artifact") @db.Text
+  manifestUrl     String?  @map("manifest_url") @db.Text
+
+  // Template Manifest from Blueprint Engine
+  manifest        Json?
+
+  // Pipeline source links
+  promptId        String?  @map("prompt_id") @db.Uuid
+  blueprintId     String?  @map("blueprint_id") @db.Uuid
+  certificationId String?  @map("certification_id") @db.Uuid
+
+  categoryId      String?  @map("category_id") @db.Uuid
+  category        CmsTemplateCategory? @relation(fields: [categoryId], references: [id])
+  createdBy       String?  @map("created_by") @db.Uuid
+  updatedBy       String?  @map("updated_by") @db.Uuid
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  versions         CmsTemplateVersion[]
+  tags             CmsTemplateTagTemplate[]
+  favorites        CmsTemplateFavorite[]
+  ratings          CmsTemplateRating[]
+  analytics        CmsTemplateAnalytics[]
+  pipelineStages   CmsTemplatePipelineStage[]
+  builderCompat    CmsTemplateBuilderCompatibility[]
+  assignments      BusinessTemplateAssignment[]
+
+  @@index([status, isDeleted])
+  @@index([tier, isDeleted])
+  @@index([categoryId])
+  @@index([createdAt])
+  @@map("cms_templates")
+}
+
+model CmsTemplateCategory {
+  id           String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  key          String       @unique @db.VarChar(100)
+  name         String       @db.VarChar(255)
+  description  String?      @db.Text
+  displayOrder Int          @default(0) @map("display_order")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  templates    CmsTemplate[]
+
+  @@map("cms_template_categories")
+}
+
+model CmsTemplateTag {
+  id        String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  key       String                 @unique @db.VarChar(100)
+  name      String                 @db.VarChar(255)
+  createdAt DateTime               @default(now()) @map("created_at")
+  templates CmsTemplateTagTemplate[]
+
+  @@map("cms_template_tags")
+}
+
+model CmsTemplateTagTemplate {
+  id         String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  templateId String      @map("template_id") @db.Uuid
+  template   CmsTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  tagId      String      @map("tag_id") @db.Uuid
+  tag        CmsTemplateTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, tagId])
+  @@map("cms_template_tag_template")
+}
+
+model CmsTemplateVersion {
+  id              String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  templateId      String      @map("template_id") @db.Uuid
+  template        CmsTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  version         Int
+  name            String      @db.VarChar(500)
+  description     String?     @db.Text
+  manifest        Json?
+  thumbnail       String?     @db.Text
+  previewImage    String?     @map("preview_image") @db.Text
+  previewVideo    String?     @map("preview_video") @db.Text
+  liveDemoUrl     String?     @map("live_demo_url") @db.Text
+  zipArtifact     String?     @map("zip_artifact") @db.Text
+  manifestUrl     String?     @map("manifest_url") @db.Text
+  changeNotes     String?     @map("change_notes") @db.Text
+  createdBy       String?     @map("created_by") @db.Uuid
+  createdAt       DateTime    @default(now()) @map("created_at")
+
+  @@unique([templateId, version])
+  @@index([templateId])
+  @@map("cms_template_versions")
+}
+
+model CmsTemplateFavorite {
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  templateId String    @map("template_id") @db.Uuid
+  template   CmsTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  userId     String    @map("user_id") @db.Uuid
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@unique([templateId, userId])
+  @@map("cms_template_favorites")
+}
+
+model CmsTemplateRating {
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  templateId String    @map("template_id") @db.Uuid
+  template   CmsTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  userId     String    @map("user_id") @db.Uuid
+  rating     Int
+  comment    String?   @db.Text
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  @@unique([templateId, userId])
+  @@map("cms_template_ratings")
+}
+
+model CmsTemplateAnalytics {
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  templateId String    @map("template_id") @db.Uuid
+  template   CmsTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  action     String    @db.VarChar(50)
+  userId     String?   @map("user_id") @db.Uuid
+  metadata   Json?
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@index([templateId, action])
+  @@index([createdAt])
+  @@map("cms_template_analytics")
+}
+
+model CmsTemplatePipelineStage {
+  id             String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  templateId     String      @map("template_id") @db.Uuid
+  template       CmsTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  stage          String      @db.VarChar(50)
+  startedAt      DateTime?   @map("started_at")
+  finishedAt     DateTime?   @map("finished_at")
+  duration       Int?        @map("duration_ms")
+  status         String      @default("PENDING") @db.VarChar(50)
+  inputArtifact  String?     @map("input_artifact") @db.Text
+  outputArtifact String?     @map("output_artifact") @db.Text
+  retryCount     Int         @default(0) @map("retry_count")
+  agent          String?     @db.VarChar(100)
+  error          String?     @db.Text
+
+  @@index([templateId, stage])
+  @@map("cms_template_pipeline_stages")
+}
+
+model CmsTemplateBuilderCompatibility {
+  id         String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  templateId String      @map("template_id") @db.Uuid
+  template   CmsTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  builderKey String      @map("builder_key") @db.VarChar(100)
+
+  @@unique([templateId, builderKey])
+  @@map("cms_template_builder_compat")
+}
+
+model BusinessTemplateAssignment {
+  id             String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  businessId     String      @map("business_id") @db.Uuid
+  templateId     String      @map("template_id") @db.Uuid
+  template       CmsTemplate @relation(fields: [templateId], references: [id])
+  subscriptionId String?     @map("subscription_id") @db.Uuid
+  deploymentId   String?     @map("deployment_id") @db.Uuid
+  environmentId  String?     @map("environment_id") @db.Uuid
+  assignedBy     String?     @map("assigned_by") @db.Uuid
+  assignedAt     DateTime    @default(now()) @map("assigned_at")
+  status         String      @default("ASSIGNED") @db.VarChar(50)
+
+  @@unique([businessId, templateId])
+  @@index([businessId])
+  @@index([templateId])
+  @@map("business_template_assignments")
 }

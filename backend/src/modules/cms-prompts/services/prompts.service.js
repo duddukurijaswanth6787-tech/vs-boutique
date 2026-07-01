@@ -2,7 +2,7 @@ const prisma = require('../../../utils/prisma');
 const { eventBus, Events } = require('../../../services/eventBus');
 
 class PromptsService {
-  async listPrompts({ page = 1, limit = 20, category, type, builderId, q, sort = 'createdAt', order = 'desc', tags, businessId, isDeleted = false } = {}) {
+  async listPrompts({ page = 1, limit = 20, category, type, builderId, q, sort = 'createdAt', order = 'desc', tags, businessId, referenceType, referenceId, isDeleted = false } = {}) {
     const skip = (page - 1) * limit;
     const where = { isDeleted };
 
@@ -10,6 +10,8 @@ class PromptsService {
     if (type) where.promptType = type;
     if (builderId) where.builderId = builderId;
     if (businessId) where.businessId = businessId;
+    if (referenceType) where.referenceType = referenceType;
+    if (referenceId) where.referenceId = referenceId;
     if (tags) {
       where.tags = {
         some: { tag: { key: { in: Array.isArray(tags) ? tags : [tags] } } }
@@ -91,7 +93,7 @@ class PromptsService {
     const existing = await prisma.cmsPrompt.findUnique({ where: { id }, include: { tags: true } });
     if (!existing) return null;
 
-    const { tags, ...fields } = data;
+    const { tags, changeNotes, ...fields } = data;
 
     const prompt = await prisma.cmsPrompt.update({
       where: { id },
@@ -613,6 +615,104 @@ class PromptsService {
     }
     if (data.tags?.length) md += `**Tags:** ${data.tags.join(', ')}\n`;
     return md;
+  }
+
+  // ==========================================
+  // CMS ENGINE INTEGRATION METHODS
+  // ==========================================
+
+  async findByReference(referenceType, referenceId) {
+    return prisma.cmsPrompt.findMany({
+      where: { referenceType, referenceId, isDeleted: false },
+      include: {
+        category: { select: { id: true, name: true, key: true } },
+        builder: { select: { id: true, name: true, provider: true } },
+        tags: { include: { tag: { select: { id: true, name: true, key: true } } } }
+      }
+    });
+  }
+
+  async linkToReference(id, referenceType, referenceId, userId) {
+    const existing = await prisma.cmsPrompt.findUnique({ where: { id } });
+    if (!existing) return null;
+
+    return prisma.cmsPrompt.update({
+      where: { id },
+      data: { referenceType, referenceId, updatedBy: userId }
+    });
+  }
+
+  async unlinkFromReference(id, userId) {
+    const existing = await prisma.cmsPrompt.findUnique({ where: { id } });
+    if (!existing) return null;
+
+    return prisma.cmsPrompt.update({
+      where: { id },
+      data: { referenceType: null, referenceId: null, updatedBy: userId }
+    });
+  }
+
+  async getPromptsForEngine(referenceType, options = {}) {
+    const where = { referenceType, isDeleted: false };
+    if (options.businessId) where.businessId = options.businessId;
+    if (options.promptType) where.promptType = options.promptType;
+
+    return prisma.cmsPrompt.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        category: { select: { id: true, name: true, key: true } },
+        builder: { select: { id: true, name: true } }
+      }
+    });
+  }
+
+  async getEnginePromptByType(referenceType, promptType) {
+    return prisma.cmsPrompt.findFirst({
+      where: { referenceType, promptType, isDeleted: false },
+      include: {
+        builder: { select: { id: true, name: true, provider: true, model: true } },
+        category: { select: { id: true, name: true } }
+      }
+    });
+  }
+
+  async getStandardsIntegration() {
+    return this.getPromptsForEngine('standard');
+  }
+
+  async getRequirementsIntegration() {
+    return this.getPromptsForEngine('requirement');
+  }
+
+  async getBlueprintsIntegration() {
+    return this.getPromptsForEngine('blueprint');
+  }
+
+  async getVerificationIntegration() {
+    return this.getPromptsForEngine('verification');
+  }
+
+  async getCertificationIntegration() {
+    return this.getPromptsForEngine('certification');
+  }
+
+  async getAIFixIntegration() {
+    return this.getPromptsForEngine('ai-fix');
+  }
+
+  async getDeploymentIntegration() {
+    return this.getPromptsForEngine('deployment');
+  }
+
+  async compileEnginePrompts(referenceType) {
+    const prompts = await this.getPromptsForEngine(referenceType);
+    const compiled = [];
+    for (const prompt of prompts) {
+      const rendered = await this.renderPrompt(prompt.id, {});
+      compiled.push({ prompt, rendered: rendered?.content || '' });
+    }
+    return compiled;
   }
 }
 

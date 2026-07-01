@@ -187,7 +187,10 @@ app.use('/api/v1/cms/projects', require('./modules/cms-uploads/routes/uploads.ro
 app.use('/api/v1/cms/projects', require('./modules/cms-verification/routes/verification.routes'));
 app.use('/api/v1/cms/deployment', require('./modules/cms-deployment/routes/deployment.routes'));
 app.use('/api/v1/cms/prompts', require('./modules/cms-prompts/routes/prompts.routes'));
+app.use('/api/v1/cms/templates', require('./modules/cms-templates/routes/templates.routes'));
 
+// Initialize template integration service (certification + deployment + pipeline subscriptions)
+require('./modules/cms-templates/services/template-integration.service');
 
 /**
  * @swagger

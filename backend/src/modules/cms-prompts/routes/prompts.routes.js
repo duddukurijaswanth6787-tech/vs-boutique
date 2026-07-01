@@ -201,6 +201,99 @@ router.delete('/collections/:collectionId/items/:promptId', protect, async (req,
   }
 });
 
+// ==========================================
+// CMS ENGINE INTEGRATION ENDPOINTS
+// ==========================================
+
+router.get('/integrations/standards', protect, async (req, res) => {
+  try {
+    const prompts = await promptsService.getStandardsIntegration();
+    res.json({ success: true, prompts, engine: 'standard' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.get('/integrations/requirements', protect, async (req, res) => {
+  try {
+    const prompts = await promptsService.getRequirementsIntegration();
+    res.json({ success: true, prompts, engine: 'requirement' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.get('/integrations/blueprints', protect, async (req, res) => {
+  try {
+    const prompts = await promptsService.getBlueprintsIntegration();
+    res.json({ success: true, prompts, engine: 'blueprint' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.get('/integrations/verification', protect, async (req, res) => {
+  try {
+    const prompts = await promptsService.getVerificationIntegration();
+    res.json({ success: true, prompts, engine: 'verification' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.get('/integrations/certification', protect, async (req, res) => {
+  try {
+    const prompts = await promptsService.getCertificationIntegration();
+    res.json({ success: true, prompts, engine: 'certification' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.get('/integrations/ai-fix', protect, async (req, res) => {
+  try {
+    const prompts = await promptsService.getAIFixIntegration();
+    res.json({ success: true, prompts, engine: 'ai-fix' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.get('/integrations/deployment', protect, async (req, res) => {
+  try {
+    const prompts = await promptsService.getDeploymentIntegration();
+    res.json({ success: true, prompts, engine: 'deployment' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.post('/integrations/link', protect, async (req, res) => {
+  try {
+    const { promptId, referenceType, referenceId } = req.body;
+    if (!promptId || !referenceType || !referenceId) {
+      return res.status(400).json({ success: false, message: 'promptId, referenceType, and referenceId are required' });
+    }
+    const prompt = await promptsService.linkToReference(promptId, referenceType, referenceId, req.user.id);
+    if (!prompt) return res.status(404).json({ success: false, message: 'Prompt not found' });
+    res.json({ success: true, prompt });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.post('/integrations/unlink', protect, async (req, res) => {
+  try {
+    const { promptId } = req.body;
+    if (!promptId) return res.status(400).json({ success: false, message: 'promptId is required' });
+    const prompt = await promptsService.unlinkFromReference(promptId, req.user.id);
+    if (!prompt) return res.status(404).json({ success: false, message: 'Prompt not found' });
+    res.json({ success: true, prompt });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 router.post('/import', protect, superAdminOnly, async (req, res) => {
   try {
     const prompt = await promptsService.importPrompt(req.body, req.user.id);
