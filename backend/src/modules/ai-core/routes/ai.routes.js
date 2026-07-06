@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const aiCoreService = require('../services/aiCore.service');
 const providerService = require('../services/provider.service');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../../../utils/prisma');
 const { protect } = require('../../../middleware/authMiddleware');
 
 // 1. Trigger AI requirement session creation

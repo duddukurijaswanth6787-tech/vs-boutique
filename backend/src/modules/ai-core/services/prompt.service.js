@@ -1,6 +1,5 @@
 const IPromptService = require('../interfaces/IPromptService');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../../../utils/prisma');
 const logger = require('../utils/logger');
 
 class PromptService extends IPromptService {

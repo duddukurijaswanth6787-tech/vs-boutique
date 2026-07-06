@@ -32,8 +32,7 @@ const upload = multer({
   }
 });
 
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../../../utils/prisma');
 
 async function resolveBusinessId(req) {
   let businessId = req.user?.businessId;

@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../../../utils/prisma');
 const eventBus = require('../utils/eventBus');
 const queueManager = require('../queues/queueManager');
 const providerService = require('./provider.service');

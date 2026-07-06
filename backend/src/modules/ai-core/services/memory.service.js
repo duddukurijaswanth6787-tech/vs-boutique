@@ -1,6 +1,5 @@
 const IMemoryService = require('../interfaces/IMemoryService');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../../../utils/prisma');
 const crypto = require('crypto');
 const logger = require('../utils/logger');
 

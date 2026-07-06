@@ -1,6 +1,5 @@
 const { EventEmitter } = require('events');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../../../utils/prisma');
 const providerService = require('../../ai-core/services/provider.service');
 const logger = require('../../ai-core/utils/logger');
 
