@@ -1,5 +1,6 @@
 const { eventBus, Events } = require('./eventBus');
 const { notificationsService } = require('../modules/notifications/services/notifications.service');
+const prisma = require('../utils/prisma');
 
 eventBus.on(Events.ORDER_PLACED, ({ userId, boutique, order }) => {
   try {
@@ -284,6 +285,327 @@ eventBus.on(Events.BOOKING_REJECTED, ({ booking, boutique }) => {
   } catch (err) {
     console.error('[NotificationListener] BOOKING_REJECTED failed:', err);
   }
+});
+
+eventBus.on('assignment:created', ({ assignmentId, businessId, templateId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN',
+      recipientId: 'system',
+      type: 'ASSIGNMENT_CREATED',
+      title: 'Assignment Created',
+      message: `A new business template assignment has been created.`,
+      metadata: { assignmentId, businessId, templateId }
+    });
+  } catch (err) {
+    console.error('[NotificationListener] assignment:created failed:', err);
+  }
+});
+
+eventBus.on('assignment:validated', ({ assignmentId, businessId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN',
+      recipientId: 'system',
+      type: 'ASSIGNMENT_VALIDATED',
+      title: 'Assignment Validated',
+      message: `Business assignment has been validated successfully.`,
+      metadata: { assignmentId, businessId }
+    });
+  } catch (err) {
+    console.error('[NotificationListener] assignment:validated failed:', err);
+  }
+});
+
+eventBus.on('assignment:ready', ({ assignmentId, businessId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN',
+      recipientId: 'system',
+      type: 'ASSIGNMENT_READY',
+      title: 'Assignment Ready',
+      message: `Business assignment is ready for deployment.`,
+      metadata: { assignmentId, businessId }
+    });
+  } catch (err) {
+    console.error('[NotificationListener] assignment:ready failed:', err);
+  }
+});
+
+eventBus.on('assignment:deploying', ({ assignmentId, businessId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN',
+      recipientId: 'system',
+      type: 'ASSIGNMENT_DEPLOYING',
+      title: 'Assignment Deploying',
+      message: `Business assignment deployment is in progress.`,
+      metadata: { assignmentId, businessId }
+    });
+  } catch (err) {
+    console.error('[NotificationListener] assignment:deploying failed:', err);
+  }
+});
+
+eventBus.on('assignment:deployed', ({ assignmentId, deploymentId, businessId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN',
+      recipientId: 'system',
+      type: 'ASSIGNMENT_DEPLOYED',
+      title: 'Assignment Deployed',
+      message: `Business assignment has been deployed successfully.`,
+      metadata: { assignmentId, deploymentId, businessId }
+    });
+  } catch (err) {
+    console.error('[NotificationListener] assignment:deployed failed:', err);
+  }
+});
+
+eventBus.on('assignment:active', ({ assignmentId, businessId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN',
+      recipientId: 'system',
+      type: 'ASSIGNMENT_ACTIVE',
+      title: 'Assignment Active',
+      message: `Business assignment is now active.`,
+      metadata: { assignmentId, businessId }
+    });
+  } catch (err) {
+    console.error('[NotificationListener] assignment:active failed:', err);
+  }
+});
+
+eventBus.on('assignment:failed', ({ assignmentId, businessId, reason }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN',
+      recipientId: 'system',
+      type: 'ASSIGNMENT_FAILED',
+      priority: 'HIGH',
+      title: 'Assignment Failed',
+      message: `Business assignment failed: ${reason || 'Unknown error'}`,
+      metadata: { assignmentId, businessId, reason }
+    });
+  } catch (err) {
+    console.error('[NotificationListener] assignment:failed failed:', err);
+  }
+});
+
+eventBus.on('assignment:archived', ({ assignmentId, businessId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN',
+      recipientId: 'system',
+      type: 'ASSIGNMENT_ARCHIVED',
+      title: 'Assignment Archived',
+      message: `Business assignment has been archived.`,
+      metadata: { assignmentId, businessId }
+    });
+  } catch (err) {
+    console.error('[NotificationListener] assignment:archived failed:', err);
+  }
+});
+
+eventBus.on('assignment:deleted', ({ assignmentId, businessId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN',
+      recipientId: 'system',
+      type: 'ASSIGNMENT_DELETED',
+      title: 'Assignment Deleted',
+      message: `Business assignment has been deleted.`,
+      metadata: { assignmentId, businessId }
+    });
+  } catch (err) {
+    console.error('[NotificationListener] assignment:deleted failed:', err);
+  }
+});
+
+// ── Enterprise Notification Center events (Phase 27) ──
+
+eventBus.on(Events.NOTIFICATION_SENT, ({ notificationId, channel }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'NORMAL', title: 'Notification Sent', message: `Notification ${notificationId} sent via ${channel}`,
+      entityType: 'Notification', entityId: notificationId
+    });
+  } catch (err) { console.error('[NotificationListener] NOTIFICATION_SENT failed:', err); }
+});
+
+eventBus.on(Events.NOTIFICATION_FAILED, ({ notificationId, channel, error }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'HIGH', title: 'Notification Failed', message: `Notification ${notificationId} failed via ${channel}: ${error}`,
+      entityType: 'Notification', entityId: notificationId
+    });
+  } catch (err) { console.error('[NotificationListener] NOTIFICATION_FAILED failed:', err); }
+});
+
+eventBus.on(Events.NOTIFICATION_DELIVERED, ({ notificationId, channel }) => {
+  try {
+    prisma.notificationReceipt.updateMany({
+      where: { notificationId },
+      data: { deliveredAt: new Date() }
+    }).catch(() => {});
+  } catch (err) { console.error('[NotificationListener] NOTIFICATION_DELIVERED failed:', err); }
+});
+
+eventBus.on(Events.NOTIFICATION_READ, ({ notificationId, userId }) => {
+  try {
+    prisma.$transaction([
+      prisma.notification.update({ where: { id: notificationId }, data: { isRead: true } }).catch(() => {}),
+      prisma.notificationReceipt.updateMany({
+        where: { notificationId, OR: [{ recipientOwnerId: userId }, { recipientUserId: userId }] },
+        data: { openedAt: new Date(), clickedAt: new Date() }
+      }).catch(() => {})
+    ]);
+  } catch (err) { console.error('[NotificationListener] NOTIFICATION_READ failed:', err); }
+});
+
+eventBus.on(Events.NOTIFICATION_CAMPAIGN_STARTED, ({ campaignId, name }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'NORMAL', title: 'Campaign Started', message: `Campaign "${name}" has been launched.`,
+      entityType: 'Campaign', entityId: campaignId
+    });
+  } catch (err) { console.error('[NotificationListener] NOTIFICATION_CAMPAIGN_STARTED failed:', err); }
+});
+
+eventBus.on(Events.NOTIFICATION_CAMPAIGN_COMPLETED, ({ campaignId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'NORMAL', title: 'Campaign Completed', message: `Campaign ${campaignId} has completed.`,
+      entityType: 'Campaign', entityId: campaignId
+    });
+  } catch (err) { console.error('[NotificationListener] NOTIFICATION_CAMPAIGN_COMPLETED failed:', err); }
+});
+
+// ── Enterprise DevOps / CI-CD Center events (Phase 28) ──
+
+eventBus.on(Events.DEVOPS_PIPELINE_STARTED, ({ pipelineId, definitionId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'NORMAL', title: 'Pipeline Started', message: `Pipeline ${pipelineId} (definition: ${definitionId}) has started.`,
+      entityType: 'WorkflowExecution', entityId: pipelineId
+    });
+  } catch (err) { console.error('[NotificationListener] DEVOPS_PIPELINE_STARTED failed:', err); }
+});
+
+eventBus.on(Events.DEVOPS_PIPELINE_COMPLETED, ({ pipelineId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'NORMAL', title: 'Pipeline Completed', message: `Pipeline ${pipelineId} completed successfully.`,
+      entityType: 'WorkflowExecution', entityId: pipelineId
+    });
+  } catch (err) { console.error('[NotificationListener] DEVOPS_PIPELINE_COMPLETED failed:', err); }
+});
+
+eventBus.on(Events.DEVOPS_PIPELINE_FAILED, ({ pipelineId, reason }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'HIGH', title: 'Pipeline Failed', message: `Pipeline ${pipelineId} failed: ${reason || 'Unknown error'}.`,
+      entityType: 'WorkflowExecution', entityId: pipelineId
+    });
+  } catch (err) { console.error('[NotificationListener] DEVOPS_PIPELINE_FAILED failed:', err); }
+});
+
+eventBus.on(Events.DEVOPS_BUILD_STARTED, ({ deploymentId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'NORMAL', title: 'Build Started', message: `Build started for deployment ${deploymentId}.`,
+      entityType: 'Deployment', entityId: deploymentId
+    });
+  } catch (err) { console.error('[NotificationListener] DEVOPS_BUILD_STARTED failed:', err); }
+});
+
+eventBus.on(Events.DEVOPS_BUILD_COMPLETED, ({ deploymentId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'NORMAL', title: 'Build Completed', message: `Build completed for deployment ${deploymentId}.`,
+      entityType: 'Deployment', entityId: deploymentId
+    });
+  } catch (err) { console.error('[NotificationListener] DEVOPS_BUILD_COMPLETED failed:', err); }
+});
+
+eventBus.on(Events.DEVOPS_BUILD_FAILED, ({ deploymentId, error }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'HIGH', title: 'Build Failed', message: `Build failed for deployment ${deploymentId}: ${error || 'Unknown error'}.`,
+      entityType: 'Deployment', entityId: deploymentId
+    });
+  } catch (err) { console.error('[NotificationListener] DEVOPS_BUILD_FAILED failed:', err); }
+});
+
+eventBus.on(Events.DEVOPS_DEPLOYMENT_STARTED, ({ deploymentId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'NORMAL', title: 'Deployment Started', message: `Deployment ${deploymentId} has started.`,
+      entityType: 'Deployment', entityId: deploymentId
+    });
+  } catch (err) { console.error('[NotificationListener] DEVOPS_DEPLOYMENT_STARTED failed:', err); }
+});
+
+eventBus.on(Events.DEVOPS_DEPLOYMENT_COMPLETED, ({ deploymentId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'NORMAL', title: 'Deployment Completed', message: `Deployment ${deploymentId} completed successfully.`,
+      entityType: 'Deployment', entityId: deploymentId
+    });
+  } catch (err) { console.error('[NotificationListener] DEVOPS_DEPLOYMENT_COMPLETED failed:', err); }
+});
+
+eventBus.on(Events.DEVOPS_DEPLOYMENT_FAILED, ({ deploymentId, error }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'HIGH', title: 'Deployment Failed', message: `Deployment ${deploymentId} failed: ${error || 'Unknown error'}.`,
+      entityType: 'Deployment', entityId: deploymentId
+    });
+  } catch (err) { console.error('[NotificationListener] DEVOPS_DEPLOYMENT_FAILED failed:', err); }
+});
+
+eventBus.on(Events.DEVOPS_RELEASE_CREATED, ({ releaseId, boutiqueId, releaseTag }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'NORMAL', title: 'Release Created', message: `Release ${releaseTag} (${releaseId}) created for boutique ${boutiqueId}.`,
+      entityType: 'ImmutableRelease', entityId: releaseId
+    });
+  } catch (err) { console.error('[NotificationListener] DEVOPS_RELEASE_CREATED failed:', err); }
+});
+
+eventBus.on(Events.DEVOPS_RELEASE_APPROVED, ({ releaseId, boutiqueId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'NORMAL', title: 'Release Approved', message: `Release ${releaseId} approved for boutique ${boutiqueId}.`,
+      entityType: 'ImmutableRelease', entityId: releaseId
+    });
+  } catch (err) { console.error('[NotificationListener] DEVOPS_RELEASE_APPROVED failed:', err); }
+});
+
+eventBus.on(Events.DEVOPS_RELEASE_ROLLED_BACK, ({ deploymentId, userId }) => {
+  try {
+    notificationsService.createAdminNotification({
+      recipientType: 'SUPER_ADMIN', recipientId: 'system', type: 'SYSTEM_ALERT',
+      priority: 'HIGH', title: 'Release Rolled Back', message: `Deployment ${deploymentId} rolled back by user ${userId}.`,
+      entityType: 'Deployment', entityId: deploymentId
+    });
+  } catch (err) { console.error('[NotificationListener] DEVOPS_RELEASE_ROLLED_BACK failed:', err); }
 });
 
 eventBus.on(Events.LOW_STOCK, ({ boutique, variant, product }) => {

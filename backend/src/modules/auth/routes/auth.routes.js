@@ -104,6 +104,11 @@ router.post('/set-password', authController.setPassword);
 // Customer OTP-based authentication (mobile app)
 router.post('/send-otp', authController.sendOtp);
 router.post('/verify-otp', authController.verifyOtp);
-router.get('/dev-otp-metadata/:phone', authController.getDevOtpMetadata);
+router.get('/dev-otp-metadata/:phone', (req, res, next) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(404).json({ success: false, message: 'Not found' });
+  }
+  next();
+}, authController.getDevOtpMetadata);
 
 module.exports = router;

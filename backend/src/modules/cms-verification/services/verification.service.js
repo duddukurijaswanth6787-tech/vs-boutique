@@ -30,7 +30,7 @@ class VerificationService {
       throw new Error('Sandbox extraction path does not exist on disk.');
     }
 
-    console.log(`🔍 [VERIFY] Initiating AST scan on: ${sandboxPath}`);
+    console.warn(`🔍 [VERIFY] Initiating AST scan on: ${sandboxPath}`);
 
     // Gather all files recursively to perform quick AST regex parsing
     const filesList = this._getAllFiles(sandboxPath);
@@ -205,7 +205,7 @@ class VerificationService {
         if (regex.test(content)) {
           return true;
         }
-      } catch (e) {}
+      } catch (e) { console.error('[Verification Service] _searchFileContents error:', e); }
     }
     return false;
   }

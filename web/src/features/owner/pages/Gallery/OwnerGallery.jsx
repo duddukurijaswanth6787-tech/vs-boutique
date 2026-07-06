@@ -71,7 +71,6 @@ const OwnerGallery = () => {
             for (const file of files) {
                 const result = await uploadImage(file, 'gallery');
                 if (result?.url) {
-                    console.log('Uploaded URL:', result.url);
                     uploaded.push(result.url);
                 }
             }

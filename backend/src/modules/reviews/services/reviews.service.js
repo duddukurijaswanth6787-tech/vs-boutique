@@ -162,7 +162,7 @@ class ReviewsService {
       const cached = reviewsCache.get(boutiqueId);
       if (now - cached.timestamp < cacheTTL) {
         const totalTime = Date.now() - tStart;
-        console.log(`[AUDIT] GET /reviews/boutique/${boutiqueId} - [CACHE HIT] Cache Age: ${now - cached.timestamp}ms, DB Query: 0ms, Serialization: 0ms, Controller: 0ms, Total Execution: ${totalTime}ms`);
+        console.warn(`[AUDIT] GET /reviews/boutique/${boutiqueId} - [CACHE HIT] Cache Age: ${now - cached.timestamp}ms, DB Query: 0ms, Serialization: 0ms, Controller: 0ms, Total Execution: ${totalTime}ms`);
         return JSON.parse(cached.data);
       }
     }
@@ -199,7 +199,7 @@ class ReviewsService {
 
     const totalTime = Date.now() - tStart;
     const controllerTime = totalTime - dbTime - serializeTime;
-    console.log(`[AUDIT] GET /reviews/boutique/${boutiqueId} - [CACHE MISS] DB Query: ${dbTime}ms, Serialization: ${serializeTime}ms, Controller: ${controllerTime}ms, Total Execution: ${totalTime}ms`);
+    console.warn(`[AUDIT] GET /reviews/boutique/${boutiqueId} - [CACHE MISS] DB Query: ${dbTime}ms, Serialization: ${serializeTime}ms, Controller: ${controllerTime}ms, Total Execution: ${totalTime}ms`);
 
     return responseData;
   }

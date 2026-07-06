@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { LayoutDashboard, Store, ClipboardList, Settings, LogOut, ChevronRight, ChevronDown, ChevronUp, Clock, X, IndianRupee, Users, Calendar, Star, TrendingUp, Coins, LifeBuoy, Megaphone, ShieldAlert, Heart, CreditCard, FolderOpen, Percent, MessageSquare, ShoppingBag, Truck, Globe } from 'lucide-react';
+import { LayoutDashboard, Store, ClipboardList, Settings, LogOut, ChevronRight, ChevronDown, ChevronUp, Clock, X, IndianRupee, Users, Calendar, Star, TrendingUp, Coins, LifeBuoy, Megaphone, ShieldAlert, Heart, CreditCard, FolderOpen, Percent, MessageSquare, ShoppingBag, Truck, Globe, Layers } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts';
@@ -206,6 +206,35 @@ const Sidebar = ({ activePage, setActivePage, isOpen, onClose }) => {
                         ))}
                       </div>
 
+                      {/* Submenu AI Agent Center */}
+                      <div className="flex flex-col space-y-1">
+                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest px-2.5 mb-0.5">AI Agent Center</span>
+                        {[
+                          { path: '/admin/cms/ai-center', label: 'Dashboard' },
+                          { path: '/admin/cms/ai-center/providers', label: 'Providers' },
+                          { path: '/admin/cms/ai-center/agents', label: 'Agents' },
+                          { path: '/admin/cms/ai-center/workflows', label: 'Workflows' },
+                          { path: '/admin/cms/ai-center/executions', label: 'Executions' },
+                          { path: '/admin/cms/ai-center/usage', label: 'Usage & Cost' },
+                          { path: '/admin/cms/ai-center/health', label: 'Health' },
+                          { path: '/admin/cms/ai-center/queue', label: 'Queue' },
+                          { path: '/admin/cms/ai-center/settings', label: 'Settings' },
+                        ].map((sub) => (
+                          <Link
+                            key={sub.path}
+                            to={sub.path}
+                            onClick={handleNavClick}
+                            className={`text-xs font-semibold py-1.5 px-2.5 rounded-lg transition-colors ${
+                              location.pathname === sub.path
+                                ? 'text-primary bg-primary/5 font-bold'
+                                : 'text-gray-500 hover:text-primary hover:bg-gray-50'
+                            }`}
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+
                       {/* Submenu App Marketplace */}
                       <div className="flex flex-col space-y-1">
                         <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest px-2.5 mb-0.5">App Marketplace</span>
@@ -233,9 +262,21 @@ const Sidebar = ({ activePage, setActivePage, isOpen, onClose }) => {
                         {[
                           { path: '/admin/cms/subscriptions', label: 'Subscription Plans' },
                           { path: '/admin/cms/feature-flags', label: 'Feature Flags' },
+                          { path: '/admin/cms/business-assignment', label: 'Business Assignments' },
                           { path: '/admin/cms/domains', label: 'Domains' },
                           { path: '/admin/cms/deployment', label: 'Deployment' },
                           { path: '/admin/cms/health', label: 'Website Health' },
+                          { path: '/admin/cms/monitoring', label: 'Monitoring Center' },
+                          { path: '/admin/cms/ai-center/workflows', label: 'Workflow Center' },
+                          { path: '/admin/cms/customer-success', label: 'Customer Success' },
+                          { path: '/admin/cms/developer', label: 'Developer Platform' },
+                          { path: '/admin/cms/compliance', label: 'Compliance Center' },
+                        { path: '/admin/cms/disaster-recovery', label: 'Disaster Recovery' },
+                        { path: '/admin/cms/infrastructure', label: 'Infrastructure' },
+                        { path: '/admin/cms/analytics', label: 'Analytics' },
+                        { path: '/admin/cms/partners', label: 'White-Label' },
+                        { path: '/admin/cms/notifications', label: 'Notifications' },
+                        { path: '/admin/cms/devops', label: 'DevOps Center' },
                         ].map((sub) => (
                           <Link
                             key={sub.path}

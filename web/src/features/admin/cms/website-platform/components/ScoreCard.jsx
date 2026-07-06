@@ -24,9 +24,10 @@ export default function ScoreCard({ value, label = "Overall Score" }) {
     };
   };
 
-  const colors = getColorClasses(value);
+  const cleanValue = typeof value === 'number' && !isNaN(value) ? value : 0;
+  const colors = getColorClasses(cleanValue);
   // Calculate circumference: 2 * pi * r = 2 * 3.14 * 28 = 175.8
-  const strokeDashoffset = 176 - (176 * value) / 100;
+  const strokeDashoffset = 176 - (176 * cleanValue) / 100;
 
   return (
     <div className={`p-6 border rounded-3xl flex flex-col items-center justify-center space-y-3 transition-all duration-300 ${colors.bg}`}>
@@ -51,7 +52,7 @@ export default function ScoreCard({ value, label = "Overall Score" }) {
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className={`text-xl font-bold tracking-tight ${colors.text}`}>{value}%</span>
+          <span className={`text-xl font-bold tracking-tight ${colors.text}`}>{cleanValue}%</span>
         </div>
       </div>
       <div className="text-center">

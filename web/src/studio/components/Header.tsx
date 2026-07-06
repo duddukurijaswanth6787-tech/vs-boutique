@@ -65,7 +65,7 @@ export default function Header({
     let active = true;
     const loadCategories = async () => {
       try {
-        const backendUrl = (window as any).VITE_API_URL || (import.meta as any).env?.VITE_API_URL || 'http://localhost:3005';
+        const backendUrl = (window as any).VITE_API_URL || (import.meta as any).env?.VITE_API_URL || '';
         const res = await fetch(`${backendUrl}/categories`);
         const json = await res.json();
         if (json && json.success && Array.isArray(json.data) && active) {

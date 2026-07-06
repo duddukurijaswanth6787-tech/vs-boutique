@@ -87,10 +87,10 @@ const getBlueprintStats = (b) => {
   const activeCms = totalCms - hidCms;
 
   const genScore = b.name && b.version ? 100 : 50;
-  const pagesScore = Math.round((activePages / totalPages) * 100);
-  const cmsScore = Math.round((activeCms / totalCms) * 100);
-  const apisScore = Math.round((activeApis / totalApis) * 100);
-  const featuresScore = Math.round((activeFeatures / totalFeatures) * 100);
+  const pagesScore = totalPages > 0 ? Math.round((activePages / totalPages) * 100) : 100;
+  const cmsScore = totalCms > 0 ? Math.round((activeCms / totalCms) * 100) : 100;
+  const apisScore = totalApis > 0 ? Math.round((activeApis / totalApis) * 100) : 100;
+  const featuresScore = totalFeatures > 0 ? Math.round((activeFeatures / totalFeatures) * 100) : 100;
   const overallScore = Math.round((genScore + pagesScore + cmsScore + apisScore + featuresScore) / 5);
 
   // Health Score (ratio of security + accessibility + seo enabled checks)
@@ -98,11 +98,11 @@ const getBlueprintStats = (b) => {
   const totalAccess = Object.values(b.accessibility).filter(Boolean).length;
   const totalSeo = Object.values(b.seo).filter(Boolean).length;
   const maxHealthChecks = Object.keys(b.security).length + Object.keys(b.accessibility).length + Object.keys(b.seo).length;
-  const healthScore = Math.round(((totalSecurity + totalAccess + totalSeo) / maxHealthChecks) * 100);
+  const healthScore = maxHealthChecks > 0 ? Math.round(((totalSecurity + totalAccess + totalSeo) / maxHealthChecks) * 100) : 100;
 
   // Est. Cert. Score (avg performance score targets)
   const performanceVals = Object.values(b.performance);
-  const estCertScore = Math.round(performanceVals.reduce((acc, curr) => acc + curr, 0) / performanceVals.length);
+  const estCertScore = performanceVals.length > 0 ? Math.round(performanceVals.reduce((acc, curr) => acc + curr, 0) / performanceVals.length) : 100;
 
   // Totals
   const totalRequired = reqPages + reqApis + reqFeatures + reqCms;
@@ -163,16 +163,22 @@ export default function WebsiteBlueprint() {
           version: `v${b.version}.0.0`,
           status: b.status === 'PUBLISHED' ? 'Active' : 'Draft',
           lastUpdated: new Date(b.updatedAt).toLocaleDateString(),
-          pages: b.pages || { core: {}, business: {}, legal: {} },
+          pages: {
+            core: b.pages?.core || {},
+            business: b.pages?.business || {},
+            legal: b.pages?.legal || {}
+          },
           components: b.components || {},
+          sections: b.sections || {},
           apis: b.apis || {},
           databaseModels: b.databaseModels || {},
           features: b.features || {},
-          cmsFields: b.cmsFields || { required: {}, optional: {}, hidden: {} },
-          security: b.security || { sslRequired: true, cspRules: true },
-          accessibility: b.accessibility || { altTagsRequired: true },
-          seo: b.seo || { metaTagsRequired: true },
-          performance: b.performance || { maxBundleSizeKb: 2048 }
+          cmsFields: b.cmsFields || {},
+          security: b.security || {},
+          accessibility: b.accessibility || {},
+          seo: b.seo || {},
+          performance: b.performance || {},
+          responsive: b.responsive || { Desktop: true, Laptop: true, Tablet: true, Mobile: true, minResolution: '320px' }
         }));
         setBlueprints(dbBlueprints);
         if (dbBlueprints.length > 0 && !selectedId) {
@@ -555,7 +561,7 @@ export default function WebsiteBlueprint() {
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Blueprint Name</label>
                     <input 
                       type="text" 
-                      value={activeBlueprint.name}
+                      value={activeBlueprint.name || ''}
                       onChange={(e) => handleConfigChange('name', null, e.target.value)}
                       className="w-full px-4 py-3 bg-gray-50 border-none rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-primary/10 hover:bg-gray-100/50 transition-all"
                     />
@@ -564,7 +570,7 @@ export default function WebsiteBlueprint() {
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Version Tag</label>
                     <input 
                       type="text" 
-                      value={activeBlueprint.version}
+                      value={activeBlueprint.version || ''}
                       onChange={(e) => handleConfigChange('version', null, e.target.value)}
                       className="w-full px-4 py-3 bg-gray-50 border-none rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-primary/10 hover:bg-gray-100/50 transition-all"
                     />
@@ -573,7 +579,7 @@ export default function WebsiteBlueprint() {
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Business Type</label>
                     <input 
                       type="text" 
-                      value={activeBlueprint.businessType}
+                      value={activeBlueprint.businessType || ''}
                       onChange={(e) => handleConfigChange('businessType', null, e.target.value)}
                       className="w-full px-4 py-3 bg-gray-50 border-none rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-primary/10 hover:bg-gray-100/50 transition-all"
                     />
@@ -582,7 +588,7 @@ export default function WebsiteBlueprint() {
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Pricing Tier Category</label>
                     <input 
                       type="text" 
-                      value={activeBlueprint.category}
+                      value={activeBlueprint.category || ''}
                       onChange={(e) => handleConfigChange('category', null, e.target.value)}
                       className="w-full px-4 py-3 bg-gray-50 border-none rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-primary/10 hover:bg-gray-100/50 transition-all"
                     />
@@ -590,7 +596,7 @@ export default function WebsiteBlueprint() {
                   <div className="space-y-1.5 md:col-span-2 text-left">
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Description</label>
                     <textarea 
-                      value={activeBlueprint.description}
+                      value={activeBlueprint.description || ''}
                       onChange={(e) => handleConfigChange('description', null, e.target.value)}
                       className="w-full px-4 py-3 bg-gray-50 border-none rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-primary/10 hover:bg-gray-100/50 transition-all h-20 resize-none"
                     />

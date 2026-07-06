@@ -58,7 +58,6 @@ const OwnerDesigns = () => {
         setUploadingDesignImage(true);
         try {
             const data = await uploadImage(file, 'gallery');
-            console.log('Uploaded URL:', data.url);
             setFormData((prev) => ({ ...prev, images: [data.url || ''] }));
         } catch (err) {
             alert(err.response?.data?.message || err.message || 'Image upload failed');

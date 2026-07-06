@@ -1,9 +1,9 @@
 const { Queue, Worker } = require('bullmq');
 const IORedis = require('ioredis');
 const eventBus = require('../utils/eventBus');
+const mainEventBus = require('../../../services/eventBus');
 const logger = require('../utils/logger');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../../../utils/prisma');
 
 class QueueManager {
   constructor() {
@@ -123,6 +123,7 @@ class QueueManager {
       });
 
       eventBus.publish('AgentStarted', sessionId, { queueName, executionId });
+      try { mainEventBus.eventBus.emit('ai:agent-started', { sessionId, queueName, executionId }); } catch (e) { console.error('[QueueManager] agent-started emit error:', e); }
 
       const startTime = Date.now();
       const output = await workerFn(jobData);
@@ -147,6 +148,7 @@ class QueueManager {
       });
 
       eventBus.publish('AgentCompleted', sessionId, { queueName, executionId, output });
+      try { mainEventBus.eventBus.emit('ai:agent-completed', { sessionId, queueName, executionId }); } catch (e) { console.error('[QueueManager] agent-completed emit error:', e); }
     } catch (err) {
       logger.warn(`Job failed on queue '${queueName}': ${err.message}`);
 
@@ -176,6 +178,7 @@ class QueueManager {
         });
 
         eventBus.publish('AgentRetrying', sessionId, { queueName, executionId, attempt: nextAttempt });
+        try { mainEventBus.eventBus.emit('ai:agent-retrying', { sessionId, queueName, executionId, attempt: nextAttempt }); } catch (e) { console.error('[QueueManager] agent-retrying emit error:', e); }
 
         setTimeout(async () => {
           await this._processJobInMemory(queueName, jobData, retryPolicy, nextAttempt);
@@ -183,6 +186,7 @@ class QueueManager {
       } else {
         await this._failJob(executionId, err.message, attempt - 1);
         eventBus.publish('AgentFailed', sessionId, { queueName, executionId, error: err.message });
+        try { mainEventBus.eventBus.emit('ai:agent-failed', { sessionId, queueName, executionId, error: err.message }); } catch (e) { console.error('[QueueManager] agent-failed emit error:', e); }
       }
     }
   }

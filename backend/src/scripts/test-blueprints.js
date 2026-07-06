@@ -63,7 +63,7 @@ async function runTests() {
       password: 'Test@123'
     });
     token = loginRes.data?.token || loginRes.data?.data?.token;
-  } catch (e) {}
+  } catch (e) { console.error('[test-blueprints] first login error:', e); }
 
   if (!token) {
     try {
@@ -78,7 +78,7 @@ async function runTests() {
         password: 'admin@123'
       });
       token = loginRes.data?.token || loginRes.data?.data?.token;
-    } catch (e) {}
+    } catch (e) { console.error('[test-blueprints] second login error:', e); }
   }
 
   if (!token) {

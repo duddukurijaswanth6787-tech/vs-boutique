@@ -39,7 +39,6 @@ const EditModal = ({ isOpen, onClose, boutique, onUpdate }) => {
     setUploadingLogo(true);
     try {
       const data = await uploadImage(file, 'logo');
-      console.log('Uploaded URL:', data.url);
       setFormData((prev) => ({ ...prev, logo: data.url || '' }));
     } catch (err) {
       console.error(err);

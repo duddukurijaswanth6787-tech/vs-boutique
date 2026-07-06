@@ -60,7 +60,7 @@ async function runTests() {
       }, creds);
       token = res.data?.token || res.data?.data?.token;
       if (token) break;
-    } catch (e) {}
+    } catch (e) { console.error('[test-certification] login error:', e); }
   }
 
   if (!token) {

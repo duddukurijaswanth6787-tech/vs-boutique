@@ -32,9 +32,26 @@ const upload = multer({
   }
 });
 
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
+async function resolveBusinessId(req) {
+  let businessId = req.user?.businessId;
+  if (!businessId) {
+    businessId = req.query.businessId || req.body.businessId;
+  }
+  if (!businessId) {
+    const firstBiz = await prisma.business.findFirst({ select: { id: true } });
+    if (firstBiz) {
+      businessId = firstBiz.id;
+    }
+  }
+  return businessId;
+}
+
 router.get('/', protect, async (req, res) => {
   try {
-    const businessId = req.user?.businessId;
+    const businessId = await resolveBusinessId(req);
     if (!businessId) {
       return res.status(400).json({ success: false, message: 'Business ID required.' });
     }
@@ -47,7 +64,7 @@ router.get('/', protect, async (req, res) => {
 
 router.get('/:id', protect, async (req, res) => {
   try {
-    const businessId = req.user?.businessId;
+    const businessId = await resolveBusinessId(req);
     if (!businessId) {
       return res.status(400).json({ success: false, message: 'Business ID required.' });
     }
@@ -63,7 +80,7 @@ router.get('/:id', protect, async (req, res) => {
 
 router.post('/upload', protect, upload.single('file'), async (req, res) => {
   try {
-    const businessId = req.user?.businessId;
+    const businessId = await resolveBusinessId(req);
     if (!businessId) {
       return res.status(400).json({ success: false, message: 'Business ID required.' });
     }

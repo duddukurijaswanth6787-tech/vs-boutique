@@ -100,7 +100,7 @@ const requestLogger = (req, res, next) => {
                     userRole = (decoded.role || 'Unknown').toUpperCase();
                     username = decoded.username || decoded.ownerName || decoded.name || 'User';
                 }
-            } catch (e) {}
+            } catch (e) { console.error('[Logger] JWT decode error:', e); }
         }
 
         console.log(chalk.blue(`[${timestamp}] ${req.method} ${req.originalUrl} [${userRole}:${username}]`));

@@ -78,7 +78,7 @@ class PaymentsController {
       const event = req.body.event;
       const payload = req.body.payload.payment.entity;
 
-      console.log(`[PAYMENT WEBHOOK] Event: ${event} | Payment ID: ${payload.id}`);
+      console.warn(`[PAYMENT WEBHOOK] Event: ${event} | Payment ID: ${payload.id}`);
       await paymentsService.processWebhook(event, payload);
 
       res.json({ status: 'ok' });

@@ -1,7 +1,15 @@
 node_modules/
 .env
+.env.backup
+.env.*
 .DS_Store
 dist/
 build/
 .expo/
 *.log
+
+# Temporary and output files
+*.zip
+api_test_results.json
+cms_analysis_output.json
+backend/scratch/

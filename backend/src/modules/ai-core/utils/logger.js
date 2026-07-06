@@ -8,7 +8,7 @@ const log = (level, message, meta = '') => {
   const metaString = meta ? ` | ${JSON.stringify(meta)}` : '';
   const logMessage = `[${timestamp}] [AI-${level.toUpperCase()}] ${message}${metaString}\n`;
   
-  console.log(logMessage.trim());
+  process.stdout.write(logMessage);
 
   try {
     fs.appendFileSync(logFilePath, logMessage);

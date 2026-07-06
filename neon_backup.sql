@@ -2,15 +2,14 @@
 -- PostgreSQL database dump
 --
 
-\restrict dBxJwgSCXWpgCdSjX5apIm37Sd3N57wOrsb3EQu9KqRTqkn5HetA526BmmWfDJb
+\restrict bUvittvSZEdJfhXdc4W6qzXr9uYIs37MuFHTsn8uZwSbZtLfp9TCrTUesRZzgw1
 
--- Dumped from database version 18.4 (eaf151e)
--- Dumped by pg_dump version 18.4
+-- Dumped from database version 16.14
+-- Dumped by pg_dump version 16.14
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
-SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -19,17 +18,815 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+ALTER TABLE ONLY public.workflow_tasks DROP CONSTRAINT workflow_tasks_stage_id_fkey;
+ALTER TABLE ONLY public.workflow_tasks DROP CONSTRAINT workflow_tasks_agent_id_fkey;
+ALTER TABLE ONLY public.workflow_stages DROP CONSTRAINT workflow_stages_workflow_id_fkey;
+ALTER TABLE ONLY public.workflow_executions DROP CONSTRAINT workflow_executions_workflow_id_fkey;
+ALTER TABLE ONLY public.wishlists DROP CONSTRAINT wishlists_user_id_fkey;
+ALTER TABLE ONLY public.wishlists DROP CONSTRAINT wishlists_design_id_fkey;
+ALTER TABLE ONLY public.websites DROP CONSTRAINT websites_business_id_fkey;
+ALTER TABLE ONLY public.user_role_mappings DROP CONSTRAINT user_role_mappings_business_id_fkey;
+ALTER TABLE ONLY public.universal_contents DROP CONSTRAINT universal_contents_business_id_fkey;
+ALTER TABLE ONLY public.support_tickets DROP CONSTRAINT support_tickets_user_id_fkey;
+ALTER TABLE ONLY public.support_tickets DROP CONSTRAINT support_tickets_order_id_fkey;
+ALTER TABLE ONLY public.support_tickets DROP CONSTRAINT support_tickets_boutique_id_fkey;
+ALTER TABLE ONLY public.support_tickets DROP CONSTRAINT support_tickets_assigned_admin_id_fkey;
+ALTER TABLE ONLY public.support_ticket_messages DROP CONSTRAINT support_ticket_messages_ticket_id_fkey;
+ALTER TABLE ONLY public.support_ticket_admin_notes DROP CONSTRAINT support_ticket_admin_notes_ticket_id_fkey;
+ALTER TABLE ONLY public.support_ticket_admin_notes DROP CONSTRAINT support_ticket_admin_notes_admin_id_fkey;
+ALTER TABLE ONLY public.subscription_billing_history DROP CONSTRAINT subscription_billing_history_subscription_id_fkey;
+ALTER TABLE ONLY public.sub_categories DROP CONSTRAINT sub_categories_category_id_fkey;
+ALTER TABLE ONLY public.shipping_addresses DROP CONSTRAINT shipping_addresses_user_id_fkey;
+ALTER TABLE ONLY public.reviews DROP CONSTRAINT reviews_user_id_fkey;
+ALTER TABLE ONLY public.reviews DROP CONSTRAINT reviews_order_id_fkey;
+ALTER TABLE ONLY public.reviews DROP CONSTRAINT reviews_boutique_id_fkey;
+ALTER TABLE ONLY public.return_requests DROP CONSTRAINT return_requests_order_item_id_fkey;
+ALTER TABLE ONLY public.return_requests DROP CONSTRAINT return_requests_order_id_fkey;
+ALTER TABLE ONLY public.return_requests DROP CONSTRAINT return_requests_customer_id_fkey;
+ALTER TABLE ONLY public.products DROP CONSTRAINT products_sub_category_id_fkey;
+ALTER TABLE ONLY public.products DROP CONSTRAINT products_category_id_fkey;
+ALTER TABLE ONLY public.products DROP CONSTRAINT products_brand_id_fkey;
+ALTER TABLE ONLY public.products DROP CONSTRAINT products_boutique_id_fkey;
+ALTER TABLE ONLY public.product_wishlists DROP CONSTRAINT product_wishlists_user_id_fkey;
+ALTER TABLE ONLY public.product_wishlists DROP CONSTRAINT product_wishlists_product_id_fkey;
+ALTER TABLE ONLY public.product_variants DROP CONSTRAINT product_variants_product_id_fkey;
+ALTER TABLE ONLY public.product_variant_attributes DROP CONSTRAINT product_variant_attributes_product_id_fkey;
+ALTER TABLE ONLY public.product_tags DROP CONSTRAINT product_tags_boutique_id_fkey;
+ALTER TABLE ONLY public.product_reviews DROP CONSTRAINT product_reviews_user_id_fkey;
+ALTER TABLE ONLY public.product_reviews DROP CONSTRAINT product_reviews_product_id_fkey;
+ALTER TABLE ONLY public.product_reviews DROP CONSTRAINT product_reviews_order_id_fkey;
+ALTER TABLE ONLY public.product_inventory DROP CONSTRAINT product_inventory_variant_id_fkey;
+ALTER TABLE ONLY public.product_inventory_logs DROP CONSTRAINT product_inventory_logs_variant_id_fkey;
+ALTER TABLE ONLY public.product_inventory_logs DROP CONSTRAINT product_inventory_logs_product_id_fkey;
+ALTER TABLE ONLY public.product_images DROP CONSTRAINT product_images_product_id_fkey;
+ALTER TABLE ONLY public.product_brands DROP CONSTRAINT product_brands_boutique_id_fkey;
+ALTER TABLE ONLY public.product_analytics DROP CONSTRAINT product_analytics_product_id_fkey;
+ALTER TABLE ONLY public.payouts DROP CONSTRAINT payouts_boutique_id_fkey;
+ALTER TABLE ONLY public.payments DROP CONSTRAINT payments_payout_id_fkey;
+ALTER TABLE ONLY public.payments DROP CONSTRAINT payments_order_id_fkey;
+ALTER TABLE ONLY public.payments DROP CONSTRAINT payments_customer_id_fkey;
+ALTER TABLE ONLY public.payments DROP CONSTRAINT payments_boutique_id_fkey;
+ALTER TABLE ONLY public.page_component_nodes DROP CONSTRAINT page_component_nodes_page_id_fkey;
+ALTER TABLE ONLY public.owners DROP CONSTRAINT owners_assigned_boutique_id_fkey;
+ALTER TABLE ONLY public.owner_feature_permissions DROP CONSTRAINT owner_feature_permissions_owner_id_fkey;
+ALTER TABLE ONLY public.orders DROP CONSTRAINT orders_owner_id_fkey;
+ALTER TABLE ONLY public.orders DROP CONSTRAINT orders_design_id_fkey;
+ALTER TABLE ONLY public.orders DROP CONSTRAINT orders_boutique_id_fkey;
+ALTER TABLE ONLY public.order_histories DROP CONSTRAINT order_histories_order_id_fkey;
+ALTER TABLE ONLY public.notifications DROP CONSTRAINT notifications_recipient_user_id_fkey;
+ALTER TABLE ONLY public.notifications DROP CONSTRAINT notifications_recipient_id_fkey;
+ALTER TABLE ONLY public.notifications DROP CONSTRAINT notifications_campaign_id_fkey;
+ALTER TABLE ONLY public.notifications DROP CONSTRAINT notifications_boutique_id_fkey;
+ALTER TABLE ONLY public.notification_receipts DROP CONSTRAINT notification_receipts_notification_id_fkey;
+ALTER TABLE ONLY public.mobile_apps DROP CONSTRAINT mobile_apps_business_id_fkey;
+ALTER TABLE ONLY public.measurements DROP CONSTRAINT measurements_user_id_fkey;
+ALTER TABLE ONLY public.marketplace_versions DROP CONSTRAINT marketplace_versions_package_id_fkey;
+ALTER TABLE ONLY public.marketplace_reviews DROP CONSTRAINT marketplace_reviews_package_id_fkey;
+ALTER TABLE ONLY public.marketplace_publishers DROP CONSTRAINT marketplace_publishers_owner_id_fkey;
+ALTER TABLE ONLY public.marketplace_packages DROP CONSTRAINT marketplace_packages_publisher_id_fkey;
+ALTER TABLE ONLY public.marketplace_licenses DROP CONSTRAINT marketplace_licenses_package_id_fkey;
+ALTER TABLE ONLY public.marketplace_licenses DROP CONSTRAINT marketplace_licenses_business_id_fkey;
+ALTER TABLE ONLY public.marketplace_installations DROP CONSTRAINT marketplace_installations_package_id_fkey;
+ALTER TABLE ONLY public.marketplace_installations DROP CONSTRAINT marketplace_installations_installed_version_id_fkey;
+ALTER TABLE ONLY public.marketplace_installations DROP CONSTRAINT marketplace_installations_business_id_fkey;
+ALTER TABLE ONLY public.marketplace_dependencies DROP CONSTRAINT marketplace_dependencies_version_id_fkey;
+ALTER TABLE ONLY public.marketplace_capabilities DROP CONSTRAINT marketplace_capabilities_version_id_fkey;
+ALTER TABLE ONLY public.immutable_releases DROP CONSTRAINT immutable_releases_business_id_fkey;
+ALTER TABLE ONLY public.exchange_requests DROP CONSTRAINT exchange_requests_order_item_id_fkey;
+ALTER TABLE ONLY public.exchange_requests DROP CONSTRAINT exchange_requests_order_id_fkey;
+ALTER TABLE ONLY public.exchange_requests DROP CONSTRAINT exchange_requests_customer_id_fkey;
+ALTER TABLE ONLY public.developer_api_keys DROP CONSTRAINT developer_api_keys_business_id_fkey;
+ALTER TABLE ONLY public.designs DROP CONSTRAINT designs_boutique_id_fkey;
+ALTER TABLE ONLY public.deployments DROP CONSTRAINT deployments_rollback_target_id_fkey;
+ALTER TABLE ONLY public.deployments DROP CONSTRAINT deployments_environment_id_fkey;
+ALTER TABLE ONLY public.deployments DROP CONSTRAINT deployments_business_id_fkey;
+ALTER TABLE ONLY public.deployment_environments DROP CONSTRAINT deployment_environments_business_id_fkey;
+ALTER TABLE ONLY public.deployment_environment_variables DROP CONSTRAINT deployment_environment_variables_environment_id_fkey;
+ALTER TABLE ONLY public.deployment_domains DROP CONSTRAINT deployment_domains_environment_id_fkey;
+ALTER TABLE ONLY public.deployment_domains DROP CONSTRAINT deployment_domains_business_id_fkey;
+ALTER TABLE ONLY public.deployment_build_logs DROP CONSTRAINT deployment_build_logs_deployment_id_fkey;
+ALTER TABLE ONLY public.deployment_artifacts DROP CONSTRAINT deployment_artifacts_deployment_id_fkey;
+ALTER TABLE ONLY public.delivery_tracking DROP CONSTRAINT delivery_tracking_order_id_fkey;
+ALTER TABLE ONLY public.delivery_tracking_history DROP CONSTRAINT delivery_tracking_history_tracking_id_fkey;
+ALTER TABLE ONLY public.customer_notifications DROP CONSTRAINT customer_notifications_customer_id_fkey;
+ALTER TABLE ONLY public.customer_addresses DROP CONSTRAINT customer_addresses_user_id_fkey;
+ALTER TABLE ONLY public.custom_plan_requests DROP CONSTRAINT custom_plan_requests_owner_id_fkey;
+ALTER TABLE ONLY public.custom_plan_requests DROP CONSTRAINT custom_plan_requests_boutique_id_fkey;
+ALTER TABLE ONLY public.coupons DROP CONSTRAINT coupons_boutique_id_fkey;
+ALTER TABLE ONLY public.coupon_usages DROP CONSTRAINT coupon_usages_user_id_fkey;
+ALTER TABLE ONLY public.coupon_usages DROP CONSTRAINT coupon_usages_order_id_fkey;
+ALTER TABLE ONLY public.coupon_usages DROP CONSTRAINT coupon_usages_coupon_id_fkey;
+ALTER TABLE ONLY public.content_translations DROP CONSTRAINT content_translations_content_id_fkey;
+ALTER TABLE ONLY public.commerce_payments DROP CONSTRAINT commerce_payments_commerce_order_id_fkey;
+ALTER TABLE ONLY public.commerce_orders DROP CONSTRAINT commerce_orders_user_id_fkey;
+ALTER TABLE ONLY public.commerce_orders DROP CONSTRAINT commerce_orders_shipping_address_id_fkey;
+ALTER TABLE ONLY public.commerce_orders DROP CONSTRAINT commerce_orders_coupon_id_fkey;
+ALTER TABLE ONLY public.commerce_orders DROP CONSTRAINT commerce_orders_boutique_id_fkey;
+ALTER TABLE ONLY public.commerce_order_items DROP CONSTRAINT commerce_order_items_variant_id_fkey;
+ALTER TABLE ONLY public.commerce_order_items DROP CONSTRAINT commerce_order_items_product_id_fkey;
+ALTER TABLE ONLY public.commerce_order_items DROP CONSTRAINT commerce_order_items_order_id_fkey;
+ALTER TABLE ONLY public.commerce_order_histories DROP CONSTRAINT commerce_order_histories_order_id_fkey;
+ALTER TABLE ONLY public.cms_validation_reports DROP CONSTRAINT cms_validation_reports_business_id_fkey;
+ALTER TABLE ONLY public.cms_validation_report_sections DROP CONSTRAINT cms_validation_report_sections_report_id_fkey;
+ALTER TABLE ONLY public.cms_validation_report_comparisons DROP CONSTRAINT cms_validation_report_comparisons_business_id_fkey;
+ALTER TABLE ONLY public.cms_validation_report_analytics DROP CONSTRAINT cms_validation_report_analytics_business_id_fkey;
+ALTER TABLE ONLY public.cms_uploads DROP CONSTRAINT cms_uploads_business_id_fkey;
+ALTER TABLE ONLY public.cms_templates DROP CONSTRAINT cms_templates_category_id_fkey;
+ALTER TABLE ONLY public.cms_template_versions DROP CONSTRAINT cms_template_versions_template_id_fkey;
+ALTER TABLE ONLY public.cms_template_tag_template DROP CONSTRAINT cms_template_tag_template_template_id_fkey;
+ALTER TABLE ONLY public.cms_template_tag_template DROP CONSTRAINT cms_template_tag_template_tag_id_fkey;
+ALTER TABLE ONLY public.cms_template_requirement_joins DROP CONSTRAINT cms_template_requirement_joins_template_id_fkey;
+ALTER TABLE ONLY public.cms_template_requirement_joins DROP CONSTRAINT cms_template_requirement_joins_requirement_id_fkey;
+ALTER TABLE ONLY public.cms_template_ratings DROP CONSTRAINT cms_template_ratings_template_id_fkey;
+ALTER TABLE ONLY public.cms_template_pipeline_stages DROP CONSTRAINT cms_template_pipeline_stages_template_id_fkey;
+ALTER TABLE ONLY public.cms_template_favorites DROP CONSTRAINT cms_template_favorites_template_id_fkey;
+ALTER TABLE ONLY public.cms_template_builder_compat DROP CONSTRAINT cms_template_builder_compat_template_id_fkey;
+ALTER TABLE ONLY public.cms_template_analytics DROP CONSTRAINT cms_template_analytics_template_id_fkey;
+ALTER TABLE ONLY public.cms_standards DROP CONSTRAINT cms_standards_parent_id_fkey;
+ALTER TABLE ONLY public.cms_standard_versions DROP CONSTRAINT cms_standard_versions_standard_id_fkey;
+ALTER TABLE ONLY public.cms_requirement_versions DROP CONSTRAINT cms_requirement_versions_requirement_id_fkey;
+ALTER TABLE ONLY public.cms_requirement_relations DROP CONSTRAINT cms_requirement_relations_target_requirement_id_fkey;
+ALTER TABLE ONLY public.cms_requirement_relations DROP CONSTRAINT cms_requirement_relations_source_requirement_id_fkey;
+ALTER TABLE ONLY public.cms_prompts DROP CONSTRAINT cms_prompts_category_id_fkey;
+ALTER TABLE ONLY public.cms_prompts DROP CONSTRAINT cms_prompts_builder_id_fkey;
+ALTER TABLE ONLY public.cms_prompt_versions DROP CONSTRAINT cms_prompt_versions_prompt_id_fkey;
+ALTER TABLE ONLY public.cms_prompt_usage_analytics DROP CONSTRAINT cms_prompt_usage_analytics_prompt_id_fkey;
+ALTER TABLE ONLY public.cms_prompt_tag_prompts DROP CONSTRAINT cms_prompt_tag_prompts_tag_id_fkey;
+ALTER TABLE ONLY public.cms_prompt_tag_prompts DROP CONSTRAINT cms_prompt_tag_prompts_prompt_id_fkey;
+ALTER TABLE ONLY public.cms_prompt_ratings DROP CONSTRAINT cms_prompt_ratings_prompt_id_fkey;
+ALTER TABLE ONLY public.cms_prompt_histories DROP CONSTRAINT cms_prompt_histories_prompt_id_fkey;
+ALTER TABLE ONLY public.cms_prompt_favorites DROP CONSTRAINT cms_prompt_favorites_prompt_id_fkey;
+ALTER TABLE ONLY public.cms_prompt_executions DROP CONSTRAINT cms_prompt_executions_prompt_id_fkey;
+ALTER TABLE ONLY public.cms_prompt_executions DROP CONSTRAINT cms_prompt_executions_builder_id_fkey;
+ALTER TABLE ONLY public.cms_prompt_collection_items DROP CONSTRAINT cms_prompt_collection_items_prompt_id_fkey;
+ALTER TABLE ONLY public.cms_prompt_collection_items DROP CONSTRAINT cms_prompt_collection_items_collection_id_fkey;
+ALTER TABLE ONLY public.cms_prompt_audit_logs DROP CONSTRAINT cms_prompt_audit_logs_prompt_id_fkey;
+ALTER TABLE ONLY public.cms_builder_profiles DROP CONSTRAINT cms_builder_profiles_standard_id_fkey;
+ALTER TABLE ONLY public.cms_builder_profile_versions DROP CONSTRAINT cms_builder_profile_versions_builder_profile_id_fkey;
+ALTER TABLE ONLY public.cms_blueprint_templates DROP CONSTRAINT cms_blueprint_templates_standard_id_fkey;
+ALTER TABLE ONLY public.cms_blueprint_template_versions DROP CONSTRAINT cms_blueprint_template_versions_blueprint_template_id_fkey;
+ALTER TABLE ONLY public.cms_blueprint_pages DROP CONSTRAINT cms_blueprint_pages_blueprint_template_id_fkey;
+ALTER TABLE ONLY public.cms_blueprint_features DROP CONSTRAINT cms_blueprint_features_requirement_id_fkey;
+ALTER TABLE ONLY public.cms_blueprint_features DROP CONSTRAINT cms_blueprint_features_blueprint_template_id_fkey;
+ALTER TABLE ONLY public.cms_blueprint_components DROP CONSTRAINT cms_blueprint_components_page_id_fkey;
+ALTER TABLE ONLY public.cms_blueprint_apis DROP CONSTRAINT cms_blueprint_apis_blueprint_template_id_fkey;
+ALTER TABLE ONLY public.cms_assignment_histories DROP CONSTRAINT cms_assignment_histories_assignment_id_fkey;
+ALTER TABLE ONLY public.cms_assignment_configurations DROP CONSTRAINT cms_assignment_configurations_business_id_fkey;
+ALTER TABLE ONLY public.cms_assignment_configurations DROP CONSTRAINT cms_assignment_configurations_assignment_id_fkey;
+ALTER TABLE ONLY public.cms_ai_usage DROP CONSTRAINT cms_ai_usage_provider_id_fkey;
+ALTER TABLE ONLY public.cms_ai_costs DROP CONSTRAINT cms_ai_costs_provider_id_fkey;
+ALTER TABLE ONLY public.cms_ai_agents DROP CONSTRAINT cms_ai_agents_provider_id_fkey;
+ALTER TABLE ONLY public.certification_workflows DROP CONSTRAINT certification_workflows_definition_id_fkey;
+ALTER TABLE ONLY public.certification_workflows DROP CONSTRAINT certification_workflows_business_id_fkey;
+ALTER TABLE ONLY public.certification_profiles DROP CONSTRAINT certification_profiles_business_id_fkey;
+ALTER TABLE ONLY public.carts DROP CONSTRAINT carts_user_id_fkey;
+ALTER TABLE ONLY public.cart_items DROP CONSTRAINT cart_items_variant_id_fkey;
+ALTER TABLE ONLY public.cart_items DROP CONSTRAINT cart_items_product_id_fkey;
+ALTER TABLE ONLY public.cart_items DROP CONSTRAINT cart_items_cart_id_fkey;
+ALTER TABLE ONLY public.businesses DROP CONSTRAINT businesses_tenant_id_fkey;
+ALTER TABLE ONLY public.business_template_assignments DROP CONSTRAINT business_template_assignments_template_id_fkey;
+ALTER TABLE ONLY public.business_template_assignments DROP CONSTRAINT business_template_assignments_business_id_fkey;
+ALTER TABLE ONLY public.boutiques DROP CONSTRAINT boutiques_owner_id_fkey;
+ALTER TABLE ONLY public.boutiques DROP CONSTRAINT boutiques_business_id_fkey;
+ALTER TABLE ONLY public.boutique_themes DROP CONSTRAINT boutique_themes_business_id_fkey;
+ALTER TABLE ONLY public.boutique_subscriptions DROP CONSTRAINT boutique_subscriptions_plan_id_fkey;
+ALTER TABLE ONLY public.boutique_subscriptions DROP CONSTRAINT boutique_subscriptions_boutique_id_fkey;
+ALTER TABLE ONLY public.boutique_plugins DROP CONSTRAINT boutique_plugins_business_id_fkey;
+ALTER TABLE ONLY public.boutique_pages DROP CONSTRAINT boutique_pages_website_id_fkey;
+ALTER TABLE ONLY public.boutique_certifications DROP CONSTRAINT boutique_certifications_profile_id_fkey;
+ALTER TABLE ONLY public.boutique_certifications DROP CONSTRAINT boutique_certifications_business_id_fkey;
+ALTER TABLE ONLY public.bookings DROP CONSTRAINT bookings_order_id_fkey;
+ALTER TABLE ONLY public.bookings DROP CONSTRAINT bookings_boutique_id_fkey;
+ALTER TABLE ONLY public.bookings DROP CONSTRAINT bookings_assigned_owner_id_fkey;
+ALTER TABLE ONLY public.booking_histories DROP CONSTRAINT booking_histories_booking_id_fkey;
+ALTER TABLE ONLY public.autofix_queue_items DROP CONSTRAINT autofix_queue_items_business_id_fkey;
+ALTER TABLE ONLY public.audit_logs DROP CONSTRAINT audit_logs_performed_by_fkey;
+ALTER TABLE ONLY public.asset_libraries DROP CONSTRAINT asset_libraries_business_id_fkey;
+ALTER TABLE ONLY public."_ProductToProductTag" DROP CONSTRAINT "_ProductToProductTag_B_fkey";
+ALTER TABLE ONLY public."_ProductToProductTag" DROP CONSTRAINT "_ProductToProductTag_A_fkey";
+ALTER TABLE ONLY public."PromptHistory" DROP CONSTRAINT "PromptHistory_templateId_fkey";
+ALTER TABLE ONLY public."ApprovalHistory" DROP CONSTRAINT "ApprovalHistory_requestId_fkey";
+ALTER TABLE ONLY public."AIExecution" DROP CONSTRAINT "AIExecution_sessionId_fkey";
+ALTER TABLE ONLY public."AIExecutionLog" DROP CONSTRAINT "AIExecutionLog_executionId_fkey";
+ALTER TABLE ONLY public."AIConversation" DROP CONSTRAINT "AIConversation_contextId_fkey";
+ALTER TABLE ONLY public."AIAgent" DROP CONSTRAINT "AIAgent_promptTemplateId_fkey";
+DROP INDEX public.workflow_definitions_name_key;
+DROP INDEX public.websites_domain_key;
+DROP INDEX public.users_phone_key;
+DROP INDEX public.user_role_mappings_business_id_user_id_key;
+DROP INDEX public.uq_user_design;
+DROP INDEX public.universal_contents_business_id_key_key;
+DROP INDEX public.tenants_domain_key;
+DROP INDEX public.subscription_plans_plan_code_key;
+DROP INDEX public.sub_categories_category_id_name_key;
+DROP INDEX public.shipping_addresses_user_id_idx;
+DROP INDEX public.reviews_boutique_id_moderation_status_created_at_idx;
+DROP INDEX public.return_requests_status_idx;
+DROP INDEX public.return_requests_return_number_key;
+DROP INDEX public.return_requests_order_id_idx;
+DROP INDEX public.return_requests_customer_id_idx;
+DROP INDEX public.qa_agent_registries_agent_key_key;
+DROP INDEX public.products_status_created_at_is_marketplace_visible_idx;
+DROP INDEX public.products_category_id_idx;
+DROP INDEX public.products_boutique_id_status_idx;
+DROP INDEX public.products_boutique_id_sku_key;
+DROP INDEX public.product_wishlists_user_id_product_id_key;
+DROP INDEX public.product_variants_product_id_sku_key;
+DROP INDEX public.product_variants_product_id_idx;
+DROP INDEX public.product_variant_attributes_product_id_idx;
+DROP INDEX public.product_tags_boutique_id_name_key;
+DROP INDEX public.product_reviews_product_id_user_id_key;
+DROP INDEX public.product_reviews_product_id_status_idx;
+DROP INDEX public.product_inventory_variant_id_key;
+DROP INDEX public.product_inventory_logs_variant_id_idx;
+DROP INDEX public.product_inventory_logs_product_id_created_at_idx;
+DROP INDEX public.product_images_product_id_idx;
+DROP INDEX public.product_brands_boutique_id_name_key;
+DROP INDEX public.product_analytics_product_id_period_start_period_end_key;
+DROP INDEX public.product_analytics_product_id_idx;
+DROP INDEX public.owners_username_key;
+DROP INDEX public.owners_email_key;
+DROP INDEX public.owner_feature_permissions_owner_id_key;
+DROP INDEX public.orders_order_id_key;
+DROP INDEX public.order_sequences_date_key;
+DROP INDEX public.notification_templates_name_key;
+DROP INDEX public.mobile_apps_bundle_id_key;
+DROP INDEX public.measurements_user_id_key;
+DROP INDEX public.marketplace_versions_package_id_version_key;
+DROP INDEX public.marketplace_reviews_business_id_package_id_key;
+DROP INDEX public.marketplace_publishers_email_key;
+DROP INDEX public.marketplace_packages_status_created_at_idx;
+DROP INDEX public.marketplace_packages_slug_key;
+DROP INDEX public.marketplace_licenses_license_key_key;
+DROP INDEX public.marketplace_installations_business_id_package_id_key;
+DROP INDEX public.marketplace_capabilities_type_idx;
+DROP INDEX public.immutable_releases_business_id_release_tag_environment_key;
+DROP INDEX public.exchange_requests_status_idx;
+DROP INDEX public.exchange_requests_order_id_idx;
+DROP INDEX public.exchange_requests_exchange_number_key;
+DROP INDEX public.exchange_requests_customer_id_idx;
+DROP INDEX public.developer_api_keys_status_idx;
+DROP INDEX public.developer_api_keys_key_key;
+DROP INDEX public.developer_api_keys_key_idx;
+DROP INDEX public.developer_api_keys_business_id_idx;
+DROP INDEX public.designs_boutique_id_is_deleted_idx;
+DROP INDEX public.deployments_business_id_status_idx;
+DROP INDEX public.deployments_business_id_environment_id_idx;
+DROP INDEX public.deployments_business_id_created_at_idx;
+DROP INDEX public.deployment_variable_histories_variable_id_version_idx;
+DROP INDEX public.deployment_environments_business_id_name_key;
+DROP INDEX public.deployment_environment_variables_environment_id_key_key;
+DROP INDEX public.deployment_domains_business_id_status_idx;
+DROP INDEX public.deployment_domains_business_id_domain_key;
+DROP INDEX public.deployment_build_logs_deployment_id_created_at_idx;
+DROP INDEX public.delivery_tracking_order_id_idx;
+DROP INDEX public.delivery_tracking_history_tracking_id_created_at_idx;
+DROP INDEX public.customer_notifications_is_read_idx;
+DROP INDEX public.customer_notifications_customer_id_idx;
+DROP INDEX public.customer_notifications_created_at_idx;
+DROP INDEX public.coupons_code_idx;
+DROP INDEX public.coupons_code_boutique_id_key;
+DROP INDEX public.coupon_usages_coupon_id_user_id_order_id_key;
+DROP INDEX public.content_translations_content_id_locale_key;
+DROP INDEX public.commerce_payments_razorpay_order_id_key;
+DROP INDEX public.commerce_payments_commerce_order_id_idx;
+DROP INDEX public.commerce_orders_user_id_status_idx;
+DROP INDEX public.commerce_orders_user_id_created_at_idx;
+DROP INDEX public.commerce_orders_payment_status_idx;
+DROP INDEX public.commerce_orders_order_id_key;
+DROP INDEX public.commerce_orders_order_id_idx;
+DROP INDEX public.commerce_orders_created_at_idx;
+DROP INDEX public.commerce_orders_boutique_id_status_idx;
+DROP INDEX public.commerce_orders_boutique_id_created_at_idx;
+DROP INDEX public.commerce_order_items_variant_id_idx;
+DROP INDEX public.commerce_order_items_product_id_idx;
+DROP INDEX public.commerce_order_items_order_id_idx;
+DROP INDEX public.commerce_order_histories_order_id_created_at_idx;
+DROP INDEX public.cms_validation_reports_upload_id_idx;
+DROP INDEX public.cms_validation_reports_template_id_idx;
+DROP INDEX public.cms_validation_reports_certification_id_idx;
+DROP INDEX public.cms_validation_reports_business_id_idx;
+DROP INDEX public.cms_validation_report_sections_report_id_section_type_key;
+DROP INDEX public.cms_validation_report_history_report_id_idx;
+DROP INDEX public.cms_validation_report_exports_report_id_idx;
+DROP INDEX public.cms_validation_report_comparisons_business_id_idx;
+DROP INDEX public.cms_validation_report_analytics_business_id_period_start_pe_key;
+DROP INDEX public.cms_templates_tier_is_deleted_idx;
+DROP INDEX public.cms_templates_status_is_deleted_idx;
+DROP INDEX public.cms_templates_created_at_idx;
+DROP INDEX public.cms_templates_category_id_idx;
+DROP INDEX public.cms_template_versions_template_id_version_key;
+DROP INDEX public.cms_template_versions_template_id_idx;
+DROP INDEX public.cms_template_tags_key_key;
+DROP INDEX public.cms_template_tag_template_template_id_tag_id_key;
+DROP INDEX public.cms_template_requirement_joins_template_id_requirement_id_key;
+DROP INDEX public.cms_template_ratings_template_id_user_id_key;
+DROP INDEX public.cms_template_pipeline_stages_template_id_stage_idx;
+DROP INDEX public.cms_template_favorites_template_id_user_id_key;
+DROP INDEX public.cms_template_categories_key_key;
+DROP INDEX public.cms_template_builder_compat_template_id_builder_key_key;
+DROP INDEX public.cms_template_analytics_template_id_action_idx;
+DROP INDEX public.cms_template_analytics_created_at_idx;
+DROP INDEX public.cms_standards_key_key;
+DROP INDEX public.cms_standard_versions_standard_id_version_key;
+DROP INDEX public.cms_requirements_key_key;
+DROP INDEX public.cms_requirement_versions_requirement_id_version_key;
+DROP INDEX public.cms_requirement_templates_key_key;
+DROP INDEX public.cms_requirement_relations_source_requirement_id_target_requ_key;
+DROP INDEX public.cms_prompts_reference_type_reference_id_idx;
+DROP INDEX public."cms_prompts_promptType_is_deleted_idx";
+DROP INDEX public.cms_prompts_created_at_idx;
+DROP INDEX public.cms_prompts_category_id_idx;
+DROP INDEX public.cms_prompts_business_id_is_deleted_idx;
+DROP INDEX public.cms_prompt_versions_prompt_id_version_key;
+DROP INDEX public.cms_prompt_versions_prompt_id_idx;
+DROP INDEX public.cms_prompt_variables_key_key;
+DROP INDEX public.cms_prompt_usage_analytics_prompt_id_action_idx;
+DROP INDEX public.cms_prompt_usage_analytics_created_at_idx;
+DROP INDEX public.cms_prompt_tags_key_key;
+DROP INDEX public.cms_prompt_tag_prompts_prompt_id_tag_id_key;
+DROP INDEX public.cms_prompt_ratings_prompt_id_user_id_key;
+DROP INDEX public.cms_prompt_histories_prompt_id_created_at_idx;
+DROP INDEX public.cms_prompt_favorites_prompt_id_user_id_key;
+DROP INDEX public.cms_prompt_executions_status_idx;
+DROP INDEX public.cms_prompt_executions_prompt_id_idx;
+DROP INDEX public.cms_prompt_executions_created_at_idx;
+DROP INDEX public.cms_prompt_collections_user_id_idx;
+DROP INDEX public.cms_prompt_collection_items_collection_id_prompt_id_key;
+DROP INDEX public.cms_prompt_categories_key_key;
+DROP INDEX public.cms_prompt_audit_logs_prompt_id_created_at_idx;
+DROP INDEX public.cms_builder_profiles_key_key;
+DROP INDEX public.cms_builder_profile_versions_builder_profile_id_version_key;
+DROP INDEX public.cms_blueprint_templates_key_key;
+DROP INDEX public.cms_blueprint_template_versions_blueprint_template_id_versi_key;
+DROP INDEX public.cms_blueprint_pages_blueprint_template_id_route_key;
+DROP INDEX public.cms_blueprint_features_blueprint_template_id_requirement_id_key;
+DROP INDEX public.cms_blueprint_apis_blueprint_template_id_path_method_key;
+DROP INDEX public.cms_assignment_histories_assignment_id_created_at_idx;
+DROP INDEX public.cms_assignment_configurations_assignment_id_key;
+DROP INDEX public.cms_ai_workflows_status_idx;
+DROP INDEX public.cms_ai_usage_provider_id_idx;
+DROP INDEX public.cms_ai_usage_date_idx;
+DROP INDEX public.cms_ai_usage_agent_key_idx;
+DROP INDEX public.cms_ai_settings_key_key;
+DROP INDEX public.cms_ai_settings_category_idx;
+DROP INDEX public.cms_ai_providers_provider_idx;
+DROP INDEX public.cms_ai_providers_priority_idx;
+DROP INDEX public.cms_ai_providers_key_key;
+DROP INDEX public.cms_ai_providers_is_enabled_idx;
+DROP INDEX public.cms_ai_execution_steps_status_idx;
+DROP INDEX public.cms_ai_execution_steps_execution_id_idx;
+DROP INDEX public.cms_ai_costs_provider_id_idx;
+DROP INDEX public.cms_ai_costs_created_at_idx;
+DROP INDEX public.cms_ai_costs_category_idx;
+DROP INDEX public.cms_ai_builders_key_key;
+DROP INDEX public.cms_ai_agents_source_idx;
+DROP INDEX public.cms_ai_agents_key_key;
+DROP INDEX public.cms_ai_agents_is_enabled_idx;
+DROP INDEX public.cms_ai_agents_category_idx;
+DROP INDEX public.certification_workflow_definitions_name_version_key;
+DROP INDEX public.certification_profiles_business_id_name_key;
+DROP INDEX public.categories_name_key;
+DROP INDEX public.carts_user_id_key;
+DROP INDEX public.cart_items_cart_id_product_id_variant_id_key;
+DROP INDEX public.business_template_assignments_template_id_idx;
+DROP INDEX public.business_template_assignments_status_idx;
+DROP INDEX public.business_template_assignments_business_id_template_id_key;
+DROP INDEX public.business_template_assignments_business_id_idx;
+DROP INDEX public.boutiques_is_deleted_status_featured_boutique_created_at_idx;
+DROP INDEX public.boutiques_business_id_key;
+DROP INDEX public.boutique_themes_business_id_key;
+DROP INDEX public.boutique_subscriptions_boutique_id_idx;
+DROP INDEX public.boutique_plugins_business_id_plugin_key_key;
+DROP INDEX public.boutique_pages_website_id_slug_key;
+DROP INDEX public.boutique_certifications_business_id_target_id_release_tag_key;
+DROP INDEX public.ai_agent_registry_name_key;
+DROP INDEX public.admin_notifications_recipient_type_idx;
+DROP INDEX public.admin_notifications_recipient_id_idx;
+DROP INDEX public.admin_notifications_is_read_idx;
+DROP INDEX public.admin_notifications_created_at_idx;
+DROP INDEX public.admin_notifications_boutique_id_idx;
+DROP INDEX public."_ProductToProductTag_B_index";
+DROP INDEX public."AITool_name_key";
+DROP INDEX public."AIKnowledgeBase_key_key";
+DROP INDEX public."AICacheRecord_cacheKey_key";
+ALTER TABLE ONLY public.workflow_tasks DROP CONSTRAINT workflow_tasks_pkey;
+ALTER TABLE ONLY public.workflow_stages DROP CONSTRAINT workflow_stages_pkey;
+ALTER TABLE ONLY public.workflow_executions DROP CONSTRAINT workflow_executions_pkey;
+ALTER TABLE ONLY public.workflow_definitions DROP CONSTRAINT workflow_definitions_pkey;
+ALTER TABLE ONLY public.wishlists DROP CONSTRAINT wishlists_pkey;
+ALTER TABLE ONLY public.websites DROP CONSTRAINT websites_pkey;
+ALTER TABLE ONLY public.users DROP CONSTRAINT users_pkey;
+ALTER TABLE ONLY public.user_role_mappings DROP CONSTRAINT user_role_mappings_pkey;
+ALTER TABLE ONLY public.universal_contents DROP CONSTRAINT universal_contents_pkey;
+ALTER TABLE ONLY public.tenants DROP CONSTRAINT tenants_pkey;
+ALTER TABLE ONLY public.support_tickets DROP CONSTRAINT support_tickets_pkey;
+ALTER TABLE ONLY public.support_ticket_messages DROP CONSTRAINT support_ticket_messages_pkey;
+ALTER TABLE ONLY public.support_ticket_admin_notes DROP CONSTRAINT support_ticket_admin_notes_pkey;
+ALTER TABLE ONLY public.subscription_plans DROP CONSTRAINT subscription_plans_pkey;
+ALTER TABLE ONLY public.subscription_billing_history DROP CONSTRAINT subscription_billing_history_pkey;
+ALTER TABLE ONLY public.sub_categories DROP CONSTRAINT sub_categories_pkey;
+ALTER TABLE ONLY public.shipping_addresses DROP CONSTRAINT shipping_addresses_pkey;
+ALTER TABLE ONLY public.reviews DROP CONSTRAINT reviews_pkey;
+ALTER TABLE ONLY public.return_requests DROP CONSTRAINT return_requests_pkey;
+ALTER TABLE ONLY public.qa_agent_registries DROP CONSTRAINT qa_agent_registries_pkey;
+ALTER TABLE ONLY public.products DROP CONSTRAINT products_pkey;
+ALTER TABLE ONLY public.product_wishlists DROP CONSTRAINT product_wishlists_pkey;
+ALTER TABLE ONLY public.product_variants DROP CONSTRAINT product_variants_pkey;
+ALTER TABLE ONLY public.product_variant_attributes DROP CONSTRAINT product_variant_attributes_pkey;
+ALTER TABLE ONLY public.product_tags DROP CONSTRAINT product_tags_pkey;
+ALTER TABLE ONLY public.product_reviews DROP CONSTRAINT product_reviews_pkey;
+ALTER TABLE ONLY public.product_inventory DROP CONSTRAINT product_inventory_pkey;
+ALTER TABLE ONLY public.product_inventory_logs DROP CONSTRAINT product_inventory_logs_pkey;
+ALTER TABLE ONLY public.product_images DROP CONSTRAINT product_images_pkey;
+ALTER TABLE ONLY public.product_brands DROP CONSTRAINT product_brands_pkey;
+ALTER TABLE ONLY public.product_analytics DROP CONSTRAINT product_analytics_pkey;
+ALTER TABLE ONLY public.platform_settings DROP CONSTRAINT platform_settings_pkey;
+ALTER TABLE ONLY public.payouts DROP CONSTRAINT payouts_pkey;
+ALTER TABLE ONLY public.payments DROP CONSTRAINT payments_pkey;
+ALTER TABLE ONLY public.page_component_nodes DROP CONSTRAINT page_component_nodes_pkey;
+ALTER TABLE ONLY public.owners DROP CONSTRAINT owners_pkey;
+ALTER TABLE ONLY public.owner_feature_permissions DROP CONSTRAINT owner_feature_permissions_pkey;
+ALTER TABLE ONLY public.orders DROP CONSTRAINT orders_pkey;
+ALTER TABLE ONLY public.order_sequences DROP CONSTRAINT order_sequences_pkey;
+ALTER TABLE ONLY public.order_histories DROP CONSTRAINT order_histories_pkey;
+ALTER TABLE ONLY public.notifications DROP CONSTRAINT notifications_pkey;
+ALTER TABLE ONLY public.notification_templates DROP CONSTRAINT notification_templates_pkey;
+ALTER TABLE ONLY public.notification_receipts DROP CONSTRAINT notification_receipts_pkey;
+ALTER TABLE ONLY public.notification_campaigns DROP CONSTRAINT notification_campaigns_pkey;
+ALTER TABLE ONLY public.mobile_apps DROP CONSTRAINT mobile_apps_pkey;
+ALTER TABLE ONLY public.measurements DROP CONSTRAINT measurements_pkey;
+ALTER TABLE ONLY public.marketplace_versions DROP CONSTRAINT marketplace_versions_pkey;
+ALTER TABLE ONLY public.marketplace_reviews DROP CONSTRAINT marketplace_reviews_pkey;
+ALTER TABLE ONLY public.marketplace_publishers DROP CONSTRAINT marketplace_publishers_pkey;
+ALTER TABLE ONLY public.marketplace_packages DROP CONSTRAINT marketplace_packages_pkey;
+ALTER TABLE ONLY public.marketplace_licenses DROP CONSTRAINT marketplace_licenses_pkey;
+ALTER TABLE ONLY public.marketplace_installations DROP CONSTRAINT marketplace_installations_pkey;
+ALTER TABLE ONLY public.marketplace_dependencies DROP CONSTRAINT marketplace_dependencies_pkey;
+ALTER TABLE ONLY public.marketplace_capabilities DROP CONSTRAINT marketplace_capabilities_pkey;
+ALTER TABLE ONLY public.immutable_releases DROP CONSTRAINT immutable_releases_pkey;
+ALTER TABLE ONLY public.exchange_requests DROP CONSTRAINT exchange_requests_pkey;
+ALTER TABLE ONLY public.developer_api_keys DROP CONSTRAINT developer_api_keys_pkey;
+ALTER TABLE ONLY public.designs DROP CONSTRAINT designs_pkey;
+ALTER TABLE ONLY public.deployments DROP CONSTRAINT deployments_pkey;
+ALTER TABLE ONLY public.deployment_variable_histories DROP CONSTRAINT deployment_variable_histories_pkey;
+ALTER TABLE ONLY public.deployment_environments DROP CONSTRAINT deployment_environments_pkey;
+ALTER TABLE ONLY public.deployment_environment_variables DROP CONSTRAINT deployment_environment_variables_pkey;
+ALTER TABLE ONLY public.deployment_domains DROP CONSTRAINT deployment_domains_pkey;
+ALTER TABLE ONLY public.deployment_build_logs DROP CONSTRAINT deployment_build_logs_pkey;
+ALTER TABLE ONLY public.deployment_artifacts DROP CONSTRAINT deployment_artifacts_pkey;
+ALTER TABLE ONLY public.delivery_tracking DROP CONSTRAINT delivery_tracking_pkey;
+ALTER TABLE ONLY public.delivery_tracking_history DROP CONSTRAINT delivery_tracking_history_pkey;
+ALTER TABLE ONLY public.customer_notifications DROP CONSTRAINT customer_notifications_pkey;
+ALTER TABLE ONLY public.customer_addresses DROP CONSTRAINT customer_addresses_pkey;
+ALTER TABLE ONLY public.custom_plan_requests DROP CONSTRAINT custom_plan_requests_pkey;
+ALTER TABLE ONLY public.coupons DROP CONSTRAINT coupons_pkey;
+ALTER TABLE ONLY public.coupon_usages DROP CONSTRAINT coupon_usages_pkey;
+ALTER TABLE ONLY public.content_translations DROP CONSTRAINT content_translations_pkey;
+ALTER TABLE ONLY public.commerce_payments DROP CONSTRAINT commerce_payments_pkey;
+ALTER TABLE ONLY public.commerce_orders DROP CONSTRAINT commerce_orders_pkey;
+ALTER TABLE ONLY public.commerce_order_items DROP CONSTRAINT commerce_order_items_pkey;
+ALTER TABLE ONLY public.commerce_order_histories DROP CONSTRAINT commerce_order_histories_pkey;
+ALTER TABLE ONLY public.cms_validation_reports DROP CONSTRAINT cms_validation_reports_pkey;
+ALTER TABLE ONLY public.cms_validation_report_sections DROP CONSTRAINT cms_validation_report_sections_pkey;
+ALTER TABLE ONLY public.cms_validation_report_history DROP CONSTRAINT cms_validation_report_history_pkey;
+ALTER TABLE ONLY public.cms_validation_report_exports DROP CONSTRAINT cms_validation_report_exports_pkey;
+ALTER TABLE ONLY public.cms_validation_report_comparisons DROP CONSTRAINT cms_validation_report_comparisons_pkey;
+ALTER TABLE ONLY public.cms_validation_report_analytics DROP CONSTRAINT cms_validation_report_analytics_pkey;
+ALTER TABLE ONLY public.cms_uploads DROP CONSTRAINT cms_uploads_pkey;
+ALTER TABLE ONLY public.cms_templates DROP CONSTRAINT cms_templates_pkey;
+ALTER TABLE ONLY public.cms_template_versions DROP CONSTRAINT cms_template_versions_pkey;
+ALTER TABLE ONLY public.cms_template_tags DROP CONSTRAINT cms_template_tags_pkey;
+ALTER TABLE ONLY public.cms_template_tag_template DROP CONSTRAINT cms_template_tag_template_pkey;
+ALTER TABLE ONLY public.cms_template_requirement_joins DROP CONSTRAINT cms_template_requirement_joins_pkey;
+ALTER TABLE ONLY public.cms_template_ratings DROP CONSTRAINT cms_template_ratings_pkey;
+ALTER TABLE ONLY public.cms_template_pipeline_stages DROP CONSTRAINT cms_template_pipeline_stages_pkey;
+ALTER TABLE ONLY public.cms_template_favorites DROP CONSTRAINT cms_template_favorites_pkey;
+ALTER TABLE ONLY public.cms_template_categories DROP CONSTRAINT cms_template_categories_pkey;
+ALTER TABLE ONLY public.cms_template_builder_compat DROP CONSTRAINT cms_template_builder_compat_pkey;
+ALTER TABLE ONLY public.cms_template_analytics DROP CONSTRAINT cms_template_analytics_pkey;
+ALTER TABLE ONLY public.cms_standards DROP CONSTRAINT cms_standards_pkey;
+ALTER TABLE ONLY public.cms_standard_versions DROP CONSTRAINT cms_standard_versions_pkey;
+ALTER TABLE ONLY public.cms_standard_audit_logs DROP CONSTRAINT cms_standard_audit_logs_pkey;
+ALTER TABLE ONLY public.cms_requirements DROP CONSTRAINT cms_requirements_pkey;
+ALTER TABLE ONLY public.cms_requirement_versions DROP CONSTRAINT cms_requirement_versions_pkey;
+ALTER TABLE ONLY public.cms_requirement_templates DROP CONSTRAINT cms_requirement_templates_pkey;
+ALTER TABLE ONLY public.cms_requirement_relations DROP CONSTRAINT cms_requirement_relations_pkey;
+ALTER TABLE ONLY public.cms_prompts DROP CONSTRAINT cms_prompts_pkey;
+ALTER TABLE ONLY public.cms_prompt_versions DROP CONSTRAINT cms_prompt_versions_pkey;
+ALTER TABLE ONLY public.cms_prompt_variables DROP CONSTRAINT cms_prompt_variables_pkey;
+ALTER TABLE ONLY public.cms_prompt_usage_analytics DROP CONSTRAINT cms_prompt_usage_analytics_pkey;
+ALTER TABLE ONLY public.cms_prompt_tags DROP CONSTRAINT cms_prompt_tags_pkey;
+ALTER TABLE ONLY public.cms_prompt_tag_prompts DROP CONSTRAINT cms_prompt_tag_prompts_pkey;
+ALTER TABLE ONLY public.cms_prompt_ratings DROP CONSTRAINT cms_prompt_ratings_pkey;
+ALTER TABLE ONLY public.cms_prompt_histories DROP CONSTRAINT cms_prompt_histories_pkey;
+ALTER TABLE ONLY public.cms_prompt_favorites DROP CONSTRAINT cms_prompt_favorites_pkey;
+ALTER TABLE ONLY public.cms_prompt_executions DROP CONSTRAINT cms_prompt_executions_pkey;
+ALTER TABLE ONLY public.cms_prompt_collections DROP CONSTRAINT cms_prompt_collections_pkey;
+ALTER TABLE ONLY public.cms_prompt_collection_items DROP CONSTRAINT cms_prompt_collection_items_pkey;
+ALTER TABLE ONLY public.cms_prompt_categories DROP CONSTRAINT cms_prompt_categories_pkey;
+ALTER TABLE ONLY public.cms_prompt_audit_logs DROP CONSTRAINT cms_prompt_audit_logs_pkey;
+ALTER TABLE ONLY public.cms_builder_profiles DROP CONSTRAINT cms_builder_profiles_pkey;
+ALTER TABLE ONLY public.cms_builder_profile_versions DROP CONSTRAINT cms_builder_profile_versions_pkey;
+ALTER TABLE ONLY public.cms_blueprint_templates DROP CONSTRAINT cms_blueprint_templates_pkey;
+ALTER TABLE ONLY public.cms_blueprint_template_versions DROP CONSTRAINT cms_blueprint_template_versions_pkey;
+ALTER TABLE ONLY public.cms_blueprint_pages DROP CONSTRAINT cms_blueprint_pages_pkey;
+ALTER TABLE ONLY public.cms_blueprint_features DROP CONSTRAINT cms_blueprint_features_pkey;
+ALTER TABLE ONLY public.cms_blueprint_components DROP CONSTRAINT cms_blueprint_components_pkey;
+ALTER TABLE ONLY public.cms_blueprint_apis DROP CONSTRAINT cms_blueprint_apis_pkey;
+ALTER TABLE ONLY public.cms_assignment_histories DROP CONSTRAINT cms_assignment_histories_pkey;
+ALTER TABLE ONLY public.cms_assignment_configurations DROP CONSTRAINT cms_assignment_configurations_pkey;
+ALTER TABLE ONLY public.cms_ai_workflows DROP CONSTRAINT cms_ai_workflows_pkey;
+ALTER TABLE ONLY public.cms_ai_usage DROP CONSTRAINT cms_ai_usage_pkey;
+ALTER TABLE ONLY public.cms_ai_settings DROP CONSTRAINT cms_ai_settings_pkey;
+ALTER TABLE ONLY public.cms_ai_providers DROP CONSTRAINT cms_ai_providers_pkey;
+ALTER TABLE ONLY public.cms_ai_execution_steps DROP CONSTRAINT cms_ai_execution_steps_pkey;
+ALTER TABLE ONLY public.cms_ai_costs DROP CONSTRAINT cms_ai_costs_pkey;
+ALTER TABLE ONLY public.cms_ai_builders DROP CONSTRAINT cms_ai_builders_pkey;
+ALTER TABLE ONLY public.cms_ai_agents DROP CONSTRAINT cms_ai_agents_pkey;
+ALTER TABLE ONLY public.certification_workflows DROP CONSTRAINT certification_workflows_pkey;
+ALTER TABLE ONLY public.certification_workflow_definitions DROP CONSTRAINT certification_workflow_definitions_pkey;
+ALTER TABLE ONLY public.certification_profiles DROP CONSTRAINT certification_profiles_pkey;
+ALTER TABLE ONLY public.certification_chat_messages DROP CONSTRAINT certification_chat_messages_pkey;
+ALTER TABLE ONLY public.categories DROP CONSTRAINT categories_pkey;
+ALTER TABLE ONLY public.carts DROP CONSTRAINT carts_pkey;
+ALTER TABLE ONLY public.cart_items DROP CONSTRAINT cart_items_pkey;
+ALTER TABLE ONLY public.businesses DROP CONSTRAINT businesses_pkey;
+ALTER TABLE ONLY public.business_template_assignments DROP CONSTRAINT business_template_assignments_pkey;
+ALTER TABLE ONLY public.boutiques DROP CONSTRAINT boutiques_pkey;
+ALTER TABLE ONLY public.boutique_themes DROP CONSTRAINT boutique_themes_pkey;
+ALTER TABLE ONLY public.boutique_subscriptions DROP CONSTRAINT boutique_subscriptions_pkey;
+ALTER TABLE ONLY public.boutique_plugins DROP CONSTRAINT boutique_plugins_pkey;
+ALTER TABLE ONLY public.boutique_pages DROP CONSTRAINT boutique_pages_pkey;
+ALTER TABLE ONLY public.boutique_certifications DROP CONSTRAINT boutique_certifications_pkey;
+ALTER TABLE ONLY public.bookings DROP CONSTRAINT bookings_pkey;
+ALTER TABLE ONLY public.booking_histories DROP CONSTRAINT booking_histories_pkey;
+ALTER TABLE ONLY public.autofix_queue_items DROP CONSTRAINT autofix_queue_items_pkey;
+ALTER TABLE ONLY public.audit_logs DROP CONSTRAINT audit_logs_pkey;
+ALTER TABLE ONLY public.asset_libraries DROP CONSTRAINT asset_libraries_pkey;
+ALTER TABLE ONLY public.ai_learning_records DROP CONSTRAINT ai_learning_records_pkey;
+ALTER TABLE ONLY public.ai_agent_registry DROP CONSTRAINT ai_agent_registry_pkey;
+ALTER TABLE ONLY public.admin_notifications DROP CONSTRAINT admin_notifications_pkey;
+ALTER TABLE ONLY public.activities DROP CONSTRAINT activities_pkey;
+ALTER TABLE ONLY public._prisma_migrations DROP CONSTRAINT _prisma_migrations_pkey;
+ALTER TABLE ONLY public."_ProductToProductTag" DROP CONSTRAINT "_ProductToProductTag_AB_pkey";
+ALTER TABLE ONLY public."PromptTemplate" DROP CONSTRAINT "PromptTemplate_pkey";
+ALTER TABLE ONLY public."PromptHistory" DROP CONSTRAINT "PromptHistory_pkey";
+ALTER TABLE ONLY public."ApprovalRequest" DROP CONSTRAINT "ApprovalRequest_pkey";
+ALTER TABLE ONLY public."ApprovalHistory" DROP CONSTRAINT "ApprovalHistory_pkey";
+ALTER TABLE ONLY public."AITool" DROP CONSTRAINT "AITool_pkey";
+ALTER TABLE ONLY public."AISession" DROP CONSTRAINT "AISession_pkey";
+ALTER TABLE ONLY public."AIKnowledgeBase" DROP CONSTRAINT "AIKnowledgeBase_pkey";
+ALTER TABLE ONLY public."AIExecution" DROP CONSTRAINT "AIExecution_pkey";
+ALTER TABLE ONLY public."AIExecutionLog" DROP CONSTRAINT "AIExecutionLog_pkey";
+ALTER TABLE ONLY public."AIConversation" DROP CONSTRAINT "AIConversation_pkey";
+ALTER TABLE ONLY public."AIContext" DROP CONSTRAINT "AIContext_pkey";
+ALTER TABLE ONLY public."AICacheRecord" DROP CONSTRAINT "AICacheRecord_pkey";
+ALTER TABLE ONLY public."AIArtifact" DROP CONSTRAINT "AIArtifact_pkey";
+ALTER TABLE ONLY public."AIAgent" DROP CONSTRAINT "AIAgent_pkey";
+DROP TABLE public.workflow_tasks;
+DROP TABLE public.workflow_stages;
+DROP TABLE public.workflow_executions;
+DROP TABLE public.workflow_definitions;
+DROP TABLE public.wishlists;
+DROP TABLE public.websites;
+DROP TABLE public.users;
+DROP TABLE public.user_role_mappings;
+DROP TABLE public.universal_contents;
+DROP TABLE public.tenants;
+DROP TABLE public.support_tickets;
+DROP TABLE public.support_ticket_messages;
+DROP TABLE public.support_ticket_admin_notes;
+DROP TABLE public.subscription_plans;
+DROP TABLE public.subscription_billing_history;
+DROP TABLE public.sub_categories;
+DROP TABLE public.shipping_addresses;
+DROP TABLE public.reviews;
+DROP TABLE public.return_requests;
+DROP TABLE public.qa_agent_registries;
+DROP TABLE public.products;
+DROP TABLE public.product_wishlists;
+DROP TABLE public.product_variants;
+DROP TABLE public.product_variant_attributes;
+DROP TABLE public.product_tags;
+DROP TABLE public.product_reviews;
+DROP TABLE public.product_inventory_logs;
+DROP TABLE public.product_inventory;
+DROP TABLE public.product_images;
+DROP TABLE public.product_brands;
+DROP TABLE public.product_analytics;
+DROP TABLE public.platform_settings;
+DROP TABLE public.payouts;
+DROP TABLE public.payments;
+DROP TABLE public.page_component_nodes;
+DROP TABLE public.owners;
+DROP TABLE public.owner_feature_permissions;
+DROP TABLE public.orders;
+DROP TABLE public.order_sequences;
+DROP TABLE public.order_histories;
+DROP TABLE public.notifications;
+DROP TABLE public.notification_templates;
+DROP TABLE public.notification_receipts;
+DROP TABLE public.notification_campaigns;
+DROP TABLE public.mobile_apps;
+DROP TABLE public.measurements;
+DROP TABLE public.marketplace_versions;
+DROP TABLE public.marketplace_reviews;
+DROP TABLE public.marketplace_publishers;
+DROP TABLE public.marketplace_packages;
+DROP TABLE public.marketplace_licenses;
+DROP TABLE public.marketplace_installations;
+DROP TABLE public.marketplace_dependencies;
+DROP TABLE public.marketplace_capabilities;
+DROP TABLE public.immutable_releases;
+DROP TABLE public.exchange_requests;
+DROP TABLE public.developer_api_keys;
+DROP TABLE public.designs;
+DROP TABLE public.deployments;
+DROP TABLE public.deployment_variable_histories;
+DROP TABLE public.deployment_environments;
+DROP TABLE public.deployment_environment_variables;
+DROP TABLE public.deployment_domains;
+DROP TABLE public.deployment_build_logs;
+DROP TABLE public.deployment_artifacts;
+DROP TABLE public.delivery_tracking_history;
+DROP TABLE public.delivery_tracking;
+DROP TABLE public.customer_notifications;
+DROP TABLE public.customer_addresses;
+DROP TABLE public.custom_plan_requests;
+DROP TABLE public.coupons;
+DROP TABLE public.coupon_usages;
+DROP TABLE public.content_translations;
+DROP TABLE public.commerce_payments;
+DROP TABLE public.commerce_orders;
+DROP TABLE public.commerce_order_items;
+DROP TABLE public.commerce_order_histories;
+DROP TABLE public.cms_validation_reports;
+DROP TABLE public.cms_validation_report_sections;
+DROP TABLE public.cms_validation_report_history;
+DROP TABLE public.cms_validation_report_exports;
+DROP TABLE public.cms_validation_report_comparisons;
+DROP TABLE public.cms_validation_report_analytics;
+DROP TABLE public.cms_uploads;
+DROP TABLE public.cms_templates;
+DROP TABLE public.cms_template_versions;
+DROP TABLE public.cms_template_tags;
+DROP TABLE public.cms_template_tag_template;
+DROP TABLE public.cms_template_requirement_joins;
+DROP TABLE public.cms_template_ratings;
+DROP TABLE public.cms_template_pipeline_stages;
+DROP TABLE public.cms_template_favorites;
+DROP TABLE public.cms_template_categories;
+DROP TABLE public.cms_template_builder_compat;
+DROP TABLE public.cms_template_analytics;
+DROP TABLE public.cms_standards;
+DROP TABLE public.cms_standard_versions;
+DROP TABLE public.cms_standard_audit_logs;
+DROP TABLE public.cms_requirements;
+DROP TABLE public.cms_requirement_versions;
+DROP TABLE public.cms_requirement_templates;
+DROP TABLE public.cms_requirement_relations;
+DROP TABLE public.cms_prompts;
+DROP TABLE public.cms_prompt_versions;
+DROP TABLE public.cms_prompt_variables;
+DROP TABLE public.cms_prompt_usage_analytics;
+DROP TABLE public.cms_prompt_tags;
+DROP TABLE public.cms_prompt_tag_prompts;
+DROP TABLE public.cms_prompt_ratings;
+DROP TABLE public.cms_prompt_histories;
+DROP TABLE public.cms_prompt_favorites;
+DROP TABLE public.cms_prompt_executions;
+DROP TABLE public.cms_prompt_collections;
+DROP TABLE public.cms_prompt_collection_items;
+DROP TABLE public.cms_prompt_categories;
+DROP TABLE public.cms_prompt_audit_logs;
+DROP TABLE public.cms_builder_profiles;
+DROP TABLE public.cms_builder_profile_versions;
+DROP TABLE public.cms_blueprint_templates;
+DROP TABLE public.cms_blueprint_template_versions;
+DROP TABLE public.cms_blueprint_pages;
+DROP TABLE public.cms_blueprint_features;
+DROP TABLE public.cms_blueprint_components;
+DROP TABLE public.cms_blueprint_apis;
+DROP TABLE public.cms_assignment_histories;
+DROP TABLE public.cms_assignment_configurations;
+DROP TABLE public.cms_ai_workflows;
+DROP TABLE public.cms_ai_usage;
+DROP TABLE public.cms_ai_settings;
+DROP TABLE public.cms_ai_providers;
+DROP TABLE public.cms_ai_execution_steps;
+DROP TABLE public.cms_ai_costs;
+DROP TABLE public.cms_ai_builders;
+DROP TABLE public.cms_ai_agents;
+DROP TABLE public.certification_workflows;
+DROP TABLE public.certification_workflow_definitions;
+DROP TABLE public.certification_profiles;
+DROP TABLE public.certification_chat_messages;
+DROP TABLE public.categories;
+DROP TABLE public.carts;
+DROP TABLE public.cart_items;
+DROP TABLE public.businesses;
+DROP TABLE public.business_template_assignments;
+DROP TABLE public.boutiques;
+DROP TABLE public.boutique_themes;
+DROP TABLE public.boutique_subscriptions;
+DROP TABLE public.boutique_plugins;
+DROP TABLE public.boutique_pages;
+DROP TABLE public.boutique_certifications;
+DROP TABLE public.bookings;
+DROP TABLE public.booking_histories;
+DROP TABLE public.autofix_queue_items;
+DROP TABLE public.audit_logs;
+DROP TABLE public.asset_libraries;
+DROP TABLE public.ai_learning_records;
+DROP TABLE public.ai_agent_registry;
+DROP TABLE public.admin_notifications;
+DROP TABLE public.activities;
+DROP TABLE public._prisma_migrations;
+DROP TABLE public."_ProductToProductTag";
+DROP TABLE public."PromptTemplate";
+DROP TABLE public."PromptHistory";
+DROP TABLE public."ApprovalRequest";
+DROP TABLE public."ApprovalHistory";
+DROP TABLE public."AITool";
+DROP TABLE public."AISession";
+DROP TABLE public."AIKnowledgeBase";
+DROP TABLE public."AIExecutionLog";
+DROP TABLE public."AIExecution";
+DROP TABLE public."AIConversation";
+DROP TABLE public."AIContext";
+DROP TABLE public."AICacheRecord";
+DROP TABLE public."AIArtifact";
+DROP TABLE public."AIAgent";
+DROP TYPE public."VariantStatus";
+DROP TYPE public."ValidationReportStatus";
+DROP TYPE public."ValidationReportSectionType";
+DROP TYPE public."UserStatus";
+DROP TYPE public."UserRole";
+DROP TYPE public."TicketType";
+DROP TYPE public."TicketStatus";
+DROP TYPE public."TicketSource";
+DROP TYPE public."TicketPriority";
+DROP TYPE public."TicketEscalationLevel";
+DROP TYPE public."SubscriptionStatus";
+DROP TYPE public."SubscriptionPlanType";
+DROP TYPE public."SessionStatus";
+DROP TYPE public."SafetyLevel";
+DROP TYPE public."ReviewModerationStatus";
+DROP TYPE public."ReturnStatus";
+DROP TYPE public."RecipientType";
+DROP TYPE public."RecipientRole";
+DROP TYPE public."QueueStatus";
+DROP TYPE public."PublisherRole";
+DROP TYPE public."ProductType";
+DROP TYPE public."ProductStatus";
+DROP TYPE public."PayoutStatusType";
+DROP TYPE public."PayoutStatus";
+DROP TYPE public."PayoutState";
+DROP TYPE public."PaymentStatus";
+DROP TYPE public."OwnerStatus";
+DROP TYPE public."OwnerRole";
+DROP TYPE public."OrderStatus";
+DROP TYPE public."NotificationType";
+DROP TYPE public."NotificationPriority";
+DROP TYPE public."MarketplacePackageStatus";
+DROP TYPE public."MarketplaceLicenseStatus";
+DROP TYPE public."LogLevel";
+DROP TYPE public."ExportFormat";
+DROP TYPE public."ExecutionStatus";
+DROP TYPE public."ExchangeStatus";
+DROP TYPE public."DesignCategory";
+DROP TYPE public."DeploymentStatus";
+DROP TYPE public."DeploymentEnvironmentType";
+DROP TYPE public."DeploymentDomainType";
+DROP TYPE public."DeploymentDomainStatus";
+DROP TYPE public."DeliveryType";
+DROP TYPE public."CustomerSegment";
+DROP TYPE public."CustomerNotificationType";
+DROP TYPE public."CommercePaymentStatus";
+DROP TYPE public."CommerceOrderStatus";
+DROP TYPE public."CmsStandardStatus";
+DROP TYPE public."CmsRequirementStatus";
+DROP TYPE public."CmsRequirementRelationType";
+DROP TYPE public."CertificationStatus";
+DROP TYPE public."BoutiqueStatus";
+DROP TYPE public."BookingType";
+DROP TYPE public."BookingStatus";
+DROP TYPE public."AssignmentStatus";
+DROP TYPE public."ApprovalStatus";
+DROP TYPE public."AdminNotificationType";
+DROP TYPE public."ActivityType";
+DROP EXTENSION "uuid-ossp";
+-- *not* dropping schema, since initdb creates it
 --
--- Name: public; Type: SCHEMA; Schema: -; Owner: neondb_owner
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
 --
 
 -- *not* creating schema, since initdb creates it
 
 
-ALTER SCHEMA public OWNER TO neondb_owner;
-
 --
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: neondb_owner
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: -
 --
 
 COMMENT ON SCHEMA public IS '';
@@ -43,14 +840,14 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
 --
 
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
 
 
 --
--- Name: ActivityType; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: ActivityType; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."ActivityType" AS ENUM (
@@ -60,10 +857,8 @@ CREATE TYPE public."ActivityType" AS ENUM (
 );
 
 
-ALTER TYPE public."ActivityType" OWNER TO neondb_owner;
-
 --
--- Name: AdminNotificationType; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: AdminNotificationType; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."AdminNotificationType" AS ENUM (
@@ -90,10 +885,37 @@ CREATE TYPE public."AdminNotificationType" AS ENUM (
 );
 
 
-ALTER TYPE public."AdminNotificationType" OWNER TO neondb_owner;
+--
+-- Name: ApprovalStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."ApprovalStatus" AS ENUM (
+    'DRAFT',
+    'PENDING_REVIEW',
+    'APPROVED',
+    'REJECTED',
+    'PUBLISHED'
+);
+
 
 --
--- Name: BookingStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: AssignmentStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."AssignmentStatus" AS ENUM (
+    'DRAFT',
+    'CONFIGURING',
+    'READY',
+    'DEPLOYING',
+    'ACTIVE',
+    'SUSPENDED',
+    'ARCHIVED',
+    'FAILED'
+);
+
+
+--
+-- Name: BookingStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."BookingStatus" AS ENUM (
@@ -105,10 +927,8 @@ CREATE TYPE public."BookingStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."BookingStatus" OWNER TO neondb_owner;
-
 --
--- Name: BookingType; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: BookingType; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."BookingType" AS ENUM (
@@ -121,10 +941,8 @@ CREATE TYPE public."BookingType" AS ENUM (
 );
 
 
-ALTER TYPE public."BookingType" OWNER TO neondb_owner;
-
 --
--- Name: BoutiqueStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: BoutiqueStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."BoutiqueStatus" AS ENUM (
@@ -133,10 +951,64 @@ CREATE TYPE public."BoutiqueStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."BoutiqueStatus" OWNER TO neondb_owner;
+--
+-- Name: CertificationStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."CertificationStatus" AS ENUM (
+    'DRAFT',
+    'REVIEWING',
+    'NEEDS_FIXES',
+    'APPROVED',
+    'CERTIFIED',
+    'PUBLISHED'
+);
+
 
 --
--- Name: CommerceOrderStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: CmsRequirementRelationType; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."CmsRequirementRelationType" AS ENUM (
+    'DEPENDS_ON',
+    'REQUIRES',
+    'CONFLICTS_WITH',
+    'OPTIONAL_WITH',
+    'RECOMMENDED_WITH',
+    'REPLACES',
+    'DEPRECATED_BY'
+);
+
+
+--
+-- Name: CmsRequirementStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."CmsRequirementStatus" AS ENUM (
+    'DRAFT',
+    'REVIEW',
+    'APPROVED',
+    'ACTIVE',
+    'DEPRECATED',
+    'ARCHIVED'
+);
+
+
+--
+-- Name: CmsStandardStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."CmsStandardStatus" AS ENUM (
+    'DRAFT',
+    'TESTING',
+    'PUBLISHED',
+    'DEPRECATED',
+    'ARCHIVED'
+);
+
+
+--
+-- Name: CommerceOrderStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."CommerceOrderStatus" AS ENUM (
@@ -153,10 +1025,8 @@ CREATE TYPE public."CommerceOrderStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."CommerceOrderStatus" OWNER TO neondb_owner;
-
 --
--- Name: CommercePaymentStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: CommercePaymentStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."CommercePaymentStatus" AS ENUM (
@@ -167,10 +1037,8 @@ CREATE TYPE public."CommercePaymentStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."CommercePaymentStatus" OWNER TO neondb_owner;
-
 --
--- Name: CustomerNotificationType; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: CustomerNotificationType; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."CustomerNotificationType" AS ENUM (
@@ -192,10 +1060,8 @@ CREATE TYPE public."CustomerNotificationType" AS ENUM (
 );
 
 
-ALTER TYPE public."CustomerNotificationType" OWNER TO neondb_owner;
-
 --
--- Name: CustomerSegment; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: CustomerSegment; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."CustomerSegment" AS ENUM (
@@ -207,10 +1073,8 @@ CREATE TYPE public."CustomerSegment" AS ENUM (
 );
 
 
-ALTER TYPE public."CustomerSegment" OWNER TO neondb_owner;
-
 --
--- Name: DeliveryType; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: DeliveryType; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."DeliveryType" AS ENUM (
@@ -222,10 +1086,67 @@ CREATE TYPE public."DeliveryType" AS ENUM (
 );
 
 
-ALTER TYPE public."DeliveryType" OWNER TO neondb_owner;
+--
+-- Name: DeploymentDomainStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."DeploymentDomainStatus" AS ENUM (
+    'PENDING_VERIFICATION',
+    'VERIFYING_DNS',
+    'DNS_VERIFIED',
+    'SSL_PENDING',
+    'SSL_ACTIVE',
+    'SSL_FAILED',
+    'ACTIVE',
+    'FAILED',
+    'PROPAGATING'
+);
+
 
 --
--- Name: DesignCategory; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: DeploymentDomainType; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."DeploymentDomainType" AS ENUM (
+    'CUSTOM',
+    'SUBDOMAIN'
+);
+
+
+--
+-- Name: DeploymentEnvironmentType; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."DeploymentEnvironmentType" AS ENUM (
+    'DEVELOPMENT',
+    'TESTING',
+    'STAGING',
+    'PRODUCTION'
+);
+
+
+--
+-- Name: DeploymentStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."DeploymentStatus" AS ENUM (
+    'PENDING',
+    'BUILDING',
+    'BUILD_FAILED',
+    'VALIDATING',
+    'VALIDATION_FAILED',
+    'PACKAGING',
+    'UPLOADING',
+    'DEPLOYING',
+    'DEPLOYED',
+    'FAILED',
+    'ROLLED_BACK',
+    'CANCELLED'
+);
+
+
+--
+-- Name: DesignCategory; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."DesignCategory" AS ENUM (
@@ -236,10 +1157,8 @@ CREATE TYPE public."DesignCategory" AS ENUM (
 );
 
 
-ALTER TYPE public."DesignCategory" OWNER TO neondb_owner;
-
 --
--- Name: ExchangeStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: ExchangeStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."ExchangeStatus" AS ENUM (
@@ -253,10 +1172,68 @@ CREATE TYPE public."ExchangeStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."ExchangeStatus" OWNER TO neondb_owner;
+--
+-- Name: ExecutionStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."ExecutionStatus" AS ENUM (
+    'PENDING',
+    'PROCESSING',
+    'COMPLETED',
+    'FAILED',
+    'RETRYING'
+);
+
 
 --
--- Name: NotificationPriority; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: ExportFormat; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."ExportFormat" AS ENUM (
+    'JSON',
+    'CSV',
+    'PDF',
+    'EXCEL',
+    'MARKDOWN'
+);
+
+
+--
+-- Name: LogLevel; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."LogLevel" AS ENUM (
+    'INFO',
+    'WARN',
+    'ERROR'
+);
+
+
+--
+-- Name: MarketplaceLicenseStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."MarketplaceLicenseStatus" AS ENUM (
+    'ACTIVE',
+    'EXPIRED',
+    'SUSPENDED'
+);
+
+
+--
+-- Name: MarketplacePackageStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."MarketplacePackageStatus" AS ENUM (
+    'DRAFT',
+    'IN_MODERATION',
+    'APPROVED',
+    'REJECTED'
+);
+
+
+--
+-- Name: NotificationPriority; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."NotificationPriority" AS ENUM (
@@ -267,10 +1244,8 @@ CREATE TYPE public."NotificationPriority" AS ENUM (
 );
 
 
-ALTER TYPE public."NotificationPriority" OWNER TO neondb_owner;
-
 --
--- Name: NotificationType; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: NotificationType; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."NotificationType" AS ENUM (
@@ -281,10 +1256,8 @@ CREATE TYPE public."NotificationType" AS ENUM (
 );
 
 
-ALTER TYPE public."NotificationType" OWNER TO neondb_owner;
-
 --
--- Name: OrderStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: OrderStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."OrderStatus" AS ENUM (
@@ -297,10 +1270,8 @@ CREATE TYPE public."OrderStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."OrderStatus" OWNER TO neondb_owner;
-
 --
--- Name: OwnerRole; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: OwnerRole; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."OwnerRole" AS ENUM (
@@ -309,10 +1280,8 @@ CREATE TYPE public."OwnerRole" AS ENUM (
 );
 
 
-ALTER TYPE public."OwnerRole" OWNER TO neondb_owner;
-
 --
--- Name: OwnerStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: OwnerStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."OwnerStatus" AS ENUM (
@@ -322,10 +1291,8 @@ CREATE TYPE public."OwnerStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."OwnerStatus" OWNER TO neondb_owner;
-
 --
--- Name: PaymentStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: PaymentStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."PaymentStatus" AS ENUM (
@@ -336,10 +1303,8 @@ CREATE TYPE public."PaymentStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."PaymentStatus" OWNER TO neondb_owner;
-
 --
--- Name: PayoutState; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: PayoutState; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."PayoutState" AS ENUM (
@@ -350,10 +1315,8 @@ CREATE TYPE public."PayoutState" AS ENUM (
 );
 
 
-ALTER TYPE public."PayoutState" OWNER TO neondb_owner;
-
 --
--- Name: PayoutStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: PayoutStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."PayoutStatus" AS ENUM (
@@ -363,10 +1326,8 @@ CREATE TYPE public."PayoutStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."PayoutStatus" OWNER TO neondb_owner;
-
 --
--- Name: PayoutStatusType; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: PayoutStatusType; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."PayoutStatusType" AS ENUM (
@@ -377,10 +1338,8 @@ CREATE TYPE public."PayoutStatusType" AS ENUM (
 );
 
 
-ALTER TYPE public."PayoutStatusType" OWNER TO neondb_owner;
-
 --
--- Name: ProductStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: ProductStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."ProductStatus" AS ENUM (
@@ -391,10 +1350,8 @@ CREATE TYPE public."ProductStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."ProductStatus" OWNER TO neondb_owner;
-
 --
--- Name: ProductType; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: ProductType; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."ProductType" AS ENUM (
@@ -405,10 +1362,30 @@ CREATE TYPE public."ProductType" AS ENUM (
 );
 
 
-ALTER TYPE public."ProductType" OWNER TO neondb_owner;
+--
+-- Name: PublisherRole; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."PublisherRole" AS ENUM (
+    'DEVELOPER',
+    'ADMIN'
+);
+
 
 --
--- Name: RecipientRole; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: QueueStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."QueueStatus" AS ENUM (
+    'PENDING',
+    'APPROVED',
+    'REJECTED',
+    'APPLIED'
+);
+
+
+--
+-- Name: RecipientRole; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."RecipientRole" AS ENUM (
@@ -417,10 +1394,8 @@ CREATE TYPE public."RecipientRole" AS ENUM (
 );
 
 
-ALTER TYPE public."RecipientRole" OWNER TO neondb_owner;
-
 --
--- Name: RecipientType; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: RecipientType; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."RecipientType" AS ENUM (
@@ -430,10 +1405,8 @@ CREATE TYPE public."RecipientType" AS ENUM (
 );
 
 
-ALTER TYPE public."RecipientType" OWNER TO neondb_owner;
-
 --
--- Name: ReturnStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: ReturnStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."ReturnStatus" AS ENUM (
@@ -448,10 +1421,8 @@ CREATE TYPE public."ReturnStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."ReturnStatus" OWNER TO neondb_owner;
-
 --
--- Name: ReviewModerationStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: ReviewModerationStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."ReviewModerationStatus" AS ENUM (
@@ -462,10 +1433,30 @@ CREATE TYPE public."ReviewModerationStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."ReviewModerationStatus" OWNER TO neondb_owner;
+--
+-- Name: SafetyLevel; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."SafetyLevel" AS ENUM (
+    'SAFE_AUTO_FIX',
+    'SUGGESTED',
+    'MANUAL_APPROVAL_REQUIRED'
+);
+
 
 --
--- Name: SubscriptionPlanType; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: SessionStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."SessionStatus" AS ENUM (
+    'IN_PROGRESS',
+    'COMPLETED',
+    'FAILED'
+);
+
+
+--
+-- Name: SubscriptionPlanType; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."SubscriptionPlanType" AS ENUM (
@@ -477,10 +1468,8 @@ CREATE TYPE public."SubscriptionPlanType" AS ENUM (
 );
 
 
-ALTER TYPE public."SubscriptionPlanType" OWNER TO neondb_owner;
-
 --
--- Name: SubscriptionStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: SubscriptionStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."SubscriptionStatus" AS ENUM (
@@ -492,10 +1481,8 @@ CREATE TYPE public."SubscriptionStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."SubscriptionStatus" OWNER TO neondb_owner;
-
 --
--- Name: TicketEscalationLevel; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: TicketEscalationLevel; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."TicketEscalationLevel" AS ENUM (
@@ -506,10 +1493,8 @@ CREATE TYPE public."TicketEscalationLevel" AS ENUM (
 );
 
 
-ALTER TYPE public."TicketEscalationLevel" OWNER TO neondb_owner;
-
 --
--- Name: TicketPriority; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: TicketPriority; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."TicketPriority" AS ENUM (
@@ -520,10 +1505,8 @@ CREATE TYPE public."TicketPriority" AS ENUM (
 );
 
 
-ALTER TYPE public."TicketPriority" OWNER TO neondb_owner;
-
 --
--- Name: TicketSource; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: TicketSource; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."TicketSource" AS ENUM (
@@ -534,10 +1517,8 @@ CREATE TYPE public."TicketSource" AS ENUM (
 );
 
 
-ALTER TYPE public."TicketSource" OWNER TO neondb_owner;
-
 --
--- Name: TicketStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: TicketStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."TicketStatus" AS ENUM (
@@ -548,10 +1529,8 @@ CREATE TYPE public."TicketStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."TicketStatus" OWNER TO neondb_owner;
-
 --
--- Name: TicketType; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: TicketType; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."TicketType" AS ENUM (
@@ -562,10 +1541,23 @@ CREATE TYPE public."TicketType" AS ENUM (
 );
 
 
-ALTER TYPE public."TicketType" OWNER TO neondb_owner;
+--
+-- Name: UserRole; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."UserRole" AS ENUM (
+    'SUPER_ADMIN',
+    'PLATFORM_ADMIN',
+    'BUSINESS_OWNER',
+    'MANAGER',
+    'EMPLOYEE',
+    'CUSTOMER',
+    'GUEST'
+);
+
 
 --
--- Name: UserStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: UserStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."UserStatus" AS ENUM (
@@ -574,10 +1566,40 @@ CREATE TYPE public."UserStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."UserStatus" OWNER TO neondb_owner;
+--
+-- Name: ValidationReportSectionType; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."ValidationReportSectionType" AS ENUM (
+    'FOLDER',
+    'COMPONENTS',
+    'APIS',
+    'CMS_COMPATIBILITY',
+    'PERFORMANCE',
+    'SEO',
+    'ACCESSIBILITY',
+    'SECURITY',
+    'RESPONSIVE',
+    'AI_RECOMMENDATIONS',
+    'SUMMARY',
+    'OVERALL_SCORE'
+);
+
 
 --
--- Name: VariantStatus; Type: TYPE; Schema: public; Owner: neondb_owner
+-- Name: ValidationReportStatus; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."ValidationReportStatus" AS ENUM (
+    'DRAFT',
+    'GENERATING',
+    'COMPLETED',
+    'FAILED'
+);
+
+
+--
+-- Name: VariantStatus; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public."VariantStatus" AS ENUM (
@@ -586,14 +1608,233 @@ CREATE TYPE public."VariantStatus" AS ENUM (
 );
 
 
-ALTER TYPE public."VariantStatus" OWNER TO neondb_owner;
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: _ProductToProductTag; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: AIAgent; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."AIAgent" (
+    id text NOT NULL,
+    name text NOT NULL,
+    description text NOT NULL,
+    "providerId" text NOT NULL,
+    model text NOT NULL,
+    "systemPrompt" text NOT NULL,
+    temperature double precision DEFAULT 0.2 NOT NULL,
+    "maxTokens" integer DEFAULT 2048 NOT NULL,
+    "inputSchema" jsonb NOT NULL,
+    "outputSchema" jsonb NOT NULL,
+    enabled boolean DEFAULT true NOT NULL,
+    "executionOrder" integer NOT NULL,
+    "retryPolicy" jsonb NOT NULL,
+    timeout integer DEFAULT 30000 NOT NULL,
+    "promptTemplateId" text NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "updatedAt" timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: AIArtifact; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."AIArtifact" (
+    id text NOT NULL,
+    version text NOT NULL,
+    checksum text NOT NULL,
+    "createdByAgent" text NOT NULL,
+    "schemaVersion" text DEFAULT 'v1.0.0'::text NOT NULL,
+    "parentArtifactId" text,
+    status text NOT NULL,
+    payload jsonb NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "updatedAt" timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: AICacheRecord; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."AICacheRecord" (
+    id text NOT NULL,
+    "cacheKey" text NOT NULL,
+    "responseVal" text NOT NULL,
+    ttl integer NOT NULL,
+    hits integer DEFAULT 0 NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: AIContext; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."AIContext" (
+    id text NOT NULL,
+    "sessionId" text NOT NULL,
+    "activeAgentId" text NOT NULL,
+    variables jsonb NOT NULL
+);
+
+
+--
+-- Name: AIConversation; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."AIConversation" (
+    id text NOT NULL,
+    "contextId" text NOT NULL,
+    role text NOT NULL,
+    content text NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: AIExecution; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."AIExecution" (
+    id text NOT NULL,
+    "sessionId" text NOT NULL,
+    "agentId" text NOT NULL,
+    status public."ExecutionStatus" DEFAULT 'PENDING'::public."ExecutionStatus" NOT NULL,
+    "inputPayload" jsonb NOT NULL,
+    "outputPayload" jsonb,
+    "tokensUsed" integer DEFAULT 0 NOT NULL,
+    "latencyMs" integer DEFAULT 0 NOT NULL,
+    "retryCount" integer DEFAULT 0 NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "updatedAt" timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: AIExecutionLog; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."AIExecutionLog" (
+    id text NOT NULL,
+    "executionId" text NOT NULL,
+    level public."LogLevel" DEFAULT 'INFO'::public."LogLevel" NOT NULL,
+    message text NOT NULL,
+    "timestamp" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: AIKnowledgeBase; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."AIKnowledgeBase" (
+    id text NOT NULL,
+    key text NOT NULL,
+    value text NOT NULL,
+    tags jsonb NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "updatedAt" timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: AISession; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."AISession" (
+    id text NOT NULL,
+    "businessName" text NOT NULL,
+    vertical text NOT NULL,
+    status public."SessionStatus" DEFAULT 'IN_PROGRESS'::public."SessionStatus" NOT NULL,
+    "totalCost" double precision DEFAULT 0.0 NOT NULL,
+    "totalTokens" integer DEFAULT 0 NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "updatedAt" timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: AITool; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."AITool" (
+    id text NOT NULL,
+    name text NOT NULL,
+    description text NOT NULL,
+    category text NOT NULL,
+    "inputSchema" jsonb NOT NULL,
+    "outputSchema" jsonb NOT NULL,
+    permissions jsonb NOT NULL,
+    timeout integer DEFAULT 5000 NOT NULL,
+    enabled boolean DEFAULT true NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "updatedAt" timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: ApprovalHistory; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."ApprovalHistory" (
+    id text NOT NULL,
+    "requestId" text NOT NULL,
+    decision text NOT NULL,
+    comments text,
+    "reviewerId" text NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: ApprovalRequest; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."ApprovalRequest" (
+    id text NOT NULL,
+    "targetType" text NOT NULL,
+    "targetId" text NOT NULL,
+    status public."ApprovalStatus" DEFAULT 'PENDING_REVIEW'::public."ApprovalStatus" NOT NULL,
+    "requesterId" text NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "updatedAt" timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: PromptHistory; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."PromptHistory" (
+    id text NOT NULL,
+    "templateId" text NOT NULL,
+    version text NOT NULL,
+    "promptContent" text NOT NULL,
+    "changeNotes" text NOT NULL,
+    author text NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: PromptTemplate; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."PromptTemplate" (
+    id text NOT NULL,
+    name text NOT NULL,
+    "activeVersion" text NOT NULL,
+    variables jsonb NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "updatedAt" timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: _ProductToProductTag; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public."_ProductToProductTag" (
@@ -602,10 +1843,8 @@ CREATE TABLE public."_ProductToProductTag" (
 );
 
 
-ALTER TABLE public."_ProductToProductTag" OWNER TO neondb_owner;
-
 --
--- Name: _prisma_migrations; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: _prisma_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public._prisma_migrations (
@@ -620,10 +1859,8 @@ CREATE TABLE public._prisma_migrations (
 );
 
 
-ALTER TABLE public._prisma_migrations OWNER TO neondb_owner;
-
 --
--- Name: activities; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: activities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.activities (
@@ -635,10 +1872,8 @@ CREATE TABLE public.activities (
 );
 
 
-ALTER TABLE public.activities OWNER TO neondb_owner;
-
 --
--- Name: admin_notifications; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: admin_notifications; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.admin_notifications (
@@ -659,10 +1894,64 @@ CREATE TABLE public.admin_notifications (
 );
 
 
-ALTER TABLE public.admin_notifications OWNER TO neondb_owner;
+--
+-- Name: ai_agent_registry; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ai_agent_registry (
+    id text NOT NULL,
+    name character varying(100) NOT NULL,
+    role character varying(100) NOT NULL,
+    "promptTemplate" text NOT NULL,
+    "requiredInputs" jsonb NOT NULL,
+    "producedOutputs" jsonb NOT NULL,
+    dependencies text[],
+    "retryPolicy" jsonb NOT NULL,
+    "estimatedCost" double precision DEFAULT 0.0 NOT NULL,
+    "estimatedTokens" integer DEFAULT 0 NOT NULL,
+    "timeoutMs" integer DEFAULT 30000 NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 
 --
--- Name: audit_logs; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: ai_learning_records; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ai_learning_records (
+    id text NOT NULL,
+    prompt text NOT NULL,
+    blueprint_id text NOT NULL,
+    stage text NOT NULL,
+    generation_time_ms integer NOT NULL,
+    errors text[],
+    "userChanges" jsonb NOT NULL,
+    acceptance_rate double precision NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: asset_libraries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.asset_libraries (
+    id text NOT NULL,
+    business_id uuid NOT NULL,
+    name character varying(255) NOT NULL,
+    type character varying(50) NOT NULL,
+    url character varying(512) NOT NULL,
+    version integer DEFAULT 1 NOT NULL,
+    meta jsonb NOT NULL,
+    is_ai boolean DEFAULT false NOT NULL,
+    prompt_log text,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: audit_logs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.audit_logs (
@@ -679,10 +1968,27 @@ CREATE TABLE public.audit_logs (
 );
 
 
-ALTER TABLE public.audit_logs OWNER TO neondb_owner;
+--
+-- Name: autofix_queue_items; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.autofix_queue_items (
+    id text NOT NULL,
+    business_id uuid NOT NULL,
+    release_tag character varying(50) NOT NULL,
+    issue_key character varying(100) NOT NULL,
+    "safetyLevel" public."SafetyLevel" DEFAULT 'SUGGESTED'::public."SafetyLevel" NOT NULL,
+    description text NOT NULL,
+    "proposedChange" jsonb NOT NULL,
+    status public."QueueStatus" DEFAULT 'PENDING'::public."QueueStatus" NOT NULL,
+    reviewed_by text,
+    reviewed_at timestamp(3) without time zone,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 
 --
--- Name: booking_histories; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: booking_histories; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.booking_histories (
@@ -694,10 +2000,8 @@ CREATE TABLE public.booking_histories (
 );
 
 
-ALTER TABLE public.booking_histories OWNER TO neondb_owner;
-
 --
--- Name: bookings; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: bookings; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.bookings (
@@ -719,10 +2023,62 @@ CREATE TABLE public.bookings (
 );
 
 
-ALTER TABLE public.bookings OWNER TO neondb_owner;
+--
+-- Name: boutique_certifications; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.boutique_certifications (
+    id text NOT NULL,
+    business_id uuid NOT NULL,
+    "targetType" text DEFAULT 'WEBSITE'::text NOT NULL,
+    target_id text NOT NULL,
+    release_tag character varying(50) NOT NULL,
+    profile_id text NOT NULL,
+    overall_score double precision NOT NULL,
+    "scoresMap" jsonb NOT NULL,
+    "agentRuns" jsonb NOT NULL,
+    issues jsonb NOT NULL,
+    suggestions jsonb NOT NULL,
+    "visualArtifacts" jsonb NOT NULL,
+    status public."CertificationStatus" DEFAULT 'DRAFT'::public."CertificationStatus" NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 
 --
--- Name: boutique_subscriptions; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: boutique_pages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.boutique_pages (
+    id text NOT NULL,
+    website_id text NOT NULL,
+    title character varying(255) NOT NULL,
+    slug character varying(100) NOT NULL,
+    is_enabled boolean DEFAULT true NOT NULL,
+    status text DEFAULT 'DRAFT'::text NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: boutique_plugins; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.boutique_plugins (
+    id text NOT NULL,
+    business_id uuid NOT NULL,
+    plugin_key character varying(100) NOT NULL,
+    is_enabled boolean DEFAULT false NOT NULL,
+    settings jsonb NOT NULL,
+    permissions jsonb NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: boutique_subscriptions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.boutique_subscriptions (
@@ -735,7 +2091,7 @@ CREATE TABLE public.boutique_subscriptions (
     trial_ends_at timestamp(3) without time zone,
     created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp(3) without time zone NOT NULL,
-    current_ready_made_products_count integer DEFAULT 0 CONSTRAINT boutique_subscriptions_current_ready_made_products_cou_not_null NOT NULL,
+    current_ready_made_products_count integer DEFAULT 0 NOT NULL,
     current_custom_designs_count integer DEFAULT 0 NOT NULL,
     current_order_count integer DEFAULT 0 NOT NULL,
     current_booking_count integer DEFAULT 0 NOT NULL,
@@ -754,10 +2110,28 @@ CREATE TABLE public.boutique_subscriptions (
 );
 
 
-ALTER TABLE public.boutique_subscriptions OWNER TO neondb_owner;
+--
+-- Name: boutique_themes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.boutique_themes (
+    id text NOT NULL,
+    business_id uuid NOT NULL,
+    "colorsLight" jsonb NOT NULL,
+    "colorsDark" jsonb NOT NULL,
+    typography jsonb NOT NULL,
+    "spacingScale" jsonb NOT NULL,
+    "borderStyles" jsonb NOT NULL,
+    "elevationShadows" jsonb NOT NULL,
+    "animationScale" jsonb NOT NULL,
+    "accessibilityTheme" jsonb,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
 
 --
--- Name: boutiques; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: boutiques; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.boutiques (
@@ -818,14 +2192,45 @@ CREATE TABLE public.boutiques (
     total_paid_out numeric(12,2) DEFAULT 0.00 NOT NULL,
     is_frozen boolean DEFAULT false NOT NULL,
     is_suspended boolean DEFAULT false NOT NULL,
-    subscription_enforcement boolean DEFAULT true NOT NULL
+    subscription_enforcement boolean DEFAULT true NOT NULL,
+    business_id uuid
 );
 
 
-ALTER TABLE public.boutiques OWNER TO neondb_owner;
+--
+-- Name: business_template_assignments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.business_template_assignments (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    business_id uuid NOT NULL,
+    template_id uuid NOT NULL,
+    subscription_id uuid,
+    deployment_id uuid,
+    environment_id uuid,
+    assigned_by uuid,
+    assigned_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    status public."AssignmentStatus" DEFAULT 'DRAFT'::public."AssignmentStatus" NOT NULL
+);
+
 
 --
--- Name: cart_items; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: businesses; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.businesses (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    tenant_id text NOT NULL,
+    name character varying(255) NOT NULL,
+    niche_vertical character varying(100) NOT NULL,
+    status text DEFAULT 'ACTIVE'::text NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cart_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.cart_items (
@@ -838,10 +2243,8 @@ CREATE TABLE public.cart_items (
 );
 
 
-ALTER TABLE public.cart_items OWNER TO neondb_owner;
-
 --
--- Name: carts; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: carts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.carts (
@@ -852,10 +2255,8 @@ CREATE TABLE public.carts (
 );
 
 
-ALTER TABLE public.carts OWNER TO neondb_owner;
-
 --
--- Name: categories; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: categories; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.categories (
@@ -870,10 +2271,1100 @@ CREATE TABLE public.categories (
 );
 
 
-ALTER TABLE public.categories OWNER TO neondb_owner;
+--
+-- Name: certification_chat_messages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.certification_chat_messages (
+    id text NOT NULL,
+    certification_id text NOT NULL,
+    role text DEFAULT 'user'::text NOT NULL,
+    message text NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 
 --
--- Name: commerce_order_histories; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: certification_profiles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.certification_profiles (
+    id text NOT NULL,
+    business_id uuid,
+    name character varying(100) NOT NULL,
+    is_active boolean DEFAULT false NOT NULL,
+    "agentWeights" jsonb NOT NULL,
+    thresholds jsonb NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: certification_workflow_definitions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.certification_workflow_definitions (
+    id text NOT NULL,
+    name character varying(100) NOT NULL,
+    description text,
+    version character varying(50) NOT NULL,
+    is_enabled boolean DEFAULT true NOT NULL,
+    target_type text DEFAULT 'WEBSITE'::text NOT NULL,
+    stages jsonb NOT NULL,
+    rollback_policy jsonb NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: certification_workflows; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.certification_workflows (
+    id text NOT NULL,
+    business_id uuid NOT NULL,
+    release_tag character varying(50) NOT NULL,
+    definition_id text NOT NULL,
+    status text DEFAULT 'PENDING'::text NOT NULL,
+    progress double precision DEFAULT 0.0 NOT NULL,
+    current_stage text DEFAULT 'INITIALIZING'::text NOT NULL,
+    execution_history jsonb NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_ai_agents; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_ai_agents (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    name character varying(255) NOT NULL,
+    key character varying(100) NOT NULL,
+    description text,
+    category character varying(50) NOT NULL,
+    source character varying(50) NOT NULL,
+    source_id character varying(255),
+    provider_id uuid,
+    model character varying(255),
+    system_prompt text,
+    is_enabled boolean DEFAULT true NOT NULL,
+    execution_order integer DEFAULT 0 NOT NULL,
+    dependencies text[] DEFAULT ARRAY[]::text[],
+    timeout integer DEFAULT 30000 NOT NULL,
+    retry_policy jsonb DEFAULT '{}'::jsonb NOT NULL,
+    version character varying(20) DEFAULT '1.0.0'::character varying NOT NULL,
+    health_status character varying(20) DEFAULT 'unknown'::character varying NOT NULL,
+    metrics jsonb DEFAULT '{}'::jsonb NOT NULL,
+    metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_ai_builders; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_ai_builders (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    key character varying(100) NOT NULL,
+    name character varying(255) NOT NULL,
+    logo character varying(512),
+    provider character varying(100) NOT NULL,
+    model character varying(255) NOT NULL,
+    "promptFormat" character varying(50) DEFAULT 'markdown'::character varying NOT NULL,
+    "systemPrompt" text,
+    temperature double precision DEFAULT 0.7 NOT NULL,
+    "maxTokens" integer DEFAULT 4096 NOT NULL,
+    supports_markdown boolean DEFAULT true NOT NULL,
+    supports_streaming boolean DEFAULT false NOT NULL,
+    supports_files boolean DEFAULT false NOT NULL,
+    supports_images boolean DEFAULT false NOT NULL,
+    supports_thinking boolean DEFAULT false NOT NULL,
+    status character varying(20) DEFAULT 'ACTIVE'::character varying NOT NULL,
+    display_order integer DEFAULT 0 NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_ai_costs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_ai_costs (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    provider_id uuid,
+    agent_key character varying(100),
+    execution_id uuid,
+    cost double precision DEFAULT 0.0 NOT NULL,
+    currency character varying(3) DEFAULT 'USD'::character varying NOT NULL,
+    description text,
+    category character varying(50) DEFAULT 'execution'::character varying NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_ai_execution_steps; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_ai_execution_steps (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    execution_id uuid NOT NULL,
+    agent_key character varying(100) NOT NULL,
+    agent_name character varying(255) NOT NULL,
+    status character varying(20) DEFAULT 'PENDING'::character varying NOT NULL,
+    input_payload jsonb,
+    output_payload jsonb,
+    tokens_used integer DEFAULT 0 NOT NULL,
+    latency_ms integer DEFAULT 0 NOT NULL,
+    retry_count integer DEFAULT 0 NOT NULL,
+    error_message text,
+    started_at timestamp(3) without time zone,
+    completed_at timestamp(3) without time zone,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_ai_providers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_ai_providers (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    name character varying(255) NOT NULL,
+    key character varying(100) NOT NULL,
+    provider character varying(50) NOT NULL,
+    model character varying(255) DEFAULT 'gemini-1.5-pro'::character varying NOT NULL,
+    base_url character varying(512),
+    api_key text NOT NULL,
+    temperature double precision DEFAULT 0.7 NOT NULL,
+    max_tokens integer DEFAULT 4096 NOT NULL,
+    supports_streaming boolean DEFAULT true NOT NULL,
+    supports_thinking boolean DEFAULT false NOT NULL,
+    is_enabled boolean DEFAULT true NOT NULL,
+    priority integer DEFAULT 0 NOT NULL,
+    cost_per_million_tokens jsonb DEFAULT '{}'::jsonb NOT NULL,
+    rate_limit jsonb DEFAULT '{}'::jsonb NOT NULL,
+    retry_policy jsonb DEFAULT '{"backoffMs": 1000, "maxRetries": 3}'::jsonb NOT NULL,
+    timeout integer DEFAULT 30000 NOT NULL,
+    last_health_check timestamp(3) without time zone,
+    health_status character varying(20) DEFAULT 'unknown'::character varying NOT NULL,
+    health_message text,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_ai_settings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_ai_settings (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    key character varying(100) NOT NULL,
+    value jsonb NOT NULL,
+    category character varying(50) DEFAULT 'general'::character varying NOT NULL,
+    description text,
+    updated_at timestamp(3) without time zone NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_ai_usage; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_ai_usage (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    provider_id uuid,
+    agent_key character varying(100),
+    execution_id uuid,
+    model character varying(255) NOT NULL,
+    prompt_tokens integer DEFAULT 0 NOT NULL,
+    completion_tokens integer DEFAULT 0 NOT NULL,
+    total_tokens integer DEFAULT 0 NOT NULL,
+    cost double precision DEFAULT 0.0 NOT NULL,
+    date timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_ai_workflows; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_ai_workflows (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    name character varying(255) NOT NULL,
+    description text,
+    stages jsonb DEFAULT '[]'::jsonb NOT NULL,
+    status character varying(20) DEFAULT 'active'::character varying NOT NULL,
+    trigger character varying(20) DEFAULT 'manual'::character varying NOT NULL,
+    schedule character varying(100),
+    event_trigger character varying(100),
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_assignment_configurations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_assignment_configurations (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    assignment_id uuid NOT NULL,
+    business_id uuid NOT NULL,
+    theme character varying(50) DEFAULT 'default'::character varying,
+    "primaryColor" character varying(7) DEFAULT '#3B82F6'::character varying,
+    "secondaryColor" character varying(7) DEFAULT '#10B981'::character varying,
+    logo_url character varying(512),
+    favicon_url character varying(512),
+    language character varying(10) DEFAULT 'en'::character varying,
+    currency character varying(3) DEFAULT 'INR'::character varying,
+    timezone character varying(50) DEFAULT 'Asia/Kolkata'::character varying,
+    contact_email character varying(255),
+    contact_phone character varying(20),
+    meta_title character varying(255),
+    meta_description text,
+    google_analytics_id character varying(50),
+    facebook_pixel_id character varying(50),
+    storage_provider character varying(50) DEFAULT 'auto'::character varying,
+    created_by uuid,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_assignment_histories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_assignment_histories (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    assignment_id uuid NOT NULL,
+    action character varying(50) NOT NULL,
+    "previousStatus" public."AssignmentStatus",
+    "newStatus" public."AssignmentStatus",
+    changes jsonb,
+    snapshot jsonb,
+    performed_by uuid,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_blueprint_apis; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_blueprint_apis (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    blueprint_template_id uuid NOT NULL,
+    path character varying(255) NOT NULL,
+    method character varying(20) NOT NULL,
+    response_schema jsonb
+);
+
+
+--
+-- Name: cms_blueprint_components; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_blueprint_components (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    page_id uuid NOT NULL,
+    component_name character varying(150) NOT NULL,
+    props_schema jsonb
+);
+
+
+--
+-- Name: cms_blueprint_features; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_blueprint_features (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    blueprint_template_id uuid NOT NULL,
+    requirement_id uuid NOT NULL
+);
+
+
+--
+-- Name: cms_blueprint_pages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_blueprint_pages (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    blueprint_template_id uuid NOT NULL,
+    route character varying(255) NOT NULL,
+    title character varying(255) NOT NULL
+);
+
+
+--
+-- Name: cms_blueprint_template_versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_blueprint_template_versions (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    blueprint_template_id uuid NOT NULL,
+    version integer NOT NULL,
+    pages jsonb NOT NULL,
+    components jsonb NOT NULL,
+    apis jsonb NOT NULL,
+    "databaseModels" jsonb NOT NULL,
+    features jsonb NOT NULL,
+    status public."CmsStandardStatus" NOT NULL,
+    description text,
+    created_by uuid NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_blueprint_templates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_blueprint_templates (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    key character varying(150) NOT NULL,
+    name character varying(255) NOT NULL,
+    status public."CmsStandardStatus" DEFAULT 'DRAFT'::public."CmsStandardStatus" NOT NULL,
+    version integer DEFAULT 1 NOT NULL,
+    standard_id uuid,
+    pages jsonb NOT NULL,
+    components jsonb NOT NULL,
+    apis jsonb NOT NULL,
+    "databaseModels" jsonb NOT NULL,
+    features jsonb NOT NULL,
+    is_enabled boolean DEFAULT true NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_builder_profile_versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_builder_profile_versions (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    builder_profile_id uuid NOT NULL,
+    version integer NOT NULL,
+    framework character varying(100) NOT NULL,
+    "promptTemplate" text NOT NULL,
+    "folderStructure" jsonb NOT NULL,
+    limitations jsonb NOT NULL,
+    status public."CmsStandardStatus" NOT NULL,
+    description text,
+    created_by uuid NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_builder_profiles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_builder_profiles (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    key character varying(150) NOT NULL,
+    name character varying(255) NOT NULL,
+    status public."CmsStandardStatus" DEFAULT 'DRAFT'::public."CmsStandardStatus" NOT NULL,
+    version integer DEFAULT 1 NOT NULL,
+    standard_id uuid,
+    framework character varying(100) NOT NULL,
+    "promptTemplate" text NOT NULL,
+    "folderStructure" jsonb NOT NULL,
+    limitations jsonb NOT NULL,
+    is_enabled boolean DEFAULT true NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_audit_logs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_audit_logs (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    prompt_id uuid NOT NULL,
+    action character varying(50) NOT NULL,
+    field character varying(100),
+    "oldValue" jsonb,
+    "newValue" jsonb,
+    performed_by uuid,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_categories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_categories (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    key character varying(100) NOT NULL,
+    name character varying(255) NOT NULL,
+    description text,
+    icon character varying(100),
+    display_order integer DEFAULT 0 NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_collection_items; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_collection_items (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    collection_id uuid NOT NULL,
+    prompt_id uuid NOT NULL,
+    display_order integer DEFAULT 0 NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_collections; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_collections (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    name character varying(255) NOT NULL,
+    description text,
+    user_id uuid,
+    is_deleted boolean DEFAULT false NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_executions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_executions (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    prompt_id uuid NOT NULL,
+    builder_id uuid,
+    rendered_content text,
+    variables jsonb,
+    status character varying(20) DEFAULT 'PENDING'::character varying NOT NULL,
+    started_at timestamp(3) without time zone,
+    completed_at timestamp(3) without time zone,
+    error text,
+    duration_ms integer,
+    performed_by uuid,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_favorites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_favorites (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    prompt_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_histories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_histories (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    prompt_id uuid NOT NULL,
+    action character varying(50) NOT NULL,
+    snapshot jsonb,
+    user_id uuid,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_ratings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_ratings (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    prompt_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    rating integer NOT NULL,
+    comment text,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_tag_prompts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_tag_prompts (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    prompt_id uuid NOT NULL,
+    tag_id uuid NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_tags (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    key character varying(100) NOT NULL,
+    name character varying(255) NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_usage_analytics; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_usage_analytics (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    prompt_id uuid NOT NULL,
+    action character varying(50) NOT NULL,
+    user_id uuid,
+    metadata jsonb,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_variables; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_variables (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    key character varying(100) NOT NULL,
+    label character varying(255) NOT NULL,
+    description text,
+    default_value text,
+    variable_type character varying(50) DEFAULT 'string'::character varying NOT NULL,
+    options jsonb,
+    required boolean DEFAULT false NOT NULL,
+    display_order integer DEFAULT 0 NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_prompt_versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompt_versions (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    prompt_id uuid NOT NULL,
+    version integer NOT NULL,
+    title character varying(500) NOT NULL,
+    description text,
+    instructions text,
+    rules text,
+    "outputFormat" text,
+    "expectedFiles" jsonb,
+    "expectedFolderStructure" jsonb,
+    "codingStandards" text,
+    "templateContent" text,
+    variables jsonb,
+    "changeNotes" text,
+    created_by uuid,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_prompts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_prompts (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    title character varying(500) NOT NULL,
+    description text,
+    "promptType" character varying(100) NOT NULL,
+    category_id uuid,
+    builder_id uuid,
+    instructions text,
+    rules text,
+    "outputFormat" text,
+    "expectedFiles" jsonb,
+    "expectedFolderStructure" jsonb,
+    "codingStandards" text,
+    framework character varying(255),
+    libraries jsonb,
+    dependencies jsonb,
+    "apiRequirements" text,
+    "dbRequirements" text,
+    "responsiveRules" text,
+    "performanceRules" text,
+    "securityRules" text,
+    "accessibilityRules" text,
+    "seoRules" text,
+    "testingRules" text,
+    "acceptanceCriteria" text,
+    variables jsonb,
+    "templateContent" text,
+    version integer DEFAULT 1 NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
+    business_id uuid,
+    created_by uuid,
+    updated_by uuid,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL,
+    reference_id uuid,
+    reference_type character varying(50)
+);
+
+
+--
+-- Name: cms_requirement_relations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_requirement_relations (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    source_requirement_id uuid NOT NULL,
+    target_requirement_id uuid NOT NULL,
+    type public."CmsRequirementRelationType" NOT NULL
+);
+
+
+--
+-- Name: cms_requirement_templates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_requirement_templates (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    key character varying(150) NOT NULL,
+    name character varying(255) NOT NULL,
+    description text,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_requirement_versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_requirement_versions (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    requirement_id uuid NOT NULL,
+    version integer NOT NULL,
+    config_schema jsonb NOT NULL,
+    status public."CmsRequirementStatus" NOT NULL,
+    description text,
+    created_by uuid NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_requirements; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_requirements (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    key character varying(150) NOT NULL,
+    name character varying(255) NOT NULL,
+    category character varying(100) NOT NULL,
+    description text,
+    status public."CmsRequirementStatus" DEFAULT 'DRAFT'::public."CmsRequirementStatus" NOT NULL,
+    version integer DEFAULT 1 NOT NULL,
+    priority integer DEFAULT 3 NOT NULL,
+    criticality integer DEFAULT 3 NOT NULL,
+    business_value integer DEFAULT 3 NOT NULL,
+    development_cost integer DEFAULT 3 NOT NULL,
+    ai_complexity integer DEFAULT 3 NOT NULL,
+    verification_weight double precision DEFAULT 1.0 NOT NULL,
+    certification_weight double precision DEFAULT 1.0 NOT NULL,
+    config_schema jsonb NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_standard_audit_logs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_standard_audit_logs (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    standard_id uuid,
+    action character varying(50) NOT NULL,
+    user_id uuid NOT NULL,
+    old_value jsonb,
+    new_value jsonb,
+    ip_address character varying(45) NOT NULL,
+    reason text,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_standard_versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_standard_versions (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    standard_id uuid NOT NULL,
+    version integer NOT NULL,
+    config jsonb NOT NULL,
+    status public."CmsStandardStatus" NOT NULL,
+    description text,
+    created_by uuid NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_standards; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_standards (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    category character varying(100) NOT NULL,
+    key character varying(150) NOT NULL,
+    name character varying(255) NOT NULL,
+    status public."CmsStandardStatus" DEFAULT 'DRAFT'::public."CmsStandardStatus" NOT NULL,
+    version integer DEFAULT 1 NOT NULL,
+    is_enabled boolean DEFAULT true NOT NULL,
+    parent_id uuid,
+    config jsonb NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_template_analytics; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_template_analytics (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    template_id uuid NOT NULL,
+    action character varying(50) NOT NULL,
+    user_id uuid,
+    metadata jsonb,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_template_builder_compat; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_template_builder_compat (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    template_id uuid NOT NULL,
+    builder_key character varying(100) NOT NULL
+);
+
+
+--
+-- Name: cms_template_categories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_template_categories (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    key character varying(100) NOT NULL,
+    name character varying(255) NOT NULL,
+    description text,
+    display_order integer DEFAULT 0 NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_template_favorites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_template_favorites (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    template_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_template_pipeline_stages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_template_pipeline_stages (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    template_id uuid NOT NULL,
+    stage character varying(50) NOT NULL,
+    started_at timestamp(3) without time zone,
+    finished_at timestamp(3) without time zone,
+    duration_ms integer,
+    status character varying(50) DEFAULT 'PENDING'::character varying NOT NULL,
+    input_artifact text,
+    output_artifact text,
+    retry_count integer DEFAULT 0 NOT NULL,
+    agent character varying(100),
+    error text
+);
+
+
+--
+-- Name: cms_template_ratings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_template_ratings (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    template_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    rating integer NOT NULL,
+    comment text,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_template_requirement_joins; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_template_requirement_joins (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    template_id uuid NOT NULL,
+    requirement_id uuid NOT NULL
+);
+
+
+--
+-- Name: cms_template_tag_template; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_template_tag_template (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    template_id uuid NOT NULL,
+    tag_id uuid NOT NULL
+);
+
+
+--
+-- Name: cms_template_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_template_tags (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    key character varying(100) NOT NULL,
+    name character varying(255) NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_template_versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_template_versions (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    template_id uuid NOT NULL,
+    version integer NOT NULL,
+    name character varying(500) NOT NULL,
+    description text,
+    manifest jsonb,
+    thumbnail text,
+    preview_image text,
+    preview_video text,
+    live_demo_url text,
+    zip_artifact text,
+    manifest_url text,
+    change_notes text,
+    created_by uuid,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: cms_templates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_templates (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    name character varying(500) NOT NULL,
+    description text,
+    industry character varying(100),
+    status character varying(50) DEFAULT 'DRAFT'::character varying NOT NULL,
+    tier character varying(50) DEFAULT 'FREE'::character varying NOT NULL,
+    version integer DEFAULT 1 NOT NULL,
+    "isFeatured" boolean DEFAULT false NOT NULL,
+    "isActive" boolean DEFAULT true NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
+    thumbnail text,
+    preview_image text,
+    preview_video text,
+    live_demo_url text,
+    zip_artifact text,
+    manifest_url text,
+    manifest jsonb,
+    prompt_id uuid,
+    blueprint_id uuid,
+    certification_id uuid,
+    category_id uuid,
+    created_by uuid,
+    updated_by uuid,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_uploads; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_uploads (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    business_id uuid NOT NULL,
+    filename character varying(255) NOT NULL,
+    size_bytes integer NOT NULL,
+    blueprint_id character varying(100),
+    status character varying(20) DEFAULT 'PENDING'::character varying NOT NULL,
+    progress_percent integer DEFAULT 0 NOT NULL,
+    virus_scan_result character varying(20),
+    sandbox_path character varying(512),
+    error_details text,
+    created_by uuid,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_validation_report_analytics; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_validation_report_analytics (
+    business_id uuid NOT NULL,
+    period_start timestamp(3) without time zone NOT NULL,
+    period_end timestamp(3) without time zone NOT NULL,
+    total_reports integer DEFAULT 0 NOT NULL,
+    avg_score double precision DEFAULT 0 NOT NULL,
+    pass_count integer DEFAULT 0 NOT NULL,
+    fail_count integer DEFAULT 0 NOT NULL,
+    section_averages jsonb DEFAULT '{}'::jsonb NOT NULL,
+    score_distribution jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL
+);
+
+
+--
+-- Name: cms_validation_report_comparisons; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_validation_report_comparisons (
+    business_id uuid NOT NULL,
+    report_id_1 uuid NOT NULL,
+    report_id_2 uuid NOT NULL,
+    diff_data jsonb NOT NULL,
+    summary jsonb NOT NULL,
+    created_by uuid NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL
+);
+
+
+--
+-- Name: cms_validation_report_exports; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_validation_report_exports (
+    report_id uuid NOT NULL,
+    format public."ExportFormat" NOT NULL,
+    status character varying(20) DEFAULT 'PENDING'::character varying NOT NULL,
+    file_url character varying(512),
+    file_size integer,
+    error_details text,
+    created_by uuid NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    completed_at timestamp(3) without time zone,
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL
+);
+
+
+--
+-- Name: cms_validation_report_history; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_validation_report_history (
+    report_id uuid NOT NULL,
+    action character varying(50) NOT NULL,
+    previous_status character varying(20),
+    new_status character varying(20),
+    changes jsonb DEFAULT '{}'::jsonb NOT NULL,
+    performed_by uuid NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL
+);
+
+
+--
+-- Name: cms_validation_report_sections; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_validation_report_sections (
+    report_id uuid NOT NULL,
+    section_type public."ValidationReportSectionType" NOT NULL,
+    score double precision,
+    max_score double precision,
+    status character varying(20) DEFAULT 'PASSED'::character varying NOT NULL,
+    issues jsonb DEFAULT '[]'::jsonb NOT NULL,
+    suggestions jsonb DEFAULT '[]'::jsonb NOT NULL,
+    data jsonb DEFAULT '{}'::jsonb NOT NULL,
+    execution_order integer DEFAULT 0 NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL
+);
+
+
+--
+-- Name: cms_validation_reports; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_validation_reports (
+    business_id uuid NOT NULL,
+    upload_id uuid,
+    certification_id uuid,
+    template_id uuid,
+    certification_summary jsonb,
+    ai_recommendations jsonb,
+    template_version jsonb,
+    overall_score double precision DEFAULT 0 NOT NULL,
+    status public."ValidationReportStatus" DEFAULT 'COMPLETED'::public."ValidationReportStatus" NOT NULL,
+    generated_by uuid NOT NULL,
+    source_type character varying(50) DEFAULT 'CERTIFICATION'::character varying NOT NULL,
+    source_label character varying(255),
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL,
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL
+);
+
+
+--
+-- Name: commerce_order_histories; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.commerce_order_histories (
@@ -888,10 +3379,8 @@ CREATE TABLE public.commerce_order_histories (
 );
 
 
-ALTER TABLE public.commerce_order_histories OWNER TO neondb_owner;
-
 --
--- Name: commerce_order_items; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: commerce_order_items; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.commerce_order_items (
@@ -913,10 +3402,8 @@ CREATE TABLE public.commerce_order_items (
 );
 
 
-ALTER TABLE public.commerce_order_items OWNER TO neondb_owner;
-
 --
--- Name: commerce_orders; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.commerce_orders (
@@ -955,10 +3442,8 @@ CREATE TABLE public.commerce_orders (
 );
 
 
-ALTER TABLE public.commerce_orders OWNER TO neondb_owner;
-
 --
--- Name: commerce_payments; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: commerce_payments; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.commerce_payments (
@@ -977,10 +3462,23 @@ CREATE TABLE public.commerce_payments (
 );
 
 
-ALTER TABLE public.commerce_payments OWNER TO neondb_owner;
+--
+-- Name: content_translations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.content_translations (
+    id text NOT NULL,
+    content_id text NOT NULL,
+    locale character varying(10) NOT NULL,
+    "translatedText" text NOT NULL,
+    "translatedSeo" jsonb,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
 
 --
--- Name: coupon_usages; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: coupon_usages; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.coupon_usages (
@@ -992,10 +3490,8 @@ CREATE TABLE public.coupon_usages (
 );
 
 
-ALTER TABLE public.coupon_usages OWNER TO neondb_owner;
-
 --
--- Name: coupons; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: coupons; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.coupons (
@@ -1020,10 +3516,8 @@ CREATE TABLE public.coupons (
 );
 
 
-ALTER TABLE public.coupons OWNER TO neondb_owner;
-
 --
--- Name: custom_plan_requests; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: custom_plan_requests; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.custom_plan_requests (
@@ -1040,10 +3534,8 @@ CREATE TABLE public.custom_plan_requests (
 );
 
 
-ALTER TABLE public.custom_plan_requests OWNER TO neondb_owner;
-
 --
--- Name: customer_addresses; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: customer_addresses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.customer_addresses (
@@ -1059,10 +3551,8 @@ CREATE TABLE public.customer_addresses (
 );
 
 
-ALTER TABLE public.customer_addresses OWNER TO neondb_owner;
-
 --
--- Name: customer_notifications; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: customer_notifications; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.customer_notifications (
@@ -1080,10 +3570,8 @@ CREATE TABLE public.customer_notifications (
 );
 
 
-ALTER TABLE public.customer_notifications OWNER TO neondb_owner;
-
 --
--- Name: delivery_tracking; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: delivery_tracking; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.delivery_tracking (
@@ -1101,10 +3589,8 @@ CREATE TABLE public.delivery_tracking (
 );
 
 
-ALTER TABLE public.delivery_tracking OWNER TO neondb_owner;
-
 --
--- Name: delivery_tracking_history; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: delivery_tracking_history; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.delivery_tracking_history (
@@ -1117,10 +3603,141 @@ CREATE TABLE public.delivery_tracking_history (
 );
 
 
-ALTER TABLE public.delivery_tracking_history OWNER TO neondb_owner;
+--
+-- Name: deployment_artifacts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.deployment_artifacts (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    deployment_id uuid NOT NULL,
+    name character varying(255) NOT NULL,
+    type character varying(100) NOT NULL,
+    url character varying(512) NOT NULL,
+    size integer DEFAULT 0 NOT NULL,
+    checksum character varying(64),
+    metadata jsonb,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 
 --
--- Name: designs; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: deployment_build_logs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.deployment_build_logs (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    deployment_id uuid NOT NULL,
+    level character varying(20) DEFAULT 'INFO'::character varying NOT NULL,
+    message text NOT NULL,
+    metadata jsonb,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: deployment_domains; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.deployment_domains (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    business_id uuid NOT NULL,
+    environment_id uuid,
+    domain character varying(255) NOT NULL,
+    type public."DeploymentDomainType" DEFAULT 'SUBDOMAIN'::public."DeploymentDomainType" NOT NULL,
+    status public."DeploymentDomainStatus" DEFAULT 'PENDING_VERIFICATION'::public."DeploymentDomainStatus" NOT NULL,
+    dns_verified boolean DEFAULT false NOT NULL,
+    ssl_enabled boolean DEFAULT true NOT NULL,
+    ssl_status character varying(50) DEFAULT 'PENDING'::character varying NOT NULL,
+    ssl_expires_at timestamp(3) without time zone,
+    cname_target character varying(255),
+    txt_record character varying(255),
+    propagation_status character varying(50) DEFAULT 'UNKNOWN'::character varying NOT NULL,
+    last_checked_at timestamp(3) without time zone,
+    is_primary boolean DEFAULT false NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: deployment_environment_variables; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.deployment_environment_variables (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    environment_id uuid NOT NULL,
+    key character varying(255) NOT NULL,
+    encrypted_value text NOT NULL,
+    is_secret boolean DEFAULT false NOT NULL,
+    version integer DEFAULT 1 NOT NULL,
+    created_by uuid,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: deployment_environments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.deployment_environments (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    name character varying(100) NOT NULL,
+    type public."DeploymentEnvironmentType" DEFAULT 'DEVELOPMENT'::public."DeploymentEnvironmentType" NOT NULL,
+    business_id uuid NOT NULL,
+    is_active boolean DEFAULT true NOT NULL,
+    sort_order integer DEFAULT 0 NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: deployment_variable_histories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.deployment_variable_histories (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    variable_id uuid NOT NULL,
+    key character varying(255) NOT NULL,
+    encrypted_value text NOT NULL,
+    is_secret boolean DEFAULT false NOT NULL,
+    version integer NOT NULL,
+    changed_by uuid,
+    changed_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: deployments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.deployments (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    business_id uuid NOT NULL,
+    environment_id uuid,
+    version character varying(50) NOT NULL,
+    blueprint_version character varying(50),
+    requirement_version character varying(50),
+    commit_hash character varying(64),
+    builder character varying(100) DEFAULT 'manual'::character varying,
+    status public."DeploymentStatus" DEFAULT 'PENDING'::public."DeploymentStatus" NOT NULL,
+    duration integer DEFAULT 0,
+    logs jsonb,
+    metadata jsonb,
+    artifact_url character varying(512),
+    artifact_checksum character varying(64),
+    deployed_by uuid,
+    rollback_target_id uuid,
+    is_deleted boolean DEFAULT false NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: designs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.designs (
@@ -1134,16 +3751,43 @@ CREATE TABLE public.designs (
     tags text[] DEFAULT ARRAY[]::text[],
     is_featured boolean DEFAULT false NOT NULL,
     is_available boolean DEFAULT true NOT NULL,
+    is_ready_made boolean DEFAULT false NOT NULL,
     is_deleted boolean DEFAULT false NOT NULL,
-    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    is_ready_made boolean DEFAULT false NOT NULL
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
-ALTER TABLE public.designs OWNER TO neondb_owner;
+--
+-- Name: developer_api_keys; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.developer_api_keys (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    business_id uuid NOT NULL,
+    name character varying(255) NOT NULL,
+    key character varying(128) NOT NULL,
+    prefix character varying(20) NOT NULL,
+    scopes jsonb DEFAULT '[]'::jsonb NOT NULL,
+    status character varying(20) DEFAULT 'ACTIVE'::character varying NOT NULL,
+    environment character varying(20) DEFAULT 'PRODUCTION'::character varying NOT NULL,
+    created_by uuid,
+    expires_at timestamp(3) without time zone,
+    last_used_at timestamp(3) without time zone,
+    rotated_at timestamp(3) without time zone,
+    revoked_at timestamp(3) without time zone,
+    usage_count integer DEFAULT 0 NOT NULL,
+    last_ip_address character varying(45),
+    "allowedIps" jsonb DEFAULT '[]'::jsonb NOT NULL,
+    rate_limit_override integer,
+    webhook_signing_secret character varying(128),
+    metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
 
 --
--- Name: exchange_requests; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: exchange_requests; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.exchange_requests (
@@ -1163,10 +3807,146 @@ CREATE TABLE public.exchange_requests (
 );
 
 
-ALTER TABLE public.exchange_requests OWNER TO neondb_owner;
+--
+-- Name: immutable_releases; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.immutable_releases (
+    id text NOT NULL,
+    business_id uuid NOT NULL,
+    release_tag character varying(50) NOT NULL,
+    status text DEFAULT 'DRAFT'::text NOT NULL,
+    environment text DEFAULT 'DEV'::text NOT NULL,
+    "payloadDump" jsonb NOT NULL,
+    checksum character varying(64) NOT NULL,
+    created_by text NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 
 --
--- Name: measurements; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: marketplace_capabilities; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.marketplace_capabilities (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    version_id uuid NOT NULL,
+    type character varying(100) NOT NULL,
+    handler_path character varying(255) NOT NULL,
+    config_schema jsonb NOT NULL
+);
+
+
+--
+-- Name: marketplace_dependencies; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.marketplace_dependencies (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    version_id uuid NOT NULL,
+    dependency_slug character varying(150) NOT NULL,
+    version_constraint character varying(100) NOT NULL
+);
+
+
+--
+-- Name: marketplace_installations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.marketplace_installations (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    business_id uuid NOT NULL,
+    package_id uuid NOT NULL,
+    installed_version_id uuid NOT NULL,
+    is_enabled boolean DEFAULT true NOT NULL,
+    settings_json jsonb,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: marketplace_licenses; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.marketplace_licenses (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    business_id uuid NOT NULL,
+    package_id uuid NOT NULL,
+    license_key character varying(255) NOT NULL,
+    status public."MarketplaceLicenseStatus" DEFAULT 'ACTIVE'::public."MarketplaceLicenseStatus" NOT NULL,
+    expires_at timestamp(3) without time zone,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: marketplace_packages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.marketplace_packages (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    publisher_id uuid NOT NULL,
+    name character varying(255) NOT NULL,
+    slug character varying(150) NOT NULL,
+    description text NOT NULL,
+    status public."MarketplacePackageStatus" DEFAULT 'DRAFT'::public."MarketplacePackageStatus" NOT NULL,
+    ratings_avg double precision DEFAULT 0.0 NOT NULL,
+    reviews_count integer DEFAULT 0 NOT NULL,
+    downloads integer DEFAULT 0 NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: marketplace_publishers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.marketplace_publishers (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    owner_id uuid NOT NULL,
+    name character varying(255) NOT NULL,
+    email character varying(255) NOT NULL,
+    website character varying(255),
+    role public."PublisherRole" DEFAULT 'DEVELOPER'::public."PublisherRole" NOT NULL,
+    is_verified boolean DEFAULT false NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: marketplace_reviews; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.marketplace_reviews (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    package_id uuid NOT NULL,
+    business_id uuid NOT NULL,
+    rating integer NOT NULL,
+    comment text,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: marketplace_versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.marketplace_versions (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    package_id uuid NOT NULL,
+    version character varying(50) NOT NULL,
+    manifest_json jsonb NOT NULL,
+    download_url character varying(512) NOT NULL,
+    checksum character varying(256) NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: measurements; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.measurements (
@@ -1183,10 +3963,23 @@ CREATE TABLE public.measurements (
 );
 
 
-ALTER TABLE public.measurements OWNER TO neondb_owner;
+--
+-- Name: mobile_apps; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.mobile_apps (
+    id text NOT NULL,
+    business_id uuid NOT NULL,
+    app_name character varying(255) NOT NULL,
+    bundle_id character varying(255) NOT NULL,
+    status text DEFAULT 'DRAFT'::text NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
 
 --
--- Name: notification_campaigns; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: notification_campaigns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.notification_campaigns (
@@ -1204,10 +3997,8 @@ CREATE TABLE public.notification_campaigns (
 );
 
 
-ALTER TABLE public.notification_campaigns OWNER TO neondb_owner;
-
 --
--- Name: notification_receipts; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: notification_receipts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.notification_receipts (
@@ -1222,10 +4013,8 @@ CREATE TABLE public.notification_receipts (
 );
 
 
-ALTER TABLE public.notification_receipts OWNER TO neondb_owner;
-
 --
--- Name: notification_templates; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: notification_templates; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.notification_templates (
@@ -1239,10 +4028,8 @@ CREATE TABLE public.notification_templates (
 );
 
 
-ALTER TABLE public.notification_templates OWNER TO neondb_owner;
-
 --
--- Name: notifications; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: notifications; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.notifications (
@@ -1268,10 +4055,8 @@ CREATE TABLE public.notifications (
 );
 
 
-ALTER TABLE public.notifications OWNER TO neondb_owner;
-
 --
--- Name: order_histories; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: order_histories; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.order_histories (
@@ -1283,10 +4068,8 @@ CREATE TABLE public.order_histories (
 );
 
 
-ALTER TABLE public.order_histories OWNER TO neondb_owner;
-
 --
--- Name: order_sequences; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: order_sequences; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.order_sequences (
@@ -1297,10 +4080,8 @@ CREATE TABLE public.order_sequences (
 );
 
 
-ALTER TABLE public.order_sequences OWNER TO neondb_owner;
-
 --
--- Name: orders; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: orders; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.orders (
@@ -1335,10 +4116,8 @@ CREATE TABLE public.orders (
 );
 
 
-ALTER TABLE public.orders OWNER TO neondb_owner;
-
 --
--- Name: owner_feature_permissions; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: owner_feature_permissions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.owner_feature_permissions (
@@ -1370,10 +4149,8 @@ CREATE TABLE public.owner_feature_permissions (
 );
 
 
-ALTER TABLE public.owner_feature_permissions OWNER TO neondb_owner;
-
 --
--- Name: owners; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: owners; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.owners (
@@ -1419,10 +4196,33 @@ CREATE TABLE public.owners (
 );
 
 
-ALTER TABLE public.owners OWNER TO neondb_owner;
+--
+-- Name: page_component_nodes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.page_component_nodes (
+    id text NOT NULL,
+    page_id text NOT NULL,
+    parent_id text,
+    name character varying(100) NOT NULL,
+    type character varying(100) NOT NULL,
+    variant character varying(50) DEFAULT 'default'::character varying NOT NULL,
+    "order" integer NOT NULL,
+    "styleTokens" jsonb NOT NULL,
+    "editableProperties" jsonb NOT NULL,
+    "responsiveRules" jsonb NOT NULL,
+    animations jsonb,
+    "visibilityRules" jsonb,
+    permissions jsonb,
+    "contentKeysBind" jsonb NOT NULL,
+    data_source_bind character varying(100),
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
 
 --
--- Name: payments; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: payments; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.payments (
@@ -1450,10 +4250,8 @@ CREATE TABLE public.payments (
 );
 
 
-ALTER TABLE public.payments OWNER TO neondb_owner;
-
 --
--- Name: payouts; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: payouts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.payouts (
@@ -1470,10 +4268,8 @@ CREATE TABLE public.payouts (
 );
 
 
-ALTER TABLE public.payouts OWNER TO neondb_owner;
-
 --
--- Name: platform_settings; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: platform_settings; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.platform_settings (
@@ -1484,10 +4280,8 @@ CREATE TABLE public.platform_settings (
 );
 
 
-ALTER TABLE public.platform_settings OWNER TO neondb_owner;
-
 --
--- Name: product_analytics; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: product_analytics; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.product_analytics (
@@ -1505,10 +4299,8 @@ CREATE TABLE public.product_analytics (
 );
 
 
-ALTER TABLE public.product_analytics OWNER TO neondb_owner;
-
 --
--- Name: product_brands; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: product_brands; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.product_brands (
@@ -1523,10 +4315,8 @@ CREATE TABLE public.product_brands (
 );
 
 
-ALTER TABLE public.product_brands OWNER TO neondb_owner;
-
 --
--- Name: product_images; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: product_images; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.product_images (
@@ -1539,10 +4329,8 @@ CREATE TABLE public.product_images (
 );
 
 
-ALTER TABLE public.product_images OWNER TO neondb_owner;
-
 --
--- Name: product_inventory; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: product_inventory; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.product_inventory (
@@ -1556,10 +4344,8 @@ CREATE TABLE public.product_inventory (
 );
 
 
-ALTER TABLE public.product_inventory OWNER TO neondb_owner;
-
 --
--- Name: product_inventory_logs; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: product_inventory_logs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.product_inventory_logs (
@@ -1576,10 +4362,8 @@ CREATE TABLE public.product_inventory_logs (
 );
 
 
-ALTER TABLE public.product_inventory_logs OWNER TO neondb_owner;
-
 --
--- Name: product_reviews; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: product_reviews; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.product_reviews (
@@ -1599,10 +4383,8 @@ CREATE TABLE public.product_reviews (
 );
 
 
-ALTER TABLE public.product_reviews OWNER TO neondb_owner;
-
 --
--- Name: product_tags; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: product_tags; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.product_tags (
@@ -1614,10 +4396,8 @@ CREATE TABLE public.product_tags (
 );
 
 
-ALTER TABLE public.product_tags OWNER TO neondb_owner;
-
 --
--- Name: product_variant_attributes; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: product_variant_attributes; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.product_variant_attributes (
@@ -1628,10 +4408,8 @@ CREATE TABLE public.product_variant_attributes (
 );
 
 
-ALTER TABLE public.product_variant_attributes OWNER TO neondb_owner;
-
 --
--- Name: product_variants; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: product_variants; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.product_variants (
@@ -1647,10 +4425,8 @@ CREATE TABLE public.product_variants (
 );
 
 
-ALTER TABLE public.product_variants OWNER TO neondb_owner;
-
 --
--- Name: product_wishlists; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: product_wishlists; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.product_wishlists (
@@ -1661,10 +4437,8 @@ CREATE TABLE public.product_wishlists (
 );
 
 
-ALTER TABLE public.product_wishlists OWNER TO neondb_owner;
-
 --
--- Name: products; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: products; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.products (
@@ -1702,10 +4476,27 @@ CREATE TABLE public.products (
 );
 
 
-ALTER TABLE public.products OWNER TO neondb_owner;
+--
+-- Name: qa_agent_registries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.qa_agent_registries (
+    id text NOT NULL,
+    agent_key character varying(100) NOT NULL,
+    name character varying(150) NOT NULL,
+    category character varying(100) NOT NULL,
+    execution_order integer NOT NULL,
+    is_enabled boolean DEFAULT true NOT NULL,
+    version character varying(50) NOT NULL,
+    timeout_ms integer DEFAULT 10000 NOT NULL,
+    configuration jsonb NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
 
 --
--- Name: return_requests; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: return_requests; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.return_requests (
@@ -1727,10 +4518,8 @@ CREATE TABLE public.return_requests (
 );
 
 
-ALTER TABLE public.return_requests OWNER TO neondb_owner;
-
 --
--- Name: reviews; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: reviews; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.reviews (
@@ -1757,10 +4546,8 @@ CREATE TABLE public.reviews (
 );
 
 
-ALTER TABLE public.reviews OWNER TO neondb_owner;
-
 --
--- Name: shipping_addresses; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: shipping_addresses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.shipping_addresses (
@@ -1778,10 +4565,8 @@ CREATE TABLE public.shipping_addresses (
 );
 
 
-ALTER TABLE public.shipping_addresses OWNER TO neondb_owner;
-
 --
--- Name: sub_categories; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: sub_categories; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.sub_categories (
@@ -1797,10 +4582,8 @@ CREATE TABLE public.sub_categories (
 );
 
 
-ALTER TABLE public.sub_categories OWNER TO neondb_owner;
-
 --
--- Name: subscription_billing_history; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: subscription_billing_history; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.subscription_billing_history (
@@ -1814,10 +4597,8 @@ CREATE TABLE public.subscription_billing_history (
 );
 
 
-ALTER TABLE public.subscription_billing_history OWNER TO neondb_owner;
-
 --
--- Name: subscription_plans; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: subscription_plans; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.subscription_plans (
@@ -1890,10 +4671,8 @@ CREATE TABLE public.subscription_plans (
 );
 
 
-ALTER TABLE public.subscription_plans OWNER TO neondb_owner;
-
 --
--- Name: support_ticket_admin_notes; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: support_ticket_admin_notes; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.support_ticket_admin_notes (
@@ -1905,10 +4684,8 @@ CREATE TABLE public.support_ticket_admin_notes (
 );
 
 
-ALTER TABLE public.support_ticket_admin_notes OWNER TO neondb_owner;
-
 --
--- Name: support_ticket_messages; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: support_ticket_messages; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.support_ticket_messages (
@@ -1924,10 +4701,8 @@ CREATE TABLE public.support_ticket_messages (
 );
 
 
-ALTER TABLE public.support_ticket_messages OWNER TO neondb_owner;
-
 --
--- Name: support_tickets; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: support_tickets; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.support_tickets (
@@ -1957,10 +4732,52 @@ CREATE TABLE public.support_tickets (
 );
 
 
-ALTER TABLE public.support_tickets OWNER TO neondb_owner;
+--
+-- Name: tenants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tenants (
+    id text NOT NULL,
+    name character varying(255) NOT NULL,
+    domain character varying(255) NOT NULL,
+    status text DEFAULT 'ACTIVE'::text NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: universal_contents; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.universal_contents (
+    id text NOT NULL,
+    business_id uuid NOT NULL,
+    key character varying(100) NOT NULL,
+    "baseText" text NOT NULL,
+    "seoTags" jsonb,
+    version integer DEFAULT 1 NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: user_role_mappings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_role_mappings (
+    id text NOT NULL,
+    business_id uuid NOT NULL,
+    user_id text NOT NULL,
+    role public."UserRole" DEFAULT 'GUEST'::public."UserRole" NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.users (
@@ -1971,14 +4788,32 @@ CREATE TABLE public.users (
     segment public."CustomerSegment" DEFAULT 'NEW'::public."CustomerSegment" NOT NULL,
     created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     otp character varying(6),
-    otp_expires_at timestamp(3) without time zone
+    otp_expires_at timestamp(3) without time zone,
+    otp_generated_at timestamp(3) without time zone,
+    otp_max_attempts integer DEFAULT 5 NOT NULL,
+    otp_remaining_attempts integer DEFAULT 5 NOT NULL,
+    otp_status text DEFAULT 'ACTIVE'::text NOT NULL,
+    otp_updated_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP,
+    otp_verified_at timestamp(3) without time zone
 );
 
 
-ALTER TABLE public.users OWNER TO neondb_owner;
+--
+-- Name: websites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.websites (
+    id text NOT NULL,
+    business_id uuid NOT NULL,
+    domain character varying(255),
+    status text DEFAULT 'DRAFT'::text NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
 
 --
--- Name: wishlists; Type: TABLE; Schema: public; Owner: neondb_owner
+-- Name: wishlists; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.wishlists (
@@ -1989,38 +4824,204 @@ CREATE TABLE public.wishlists (
 );
 
 
-ALTER TABLE public.wishlists OWNER TO neondb_owner;
+--
+-- Name: workflow_definitions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.workflow_definitions (
+    id text NOT NULL,
+    name character varying(100) NOT NULL,
+    description text,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 
 --
--- Data for Name: _ProductToProductTag; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Name: workflow_executions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.workflow_executions (
+    id text NOT NULL,
+    workflow_id text NOT NULL,
+    status text DEFAULT 'PENDING'::text NOT NULL,
+    payload jsonb NOT NULL,
+    progress double precision DEFAULT 0.0 NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(3) without time zone NOT NULL
+);
+
+
+--
+-- Name: workflow_stages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.workflow_stages (
+    id text NOT NULL,
+    workflow_id text NOT NULL,
+    name character varying(100) NOT NULL,
+    "order" integer NOT NULL,
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: workflow_tasks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.workflow_tasks (
+    id text NOT NULL,
+    stage_id text NOT NULL,
+    name character varying(100) NOT NULL,
+    "order" integer NOT NULL,
+    agent_id text,
+    artifact_type text NOT NULL,
+    dependencies text[],
+    created_at timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Data for Name: AIAgent; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."AIAgent" (id, name, description, "providerId", model, "systemPrompt", temperature, "maxTokens", "inputSchema", "outputSchema", enabled, "executionOrder", "retryPolicy", timeout, "promptTemplateId", "createdAt", "updatedAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: AIArtifact; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."AIArtifact" (id, version, checksum, "createdByAgent", "schemaVersion", "parentArtifactId", status, payload, "createdAt", "updatedAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: AICacheRecord; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."AICacheRecord" (id, "cacheKey", "responseVal", ttl, hits, "createdAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: AIContext; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."AIContext" (id, "sessionId", "activeAgentId", variables) FROM stdin;
+\.
+
+
+--
+-- Data for Name: AIConversation; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."AIConversation" (id, "contextId", role, content, "createdAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: AIExecution; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."AIExecution" (id, "sessionId", "agentId", status, "inputPayload", "outputPayload", "tokensUsed", "latencyMs", "retryCount", "createdAt", "updatedAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: AIExecutionLog; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."AIExecutionLog" (id, "executionId", level, message, "timestamp") FROM stdin;
+\.
+
+
+--
+-- Data for Name: AIKnowledgeBase; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."AIKnowledgeBase" (id, key, value, tags, "createdAt", "updatedAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: AISession; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."AISession" (id, "businessName", vertical, status, "totalCost", "totalTokens", "createdAt", "updatedAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: AITool; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."AITool" (id, name, description, category, "inputSchema", "outputSchema", permissions, timeout, enabled, "createdAt", "updatedAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: ApprovalHistory; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."ApprovalHistory" (id, "requestId", decision, comments, "reviewerId", "createdAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: ApprovalRequest; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."ApprovalRequest" (id, "targetType", "targetId", status, "requesterId", "createdAt", "updatedAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: PromptHistory; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."PromptHistory" (id, "templateId", version, "promptContent", "changeNotes", author, "createdAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: PromptTemplate; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."PromptTemplate" (id, name, "activeVersion", variables, "createdAt", "updatedAt") FROM stdin;
+\.
+
+
+--
+-- Data for Name: _ProductToProductTag; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public."_ProductToProductTag" ("A", "B") FROM stdin;
-39d029a5-b0aa-4f31-8b3a-0f256bbe86d3	fc4d7943-f8ce-4e64-8a01-5d06858f3c39
-5d3f8cfb-5c57-4234-92b1-54e5775cc71f	6fe072e6-7b8a-4acd-b466-f936c359686a
-9e953786-5208-482b-9aad-9fd59d522801	e2e8899b-4eb9-4c92-ad26-925cd257d16e
 \.
 
 
 --
--- Data for Name: _prisma_migrations; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: _prisma_migrations; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public._prisma_migrations (id, checksum, finished_at, migration_name, logs, rolled_back_at, started_at, applied_steps_count) FROM stdin;
-6f904cd5-e33f-4af0-9f74-da54a3765d44	ebefa6f29a9ecabbc21dfd63717f1c33646bb95898ef43fde9f755186f9f9752	2026-06-18 16:41:47.178254+00	20260618000000_full_baseline		\N	2026-06-18 16:41:47.178254+00	0
-06fc20f9-d8cc-4a54-ae9e-9d4829b0807b	122d743a0403e77ad7e0ed9447f5b8826f2fbdbc55612d936eff004dd13c2eec	2026-06-18 16:43:31.819138+00	20260618164302_add_category_management	\N	\N	2026-06-18 16:43:30.530172+00	1
-ff58bf33-3ad9-4ccc-8a11-0bff9ace6eaa	64dc5477d1c7ab236f9a81973c3e9c20f47e834298e7863f4c3a950e75c7de13	2026-06-18 16:57:03.938384+00	20260618165642_add_product_management	\N	\N	2026-06-18 16:57:02.424135+00	1
-a4f9ec9c-beca-4b44-8406-c44815748f6b	348db90e49102eb1f0bb14f7a4a8bd8b31339c7d53df7dd31e245995b4cb3ba6	2026-06-18 17:14:17.638795+00	20260618171358_add_can_manage_products	\N	\N	2026-06-18 17:14:16.32855+00	1
-f82249d6-4c14-4a38-9a10-291febffaeca	8acea29873c6257e079097673d14791c4b6c4cc461c035d53a02aca1e458e1d5	2026-06-18 18:31:16.273644+00	20260618183112_add_commerce_models	\N	\N	2026-06-18 18:31:14.466296+00	1
-fd96cf37-903d-46cc-81c5-9f326fd9748e	c3f46ec2cc3aaadfe322d18bd57e581fc4a39bf63d45bdcc307cb62c9fd3cf13	2026-06-19 04:14:39.965516+00	20260619041336_commerce_foundation_phase	\N	\N	2026-06-19 04:14:38.621631+00	1
-3f77bbb2-e845-4b6d-8041-93256379d208	c5354e56c807025583ef918f71bd010b774bc76999118e5748618102816a9e49	2026-06-19 04:36:10.6871+00	20260619043607_order_sequence	\N	\N	2026-06-19 04:36:09.259697+00	1
-14c645b1-c19c-45b0-87a4-b29fe24094a0	c5893d1324a41aa86e9b316401cb916f0e11f3157286088c1898f48501342936	2026-06-22 04:01:14.914166+00	20260622040111_enforce_subscription_default	\N	\N	2026-06-22 04:01:13.314609+00	1
-926d22b8-a52d-4973-a15d-7d233ac3fed5	59bb9b46af2ac9977b6dc8033030c97cfb73acfdf933adabcc56c9990cca25ca	2026-06-22 04:21:35.455335+00	20260622120000_add_otp_fields	\N	\N	2026-06-22 04:21:33.936018+00	1
+279c14f9-cb3e-4289-a639-805a18a1cf46	5b919bf8880d374308179c2ac7770dbaa644933b7f291d8e95f3f8c4d218bfda	2026-06-30 00:33:28.560451+05:30	20260630000000_add_requirements_and_blueprints	\N	\N	2026-06-30 00:33:27.844504+05:30	1
+7e9c2db2-f99e-45fd-a64e-1b32fb620e29	ebefa6f29a9ecabbc21dfd63717f1c33646bb95898ef43fde9f755186f9f9752	2026-06-30 00:32:32.735449+05:30	20260618000000_full_baseline	\N	\N	2026-06-30 00:32:32.451131+05:30	1
+f5ca9065-4274-42f9-8cd2-9101bef010ad	67230dbf3c676a3d456ffa59f10a740fc5b5f2221a2d1ed0afdfd82860921282	2026-06-30 23:42:30.94985+05:30	20260630234118_add_cms_prompts		\N	2026-06-30 23:42:30.94985+05:30	0
+0c61e5b6-8201-43a6-8f50-195280f76c9a	64dc5477d1c7ab236f9a81973c3e9c20f47e834298e7863f4c3a950e75c7de13	2026-06-30 00:32:32.85226+05:30	20260618165642_add_product_management	\N	\N	2026-06-30 00:32:32.736014+05:30	1
+5a5d2f62-456d-4e45-87cb-8fa31e1a6855	5ca50dcb59a82f423e95b72670e95e43b81a4986edb3bd4f54eacf8b2d75e9e9	2026-06-30 23:55:52.189078+05:30	20260630234119_add_prompt_references		\N	2026-06-30 23:55:52.189078+05:30	0
+70b81ff4-c283-4a07-9368-f99a376c0225	348db90e49102eb1f0bb14f7a4a8bd8b31339c7d53df7dd31e245995b4cb3ba6	2026-06-30 00:32:32.854858+05:30	20260618171358_add_can_manage_products	\N	\N	2026-06-30 00:32:32.852598+05:30	1
+3fcd33b2-b726-4b4b-87e4-7b7050ddb5dc	8acea29873c6257e079097673d14791c4b6c4cc461c035d53a02aca1e458e1d5	2026-06-30 00:32:32.952233+05:30	20260618183112_add_commerce_models	\N	\N	2026-06-30 00:32:32.855219+05:30	1
+bec45a79-b50b-4748-ba9a-f43ce619ef8a	c3f46ec2cc3aaadfe322d18bd57e581fc4a39bf63d45bdcc307cb62c9fd3cf13	2026-06-30 00:32:32.990118+05:30	20260619041336_commerce_foundation_phase	\N	\N	2026-06-30 00:32:32.952648+05:30	1
+79ab7a3a-42a0-4128-8f95-9ecc3ff70adf	c5354e56c807025583ef918f71bd010b774bc76999118e5748618102816a9e49	2026-06-30 00:32:32.996824+05:30	20260619043607_order_sequence	\N	\N	2026-06-30 00:32:32.99051+05:30	1
+86a09f77-4d7f-43e9-909a-f4d08a878237	e9887fd3db5ee6a2a60c99eb6d8f4ae0285f8de760d371509a1c7dfb81709890	2026-06-30 00:32:32.999694+05:30	20260622040111_enforce_subscription_default	\N	\N	2026-06-30 00:32:32.997178+05:30	1
+4f39de66-3c51-40c6-bf30-7f4f838831a0	59bb9b46af2ac9977b6dc8033030c97cfb73acfdf933adabcc56c9990cca25ca	2026-06-30 00:32:33.001333+05:30	20260622120000_add_otp_fields	\N	\N	2026-06-30 00:32:33.000076+05:30	1
+38bf6b63-ad54-4368-8718-06ee1e896191	445e5930fe48b2c0ed330513febdbd7fbeb4e29d08e257264b580f0a8f5009b8	\N	20260630000000_add_requirements_and_blueprints	A migration failed to apply. New migrations cannot be applied before the error is recovered from. Read more about how to resolve migration issues in a production database: https://pris.ly/d/migrate-resolve\n\nMigration name: 20260630000000_add_requirements_and_blueprints\n\nDatabase error code: none\n\nDatabase error:\nerror encoding message to server: string contains embedded null\n\n   0: sql_schema_connector::apply_migration::apply_script\n           with migration_name="20260630000000_add_requirements_and_blueprints"\n             at schema-engine\\connectors\\sql-schema-connector\\src\\apply_migration.rs:113\n   1: schema_commands::commands::apply_migrations::Applying migration\n           with migration_name="20260630000000_add_requirements_and_blueprints"\n             at schema-engine\\commands\\src\\commands\\apply_migrations.rs:95\n   2: schema_core::state::ApplyMigrations\n             at schema-engine\\core\\src\\state.rs:260	2026-06-30 00:33:22.908325+05:30	2026-06-30 00:33:07.486138+05:30	0
 \.
 
 
 --
--- Data for Name: activities; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: activities; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.activities (id, type, title, price, created_at) FROM stdin;
@@ -2028,7 +5029,7 @@ COPY public.activities (id, type, title, price, created_at) FROM stdin;
 
 
 --
--- Data for Name: admin_notifications; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: admin_notifications; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.admin_notifications (id, recipient_type, recipient_id, boutique_id, type, priority, title, message, entity_type, entity_id, is_read, metadata, created_at, updated_at) FROM stdin;
@@ -2036,92 +5037,69 @@ COPY public.admin_notifications (id, recipient_type, recipient_id, boutique_id, 
 
 
 --
--- Data for Name: audit_logs; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: ai_agent_registry; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.audit_logs (id, action_type, entity_type, entity_id, performed_by, changes_before, changes_after, metadata, ip_address, "timestamp") FROM stdin;
-71ea4e96-eb1a-4860-8f0e-31cc751e0832	CREATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"name": "Tiny Tucks"}		2026-04-29 13:13:23.058
-6f6904be-819a-4eab-a309-3025f50413f2	CREATE_OWNER_DIRECT	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"username": "sanjana_tiny_admin"}		2026-04-29 13:13:23.324
-72e74614-4836-42d3-88b9-c7b6818ab315	UNLINK_OWNER	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"boutiqueId": "69f203f2ceddcfe9b7035ef5"}		2026-04-30 05:15:21.286
-6765dced-b061-4ad1-bce8-d42e8f89b3ca	LINK_OWNER	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"boutiqueId": "69f203f2ceddcfe9b7035ef5"}		2026-04-30 05:47:22.48
-4a118179-752d-4442-b6a9-8a84f55e9ce8	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": false, "canManageMedia": true, "canEditServices": true, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canManageBookings": true}}		2026-04-30 05:50:15.585
-6f3f9ca8-0e16-4bd6-9343-7fcbab6d5d54	OWNER_UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 05:50:29.814
-e7c612e1-9803-4e50-b41a-be4156063026	OWNER_UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 05:50:41.958
-5dd40340-0c5d-4a43-8604-1805ff0ef277	OWNER_UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 05:50:48.137
-1cba9c75-0bcf-4941-b964-fe8ee361569d	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": false, "canManageMedia": true, "canEditServices": false, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canManageBookings": true}}		2026-04-30 05:53:52.271
-6c953106-f133-44b8-afbe-5aaa2a27f9fe	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": false, "canManageMedia": true, "canEditServices": true, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canManageBookings": true}}		2026-04-30 05:54:02.408
-c47d04c2-7529-495a-8809-8efa8960dbc4	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": false, "canManageMedia": true, "canEditServices": true, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canManageBookings": true}}		2026-04-30 06:07:15.294
-df90d0fa-aea2-41d3-ada3-6741869699e9	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": false, "canManageMedia": true, "canEditServices": false, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canManageBookings": true}}		2026-04-30 06:09:41.094
-466e1ec9-2511-4d1b-b76e-774c31c68495	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": true, "canManageMedia": true, "canEditServices": false, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canManageBookings": true}}		2026-04-30 06:09:48.757
-b2f8964c-f8d5-4b85-8ecb-15ca33b7b942	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": true, "canManageMedia": true, "canEditServices": true, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canManageBookings": true}}		2026-04-30 06:09:58.079
-da2de062-4c03-4f0e-9d07-8546af771ae4	OWNER_UPDATE_GALLERY	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 06:45:22.429
-17fbb20d-329c-47e8-903e-e7bc4fc06503	OWNER_UPDATE_GALLERY	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 06:55:43.583
-37663a86-c6e7-4363-92c8-7bf19609749d	OWNER_UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 07:06:48.971
-27f209a9-10d1-43e4-b8a6-7c17c1797c27	OWNER_UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 07:07:40.935
-fd28a82b-e233-422f-8c87-afe5d19444d0	OWNER_UPDATE_MEDIA	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{"fields": ["logo", "coverImage"]}		2026-04-30 07:16:22.834
-c3a3642f-f063-4404-8753-be48efb4e185	OWNER_UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 07:16:24.919
-3825795c-a9ff-4500-9756-c2467f0127ee	UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"changes": ["featuredBoutique"]}		2026-04-30 08:36:15.143
-2d046165-d4fa-4a60-aa5a-9ddd6aea7775	UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"changes": ["featuredBoutique"]}		2026-04-30 08:36:15.99
-9d4f160f-b33a-420c-8a67-b2398fe5d904	OWNER_UPDATE_SERVICES	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 08:47:00.796
-c99f2dc6-f8cb-448d-8800-a5ab75fddfa3	OWNER_UPDATE_SERVICES	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 09:08:49.692
-4010510c-514b-4ba7-ad14-e3cb01b4dc26	OWNER_UPDATE_SERVICES	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 09:09:14.411
-50aaf8ca-2c42-43c2-9bdc-b9d1895e0941	CREATE_DESIGN	Design	69f31d4c73662dff87b0e105	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 09:13:48.288
-6971e7c7-f362-410b-9bed-886d88963ff5	DELETE_DESIGN	Design	69f31d4c73662dff87b0e105	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 09:21:19.169
-13312984-6aef-4278-b5e6-fde29f31ab37	CREATE_DESIGN	Design	69f31f3d05234414c6b812c6	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 09:22:05.834
-c07df8ef-2829-4436-9544-18e756222d4a	OWNER_UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-04-30 09:49:35.683
-869a6ed6-2e97-4152-a605-aa9995d45752	SOFT_DELETE_BOUTIQUE	Boutique	69f1d49f54e6f6a7e249aa36	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"name": "Sai Ram"}		2026-05-02 18:15:05.915
-12d33cb2-fa0e-4398-9845-4e9b69458476	UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"changes": ["experienceYears", "logo", "coverImage"]}		2026-05-02 18:27:48.158
-1ae54ed2-581a-4824-8661-0e1de6fdea3a	UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"changes": ["experienceYears"]}		2026-05-02 18:29:51.855
-7ed70004-a782-4498-9db0-da86a2f0265e	UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"changes": ["experienceYears", "logo"]}		2026-05-02 18:33:26.216
-cf5bb79b-d1c1-44a3-b335-87b19d2d1e9a	UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"changes": ["experienceYears", "logo"]}		2026-05-02 18:35:37.828
-2950b6ee-cb99-4e82-94e4-bd0586190512	UPDATE_BOUTIQUE	Boutique	69f203f2ceddcfe9b7035ef5	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"changes": ["experienceYears", "media"]}		2026-05-02 20:45:17.896
-6a895a7b-ca89-48bc-b7b0-d53340603477	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": true, "canManageMedia": true, "canEditServices": true, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canViewAnalytics": true, "canManageBookings": true}}		2026-05-05 12:39:05.12
-750ca647-d953-42ed-9410-2339fe14eadf	UPDATE_DESIGN	Design	69f31f3d05234414c6b812c6	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-05-05 12:39:38.296
-86d31b99-e5c0-4215-af72-d5cf633972c4	CREATE_DESIGN	Design	69f9e5625c084be1ac33aae4	d3350b54-b045-480f-99c0-a62951f906a1	{}	{}	{}		2026-05-05 12:41:06.967
-f1bc26cf-56e0-471a-9866-302bd77e1323	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": true, "canManageMedia": true, "canEditServices": true, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canViewAnalytics": true, "canManageBookings": true}}		2026-05-05 12:52:05.932
-bf9fa0ba-056d-4a49-a7b5-58feec68e3ab	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": true, "canManageMedia": true, "canEditServices": true, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canViewAnalytics": false, "canManageBookings": true}}		2026-05-05 12:52:34.335
-b03ff895-f876-439b-a4c4-8a7fa522c0f7	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": true, "canManageMedia": true, "canEditServices": true, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canViewAnalytics": true, "canManageBookings": true}}		2026-05-05 12:59:14.409
-4d789211-8155-48fd-abbd-394a2ed73693	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": true, "canManageMedia": true, "canEditServices": true, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canViewAnalytics": false, "canManageBookings": true}}		2026-05-05 13:01:50.449
-f7bc1db0-1900-4944-943a-0aed88a5b309	UPDATE_OWNER_PERMISSIONS	Owner	69f203f3ceddcfe9b7035ef9	f190aceb-e440-4cb2-b483-403ab4bb0797	{}	{}	{"permissions": {"canEditGallery": true, "canEditProfile": true, "canManageMedia": true, "canEditServices": true, "canManageOrders": true, "canManageDesigns": true, "canManageReviews": true, "canViewAnalytics": true, "canManageBookings": true}}		2026-05-05 13:01:58.868
-d1e27288-94f0-4ef4-946a-ea276ec202ed	BLOCK_CUSTOMER	User	efe55879-1289-40a3-9a73-915ef7742f49	f190aceb-e440-4cb2-b483-403ab4bb0797	null	null	{"reason": "Spamming payment requests"}	\N	2026-06-04 19:12:30.694
-c4e31313-6469-4345-8e6b-dfa772eeb060	UNBLOCK_CUSTOMER	User	efe55879-1289-40a3-9a73-915ef7742f49	f190aceb-e440-4cb2-b483-403ab4bb0797	null	null	{"reason": "Verified profile"}	\N	2026-06-04 19:12:30.715
-62f7323d-5067-4be4-8326-32c169d0e278	BLOCK_CUSTOMER	User	efe55879-1289-40a3-9a73-915ef7742f49	f190aceb-e440-4cb2-b483-403ab4bb0797	null	null	{"reason": "Spamming payment requests"}	\N	2026-06-04 19:13:54.72
-440f1d63-dd70-4611-88a7-290f5b7123c9	UNBLOCK_CUSTOMER	User	efe55879-1289-40a3-9a73-915ef7742f49	f190aceb-e440-4cb2-b483-403ab4bb0797	null	null	{"reason": "Verified profile"}	\N	2026-06-04 19:13:54.738
-d7cbe6f5-8b51-4492-8137-3f46f954099b	MODERATE_REVIEW	Review	ca92b9e0-1f0d-4bee-995b-ac5c94d1e8f0	f190aceb-e440-4cb2-b483-403ab4bb0797	"APPROVED"	"APPROVED"	null	\N	2026-06-04 19:23:42.845
-7b318255-ebce-4cab-b6cb-5abca7cd747e	MODERATE_REVIEW	Review	63c1a9e2-482d-4a24-ad11-89fc01b9259a	f190aceb-e440-4cb2-b483-403ab4bb0797	"APPROVED"	"APPROVED"	null	\N	2026-06-04 19:23:54.495
-33484a56-6c09-40b0-ab7c-404cccafe238	MODERATE_REVIEW	Review	86df8160-c5fb-4e80-97fc-14f2ef2b1b38	f190aceb-e440-4cb2-b483-403ab4bb0797	"APPROVED"	"APPROVED"	null	\N	2026-06-04 19:26:50.828
-04c5ae91-6b00-49c8-8a27-ca5ceb28c5e6	UPDATE_COMMISSION_SETTINGS	PlatformSetting	7314c117-a9d5-42dd-9e05-334d7690dbd6	f190aceb-e440-4cb2-b483-403ab4bb0797	{"id": "7314c117-a9d5-42dd-9e05-334d7690dbd6", "updatedAt": "2026-06-04T19:37:17.040Z", "categoryCommissions": {}, "globalCommissionRate": 10}	{"id": "7314c117-a9d5-42dd-9e05-334d7690dbd6", "updatedAt": "2026-06-04T19:37:17.049Z", "categoryCommissions": {"Saree": 15, "Lehenga": 20}, "globalCommissionRate": 12}	null	\N	2026-06-04 19:37:17.049
-386e3c64-ccc6-4802-985a-b130621dc076	UPDATE_BOUTIQUE_COMMISSION	Boutique	a8620a56-8cb8-4057-b350-fcd0dd3a1d8a	f190aceb-e440-4cb2-b483-403ab4bb0797	18	18	null	\N	2026-06-04 19:37:17.069
-3e964cf6-18c2-495a-b39d-e18404cfdbb1	UPDATE_COMMISSION_SETTINGS	PlatformSetting	7314c117-a9d5-42dd-9e05-334d7690dbd6	f190aceb-e440-4cb2-b483-403ab4bb0797	{"id": "7314c117-a9d5-42dd-9e05-334d7690dbd6", "updatedAt": "2026-06-04T19:37:17.049Z", "categoryCommissions": {"Saree": 15, "Lehenga": 20}, "globalCommissionRate": 12}	{"id": "7314c117-a9d5-42dd-9e05-334d7690dbd6", "updatedAt": "2026-06-04T19:37:53.570Z", "categoryCommissions": {"Saree": 15, "Lehenga": 20}, "globalCommissionRate": 12}	null	\N	2026-06-04 19:37:53.57
-94a38100-0c08-4e97-ab1c-84e2b36a2d40	UPDATE_BOUTIQUE_COMMISSION	Boutique	179f2e1b-2d8a-44f0-a74c-4bd7230ff819	f190aceb-e440-4cb2-b483-403ab4bb0797	18	18	null	\N	2026-06-04 19:37:53.595
-cc07a2d0-2300-4687-aec6-3bdad34454ae	PAYMENT_VERIFIED	Order	eb9eefd1-07fd-499c-867e-0efdc8eb961e	f190aceb-e440-4cb2-b483-403ab4bb0797	null	null	{"amount": 1000, "orderId": "eb9eefd1-07fd-499c-867e-0efdc8eb961e", "razorpay_payment_id": "pay_global_123"}	\N	2026-06-04 19:37:53.643
-1f299414-a8cc-4eb2-9970-dd9324346056	PAYMENT_VERIFIED	Order	db51dce6-fa1f-4bf7-9985-ecf9550c954c	f190aceb-e440-4cb2-b483-403ab4bb0797	null	null	{"amount": 1000, "orderId": "db51dce6-fa1f-4bf7-9985-ecf9550c954c", "razorpay_payment_id": "pay_category_123"}	\N	2026-06-04 19:37:53.666
-2a1612e7-a10d-4447-9e20-efe797690988	PAYMENT_VERIFIED	Order	3bde4899-6f19-4c00-a016-8150533b1b57	f190aceb-e440-4cb2-b483-403ab4bb0797	null	null	{"amount": 1000, "orderId": "3bde4899-6f19-4c00-a016-8150533b1b57", "razorpay_payment_id": "pay_boutique_123"}	\N	2026-06-04 19:37:53.685
-4e75df8e-e3e4-40d0-a8ef-4e9f4ef9db0d	GENERATE_PAYOUT	Payout	762fd364-34f2-4bb2-848e-315771cbd99a	f190aceb-e440-4cb2-b483-403ab4bb0797	null	null	{"amount": 500, "boutiqueId": "179f2e1b-2d8a-44f0-a74c-4bd7230ff819"}	\N	2026-06-04 19:37:53.712
-fbce208f-5eb1-4cbe-a97c-40568bacf94e	UPDATE_PAYOUT_STATUS	Payout	762fd364-34f2-4bb2-848e-315771cbd99a	f190aceb-e440-4cb2-b483-403ab4bb0797	"PENDING"	"FAILED"	null	\N	2026-06-04 19:37:53.726
-f88425d4-9750-46d1-9641-9f3233f68c71	GENERATE_PAYOUT	Payout	e6e6fc49-725c-4801-a13d-a88ec5cc375c	f190aceb-e440-4cb2-b483-403ab4bb0797	null	null	{"amount": 500, "boutiqueId": "179f2e1b-2d8a-44f0-a74c-4bd7230ff819"}	\N	2026-06-04 19:37:53.744
-612b215d-843e-470b-aae6-47dbbd4560ec	UPDATE_PAYOUT_STATUS	Payout	e6e6fc49-725c-4801-a13d-a88ec5cc375c	f190aceb-e440-4cb2-b483-403ab4bb0797	"PENDING"	"RELEASED"	null	\N	2026-06-04 19:37:53.755
-dcf23e39-e42d-452d-86f5-dac20675d3df	PAYMENT_REFUNDED	Order	eb9eefd1-07fd-499c-867e-0efdc8eb961e	f190aceb-e440-4cb2-b483-403ab4bb0797	null	null	{"amount": 1000, "reason": "Customer cancelled design request", "paymentId": "57d8ffc1-a6d3-4e38-8683-3c46ef662759"}	\N	2026-06-04 19:37:53.773
-5d0313ea-a964-4cad-8ddb-bc00538bd442	CREATE_PRODUCT	product	836e8c3d-8cfa-44a6-b483-ffbb4e64699a	0b0e0c27-63ab-4aac-b138-99d46e7cbd47	\N	\N	{"boutiqueId": "5ab54e5a-4ef6-4911-8ea1-4224617df55c"}	\N	2026-06-18 18:02:33.476
-a198cd47-f2e0-4a29-9a1a-57ce12f69bd4	DELETE_PRODUCT	product	836e8c3d-8cfa-44a6-b483-ffbb4e64699a	0b0e0c27-63ab-4aac-b138-99d46e7cbd47	\N	\N	{"boutiqueId": "5ab54e5a-4ef6-4911-8ea1-4224617df55c"}	\N	2026-06-18 18:02:57.439
-e30181f0-9e6a-4e3c-b691-2af183c1acfe	CREATE_PRODUCT	product	45fe0f2a-9e3a-46a2-aa77-9ea846b0ff84	0b0e0c27-63ab-4aac-b138-99d46e7cbd47	\N	\N	{"boutiqueId": "5ab54e5a-4ef6-4911-8ea1-4224617df55c"}	\N	2026-06-18 18:03:35.788
-27355f85-00f7-4231-b145-001bab90f244	DELETE_PRODUCT	product	45fe0f2a-9e3a-46a2-aa77-9ea846b0ff84	0b0e0c27-63ab-4aac-b138-99d46e7cbd47	\N	\N	{"boutiqueId": "5ab54e5a-4ef6-4911-8ea1-4224617df55c"}	\N	2026-06-18 18:03:59.609
-b448e4c3-f2da-448a-b161-a52e344707c0	CREATE_PRODUCT	product	39d029a5-b0aa-4f31-8b3a-0f256bbe86d3	7f882ccb-f565-4f42-a33d-56c411d82415	\N	\N	{"boutiqueId": "154c28b2-97e5-4179-824e-8179589d5547"}	\N	2026-06-22 04:46:04.623
-e193f440-1bf0-4f83-8cb8-9cd49490d29c	CREATE_PRODUCT_IMAGE	product_image	98edaa53-6efc-44c9-9365-51cd37e67d66	7f882ccb-f565-4f42-a33d-56c411d82415	\N	\N	{"productId": "39d029a5-b0aa-4f31-8b3a-0f256bbe86d3", "boutiqueId": "154c28b2-97e5-4179-824e-8179589d5547"}	\N	2026-06-22 04:46:24.854
-6224289f-af55-41b8-bd12-0d7162ed1119	DELETE_PRODUCT	product	39d029a5-b0aa-4f31-8b3a-0f256bbe86d3	7f882ccb-f565-4f42-a33d-56c411d82415	\N	\N	{"boutiqueId": "154c28b2-97e5-4179-824e-8179589d5547"}	\N	2026-06-22 04:46:49.802
-8442d64d-376c-4e57-a5a2-6ac79ef8dda1	CREATE_PRODUCT	product	5d3f8cfb-5c57-4234-92b1-54e5775cc71f	7f882ccb-f565-4f42-a33d-56c411d82415	\N	\N	{"boutiqueId": "154c28b2-97e5-4179-824e-8179589d5547"}	\N	2026-06-22 04:49:06.204
-4346c785-2548-49ff-9294-415e6722070e	CREATE_PRODUCT_IMAGE	product_image	37b0590e-48ee-4835-9751-baebbc2cd1b7	7f882ccb-f565-4f42-a33d-56c411d82415	\N	\N	{"productId": "5d3f8cfb-5c57-4234-92b1-54e5775cc71f", "boutiqueId": "154c28b2-97e5-4179-824e-8179589d5547"}	\N	2026-06-22 04:49:22.731
-be17b3b1-e98e-44a0-b5df-6479874a6613	DELETE_PRODUCT	product	5d3f8cfb-5c57-4234-92b1-54e5775cc71f	7f882ccb-f565-4f42-a33d-56c411d82415	\N	\N	{"boutiqueId": "154c28b2-97e5-4179-824e-8179589d5547"}	\N	2026-06-22 04:49:42.834
-29893148-d364-485b-b5ab-e84e1065c34a	CREATE_PRODUCT	product	00b503ba-e2ff-4ddd-9551-0a2ff3b2b1aa	7f882ccb-f565-4f42-a33d-56c411d82415	\N	\N	{"boutiqueId": "154c28b2-97e5-4179-824e-8179589d5547"}	\N	2026-06-22 06:12:03.548
-a573d531-b604-4aaa-9757-b96313f62f46	CREATE_PRODUCT	product	22fbfc8a-46fa-471e-b1e2-87aac5b94414	7f882ccb-f565-4f42-a33d-56c411d82415	\N	\N	{"boutiqueId": "154c28b2-97e5-4179-824e-8179589d5547"}	\N	2026-06-22 06:12:50.225
-ab90540a-8551-4e5b-ac22-6a47f6c9936d	CREATE_PRODUCT	product	9e953786-5208-482b-9aad-9fd59d522801	7f882ccb-f565-4f42-a33d-56c411d82415	\N	\N	{"boutiqueId": "154c28b2-97e5-4179-824e-8179589d5547"}	\N	2026-06-22 06:13:34.889
-d0a94de9-9281-4aa0-a788-2726697e13a4	CREATE_PRODUCT_IMAGE	product_image	d9467c6c-b50f-4065-9d4b-f0a12fe1b7bf	7f882ccb-f565-4f42-a33d-56c411d82415	\N	\N	{"productId": "9e953786-5208-482b-9aad-9fd59d522801", "boutiqueId": "154c28b2-97e5-4179-824e-8179589d5547"}	\N	2026-06-22 06:13:52.498
-7a97cb15-b9aa-4cde-9c5c-2b3a1ffbdb8f	DELETE_PRODUCT	product	9e953786-5208-482b-9aad-9fd59d522801	7f882ccb-f565-4f42-a33d-56c411d82415	\N	\N	{"boutiqueId": "154c28b2-97e5-4179-824e-8179589d5547"}	\N	2026-06-22 06:14:24.019
+COPY public.ai_agent_registry (id, name, role, "promptTemplate", "requiredInputs", "producedOutputs", dependencies, "retryPolicy", "estimatedCost", "estimatedTokens", "timeoutMs", created_at) FROM stdin;
 \.
 
 
 --
--- Data for Name: booking_histories; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: ai_learning_records; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.ai_learning_records (id, prompt, blueprint_id, stage, generation_time_ms, errors, "userChanges", acceptance_rate, created_at) FROM stdin;
+2e8d0fa6-700a-4f8b-a084-524034c05389	Orchestrating storefront compilation from blueprint for session test-session-1782759837353	test-session-1782759837353	website_full_compile	4500	\N	{}	1	2026-06-29 19:04:02.077
+\.
+
+
+--
+-- Data for Name: asset_libraries; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.asset_libraries (id, business_id, name, type, url, version, meta, is_ai, prompt_log, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: audit_logs; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.audit_logs (id, action_type, entity_type, entity_id, performed_by, changes_before, changes_after, metadata, ip_address, "timestamp") FROM stdin;
+\.
+
+
+--
+-- Data for Name: autofix_queue_items; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.autofix_queue_items (id, business_id, release_tag, issue_key, "safetyLevel", description, "proposedChange", status, reviewed_by, reviewed_at, created_at) FROM stdin;
+ba988ca3-3a77-4273-9a17-2be612515433	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	test-qa-release-tag	seo-title-short-undefined	SUGGESTED	Optimize title tag for page "undefined" to be descriptive.	{"title": " | Premium Couture & Custom Fashion", "action": "set_page_title", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Optimize title tag for page \\"undefined\\" to be descriptive.", "bolt": "[Bolt] Apply project-level corrections: Optimize title tag for page \\"undefined\\" to be descriptive.. Change manifest: {\\"action\\":\\"set_page_title\\",\\"title\\":\\" | Premium Couture & Custom Fashion\\"}", "cursor": "[Cursor] Open relevant file and edit: Optimize title tag for page \\"undefined\\" to be descriptive.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Optimize title tag for page \\"undefined\\" to be descriptive.. Action payload: {\\"action\\":\\"set_page_title\\",\\"title\\":\\" | Premium Couture & Custom Fashion\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Optimize title tag for page \\"undefined\\" to be descriptive."}}	PENDING	\N	\N	2026-06-30 15:00:35.316
+b5288292-1f91-40b9-b42d-5c2a29f8b3b1	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	seo-meta-desc-missing-home	SAFE_AUTO_FIX	Automatically generate a descriptive meta description for page "Home".	{"key": "home-meta-description", "value": "Bespoke tailoring, custom design couture and premium alterations for Home. Discover high quality fabrics.", "action": "create_meta_desc", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Automatically generate a descriptive meta description for page \\"Home\\".", "bolt": "[Bolt] Apply project-level corrections: Automatically generate a descriptive meta description for page \\"Home\\".. Change manifest: {\\"action\\":\\"create_meta_desc\\",\\"pageSlug\\":\\"home\\",\\"key\\":\\"home-meta-description\\",\\"value\\":\\"Bespoke tailoring, custom design couture and premium alterations for Home. Discover high quality fabrics.\\"}", "cursor": "[Cursor] Open relevant file and edit: Automatically generate a descriptive meta description for page \\"Home\\".", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Automatically generate a descriptive meta description for page \\"Home\\".. Action payload: {\\"action\\":\\"create_meta_desc\\",\\"pageSlug\\":\\"home\\",\\"key\\":\\"home-meta-description\\",\\"value\\":\\"Bespoke tailoring, custom design couture and premium alterations for Home. Discover high quality fabrics.\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Automatically generate a descriptive meta description for page \\"Home\\"."}, "pageSlug": "home", "originalPayloadDump": {"pages": [{"id": "page-home", "slug": "home", "title": "Home", "components": [{"id": "comp-hero", "name": "Hero Section", "type": "Hero", "styleTokens": {"padding": "none"}, "contentKeysBind": ["headline-hero"]}, {"id": "comp-grid", "name": "Product Catalog", "type": "ProductGrid", "styleTokens": {"cols": {"md": 3}}, "contentKeysBind": ["title-grid"]}]}], "theme": {"typography": {"headingFont": "http://fonts.googleapis.com/css?family=Montserrat"}, "colorsLight": {"primary": "#ffffff"}}, "assets": [{"id": "asset-1", "meta": {"sizeBytes": 1500000}, "name": "hero-banner.png", "type": "IMAGE"}, {"id": "asset-2", "meta": {"sizeBytes": 12000}, "name": "logo-vector.svg", "type": "IMAGE"}], "contents": [{"id": "content-empty-desc", "key": "home-meta-description", "baseText": ""}]}}	APPLIED	remediation-runner	2026-07-02 04:31:01.758	2026-07-02 04:30:59.7
+a90e65d5-f912-4ed0-b764-feae2a963255	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	test-qa-release-tag	seo-meta-desc-missing-home	SAFE_AUTO_FIX	Automatically generate a descriptive meta description for page "undefined".	{"key": "home-meta-description", "value": "Bespoke tailoring, custom design couture and premium alterations for undefined. Discover high quality fabrics.", "action": "create_meta_desc", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Automatically generate a descriptive meta description for page \\"undefined\\".", "bolt": "[Bolt] Apply project-level corrections: Automatically generate a descriptive meta description for page \\"undefined\\".. Change manifest: {\\"action\\":\\"create_meta_desc\\",\\"pageSlug\\":\\"home\\",\\"key\\":\\"home-meta-description\\",\\"value\\":\\"Bespoke tailoring, custom design couture and premium alterations for undefined. Discover high quality fabrics.\\"}", "cursor": "[Cursor] Open relevant file and edit: Automatically generate a descriptive meta description for page \\"undefined\\".", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Automatically generate a descriptive meta description for page \\"undefined\\".. Action payload: {\\"action\\":\\"create_meta_desc\\",\\"pageSlug\\":\\"home\\",\\"key\\":\\"home-meta-description\\",\\"value\\":\\"Bespoke tailoring, custom design couture and premium alterations for undefined. Discover high quality fabrics.\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Automatically generate a descriptive meta description for page \\"undefined\\"."}, "pageSlug": "home"}	PENDING	\N	\N	2026-06-30 15:00:35.325
+8335e187-9c3f-4a7e-869e-38e962f432a5	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	test-qa-release-tag	seo-title-short-undefined	SUGGESTED	Optimize title tag for page "undefined" to be descriptive.	{"title": " | Premium Couture & Custom Fashion", "action": "set_page_title", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Optimize title tag for page \\"undefined\\" to be descriptive.", "bolt": "[Bolt] Apply project-level corrections: Optimize title tag for page \\"undefined\\" to be descriptive.. Change manifest: {\\"action\\":\\"set_page_title\\",\\"title\\":\\" | Premium Couture & Custom Fashion\\"}", "cursor": "[Cursor] Open relevant file and edit: Optimize title tag for page \\"undefined\\" to be descriptive.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Optimize title tag for page \\"undefined\\" to be descriptive.. Action payload: {\\"action\\":\\"set_page_title\\",\\"title\\":\\" | Premium Couture & Custom Fashion\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Optimize title tag for page \\"undefined\\" to be descriptive."}}	PENDING	\N	\N	2026-06-30 15:00:35.327
+312af294-8051-45df-830c-1b1133ca6292	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	test-qa-release-tag	seo-meta-desc-missing-cart	SAFE_AUTO_FIX	Automatically generate a descriptive meta description for page "undefined".	{"key": "cart-meta-description", "value": "Bespoke tailoring, custom design couture and premium alterations for undefined. Discover high quality fabrics.", "action": "create_meta_desc", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Automatically generate a descriptive meta description for page \\"undefined\\".", "bolt": "[Bolt] Apply project-level corrections: Automatically generate a descriptive meta description for page \\"undefined\\".. Change manifest: {\\"action\\":\\"create_meta_desc\\",\\"pageSlug\\":\\"cart\\",\\"key\\":\\"cart-meta-description\\",\\"value\\":\\"Bespoke tailoring, custom design couture and premium alterations for undefined. Discover high quality fabrics.\\"}", "cursor": "[Cursor] Open relevant file and edit: Automatically generate a descriptive meta description for page \\"undefined\\".", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Automatically generate a descriptive meta description for page \\"undefined\\".. Action payload: {\\"action\\":\\"create_meta_desc\\",\\"pageSlug\\":\\"cart\\",\\"key\\":\\"cart-meta-description\\",\\"value\\":\\"Bespoke tailoring, custom design couture and premium alterations for undefined. Discover high quality fabrics.\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Automatically generate a descriptive meta description for page \\"undefined\\"."}, "pageSlug": "cart"}	PENDING	\N	\N	2026-06-30 15:00:35.329
+92e88903-f75f-4b2d-8b0b-304e080c4624	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	test-qa-release-tag	brand-primary-invalid	SUGGESTED	Update light theme primary color to royal indigo.	{"key": "primary", "color": "#4f46e5", "action": "set_theme_color", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Update light theme primary color to royal indigo.", "bolt": "[Bolt] Apply project-level corrections: Update light theme primary color to royal indigo.. Change manifest: {\\"action\\":\\"set_theme_color\\",\\"key\\":\\"primary\\",\\"color\\":\\"#4f46e5\\"}", "cursor": "[Cursor] Open relevant file and edit: Update light theme primary color to royal indigo.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Update light theme primary color to royal indigo.. Action payload: {\\"action\\":\\"set_theme_color\\",\\"key\\":\\"primary\\",\\"color\\":\\"#4f46e5\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Update light theme primary color to royal indigo."}}	PENDING	\N	\N	2026-06-30 15:00:35.33
+12f98e53-c376-4c34-b8ed-7c6970ab404f	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	a11y-img-alt-missing-comp-grid	SAFE_AUTO_FIX	Inject default alt text mapping key "image-alt-comp-grid" to component content bindings.	{"key": "image-alt-comp-grid", "value": "Luxury customized apparel fashion display at storefront.", "action": "bind_alt_key", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.", "bolt": "[Bolt] Apply project-level corrections: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.. Change manifest: {\\"action\\":\\"bind_alt_key\\",\\"componentId\\":\\"comp-grid\\",\\"key\\":\\"image-alt-comp-grid\\",\\"value\\":\\"Luxury customized apparel fashion display at storefront.\\"}", "cursor": "[Cursor] Open relevant file and edit: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.. Action payload: {\\"action\\":\\"bind_alt_key\\",\\"componentId\\":\\"comp-grid\\",\\"key\\":\\"image-alt-comp-grid\\",\\"value\\":\\"Luxury customized apparel fashion display at storefront.\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings."}, "componentId": "comp-grid", "originalPayloadDump": {"pages": [{"id": "page-home", "slug": "home", "title": "Home", "components": [{"id": "comp-hero", "name": "Hero Section", "type": "Hero", "styleTokens": {"padding": "none"}, "contentKeysBind": ["headline-hero", "image-alt-comp-hero"]}, {"id": "comp-grid", "name": "Product Catalog", "type": "ProductGrid", "styleTokens": {"cols": {"md": 3}}, "contentKeysBind": ["title-grid"]}]}], "theme": {"typography": {"headingFont": "http://fonts.googleapis.com/css?family=Montserrat"}, "colorsLight": {"primary": "#ffffff"}}, "assets": [{"id": "asset-1", "meta": {"sizeBytes": 1500000}, "name": "hero-banner.webp", "type": "IMAGE"}, {"id": "asset-2", "meta": {"sizeBytes": 12000}, "name": "logo-vector.svg", "type": "IMAGE"}], "contents": [{"id": "content-autofix-b5288292-1f91-40b9-b42d-5c2a29f8b3b1", "key": "home-meta-description", "baseText": "Bespoke tailoring, custom design couture and premium alterations for Home. Discover high quality fabrics."}, {"id": "content-autofix-0c879b08-9884-4fbe-bb96-c76fee810815", "key": "image-alt-comp-hero", "baseText": "Luxury customized apparel fashion display at storefront."}]}}	APPLIED	remediation-runner	2026-07-02 04:31:01.718	2026-07-02 04:30:59.703
+79cd9413-92b7-4de8-b8d0-6a398379c55a	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	sec-http-font-url	SAFE_AUTO_FIX	Upgrade Google Fonts resource connection link to HTTPS.	{"action": "upgrade_font_protocol", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Upgrade Google Fonts resource connection link to HTTPS.", "bolt": "[Bolt] Apply project-level corrections: Upgrade Google Fonts resource connection link to HTTPS.. Change manifest: {\\"action\\":\\"upgrade_font_protocol\\",\\"secureUrl\\":\\"https://fonts.googleapis.com/css?family=Montserrat\\"}", "cursor": "[Cursor] Open relevant file and edit: Upgrade Google Fonts resource connection link to HTTPS.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Upgrade Google Fonts resource connection link to HTTPS.. Action payload: {\\"action\\":\\"upgrade_font_protocol\\",\\"secureUrl\\":\\"https://fonts.googleapis.com/css?family=Montserrat\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Upgrade Google Fonts resource connection link to HTTPS."}, "secureUrl": "https://fonts.googleapis.com/css?family=Montserrat", "originalPayloadDump": {"pages": [{"id": "page-home", "slug": "home", "title": "Home", "components": [{"id": "comp-hero", "name": "Hero Section", "type": "Hero", "styleTokens": {"padding": "none"}, "contentKeysBind": ["headline-hero", "image-alt-comp-hero"]}, {"id": "comp-grid", "name": "Product Catalog", "type": "ProductGrid", "styleTokens": {"cols": {"md": 3}}, "contentKeysBind": ["title-grid", "image-alt-comp-grid"]}]}], "theme": {"typography": {"headingFont": "http://fonts.googleapis.com/css?family=Montserrat"}, "colorsLight": {"primary": "#ffffff"}}, "assets": [{"id": "asset-1", "meta": {"sizeBytes": 1500000}, "name": "hero-banner.webp", "type": "IMAGE"}, {"id": "asset-2", "meta": {"sizeBytes": 12000}, "name": "logo-vector.svg", "type": "IMAGE"}], "contents": [{"id": "content-autofix-b5288292-1f91-40b9-b42d-5c2a29f8b3b1", "key": "home-meta-description", "baseText": "Bespoke tailoring, custom design couture and premium alterations for Home. Discover high quality fabrics."}, {"id": "content-autofix-0c879b08-9884-4fbe-bb96-c76fee810815", "key": "image-alt-comp-hero", "baseText": "Luxury customized apparel fashion display at storefront."}, {"id": "content-autofix-12f98e53-c376-4c34-b8ed-7c6970ab404f", "key": "image-alt-comp-grid", "baseText": "Luxury customized apparel fashion display at storefront."}]}}	APPLIED	remediation-runner	2026-07-02 04:31:01.726	2026-07-02 04:30:59.704
+262c8bd8-03e8-4cf9-94bb-48d41f78c63f	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	perf-asset-format-asset-1	SAFE_AUTO_FIX	Convert hero-banner.png to WebP format.	{"action": "convert_format", "assetId": "asset-1", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Convert hero-banner.png to WebP format.", "bolt": "[Bolt] Apply project-level corrections: Convert hero-banner.png to WebP format.. Change manifest: {\\"action\\":\\"convert_format\\",\\"assetId\\":\\"asset-1\\",\\"targetFormat\\":\\"webp\\"}", "cursor": "[Cursor] Open relevant file and edit: Convert hero-banner.png to WebP format.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Convert hero-banner.png to WebP format.. Action payload: {\\"action\\":\\"convert_format\\",\\"assetId\\":\\"asset-1\\",\\"targetFormat\\":\\"webp\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Convert hero-banner.png to WebP format."}, "targetFormat": "webp", "originalPayloadDump": {"pages": [{"id": "page-home", "slug": "home", "title": "Home", "components": [{"id": "comp-hero", "name": "Hero Section", "type": "Hero", "styleTokens": {"padding": "none"}, "contentKeysBind": ["headline-hero"]}, {"id": "comp-grid", "name": "Product Catalog", "type": "ProductGrid", "styleTokens": {"cols": {"md": 3}}, "contentKeysBind": ["title-grid"]}]}], "theme": {"typography": {"headingFont": "http://fonts.googleapis.com/css?family=Montserrat"}, "colorsLight": {"primary": "#ffffff"}}, "assets": [{"id": "asset-1", "meta": {"sizeBytes": 1500000}, "name": "hero-banner.png", "type": "IMAGE"}, {"id": "asset-2", "meta": {"sizeBytes": 12000}, "name": "logo-vector.svg", "type": "IMAGE"}], "contents": [{"id": "content-autofix-b5288292-1f91-40b9-b42d-5c2a29f8b3b1", "key": "home-meta-description", "baseText": "Bespoke tailoring, custom design couture and premium alterations for Home. Discover high quality fabrics."}]}}	APPLIED	remediation-runner	2026-07-02 04:31:01.695	2026-07-02 04:30:59.699
+0c879b08-9884-4fbe-bb96-c76fee810815	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	a11y-img-alt-missing-comp-hero	SAFE_AUTO_FIX	Inject default alt text mapping key "image-alt-comp-hero" to component content bindings.	{"key": "image-alt-comp-hero", "value": "Luxury customized apparel fashion display at storefront.", "action": "bind_alt_key", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.", "bolt": "[Bolt] Apply project-level corrections: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.. Change manifest: {\\"action\\":\\"bind_alt_key\\",\\"componentId\\":\\"comp-hero\\",\\"key\\":\\"image-alt-comp-hero\\",\\"value\\":\\"Luxury customized apparel fashion display at storefront.\\"}", "cursor": "[Cursor] Open relevant file and edit: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.. Action payload: {\\"action\\":\\"bind_alt_key\\",\\"componentId\\":\\"comp-hero\\",\\"key\\":\\"image-alt-comp-hero\\",\\"value\\":\\"Luxury customized apparel fashion display at storefront.\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings."}, "componentId": "comp-hero", "originalPayloadDump": {"pages": [{"id": "page-home", "slug": "home", "title": "Home", "components": [{"id": "comp-hero", "name": "Hero Section", "type": "Hero", "styleTokens": {"padding": "none"}, "contentKeysBind": ["headline-hero"]}, {"id": "comp-grid", "name": "Product Catalog", "type": "ProductGrid", "styleTokens": {"cols": {"md": 3}}, "contentKeysBind": ["title-grid"]}]}], "theme": {"typography": {"headingFont": "http://fonts.googleapis.com/css?family=Montserrat"}, "colorsLight": {"primary": "#ffffff"}}, "assets": [{"id": "asset-1", "meta": {"sizeBytes": 1500000}, "name": "hero-banner.webp", "type": "IMAGE"}, {"id": "asset-2", "meta": {"sizeBytes": 12000}, "name": "logo-vector.svg", "type": "IMAGE"}], "contents": [{"id": "content-autofix-b5288292-1f91-40b9-b42d-5c2a29f8b3b1", "key": "home-meta-description", "baseText": "Bespoke tailoring, custom design couture and premium alterations for Home. Discover high quality fabrics."}]}}	APPLIED	remediation-runner	2026-07-02 04:31:01.706	2026-07-02 04:30:59.701
+a344a242-f211-4744-bf38-690e9e96d212	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	resp-missing-xs-cols-comp-grid	SAFE_AUTO_FIX	Inject standard mobile viewport grid columns properties.	{"action": "set_style_tokens", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Inject standard mobile viewport grid columns properties.", "bolt": "[Bolt] Apply project-level corrections: Inject standard mobile viewport grid columns properties.. Change manifest: {\\"action\\":\\"set_style_tokens\\",\\"componentId\\":\\"comp-grid\\",\\"styleTokens\\":{\\"cols\\":{\\"md\\":3,\\"xs\\":1}}}", "cursor": "[Cursor] Open relevant file and edit: Inject standard mobile viewport grid columns properties.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Inject standard mobile viewport grid columns properties.. Action payload: {\\"action\\":\\"set_style_tokens\\",\\"componentId\\":\\"comp-grid\\",\\"styleTokens\\":{\\"cols\\":{\\"md\\":3,\\"xs\\":1}}}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Inject standard mobile viewport grid columns properties."}, "componentId": "comp-grid", "styleTokens": {"cols": {"md": 3, "xs": 1}}, "originalPayloadDump": {"pages": [{"id": "page-home", "slug": "home", "title": "Home", "components": [{"id": "comp-hero", "name": "Hero Section", "type": "Hero", "styleTokens": {"padding": "none"}, "contentKeysBind": ["headline-hero", "image-alt-comp-hero"]}, {"id": "comp-grid", "name": "Product Catalog", "type": "ProductGrid", "styleTokens": {"cols": {"md": 3}}, "contentKeysBind": ["title-grid", "image-alt-comp-grid"]}]}], "theme": {"typography": {"headingFont": "https://fonts.googleapis.com/css?family=Montserrat"}, "colorsLight": {"primary": "#ffffff"}}, "assets": [{"id": "asset-1", "meta": {"sizeBytes": 1500000}, "name": "hero-banner.webp", "type": "IMAGE"}, {"id": "asset-2", "meta": {"sizeBytes": 12000}, "name": "logo-vector.svg", "type": "IMAGE"}], "contents": [{"id": "content-autofix-b5288292-1f91-40b9-b42d-5c2a29f8b3b1", "key": "home-meta-description", "baseText": "Bespoke tailoring, custom design couture and premium alterations for Home. Discover high quality fabrics."}, {"id": "content-autofix-0c879b08-9884-4fbe-bb96-c76fee810815", "key": "image-alt-comp-hero", "baseText": "Luxury customized apparel fashion display at storefront."}, {"id": "content-autofix-12f98e53-c376-4c34-b8ed-7c6970ab404f", "key": "image-alt-comp-grid", "baseText": "Luxury customized apparel fashion display at storefront."}]}}	APPLIED	remediation-runner	2026-07-02 04:31:01.736	2026-07-02 04:30:59.705
+ff082b93-8bd6-4105-9812-dc9c3fcb0b8c	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	sec-http-font-url	SAFE_AUTO_FIX	Upgrade Google Fonts resource connection link to HTTPS.	{"action": "upgrade_font_protocol", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Upgrade Google Fonts resource connection link to HTTPS.", "bolt": "[Bolt] Apply project-level corrections: Upgrade Google Fonts resource connection link to HTTPS.. Change manifest: {\\"action\\":\\"upgrade_font_protocol\\",\\"secureUrl\\":\\"https://fonts.googleapis.com/css?family=Montserrat\\"}", "cursor": "[Cursor] Open relevant file and edit: Upgrade Google Fonts resource connection link to HTTPS.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Upgrade Google Fonts resource connection link to HTTPS.. Action payload: {\\"action\\":\\"upgrade_font_protocol\\",\\"secureUrl\\":\\"https://fonts.googleapis.com/css?family=Montserrat\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Upgrade Google Fonts resource connection link to HTTPS."}, "secureUrl": "https://fonts.googleapis.com/css?family=Montserrat"}	PENDING	\N	\N	2026-07-02 04:31:01.773
+00df3cf6-4b4e-40a1-b316-ad9bdc37652d	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	resp-missing-xs-cols-comp-grid	SAFE_AUTO_FIX	Inject standard mobile viewport grid columns properties.	{"action": "set_style_tokens", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Inject standard mobile viewport grid columns properties.", "bolt": "[Bolt] Apply project-level corrections: Inject standard mobile viewport grid columns properties.. Change manifest: {\\"action\\":\\"set_style_tokens\\",\\"componentId\\":\\"comp-grid\\",\\"styleTokens\\":{\\"cols\\":{\\"md\\":3,\\"xs\\":1}}}", "cursor": "[Cursor] Open relevant file and edit: Inject standard mobile viewport grid columns properties.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Inject standard mobile viewport grid columns properties.. Action payload: {\\"action\\":\\"set_style_tokens\\",\\"componentId\\":\\"comp-grid\\",\\"styleTokens\\":{\\"cols\\":{\\"md\\":3,\\"xs\\":1}}}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Inject standard mobile viewport grid columns properties."}, "componentId": "comp-grid", "styleTokens": {"cols": {"md": 3, "xs": 1}}}	PENDING	\N	\N	2026-07-02 04:31:01.774
+01d5217a-15c2-42f9-b1e0-37ef6b916602	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	content-empty-content-empty-desc	SAFE_AUTO_FIX	Automatically inject descriptive copy for content key "home-meta-description".	{"text": "Discover bespoke custom tailor fashion accessories and premium designer blouses styled for you.", "action": "set_content_text", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Automatically inject descriptive copy for content key \\"home-meta-description\\".", "bolt": "[Bolt] Apply project-level corrections: Automatically inject descriptive copy for content key \\"home-meta-description\\".. Change manifest: {\\"action\\":\\"set_content_text\\",\\"contentId\\":\\"content-empty-desc\\",\\"text\\":\\"Discover bespoke custom tailor fashion accessories and premium designer blouses styled for you.\\"}", "cursor": "[Cursor] Open relevant file and edit: Automatically inject descriptive copy for content key \\"home-meta-description\\".", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Automatically inject descriptive copy for content key \\"home-meta-description\\".. Action payload: {\\"action\\":\\"set_content_text\\",\\"contentId\\":\\"content-empty-desc\\",\\"text\\":\\"Discover bespoke custom tailor fashion accessories and premium designer blouses styled for you.\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Automatically inject descriptive copy for content key \\"home-meta-description\\"."}, "contentId": "content-empty-desc", "originalPayloadDump": {"pages": [{"id": "page-home", "slug": "home", "title": "Home", "components": [{"id": "comp-hero", "name": "Hero Section", "type": "Hero", "styleTokens": {"padding": "none"}, "contentKeysBind": ["headline-hero", "image-alt-comp-hero"]}, {"id": "comp-grid", "name": "Product Catalog", "type": "ProductGrid", "styleTokens": {"cols": {"md": 3, "xs": 1}}, "contentKeysBind": ["title-grid", "image-alt-comp-grid"]}]}], "theme": {"typography": {"headingFont": "https://fonts.googleapis.com/css?family=Montserrat"}, "colorsLight": {"primary": "#ffffff"}}, "assets": [{"id": "asset-1", "meta": {"sizeBytes": 1500000}, "name": "hero-banner.webp", "type": "IMAGE"}, {"id": "asset-2", "meta": {"sizeBytes": 12000}, "name": "logo-vector.svg", "type": "IMAGE"}], "contents": [{"id": "content-autofix-b5288292-1f91-40b9-b42d-5c2a29f8b3b1", "key": "home-meta-description", "baseText": "Bespoke tailoring, custom design couture and premium alterations for Home. Discover high quality fabrics."}, {"id": "content-autofix-0c879b08-9884-4fbe-bb96-c76fee810815", "key": "image-alt-comp-hero", "baseText": "Luxury customized apparel fashion display at storefront."}, {"id": "content-autofix-12f98e53-c376-4c34-b8ed-7c6970ab404f", "key": "image-alt-comp-grid", "baseText": "Luxury customized apparel fashion display at storefront."}]}}	APPLIED	remediation-runner	2026-07-02 04:31:01.742	2026-07-02 04:30:59.707
+db392670-fde1-4644-a8a0-3656e0720b79	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	perf-asset-size-asset-1	SUGGESTED	Compress and resize image asset hero-banner.png.	{"action": "compress_asset", "assetId": "asset-1", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Compress and resize image asset hero-banner.png.", "bolt": "[Bolt] Apply project-level corrections: Compress and resize image asset hero-banner.png.. Change manifest: {\\"action\\":\\"compress_asset\\",\\"assetId\\":\\"asset-1\\"}", "cursor": "[Cursor] Open relevant file and edit: Compress and resize image asset hero-banner.png.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Compress and resize image asset hero-banner.png.. Action payload: {\\"action\\":\\"compress_asset\\",\\"assetId\\":\\"asset-1\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Compress and resize image asset hero-banner.png."}}	PENDING	\N	\N	2026-07-02 04:31:01.769
+2d555421-05e6-4b30-9cc9-483bb4603986	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	perf-asset-format-asset-1	SAFE_AUTO_FIX	Convert hero-banner.png to WebP format.	{"action": "convert_format", "assetId": "asset-1", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Convert hero-banner.png to WebP format.", "bolt": "[Bolt] Apply project-level corrections: Convert hero-banner.png to WebP format.. Change manifest: {\\"action\\":\\"convert_format\\",\\"assetId\\":\\"asset-1\\",\\"targetFormat\\":\\"webp\\"}", "cursor": "[Cursor] Open relevant file and edit: Convert hero-banner.png to WebP format.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Convert hero-banner.png to WebP format.. Action payload: {\\"action\\":\\"convert_format\\",\\"assetId\\":\\"asset-1\\",\\"targetFormat\\":\\"webp\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Convert hero-banner.png to WebP format."}, "targetFormat": "webp"}	PENDING	\N	\N	2026-07-02 04:31:01.77
+5f9f64f4-72ca-4eaa-9933-c26ca3e8d487	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	seo-title-short-page-home	SUGGESTED	Optimize title tag for page "Home" to be descriptive.	{"title": "Home | Premium Couture & Custom Fashion", "action": "set_page_title", "pageId": "page-home", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Optimize title tag for page \\"Home\\" to be descriptive.", "bolt": "[Bolt] Apply project-level corrections: Optimize title tag for page \\"Home\\" to be descriptive.. Change manifest: {\\"action\\":\\"set_page_title\\",\\"pageId\\":\\"page-home\\",\\"title\\":\\"Home | Premium Couture & Custom Fashion\\"}", "cursor": "[Cursor] Open relevant file and edit: Optimize title tag for page \\"Home\\" to be descriptive.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Optimize title tag for page \\"Home\\" to be descriptive.. Action payload: {\\"action\\":\\"set_page_title\\",\\"pageId\\":\\"page-home\\",\\"title\\":\\"Home | Premium Couture & Custom Fashion\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Optimize title tag for page \\"Home\\" to be descriptive."}}	PENDING	\N	\N	2026-07-02 04:31:01.771
+c0338370-c56b-468b-8906-59a70620c024	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	a11y-img-alt-missing-comp-hero	SAFE_AUTO_FIX	Inject default alt text mapping key "image-alt-comp-hero" to component content bindings.	{"key": "image-alt-comp-hero", "value": "Luxury customized apparel fashion display at storefront.", "action": "bind_alt_key", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.", "bolt": "[Bolt] Apply project-level corrections: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.. Change manifest: {\\"action\\":\\"bind_alt_key\\",\\"componentId\\":\\"comp-hero\\",\\"key\\":\\"image-alt-comp-hero\\",\\"value\\":\\"Luxury customized apparel fashion display at storefront.\\"}", "cursor": "[Cursor] Open relevant file and edit: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.. Action payload: {\\"action\\":\\"bind_alt_key\\",\\"componentId\\":\\"comp-hero\\",\\"key\\":\\"image-alt-comp-hero\\",\\"value\\":\\"Luxury customized apparel fashion display at storefront.\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings."}, "componentId": "comp-hero"}	PENDING	\N	\N	2026-07-02 04:31:01.772
+505ad067-849b-4377-9735-08dfddc89eea	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	a11y-img-alt-missing-comp-grid	SAFE_AUTO_FIX	Inject default alt text mapping key "image-alt-comp-grid" to component content bindings.	{"key": "image-alt-comp-grid", "value": "Luxury customized apparel fashion display at storefront.", "action": "bind_alt_key", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.", "bolt": "[Bolt] Apply project-level corrections: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.. Change manifest: {\\"action\\":\\"bind_alt_key\\",\\"componentId\\":\\"comp-grid\\",\\"key\\":\\"image-alt-comp-grid\\",\\"value\\":\\"Luxury customized apparel fashion display at storefront.\\"}", "cursor": "[Cursor] Open relevant file and edit: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.. Action payload: {\\"action\\":\\"bind_alt_key\\",\\"componentId\\":\\"comp-grid\\",\\"key\\":\\"image-alt-comp-grid\\",\\"value\\":\\"Luxury customized apparel fashion display at storefront.\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings."}, "componentId": "comp-grid"}	PENDING	\N	\N	2026-07-02 04:31:01.772
+bdce614d-5978-4f05-a653-f0e203deaf83	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	ux-short-padding-comp-hero	SUGGESTED	Adjust container padding to standard spacing value.	{"action": "set_style_tokens", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Adjust container padding to standard spacing value.", "bolt": "[Bolt] Apply project-level corrections: Adjust container padding to standard spacing value.. Change manifest: {\\"action\\":\\"set_style_tokens\\",\\"componentId\\":\\"comp-hero\\",\\"styleTokens\\":{\\"padding\\":\\"md\\"}}", "cursor": "[Cursor] Open relevant file and edit: Adjust container padding to standard spacing value.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Adjust container padding to standard spacing value.. Action payload: {\\"action\\":\\"set_style_tokens\\",\\"componentId\\":\\"comp-hero\\",\\"styleTokens\\":{\\"padding\\":\\"md\\"}}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Adjust container padding to standard spacing value."}, "componentId": "comp-hero", "styleTokens": {"padding": "md"}}	PENDING	\N	\N	2026-07-02 04:31:01.774
+bc8e47d2-43e9-4f03-a3e7-a4392ffa3b4d	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	brand-primary-invalid	SUGGESTED	Update light theme primary color to royal indigo.	{"key": "primary", "color": "#4f46e5", "action": "set_theme_color", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Update light theme primary color to royal indigo.", "bolt": "[Bolt] Apply project-level corrections: Update light theme primary color to royal indigo.. Change manifest: {\\"action\\":\\"set_theme_color\\",\\"key\\":\\"primary\\",\\"color\\":\\"#4f46e5\\"}", "cursor": "[Cursor] Open relevant file and edit: Update light theme primary color to royal indigo.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Update light theme primary color to royal indigo.. Action payload: {\\"action\\":\\"set_theme_color\\",\\"key\\":\\"primary\\",\\"color\\":\\"#4f46e5\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Update light theme primary color to royal indigo."}}	PENDING	\N	\N	2026-07-02 04:31:01.775
+\.
+
+
+--
+-- Data for Name: booking_histories; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.booking_histories (id, booking_id, status, note, "timestamp") FROM stdin;
@@ -2129,187 +5107,1934 @@ COPY public.booking_histories (id, booking_id, status, note, "timestamp") FROM s
 
 
 --
--- Data for Name: bookings; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: bookings; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.bookings (id, boutique_id, booking_type, customer_name, customer_email, customer_mobile, booking_date, booking_time, notes, status, assigned_owner_id, reminder_sent, order_id, is_deleted, created_at) FROM stdin;
-79865a15-628c-41ee-b60b-0e8623d07f2a	3b360640-f08b-460c-b06e-4f4ba821e298	STORE_VISIT	Aranya Sen	\N	9876543200	2026-06-05	11:00 AM	Session notes for Aranya Sen	Accepted	d3350b54-b045-480f-99c0-a62951f906a1	f	\N	f	2026-06-05 02:57:04.464
-657826ad-3c37-4455-abd1-953723c5e73e	3b360640-f08b-460c-b06e-4f4ba821e298	VIDEO_CONSULTATION	Bhavya Rao	\N	9876543201	2026-06-05	02:00 PM	Session notes for Bhavya Rao	Pending	d3350b54-b045-480f-99c0-a62951f906a1	f	\N	f	2026-06-05 02:57:04.464
-3359d4a3-a3cd-4608-9a80-4b2447aea72c	3b360640-f08b-460c-b06e-4f4ba821e298	HOME_MEASUREMENT	Deepika Padukone	\N	9876543202	2026-06-05	04:00 PM	Session notes for Deepika Padukone	Completed	d3350b54-b045-480f-99c0-a62951f906a1	f	\N	f	2026-06-05 02:57:04.464
-8b7a628b-eac3-4a92-82fd-3d8ff0a6d7c9	3b360640-f08b-460c-b06e-4f4ba821e298	DESIGN_DISCUSSION	Esha Deol	\N	9876543203	2026-06-04	12:00 PM	Session notes for Esha Deol	Accepted	d3350b54-b045-480f-99c0-a62951f906a1	f	\N	f	2026-06-04 02:57:04.464
-834d6abf-74af-4e50-8c41-2927a07b041f	3b360640-f08b-460c-b06e-4f4ba821e298	TRIAL_FITTING	Gauri Khan	\N	9876543204	2026-06-03	03:00 PM	Session notes for Gauri Khan	Completed	d3350b54-b045-480f-99c0-a62951f906a1	f	\N	f	2026-06-03 02:57:04.464
-a14c0414-960c-414d-9e75-d67808232c08	3b360640-f08b-460c-b06e-4f4ba821e298	STORE_VISIT	Ishita Sharma	\N	9876543205	2026-05-31	10:00 AM	Session notes for Ishita Sharma	Accepted	d3350b54-b045-480f-99c0-a62951f906a1	f	\N	f	2026-05-31 02:57:04.464
-d74e29c6-b674-4af7-b2d6-37e04bcd0d2f	3b360640-f08b-460c-b06e-4f4ba821e298	FINAL_DELIVERY	Kriti Sanon	\N	9876543206	2026-05-26	05:30 PM	Session notes for Kriti Sanon	Completed	d3350b54-b045-480f-99c0-a62951f906a1	f	\N	f	2026-05-26 02:57:04.464
-a46228f1-e877-495d-bbf0-81486d849c1b	3b360640-f08b-460c-b06e-4f4ba821e298	STORE_VISIT	Meera Rajput	\N	9876543207	2026-05-21	01:00 PM	Session notes for Meera Rajput	Rejected	d3350b54-b045-480f-99c0-a62951f906a1	f	\N	f	2026-05-21 02:57:04.464
-b0c0131b-8c7e-4ef4-898d-2e4efef764e5	3b360640-f08b-460c-b06e-4f4ba821e298	VIDEO_CONSULTATION	Neha Dhupia	\N	9876543208	2026-05-16	04:30 PM	Session notes for Neha Dhupia	Completed	d3350b54-b045-480f-99c0-a62951f906a1	f	\N	f	2026-05-16 02:57:04.464
-3769c9bf-0abb-4bfd-a5c7-0d63574a237a	3b360640-f08b-460c-b06e-4f4ba821e298	HOME_MEASUREMENT	Priyanka Chopra	\N	9876543209	2026-05-11	11:30 AM	Session notes for Priyanka Chopra	Accepted	d3350b54-b045-480f-99c0-a62951f906a1	f	\N	f	2026-05-11 02:57:04.464
 \.
 
 
 --
--- Data for Name: boutique_subscriptions; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: boutique_certifications; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.boutique_certifications (id, business_id, "targetType", target_id, release_tag, profile_id, overall_score, "scoresMap", "agentRuns", issues, suggestions, "visualArtifacts", status, created_at) FROM stdin;
+5f0cab8c-733b-4a22-be25-ee13fdf34b93	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	WEBSITE	2264d82c-69d2-48c6-bdbb-81146f0b4492	v1.0.62	d67ab1e1-4b22-4aa5-b21b-1507307e85fa	83.75	{"seo_agent": 90, "brand_agent": 80, "ux_ui_agent": 90, "content_agent": 100, "security_agent": 80, "responsive_agent": 90, "performance_agent": 85, "accessibility_agent": 70}	{"seo_agent": {"cost": 0.000024, "model": "gemini-1.5-flash", "errors": 0, "tokens": 120, "warnings": 1, "executionTime": 0, "scoreContribution": 90}, "brand_agent": {"cost": 0.000024, "model": "gemini-1.5-flash", "errors": 0, "tokens": 120, "warnings": 1, "executionTime": 0, "scoreContribution": 80}, "ux_ui_agent": {"cost": 0.000024, "model": "gemini-1.5-flash", "errors": 0, "tokens": 120, "warnings": 1, "executionTime": 0, "scoreContribution": 90}, "content_agent": {"cost": 0.000024, "model": "gemini-1.5-flash", "errors": 0, "tokens": 120, "warnings": 0, "executionTime": 0, "scoreContribution": 100}, "security_agent": {"cost": 0.000024, "model": "gemini-1.5-flash", "errors": 1, "tokens": 120, "warnings": 0, "executionTime": 0, "scoreContribution": 80}, "responsive_agent": {"cost": 0.000024, "model": "gemini-1.5-flash", "errors": 0, "tokens": 120, "warnings": 1, "executionTime": 0, "scoreContribution": 90}, "performance_agent": {"cost": 0.000024, "model": "gemini-1.5-flash", "errors": 0, "tokens": 120, "warnings": 1, "executionTime": 0, "scoreContribution": 85}, "accessibility_agent": {"cost": 0.000024, "model": "gemini-1.5-flash", "errors": 2, "tokens": 120, "warnings": 0, "executionTime": 0, "scoreContribution": 70}}	[{"key": "perf-asset-size-asset-1", "name": "Large Asset Payload Warning", "type": "WARNING", "element": "Asset ID: asset-1", "message": "Asset hero-banner.png is 1464.8KB, exceeding the 500KB threshold.", "safetyLevel": "SUGGESTED", "fixSuggestion": "Compress image or request scaled CDN parameters."}, {"key": "perf-asset-format-asset-1", "name": "Non-optimal Image Format", "type": "INFO", "element": "Asset ID: asset-1", "message": "Image hero-banner.png uses format .png. WebP or SVG format is recommended.", "safetyLevel": "SAFE_AUTO_FIX", "fixSuggestion": "Convert hero-banner.png to WebP format."}, {"key": "seo-title-short-page-home", "name": "Short Page Title", "type": "WARNING", "element": "Page: home", "message": "Page \\"Home\\" has a very short title (4 chars). Title tags should be at least 10 chars.", "safetyLevel": "SUGGESTED", "fixSuggestion": "Lengthen title tag for Home to improve search visibility."}, {"key": "a11y-img-alt-missing-comp-hero", "name": "Missing Image Description (WCAG 2.2)", "type": "ERROR", "element": "Component: Hero Section (Hero)", "message": "Component \\"Hero Section\\" renders images without accessibility alt descriptions.", "safetyLevel": "SAFE_AUTO_FIX", "fixSuggestion": "Inject a descriptive alt-text label key-value pair."}, {"key": "a11y-img-alt-missing-comp-grid", "name": "Missing Image Description (WCAG 2.2)", "type": "ERROR", "element": "Component: Product Catalog (ProductGrid)", "message": "Component \\"Product Catalog\\" renders images without accessibility alt descriptions.", "safetyLevel": "SAFE_AUTO_FIX", "fixSuggestion": "Inject a descriptive alt-text label key-value pair."}, {"key": "sec-http-font-url", "name": "Insecure External Asset Reference", "type": "ERROR", "element": "Font config: http://fonts.googleapis.com/css?family=Montserrat", "message": "External fonts or assets loaded using insecure HTTP connection protocol.", "safetyLevel": "SAFE_AUTO_FIX", "fixSuggestion": "Upgrade font protocol connection endpoint to secure HTTPS."}, {"key": "resp-missing-xs-cols-comp-grid", "name": "Missing Responsive Mobile Breakpoint Grid Columns", "type": "WARNING", "element": "Component ID: comp-grid", "message": "Grid component \\"Product Catalog\\" does not configure column sizing rules for extra-small (xs) mobile displays.", "safetyLevel": "SAFE_AUTO_FIX", "fixSuggestion": "Inject column grid configuration properties matching mobile layouts."}, {"key": "ux-short-padding-comp-hero", "name": "Zero Element Spacing Warning", "type": "WARNING", "element": "Component: Hero Section", "message": "Hero panel \\"Hero Section\\" sets zero padding spacing, which might cause text clipping.", "safetyLevel": "SUGGESTED", "fixSuggestion": "Set safe container padding margins."}, {"key": "brand-primary-invalid", "name": "Monochromatic Primary Palette Warning", "type": "WARNING", "element": "Theme: ColorsLight config", "message": "Primary brand color is configured as monochromatic black/white, which degrades corporate visibility.", "safetyLevel": "SUGGESTED", "fixSuggestion": "Specify a corporate primary brand color from the design system."}]	[{"issueKey": "perf-asset-size-asset-1", "description": "Compress and resize image asset hero-banner.png.", "proposedChange": {"action": "compress_asset", "assetId": "asset-1", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Compress and resize image asset hero-banner.png.", "bolt": "[Bolt] Apply project-level corrections: Compress and resize image asset hero-banner.png.. Change manifest: {\\"action\\":\\"compress_asset\\",\\"assetId\\":\\"asset-1\\"}", "cursor": "[Cursor] Open relevant file and edit: Compress and resize image asset hero-banner.png.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Compress and resize image asset hero-banner.png.. Action payload: {\\"action\\":\\"compress_asset\\",\\"assetId\\":\\"asset-1\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Compress and resize image asset hero-banner.png."}}}, {"issueKey": "perf-asset-format-asset-1", "description": "Convert hero-banner.png to WebP format.", "proposedChange": {"action": "convert_format", "assetId": "asset-1", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Convert hero-banner.png to WebP format.", "bolt": "[Bolt] Apply project-level corrections: Convert hero-banner.png to WebP format.. Change manifest: {\\"action\\":\\"convert_format\\",\\"assetId\\":\\"asset-1\\",\\"targetFormat\\":\\"webp\\"}", "cursor": "[Cursor] Open relevant file and edit: Convert hero-banner.png to WebP format.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Convert hero-banner.png to WebP format.. Action payload: {\\"action\\":\\"convert_format\\",\\"assetId\\":\\"asset-1\\",\\"targetFormat\\":\\"webp\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Convert hero-banner.png to WebP format."}, "targetFormat": "webp"}}, {"issueKey": "seo-title-short-page-home", "description": "Optimize title tag for page \\"Home\\" to be descriptive.", "proposedChange": {"title": "Home | Premium Couture & Custom Fashion", "action": "set_page_title", "pageId": "page-home", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Optimize title tag for page \\"Home\\" to be descriptive.", "bolt": "[Bolt] Apply project-level corrections: Optimize title tag for page \\"Home\\" to be descriptive.. Change manifest: {\\"action\\":\\"set_page_title\\",\\"pageId\\":\\"page-home\\",\\"title\\":\\"Home | Premium Couture & Custom Fashion\\"}", "cursor": "[Cursor] Open relevant file and edit: Optimize title tag for page \\"Home\\" to be descriptive.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Optimize title tag for page \\"Home\\" to be descriptive.. Action payload: {\\"action\\":\\"set_page_title\\",\\"pageId\\":\\"page-home\\",\\"title\\":\\"Home | Premium Couture & Custom Fashion\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Optimize title tag for page \\"Home\\" to be descriptive."}}}, {"issueKey": "a11y-img-alt-missing-comp-hero", "description": "Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.", "proposedChange": {"key": "image-alt-comp-hero", "value": "Luxury customized apparel fashion display at storefront.", "action": "bind_alt_key", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.", "bolt": "[Bolt] Apply project-level corrections: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.. Change manifest: {\\"action\\":\\"bind_alt_key\\",\\"componentId\\":\\"comp-hero\\",\\"key\\":\\"image-alt-comp-hero\\",\\"value\\":\\"Luxury customized apparel fashion display at storefront.\\"}", "cursor": "[Cursor] Open relevant file and edit: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings.. Action payload: {\\"action\\":\\"bind_alt_key\\",\\"componentId\\":\\"comp-hero\\",\\"key\\":\\"image-alt-comp-hero\\",\\"value\\":\\"Luxury customized apparel fashion display at storefront.\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Inject default alt text mapping key \\"image-alt-comp-hero\\" to component content bindings."}, "componentId": "comp-hero"}}, {"issueKey": "a11y-img-alt-missing-comp-grid", "description": "Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.", "proposedChange": {"key": "image-alt-comp-grid", "value": "Luxury customized apparel fashion display at storefront.", "action": "bind_alt_key", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.", "bolt": "[Bolt] Apply project-level corrections: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.. Change manifest: {\\"action\\":\\"bind_alt_key\\",\\"componentId\\":\\"comp-grid\\",\\"key\\":\\"image-alt-comp-grid\\",\\"value\\":\\"Luxury customized apparel fashion display at storefront.\\"}", "cursor": "[Cursor] Open relevant file and edit: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings.. Action payload: {\\"action\\":\\"bind_alt_key\\",\\"componentId\\":\\"comp-grid\\",\\"key\\":\\"image-alt-comp-grid\\",\\"value\\":\\"Luxury customized apparel fashion display at storefront.\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Inject default alt text mapping key \\"image-alt-comp-grid\\" to component content bindings."}, "componentId": "comp-grid"}}, {"issueKey": "sec-http-font-url", "description": "Upgrade Google Fonts resource connection link to HTTPS.", "proposedChange": {"action": "upgrade_font_protocol", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Upgrade Google Fonts resource connection link to HTTPS.", "bolt": "[Bolt] Apply project-level corrections: Upgrade Google Fonts resource connection link to HTTPS.. Change manifest: {\\"action\\":\\"upgrade_font_protocol\\",\\"secureUrl\\":\\"https://fonts.googleapis.com/css?family=Montserrat\\"}", "cursor": "[Cursor] Open relevant file and edit: Upgrade Google Fonts resource connection link to HTTPS.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Upgrade Google Fonts resource connection link to HTTPS.. Action payload: {\\"action\\":\\"upgrade_font_protocol\\",\\"secureUrl\\":\\"https://fonts.googleapis.com/css?family=Montserrat\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Upgrade Google Fonts resource connection link to HTTPS."}, "secureUrl": "https://fonts.googleapis.com/css?family=Montserrat"}}, {"issueKey": "resp-missing-xs-cols-comp-grid", "description": "Inject standard mobile viewport grid columns properties.", "proposedChange": {"action": "set_style_tokens", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Inject standard mobile viewport grid columns properties.", "bolt": "[Bolt] Apply project-level corrections: Inject standard mobile viewport grid columns properties.. Change manifest: {\\"action\\":\\"set_style_tokens\\",\\"componentId\\":\\"comp-grid\\",\\"styleTokens\\":{\\"cols\\":{\\"md\\":3,\\"xs\\":1}}}", "cursor": "[Cursor] Open relevant file and edit: Inject standard mobile viewport grid columns properties.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Inject standard mobile viewport grid columns properties.. Action payload: {\\"action\\":\\"set_style_tokens\\",\\"componentId\\":\\"comp-grid\\",\\"styleTokens\\":{\\"cols\\":{\\"md\\":3,\\"xs\\":1}}}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Inject standard mobile viewport grid columns properties."}, "componentId": "comp-grid", "styleTokens": {"cols": {"md": 3, "xs": 1}}}}, {"issueKey": "ux-short-padding-comp-hero", "description": "Adjust container padding to standard spacing value.", "proposedChange": {"action": "set_style_tokens", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Adjust container padding to standard spacing value.", "bolt": "[Bolt] Apply project-level corrections: Adjust container padding to standard spacing value.. Change manifest: {\\"action\\":\\"set_style_tokens\\",\\"componentId\\":\\"comp-hero\\",\\"styleTokens\\":{\\"padding\\":\\"md\\"}}", "cursor": "[Cursor] Open relevant file and edit: Adjust container padding to standard spacing value.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Adjust container padding to standard spacing value.. Action payload: {\\"action\\":\\"set_style_tokens\\",\\"componentId\\":\\"comp-hero\\",\\"styleTokens\\":{\\"padding\\":\\"md\\"}}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Adjust container padding to standard spacing value."}, "componentId": "comp-hero", "styleTokens": {"padding": "md"}}}, {"issueKey": "brand-primary-invalid", "description": "Update light theme primary color to royal indigo.", "proposedChange": {"key": "primary", "color": "#4f46e5", "action": "set_theme_color", "prompts": {"v0": "[v0] Rebuild or patch component markup to satisfy quality check: Update light theme primary color to royal indigo.", "bolt": "[Bolt] Apply project-level corrections: Update light theme primary color to royal indigo.. Change manifest: {\\"action\\":\\"set_theme_color\\",\\"key\\":\\"primary\\",\\"color\\":\\"#4f46e5\\"}", "cursor": "[Cursor] Open relevant file and edit: Update light theme primary color to royal indigo.", "lovable": "[Lovable] Fix accessibility/layout issue in UI: Update light theme primary color to royal indigo.. Action payload: {\\"action\\":\\"set_theme_color\\",\\"key\\":\\"primary\\",\\"color\\":\\"#4f46e5\\"}", "claudeCode": "[Claude Code] Execute AST/regex replacement for: Update light theme primary color to royal indigo."}}}]	[{"pageSlug": "home", "screenshotUrl": "https://cdn.antair.live/visual-reviews/v1.0.62/home.png", "evaluatedMetrics": {"spacingAlignment": "95%", "mobileReadability": "EXCELLENT", "typographyContrast": "PASSED"}}]	NEEDS_FIXES	2026-07-02 04:31:01.774
+\.
+
+
+--
+-- Data for Name: boutique_pages; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.boutique_pages (id, website_id, title, slug, is_enabled, status, created_at, updated_at) FROM stdin;
+500115dc-2875-40b9-b202-809a36bef2ce	01b539cf-c7ab-44b6-9854-4001f2033bbb	Home	home	t	PUBLISHED	2026-06-29 19:03:58.031	2026-06-29 19:03:58.031
+da28847a-a95a-4dc8-bfb0-287d0b0883e6	01b539cf-c7ab-44b6-9854-4001f2033bbb	Shop	shop	t	PUBLISHED	2026-06-29 19:03:58.036	2026-06-29 19:03:58.036
+0935addb-633a-4a84-8aec-682ea9cdc0a4	01b539cf-c7ab-44b6-9854-4001f2033bbb	Tailoring	tailoring	t	PUBLISHED	2026-06-29 19:03:58.037	2026-06-29 19:03:58.037
+db45bd2a-3637-45cd-8b36-9853ef76e407	01b539cf-c7ab-44b6-9854-4001f2033bbb	Contact	contact	t	PUBLISHED	2026-06-29 19:03:58.038	2026-06-29 19:03:58.038
+\.
+
+
+--
+-- Data for Name: boutique_plugins; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.boutique_plugins (id, business_id, plugin_key, is_enabled, settings, permissions, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: boutique_subscriptions; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.boutique_subscriptions (id, boutique_id, plan_id, status, start_date, end_date, trial_ends_at, created_at, updated_at, current_ready_made_products_count, current_custom_designs_count, current_order_count, current_booking_count, current_customer_count, current_measurements_count, current_gallery_images, current_staff_accounts, current_branch_count, trial_started_at, trial_ended_at, converted_at, gateway_customer_id, gateway_subscription_id, gateway_payment_id, pending_plan_id) FROM stdin;
-c7a592cf-5ccb-40c1-b681-f0e66f5dc25a	3b360640-f08b-460c-b06e-4f4ba821e298	6382ecb7-a82e-49f9-8770-c0edc63e0e4b	ACTIVE	2026-06-04 19:44:29.895	2126-06-04 19:44:29.895	\N	2026-06-04 19:44:29.899	2026-06-04 19:44:29.899	0	0	0	0	0	0	0	0	0	\N	\N	\N	\N	\N	\N	\N
-46e9499b-ac36-4561-bf3d-3116c972ff79	444d0792-6d4b-4912-870d-a7084fb4000d	6382ecb7-a82e-49f9-8770-c0edc63e0e4b	ACTIVE	2026-06-18 15:52:24.899	2126-06-18 15:52:24.899	\N	2026-06-18 15:52:25.683	2026-06-18 15:52:25.683	0	0	0	0	0	0	0	0	0	\N	\N	\N	\N	\N	\N	\N
-0eb8d144-14ea-42b3-b2d8-7072187902d7	e93b248c-0e8a-4db9-9915-c2fec8f46845	6382ecb7-a82e-49f9-8770-c0edc63e0e4b	ACTIVE	2026-06-18 15:52:24.899	2126-06-18 15:52:24.899	\N	2026-06-18 15:52:26.82	2026-06-18 15:52:26.82	0	0	0	0	0	0	0	0	0	\N	\N	\N	\N	\N	\N	\N
-15d93870-b1b6-4d3d-baed-c823f8aac3c4	154c28b2-97e5-4179-824e-8179589d5547	6382ecb7-a82e-49f9-8770-c0edc63e0e4b	ACTIVE	2026-06-22 04:39:12.691	2027-06-22 04:39:12.691	2026-07-22 04:39:12.691	2026-06-22 04:39:12.693	2026-06-22 04:40:54.401	0	0	0	0	0	0	0	1	1	\N	\N	\N	\N	\N	\N	\N
-0739942f-32b6-459a-9f75-f73ca7424647	9713de00-8c88-48c2-9ecc-902b86954f96	6382ecb7-a82e-49f9-8770-c0edc63e0e4b	ACTIVE	2026-06-04 19:44:29.895	2126-06-04 19:44:29.895	\N	2026-06-04 19:44:29.904	2026-06-22 09:50:36.551	2	0	0	0	0	0	0	1	1	\N	\N	\N	\N	\N	\N	\N
 \.
 
 
 --
--- Data for Name: boutiques; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: boutique_themes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.boutiques (id, name, owner_name, description, experience_years, status, featured_boutique, verified, owner_id, happy_clients, total_designs, mobile_number, whatsapp_number, email, full_address, area, city, state, pincode, google_maps_link, service_radius, open_days, opening_time, closing_time, weekly_holiday, services_offered, work_type_specialty, pickup_available, delivery_available, home_visit_available, appointment_booking_available, rush_order_available, starting_price, turnaround_time, logo_url, cover_image_url, gallery_urls, instagram_handle, facebook_page, website_link, verification_documents, payout_details, payout_status, internal_notes, is_deleted, deleted_at, rating, reviews_count, version, created_at, commission_rate, response_time_avg, wallet_balance, pending_payout, total_paid_out, is_frozen, is_suspended, subscription_enforcement) FROM stdin;
-d31a980d-407e-4511-a5eb-436a186d5092	Stress Boutique 1782112020354	Stress Owner		0	Active	f	f	\N	0	0	99999920354		stress1782112020354@boutique.com	Stress Address		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-22 07:07:03.505	10.00	0	0.00	0.00	0.00	f	f	t
-444d0792-6d4b-4912-870d-a7084fb4000d	Ticket Test Boutique	Test Boutique Owner		3	Active	f	f	\N	0	0	9999999912		ticketing@test.com	456 Ticket Lane		Test City	Test State								{Saree}	{Embroidery}	f	f	f	f	f	300.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-04 19:59:10.674	10.00	0	0.00	0.00	0.00	f	f	t
-e93b248c-0e8a-4db9-9915-c2fec8f46845	Validation Test Boutique	Test Owner		5	Active	f	f	\N	0	0	9999999988		validation@test.com	123 Test Street, Suite 100		Test City	Test State								{Blouse}	{Stitching}	f	f	f	f	f	500.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-17 18:31:34.649	10.00	0	0.00	0.00	0.00	f	f	t
-3b360640-f08b-460c-b06e-4f4ba821e298	Sai Ram	Kumar	Register Complete Boutique Entity Fill in the comprehensive details to onboard a new boutique and generate owner credentials.  1. Basic Information Boutique Name * Sai Ram Owner Name * Kumar Boutique Description  Bridal and custom blouse specialist... Experience Years  e.g. 5+ Years Status Active Featured Boutique? 2. Contact Details Mobile Number * 9876543210 WhatsApp Number  9876543210 Email Address * sri@gmail.com 3. Location Details Full Address * Shop No. 12, Banjara Hills... Area / Locality  Banjara Hills City * Hyderabad State * Telangana Pincode  500034 Google Maps Link  https://maps.google.com/... Service Radius  Within 10 km 4. Business Hours Open Days  Mon-Sat Opening Time  11:00 AM Closing Time  8:00 PM Weekly Holiday  Sunday 5. Services & Specialities Services Offered (comma separated)  Custom blouse, bridal wear, sarees Work Specialty (comma separated)  Maggam work, hand embroidery 6. Features & Availability Pickup Available Delivery Available Tailor Home Visit Appointment Booking Rush Order Ava	8	Active	f	t	\N	0	0	7660922416	9123456789	2100031261cser@gmail.com	Plot 45, Ground Floor, Jubilee Hills Check Post, Road No. 36.	Jubilee Hills	Hyderabad	Telangana	500033	https://maps.app.goo.gl/gQEB7YBivPv13xvw6	Within 10 km	Monday, Tuesday, Wednesday, Thursday, Friday, Saturday	11:00 AM	08:00 PM	Sunday	{"Lehenga Stitching","Blouse Customization","Gown Alterations"}	{"Zardosi Work","Bead Work","Cut-work Embroidery"}	t	t	t	t	f	750.00	3-5 Days			{}	@Sai_Ram			{https://drive.google.com/file/d/gst_doc_ab}		Pending		t	2026-05-02 18:15:05.838	0.00	0	0	2026-06-04 18:19:19.79	10.00	0	0.00	0.00	0.00	f	f	t
-9713de00-8c88-48c2-9ecc-902b86954f96	Tiny Tucks	Sanjana Kapoor	Custom-made ethnic wear for newborns to teenagers. We specialize in skin-friendly fabrics and comfortable festive wear.	0	Active	t	f	d3350b54-b045-480f-99c0-a62951f906a1	0	0	9052011447	9052011447	hello@tinytucks.com	Shop G-4, Pearl Residency, Somajiguda Main Road.	Somajiguda	Hyderabad	Telangana	500082	https://maps.google.com/urban_dhaga_madhapur	Within 10 km	Monday, Tuesday, Wednesday, Thursday, Friday, Saturday	11:00 AM	08:00 PM	Sunday	{}	{"Custom Blouse","Soft Cotton Lining"}	t	t	t	f	t	766.00	3-5 Days	https://vs-boutique-images.s3.ap-south-1.amazonaws.com/uploads/logo/1777754714618-df96b370-7674-4c74-ac25-7c10eb32beed.png		{}	@tinytucks_hyd	facebook.com/tinytucks		{}		Pending		f	\N	0.00	0	0	2026-06-04 18:19:19.797	10.00	0	0.00	0.00	0.00	f	f	t
-ebb03214-7fe9-48bc-9702-ce513b1fe095	Audit Boutique B 1781809114924	Audit Owner B		0	Active	f	f	\N	0	0	9888888883		auditb1781809114924@boutique.com	2 Audit St		Audit City	Audit State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-18 18:58:38.215	10.00	0	0.00	0.00	0.00	f	f	t
-154c28b2-97e5-4179-824e-8179589d5547	Product Test Boutique	Product Tester		0	Active	f	f	\N	0	0	9999888777		producttest@boutique.com	456 Test Ave		Testopolis	Test State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-18 17:16:58.806	10.00	0	0.00	0.00	0.00	f	f	t
-5ab54e5a-4ef6-4911-8ea1-4224617df55c	Owner Product Test Boutique	Owner Product Tester		0	Active	f	f	\N	0	0	9111111111		ownerproducttest@boutique.com	789 Test Lane		Test City	Test State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-18 18:02:01.357	10.00	0	0.00	0.00	0.00	f	f	t
-49421d96-d408-4133-b700-7977aabbf112	Wrong Boutique 1781805723100	Wrong Owner		0	Active	f	f	\N	0	0	9222222222		wrong1781805723100@boutique.com	1 Wrong St		Wrong City	Wrong State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-18 18:02:03.102	10.00	0	0.00	0.00	0.00	f	f	t
-aeebf623-d51b-4f89-bd8e-d28d83364469	Wrong Boutique 1781805791506	Wrong Owner		0	Active	f	f	\N	0	0	9222222222		wrong1781805791506@boutique.com	1 Wrong St		Wrong City	Wrong State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-18 18:03:11.507	10.00	0	0.00	0.00	0.00	f	f	t
-6900ca7f-05c5-4a4a-a636-8d1f9fc3eba8	Wishlist Test Boutique	Wishlist Owner		0	Active	f	f	\N	0	0	9555555551		wishlistowner@boutique.com	55 Wishlist Ave		Wish City	Wish State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-18 18:20:05.35	10.00	0	0.00	0.00	0.00	f	f	t
-416af8dc-b903-425c-92cd-f12ca2483386	Audit Boutique	Audit Owner		0	Active	f	f	\N	0	0	9888888881		auditowner@boutique.com	1 Audit St		Audit City	Audit State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-18 18:37:08.75	10.00	0	0.00	0.00	0.00	f	f	t
-af5c6060-19c5-4706-bef9-55ba9fd574a7	Audit Boutique B 1781807824326	Audit Owner B		0	Active	f	f	\N	0	0	9888888883		auditb1781807824326@boutique.com	2 Audit St		Audit City	Audit State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-18 18:37:10.138	10.00	0	0.00	0.00	0.00	f	f	t
-19859527-fe72-4cd4-99ab-dfc7c544be7f	Audit Boutique B 1781808669195	Audit Owner B		0	Active	f	f	\N	0	0	9888888883		auditb1781808669195@boutique.com	2 Audit St		Audit City	Audit State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-18 18:51:15.807	10.00	0	0.00	0.00	0.00	f	f	t
-8f5b1639-55db-4043-9069-d90579d02921	Audit Boutique B 1781809334074	Audit Owner B		0	Active	f	f	\N	0	0	9888888883		auditb1781809334074@boutique.com	2 Audit St		Audit City	Audit State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-18 19:02:17.47	10.00	0	0.00	0.00	0.00	f	f	t
-adace4fb-ac88-4f51-8e3d-02090b6b093d	Audit Boutique B 1781809480752	Audit Owner B		0	Active	f	f	\N	0	0	9888888883		auditb1781809480752@boutique.com	2 Audit St		Audit City	Audit State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-18 19:04:44.194	10.00	0	0.00	0.00	0.00	f	f	t
-c8bc3d3d-f4d3-4197-9592-4274146afaac	Wrong Boutique 1782103079902	Wrong Owner		0	Active	f	f	\N	0	0	9222222222		wrong1782103079902@boutique.com	1 Wrong St		Wrong City	Wrong State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-22 04:37:59.904	10.00	0	0.00	0.00	0.00	f	f	t
-ee732cec-30a1-4c83-9238-5cc412f364d8	Coupon Test Boutique	Coupon Owner		0	Active	f	f	\N	0	0	9999999999		coupon1782103293970@boutique.com	Test		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-22 04:41:33.972	10.00	0	0.00	0.00	0.00	f	f	t
-e4e28167-51e8-4ce9-826a-4c6f4449721c	Coupon Test Boutique	Coupon Owner		0	Active	f	f	\N	0	0	9999999999		coupon1782103626080@boutique.com	Test		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-22 04:47:06.083	10.00	0	0.00	0.00	0.00	f	f	t
-0f9b0f5a-ad9f-418f-b24c-bb20df336626	Coupon Test Boutique	Coupon Owner		0	Active	f	f	\N	0	0	9999999999		coupon1782103789664@boutique.com	Test		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-22 04:49:49.666	10.00	0	0.00	0.00	0.00	f	f	t
-41c3ef8d-4fba-4c34-8178-407099d4712f	Coupon Test Boutique	Coupon Owner		0	Active	f	f	\N	0	0	9999999999		coupon1782103808209@boutique.com	Test		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-22 04:50:08.211	10.00	0	0.00	0.00	0.00	f	f	t
-e348a642-ac02-419e-9c90-dd8ed38616bf	Coupon Test Boutique	Coupon Owner		0	Active	f	f	\N	0	0	9999999999		coupon1782109447118@boutique.com	Test		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-22 06:24:07.12	10.00	0	0.00	0.00	0.00	f	f	t
+COPY public.boutique_themes (id, business_id, "colorsLight", "colorsDark", typography, "spacingScale", "borderStyles", "elevationShadows", "animationScale", "accessibilityTheme", created_at, updated_at) FROM stdin;
+f00aaf09-9a86-4cc1-b383-3bc434603b1e	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	{"primary": "#4f46e5", "surface": "#ffffff", "secondary": "#10b981", "background": "#f9fafb"}	{"primary": "#6366f1", "surface": "#1f2937", "secondary": "#34d399", "background": "#111827"}	{"baseSize": "16px", "bodyFont": "Inter", "headingFont": "Playfair Display"}	{"lg": "24px", "md": "16px", "sm": "8px", "xs": "4px"}	{"radiusLg": "16px", "radiusMd": "8px", "radiusSm": "4px"}	{"low": "0 1px 2px rgba(0,0,0,0.05)", "medium": "0 4px 6px rgba(0,0,0,0.1)"}	{"duration": "0.2s"}	\N	2026-06-29 19:03:57.412	2026-06-29 19:04:04.941
 \.
 
 
 --
--- Data for Name: cart_items; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: boutiques; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.boutiques (id, name, owner_name, description, experience_years, status, featured_boutique, verified, owner_id, happy_clients, total_designs, mobile_number, whatsapp_number, email, full_address, area, city, state, pincode, google_maps_link, service_radius, open_days, opening_time, closing_time, weekly_holiday, services_offered, work_type_specialty, pickup_available, delivery_available, home_visit_available, appointment_booking_available, rush_order_available, starting_price, turnaround_time, logo_url, cover_image_url, gallery_urls, instagram_handle, facebook_page, website_link, verification_documents, payout_details, payout_status, internal_notes, is_deleted, deleted_at, rating, reviews_count, version, created_at, commission_rate, response_time_avg, wallet_balance, pending_payout, total_paid_out, is_frozen, is_suspended, subscription_enforcement, business_id) FROM stdin;
+2264d82c-69d2-48c6-bdbb-81146f0b4492	Antair Test Couture	Admin Owner		0	Active	f	f	\N	0	0	+919999999999		test@antair.com	Antair HQ, Bangalore		Bangalore	Karnataka								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-29 19:03:57.344	10.00	0	0.00	0.00	0.00	f	f	t	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b
+52ce0656-6d86-4e27-ba2d-58f09b95e7dd	Review Test Boutique	Review Owner		0	Active	f	f	\N	0	0	9999999999		review1782836957881@boutique.com	Test Address		Test City	Test State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-30 16:29:17.884	10.00	0	0.00	0.00	0.00	f	f	t	\N
+6447b13c-38b3-4e98-bb17-03e04d0f8d3e	Test Boutique	Test Owner		0	Active	f	f	\N	0	0	9999999999		test1782836957878@boutique.com	Test Address		Test City	Test State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-30 16:29:17.88	10.00	0	0.00	0.00	0.00	f	f	t	\N
+8639ba89-07d9-485e-bc3d-20f68e97658b	Stress Boutique 1782836957475	Stress Owner		0	Active	f	f	\N	0	0	999999957475		stress1782836957475@boutique.com	Stress Address		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-30 16:29:17.888	10.00	0	0.00	0.00	0.00	f	f	t	\N
+10eb5784-f69e-4085-8eaa-133c2f79d21a	Coupon Test Boutique	Coupon Owner		0	Active	f	f	\N	0	0	9999999999		coupon1782836957907@boutique.com	Test		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-30 16:29:17.909	10.00	0	0.00	0.00	0.00	f	f	t	\N
+b086a84e-c9a3-4dc8-8ede-aa698668a0b2	Tracking Test Boutique	Tracking Owner		0	Active	f	f	\N	0	0	9999999999		tracking1782836957974@boutique.com	Test Address		Test City	Test State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-06-30 16:29:17.977	10.00	0	0.00	0.00	0.00	f	f	t	\N
+d90b786b-7d93-4449-b5de-88b80f7537ab	Stress Boutique 1782876611834	Stress Owner		0	Active	f	f	\N	0	0	999999611834		stress1782876611834@boutique.com	Stress Address		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-07-01 03:30:13.5	10.00	0	0.00	0.00	0.00	f	f	t	\N
+cda137f3-6d97-4c4a-95d7-f0b9fb15d533	Test Boutique	Test Owner		0	Active	f	f	\N	0	0	9999999999		test1782876839161@boutique.com	Test Address		Test City	Test State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-07-01 03:33:59.162	10.00	0	0.00	0.00	0.00	f	f	t	\N
+7364b9da-43dd-4b71-9f6d-a7afb48cc091	Review Test Boutique	Review Owner		0	Active	f	f	\N	0	0	9999999999		review1782876839203@boutique.com	Test Address		Test City	Test State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-07-01 03:33:59.205	10.00	0	0.00	0.00	0.00	f	f	t	\N
+99ddf620-1225-4e84-b91a-36e85b487df7	Stress Boutique 1782876838261	Stress Owner		0	Active	f	f	\N	0	0	999999838261		stress1782876838261@boutique.com	Stress Address		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-07-01 03:33:59.245	10.00	0	0.00	0.00	0.00	f	f	t	\N
+0bc91246-24c6-4373-851f-d6c025d6a61d	Tracking Test Boutique	Tracking Owner		0	Active	f	f	\N	0	0	9999999999		tracking1782876839345@boutique.com	Test Address		Test City	Test State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-07-01 03:33:59.347	10.00	0	0.00	0.00	0.00	f	f	t	\N
+664f6ef7-a082-4dd9-a00c-1aa3e22a690c	Coupon Test Boutique	Coupon Owner		0	Active	f	f	\N	0	0	9999999999		coupon1782876839642@boutique.com	Test		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-07-01 03:33:59.643	10.00	0	0.00	0.00	0.00	f	f	t	\N
+f3a7ef2d-7ea5-43fc-8107-24f9bc7bf199	Coupon Test Boutique	Coupon Owner		0	Active	f	f	\N	0	0	9999999999		coupon1782961936487@boutique.com	Test		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-07-02 03:12:16.49	10.00	0	0.00	0.00	0.00	f	f	t	\N
+9c0180cc-8287-419a-a7de-f5961fcd0e01	Coupon Test Boutique	Coupon Owner		0	Active	f	f	\N	0	0	9999999999		coupon1782961996807@boutique.com	Test		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-07-02 03:13:16.809	10.00	0	0.00	0.00	0.00	f	f	t	\N
+19007c86-b45a-4dd7-be2d-bf38ed9dc2cc	Tracking Test Boutique	Tracking Owner		0	Active	f	f	\N	0	0	9999999999		tracking1782961996981@boutique.com	Test Address		Test City	Test State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-07-02 03:13:16.983	10.00	0	0.00	0.00	0.00	f	f	t	\N
+4079e784-770a-4c7d-9819-087e149278c1	Stress Boutique 1782961995437	Stress Owner		0	Active	f	f	\N	0	0	999999995437		stress1782961995437@boutique.com	Stress Address		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-07-02 03:13:20.343	10.00	0	0.00	0.00	0.00	f	f	t	\N
+75c477b0-23b1-4db3-93d1-e4abbcc2e985	Stress Boutique 1782962020011	Stress Owner		0	Active	f	f	\N	0	0	99999920011		stress1782962020011@boutique.com	Stress Address		City	State								{}	{}	f	f	f	f	f	0.00				{}				{}		Pending		f	\N	0.00	0	0	2026-07-02 03:13:45.063	10.00	0	0.00	0.00	0.00	f	f	t	\N
+\.
+
+
+--
+-- Data for Name: business_template_assignments; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.business_template_assignments (id, business_id, template_id, subscription_id, deployment_id, environment_id, assigned_by, assigned_at, status) FROM stdin;
+\.
+
+
+--
+-- Data for Name: businesses; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.businesses (id, tenant_id, name, niche_vertical, status, created_at, updated_at) FROM stdin;
+519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	b903e835-0537-48c6-aa57-a5f036ddb701	Antair Test Couture	Luxury Boutique	ACTIVE	2026-06-29 19:03:57.4	2026-06-29 19:03:57.4
+56d7ad74-3868-4611-9e2d-2b6766dfffa1	6875f9bf-1044-43d7-bf48-a49f4c7a1847	Test Business	ecommerce	ACTIVE	2026-07-01 03:30:07.196	2026-07-01 03:30:07.196
+a4c46810-595b-4eee-b9bc-0ba38f3dcf46	ea3ad905-8c0b-4f80-a815-369aa83ef534	Test Business	ecommerce	ACTIVE	2026-07-01 03:31:02.628	2026-07-01 03:31:02.628
+e2646d2f-b1a3-4a37-9043-4066ad2afae2	140cf49f-6639-48a4-a8ed-c907dc9e4721	Test Business	ecommerce	ACTIVE	2026-07-01 03:33:59.687	2026-07-01 03:33:59.687
+08d46255-fa3e-45f4-b0cb-84d1cd0069be	bb9f747c-330e-41c2-ac82-5c47f600ffad	Test Business	ecommerce	ACTIVE	2026-07-02 03:12:12.442	2026-07-02 03:12:12.442
+3db909ba-a83b-40ac-91ff-fe55a2c8d245	a56726e3-7058-43da-8b99-46d6993c3f72	Test Business	ecommerce	ACTIVE	2026-07-02 03:12:46.584	2026-07-02 03:12:46.584
+54768a5c-500b-4ee3-842c-d4e049f96b39	8889c040-02c7-415f-8027-d9df4054cff9	Test Business	ecommerce	ACTIVE	2026-07-02 03:13:17.693	2026-07-02 03:13:17.693
+39f549a2-03c1-409a-903e-f531d37bb750	d4704a98-7342-4a98-9bcb-7fadc813ea25	Test Business	ecommerce	ACTIVE	2026-07-02 03:13:42.401	2026-07-02 03:13:42.401
+\.
+
+
+--
+-- Data for Name: cart_items; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.cart_items (id, cart_id, product_id, variant_id, quantity, created_at) FROM stdin;
-e8390429-0edf-4419-986e-b01e04ffad77	f2b19d18-e008-4493-8e75-4986819d3aa5	eda35e98-7d92-455e-8f2c-89e6d3648f11	3a96d63b-93eb-4631-9619-7392e42a7709	1	2026-06-18 18:37:23.449
-1248dae4-ab84-4d6c-8cf9-9b3b108a1722	f2b19d18-e008-4493-8e75-4986819d3aa5	eda35e98-7d92-455e-8f2c-89e6d3648f11	d604659d-c292-4dd0-967d-e1611b0fb37c	15	2026-06-18 18:37:30.065
-98f29083-a6a8-4f98-bed8-56e8c9c26f44	f2b19d18-e008-4493-8e75-4986819d3aa5	eda35e98-7d92-455e-8f2c-89e6d3648f11	\N	1	2026-06-18 18:37:57.837
-b30e1bfb-2c32-489b-969f-1f0dfac0a36e	f2b19d18-e008-4493-8e75-4986819d3aa5	eda35e98-7d92-455e-8f2c-89e6d3648f11	\N	1	2026-06-18 18:37:58.429
-49a89f13-de2e-4fbc-83f7-d315ba4b10f4	6c599958-ba42-41ba-9ea6-7db5f756caf8	0e1a9224-820b-4e11-92c8-0f76c57eab3f	97d3cfa3-57b5-47e8-ae55-17631860babf	5	2026-06-18 18:51:35.435
-d0003717-3d98-4489-99aa-a13008635e6e	6c599958-ba42-41ba-9ea6-7db5f756caf8	e0c8a9b5-baac-4e90-9249-67c6d9fe659f	\N	1	2026-06-18 18:51:46.729
-05422c5e-d7b2-4d1e-b758-42e91e5b3de9	6c599958-ba42-41ba-9ea6-7db5f756caf8	136987c9-d75e-4b3e-8106-afcdce03dea9	\N	1	2026-06-18 18:52:14.995
-de09b27f-e99a-4d4b-a531-82589664c626	6c599958-ba42-41ba-9ea6-7db5f756caf8	136987c9-d75e-4b3e-8106-afcdce03dea9	\N	2	2026-06-18 18:52:15.505
-176a1f09-b688-48fc-b584-5aa1363ff7fe	009b1cb8-13e4-4a6a-9c28-9bbb0a253725	405e28d5-4e8b-46f0-8f7a-8f0582c438c3	743d5892-97a6-4d89-b5ff-810668b6c243	5	2026-06-18 18:58:47.926
-671ee07d-45c8-4b69-a974-bb86968e672f	009b1cb8-13e4-4a6a-9c28-9bbb0a253725	c8704420-9b8a-4ba0-a033-cc44c79b129e	\N	1	2026-06-18 18:58:53.876
-ebb5b3b1-84f5-4dc6-bb67-4f01d2e7b92a	009b1cb8-13e4-4a6a-9c28-9bbb0a253725	23e62d17-4dd4-42aa-a106-5d4f9ebba6fc	\N	1	2026-06-18 18:59:08.676
-704f1c4a-5e41-48d6-9b4a-24aa70a55c31	009b1cb8-13e4-4a6a-9c28-9bbb0a253725	23e62d17-4dd4-42aa-a106-5d4f9ebba6fc	\N	2	2026-06-18 18:59:08.928
-336f8903-45ee-4c17-b026-e14446e3bcd6	6189fe64-6b76-46b8-b198-673168de9664	50b5e987-1a09-4714-8293-501d38452549	e489bcf4-42bc-4a45-b0ed-7fdd8345ae52	5	2026-06-18 19:02:25.555
-6dbb4dde-48d5-403d-9493-2fbe6936cd4e	6189fe64-6b76-46b8-b198-673168de9664	16c6c907-ae69-46e6-b8fb-d6cc8470de7f	\N	1	2026-06-18 19:02:29.913
-5028ede5-6fc2-4d24-af6f-889b182f7998	3020af92-7a61-49df-911a-d31716af0fab	aa35c61c-9cf8-4669-a0d2-0e583774bc3f	66ecd178-f1ea-46ab-a38c-5cbcdc714f6e	5	2026-06-18 19:04:55.634
-81be5b0d-c422-4e32-9a1c-8a6a1ff84f75	3020af92-7a61-49df-911a-d31716af0fab	81b7df6a-5fa3-40f0-b361-bf0d9489fa0f	\N	1	2026-06-18 19:05:01.106
-81c44e4e-793a-4850-bf8f-60c8fefe5d29	3020af92-7a61-49df-911a-d31716af0fab	ec6195ef-4dda-4fab-a1f1-b10a23c376d9	\N	5	2026-06-18 19:05:09.624
-8efd4656-cc19-4ef5-bd53-cd600706c924	3020af92-7a61-49df-911a-d31716af0fab	e787b99c-23a4-40dd-b0e5-598467c46da8	c2af1f7b-96c4-48c7-a743-140a367eb2ba	1	2026-06-18 19:05:16.178
 \.
 
 
 --
--- Data for Name: carts; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: carts; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.carts (id, user_id, created_at, updated_at) FROM stdin;
-f2b19d18-e008-4493-8e75-4986819d3aa5	2d115048-c9d1-4a8a-abad-dbfe023b081c	2026-06-18 18:37:18.935	2026-06-18 18:37:18.935
-23f6f2c3-7fdc-4163-b36c-2cd72e2aea13	9249b3b6-c219-4c71-884a-c512bf257ecd	2026-06-18 18:37:45.185	2026-06-18 18:37:45.185
-6c599958-ba42-41ba-9ea6-7db5f756caf8	7235d5ec-662e-4d1a-9220-d5aec3df6f66	2026-06-18 18:51:31.003	2026-06-18 18:51:31.003
-e16a65d8-033e-43ce-9a55-3d9ca3fec8f8	73f26525-68f3-4a72-abc6-58f9ad8c17d3	2026-06-18 18:51:52.57	2026-06-18 18:51:52.57
-009b1cb8-13e4-4a6a-9c28-9bbb0a253725	b4ea6dd1-727e-4950-9cc3-709429d9d089	2026-06-18 18:58:45.365	2026-06-18 18:58:45.365
-5b3a34dc-c217-4f21-acd7-de36640f6e45	2d3265eb-1ddc-4ef2-8dfb-7da686576ba2	2026-06-18 18:58:58.422	2026-06-18 18:58:58.422
-6189fe64-6b76-46b8-b198-673168de9664	c60f6ccc-fd11-4b3e-99fb-08d2a1aa563d	2026-06-18 19:02:24.018	2026-06-18 19:02:24.018
-3c7ef12a-eb02-4a63-aea4-28b42f201a42	1de8d272-1b64-4c37-a054-588b565675f8	2026-06-18 19:02:33.52	2026-06-18 19:02:33.52
-3020af92-7a61-49df-911a-d31716af0fab	34ba5271-bc6b-4310-8d71-5d1e986724cb	2026-06-18 19:04:53.149	2026-06-18 19:04:53.149
-ff611346-49cb-49e0-a935-802220238a34	12b8ad26-5404-42c8-add0-87802fc31f4e	2026-06-18 19:05:05.149	2026-06-18 19:05:05.149
-12de19bd-0254-4ebd-8a75-328dda5d9f5d	e00770ea-ef70-470f-9b29-1a5d6df59470	2026-06-25 07:02:35.996	2026-06-25 07:02:35.996
+9c2c0ed7-6fe4-4dd7-9a13-1d5ee83191d8	92720bc1-0ccc-4a03-aa9d-931df0ffb1de	2026-06-30 16:29:19.239	2026-06-30 16:29:19.239
 \.
 
 
 --
--- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.categories (id, name, description, image, sort_order, is_active, created_at, updated_at) FROM stdin;
-b4566aff-8c5b-4a21-949d-ad00efd8b4cd	Sherwani & Indo-Western	Traditional sherwanis, Indo-western suits for grooms and guests	\N	1	t	2026-06-18 16:30:15.727	2026-06-18 16:30:15.727
-410d9117-e13d-4669-96cb-b74026bdd8fa	Kurta & Ethnic Sets	Kurtas, pajamas, and coordinated ethnic sets for men	\N	3	t	2026-06-18 16:30:15.727	2026-06-18 16:30:15.727
-6c781dcc-4836-4a88-b444-e0cc35d6fe40	Western & Indo-Western	Western suits, gowns, and fusion wear	\N	5	t	2026-06-18 16:30:15.727	2026-06-18 16:30:15.727
-c6310a97-b478-4175-aa80-0ac8a98df22a	Kids Wear	Traditional and western wear for children	\N	6	t	2026-06-18 16:30:15.727	2026-06-18 16:30:15.727
-e15d73aa-0bc6-4ce1-8fa0-b5ca874a65cf	Lehenga & Bridal Wear	Bridal lehengas, reception gowns, and wedding trousseau	\N	2	t	2026-06-18 16:30:15.727	2026-06-18 16:30:15.727
-2419c616-444d-4e19-9244-ff28eb52c81d	Accessories	Turbans, stoles, jewelry, and other fashion accessories	\N	7	t	2026-06-18 16:30:15.727	2026-06-18 16:30:15.727
-5b416adc-f64a-420e-8a50-30c4accf7ca8	Saree & Blouse	Handloom sarees, designer blouses, and saree draping	\N	4	t	2026-06-18 16:30:15.727	2026-06-18 16:30:15.727
-4c568875-d770-4045-b0de-1e5bdfa743c7	TestCat 1781805715884	Owner product test category	\N	0	t	2026-06-18 18:01:58.641	2026-06-18 18:01:58.641
-6f36e050-bde1-4390-aaaa-704d035a61e6	TestCat 1781805787366	Owner product test category	\N	0	t	2026-06-18 18:03:09.551	2026-06-18 18:03:09.551
-ed7fd462-a008-4f79-9af5-306612f4ffd0	WishlistCat 1781806799102	\N	\N	0	t	2026-06-18 18:20:02.494	2026-06-18 18:20:02.494
-7d82019f-54b6-47b2-af9c-53e5b74da244	WishlistCat 1781807120927	\N	\N	0	t	2026-06-18 18:25:24.367	2026-06-18 18:25:24.367
-392abf64-af32-4e93-99ff-0e7243b54cfc	WishlistCat 1781807140175	\N	\N	0	t	2026-06-18 18:25:43.411	2026-06-18 18:25:43.411
-0411488f-4570-4640-9531-fd242a384295	AuditCat 1781807824326	\N	\N	0	t	2026-06-18 18:37:07.081	2026-06-18 18:37:07.081
-bde29a4d-e296-4b90-9422-8a8527e427ca	AuditCat 1781808669195	\N	\N	0	t	2026-06-18 18:51:12.634	2026-06-18 18:51:12.634
-c9430425-b8a9-490e-8ea3-185fc4ef724f	AuditCat 1781809114924	\N	\N	0	t	2026-06-18 18:58:36.712	2026-06-18 18:58:36.712
-42b3ee53-391f-441b-b8b6-73ecd43797c5	AuditCat 1781809334074	\N	\N	0	t	2026-06-18 19:02:15.92	2026-06-18 19:02:15.92
-90a299fc-ffdb-45ca-ac79-76144b32e87c	AuditCat 1781809480752	\N	\N	0	t	2026-06-18 19:04:42.642	2026-06-18 19:04:42.642
-f538a3af-2b1b-4df1-97d0-560ef35591cf	TestCat 1782103075444	Owner product test category	\N	0	t	2026-06-22 04:37:57.632	2026-06-22 04:37:57.632
-6fe04503-3c5c-4299-83c4-5d197647938f	CouponCat1782103294561	\N	\N	0	t	2026-06-22 04:41:34.563	2026-06-22 04:41:34.563
-4651ac3a-c744-4a22-ab99-01168f89d1d0	CouponCat1782103626646	\N	\N	0	t	2026-06-22 04:47:06.648	2026-06-22 04:47:06.648
-5eec108d-0ff3-4117-9589-8aca4546a828	CouponCat1782103790210	\N	\N	0	t	2026-06-22 04:49:50.212	2026-06-22 04:49:50.212
-bd7abb45-4fa2-49ba-935e-05aec1ebbf7f	CouponCat1782103808783	\N	\N	0	t	2026-06-22 04:50:08.784	2026-06-22 04:50:08.784
-1d4bfbc7-154d-4ed8-bed0-2a6a2c54e794	CouponCat1782109447945	\N	\N	0	t	2026-06-22 06:24:07.947	2026-06-22 06:24:07.947
-24fad22e-2b35-4ab8-95cc-50de54b4abab	StressCat1782112020354	\N	\N	0	t	2026-06-22 07:07:04.214	2026-06-22 07:07:04.214
+63447bc2-9550-40af-a4c4-c9b73d510e90	Sherwani & Indo-Western	Traditional sherwanis, Indo-western suits for grooms and guests	\N	1	t	2026-06-29 19:03:40.435	2026-06-29 19:03:40.435
+9cd74113-8e19-48ba-a85f-3a19c6767e21	Lehenga & Bridal Wear	Bridal lehengas, reception gowns, and wedding trousseau	\N	2	t	2026-06-29 19:03:40.435	2026-06-29 19:03:40.435
+cec01ea9-4a81-43b6-8431-50d0a11f250a	Saree & Blouse	Handloom sarees, designer blouses, and saree draping	\N	4	t	2026-06-29 19:03:40.435	2026-06-29 19:03:40.435
+fcd534dd-4fd3-45f6-98ee-3731e23284cf	Kids Wear	Traditional and western wear for children	\N	6	t	2026-06-29 19:03:40.435	2026-06-29 19:03:40.435
+29ca0d6b-b644-48f6-8a9e-5d65513c1e57	Western & Indo-Western	Western suits, gowns, and fusion wear	\N	5	t	2026-06-29 19:03:40.435	2026-06-29 19:03:40.435
+fef8ff5b-1f95-470e-a00a-334d9d926f81	Accessories	Turbans, stoles, jewelry, and other fashion accessories	\N	7	t	2026-06-29 19:03:40.435	2026-06-29 19:03:40.435
+54b74c58-4940-40c8-a1c5-702508eae6a3	Kurta & Ethnic Sets	Kurtas, pajamas, and coordinated ethnic sets for men	\N	3	t	2026-06-29 19:03:40.435	2026-06-29 19:03:40.435
+1ac5511f-b3a9-40a1-9ea3-89e34522e9d8	StressCat1782836957475	\N	\N	0	t	2026-06-30 16:29:17.944	2026-06-30 16:29:17.944
+80bbd89a-37d6-4048-8056-ce7f7a69dfba	CouponCat1782836957950	\N	\N	0	t	2026-06-30 16:29:17.952	2026-06-30 16:29:17.952
+5fc3b997-1b54-4d31-9beb-be79e925b5ec	StressCat1782876838261	\N	\N	0	t	2026-07-01 03:33:59.328	2026-07-01 03:33:59.328
+e0183a2c-3320-48c9-8dd3-fa2d41722fc8	CouponCat1782876839680	\N	\N	0	t	2026-07-01 03:33:59.682	2026-07-01 03:33:59.682
+169bed3d-6f8a-418a-8424-1512ed9392b0	CouponCat1782961936637	\N	\N	0	t	2026-07-02 03:12:16.639	2026-07-02 03:12:16.639
+feca0aa7-54c3-4af8-b605-8d6197836968	CouponCat1782961996941	\N	\N	0	t	2026-07-02 03:13:16.942	2026-07-02 03:13:16.942
+07429631-abb8-4f6f-991f-cd05e7b232cd	StressCat1782961995437	\N	\N	0	t	2026-07-02 03:13:20.434	2026-07-02 03:13:20.434
+5e31a435-6d74-4518-bd78-791e47754241	StressCat1782962020011	\N	\N	0	t	2026-07-02 03:13:45.157	2026-07-02 03:13:45.157
 \.
 
 
 --
--- Data for Name: commerce_order_histories; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: certification_chat_messages; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.certification_chat_messages (id, certification_id, role, message, created_at) FROM stdin;
+6e1084a2-66bd-40f4-9006-8acbb739ec44	b2fc7514-09f6-4474-bf3d-22581a06f1f4	user	Why did my performance score drop?	2026-06-29 20:27:09.332
+137ff872-196f-48d2-a79e-9215a92d54c0	b2fc7514-09f6-4474-bf3d-22581a06f1f4	assistant	I've analyzed the QA reports for release test-qa-release-tag. Your overall score is 89.0/100. This is primarily affected by the following sections: seo agent (50), brand agent (80). I detected 5 active issue compliance warnings. Please review the details list in the dashboard.	2026-06-29 20:27:09.335
+777afc09-2f09-455d-acee-28cce50fd34b	144921f2-f964-47d2-ac30-27a92018fdb0	user	Why did my performance score drop?	2026-06-29 20:34:11.218
+96987765-1a96-403d-a54a-26b09c2b45b0	144921f2-f964-47d2-ac30-27a92018fdb0	assistant	I've analyzed the QA reports for release test-qa-release-tag. Your overall score is 89.0/100. This is primarily affected by the following sections: seo agent (50), brand agent (80). I detected 5 active issue compliance warnings. Please review the details list in the dashboard.	2026-06-29 20:34:11.22
+6213a2fe-2b02-4b16-a2f2-f09724b5decb	1f3c8f96-bbc7-4ad2-a575-e5bac996a548	user	Explain my remaining warnings	2026-06-30 14:58:27.53
+e1a679a5-2af6-48f1-9dcb-387117cbed9a	1f3c8f96-bbc7-4ad2-a575-e5bac996a548	assistant	I've analyzed the QA reports for release v1.0.62. Your overall score is 81.0/100. This is primarily affected by the following sections: seo agent (75), brand agent (80), security agent (80), accessibility agent (70). I detected 10 active issue compliance warnings. Please review the details list in the dashboard.	2026-06-30 14:58:27.535
+c72f721c-bf47-43e0-9581-91c06b3f586e	bf08378f-bcf5-4055-b9a5-aa15dd05a647	user	Why did my performance score drop?	2026-06-30 15:00:35.829
+74d8752a-79b6-45b3-ba86-e6145ebb7b14	bf08378f-bcf5-4055-b9a5-aa15dd05a647	assistant	I've analyzed the QA reports for release test-qa-release-tag. Your overall score is 89.0/100. This is primarily affected by the following sections: seo agent (50), brand agent (80). I detected 5 active issue compliance warnings. Please review the details list in the dashboard.	2026-06-30 15:00:35.832
+2536d8d8-c1b7-46ca-8f1c-d2d898f81e14	5f0cab8c-733b-4a22-be25-ee13fdf34b93	user	Explain my remaining warnings	2026-07-02 04:31:03.782
+5ee7822a-01b4-4f2a-a5ee-1e57c60af3a6	5f0cab8c-733b-4a22-be25-ee13fdf34b93	assistant	I've analyzed the QA reports for release v1.0.62. Your overall score is 83.8/100. This is primarily affected by the following sections: brand agent (80), security agent (80), performance agent (85), accessibility agent (70). I detected 9 active issue compliance warnings. Please review the details list in the dashboard.	2026-07-02 04:31:03.785
+\.
+
+
+--
+-- Data for Name: certification_profiles; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.certification_profiles (id, business_id, name, is_active, "agentWeights", thresholds, created_at, updated_at) FROM stdin;
+d67ab1e1-4b22-4aa5-b21b-1507307e85fa	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	Standard Boutique QA Profile	t	{"seo_agent": 0.2, "brand_agent": 0.05, "ux_ui_agent": 0.1, "content_agent": 0.05, "security_agent": 0.15, "responsive_agent": 0.1, "performance_agent": 0.15, "accessibility_agent": 0.2}	{"minOverall": 75, "minSeoScore": 80, "minAccessibilityScore": 85}	2026-06-29 19:04:05.092	2026-06-29 20:26:19.147
+\.
+
+
+--
+-- Data for Name: certification_workflow_definitions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.certification_workflow_definitions (id, name, description, version, is_enabled, target_type, stages, rollback_policy, created_at, updated_at) FROM stdin;
+24560947-68ee-42b9-8c0d-2b17ba85445a	Default Storefront QA Certification	Dynamic multitenant storefront parallel verification workflow.	v1.0.0	t	WEBSITE	[{"stageId": "load_release", "timeout": 5000, "agentKey": null, "parallel": false, "dependsOn": [], "stageName": "Immutable Release Loading", "retryPolicy": {"backoffMs": 1000, "maxAttempts": 3}, "outputSchema": {}, "executionOrder": 1}, {"stageId": "parallel_audits", "timeout": 15000, "agentKey": "ALL_ENABLED_AGENTS", "parallel": true, "dependsOn": ["load_release"], "stageName": "Multi-Agent Quality Checkers", "retryPolicy": {"backoffMs": 2000, "maxAttempts": 2}, "outputSchema": {}, "executionOrder": 2}, {"stageId": "visual_review", "timeout": 20000, "agentKey": null, "parallel": false, "dependsOn": ["parallel_audits"], "stageName": "AI Headless Visual Reviewer", "retryPolicy": {"backoffMs": 1000, "maxAttempts": 1}, "outputSchema": {}, "executionOrder": 3}, {"stageId": "scoring_engine", "timeout": 5000, "agentKey": null, "parallel": false, "dependsOn": ["visual_review"], "stageName": "Rules Engine & Weighted Scoring", "retryPolicy": {"backoffMs": 500, "maxAttempts": 3}, "outputSchema": {}, "executionOrder": 4}]	{"autoRollbackOnCriticalFailure": false}	2026-06-29 19:04:05.096	2026-06-29 20:26:19.15
+\.
+
+
+--
+-- Data for Name: certification_workflows; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.certification_workflows (id, business_id, release_tag, definition_id, status, progress, current_stage, execution_history, created_at, updated_at) FROM stdin;
+097a5db9-3383-4b25-adc9-85e650c146b2	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	24560947-68ee-42b9-8c0d-2b17ba85445a	COMPLETED	100	COMPLETE	[{"logs": "Successfully verified release configuration snapshot. Pages Count: 1", "status": "COMPLETED", "stageId": "load_release", "duration": 1, "startedAt": "2026-07-02T04:31:01.762Z", "finishedAt": "2026-07-02T04:31:01.763Z", "retryCount": 0}, {"logs": "Completed parallel verification checkers.", "status": "COMPLETED", "stageId": "parallel_audits", "duration": 2, "startedAt": "2026-07-02T04:31:01.763Z", "finishedAt": "2026-07-02T04:31:01.765Z", "retryCount": 0}, {"logs": "Completed headless layout review.", "status": "COMPLETED", "stageId": "visual_review", "duration": 1, "startedAt": "2026-07-02T04:31:01.765Z", "finishedAt": "2026-07-02T04:31:01.766Z", "retryCount": 0}, {"logs": "Weighted scoring engine compiled successfully.", "status": "COMPLETED", "stageId": "scoring_engine", "duration": 12, "startedAt": "2026-07-02T04:31:01.766Z", "finishedAt": "2026-07-02T04:31:01.778Z", "retryCount": 0}]	2026-07-02 04:31:01.762	2026-07-02 04:31:01.78
+fe2010a0-8c4d-4a12-a2bb-d39a7a18ca44	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	24560947-68ee-42b9-8c0d-2b17ba85445a	COMPLETED	100	COMPLETE	[{"logs": "Successfully verified release configuration snapshot. Pages Count: 1", "status": "COMPLETED", "stageId": "load_release", "duration": 4, "startedAt": "2026-07-02T04:30:59.672Z", "finishedAt": "2026-07-02T04:30:59.676Z", "retryCount": 0}, {"logs": "Completed parallel verification checkers.", "status": "COMPLETED", "stageId": "parallel_audits", "duration": 7, "startedAt": "2026-07-02T04:30:59.676Z", "finishedAt": "2026-07-02T04:30:59.683Z", "retryCount": 0}, {"logs": "Completed headless layout review.", "status": "COMPLETED", "stageId": "visual_review", "duration": 1, "startedAt": "2026-07-02T04:30:59.683Z", "finishedAt": "2026-07-02T04:30:59.684Z", "retryCount": 0}, {"logs": "Weighted scoring engine compiled successfully.", "status": "COMPLETED", "stageId": "scoring_engine", "duration": 36, "startedAt": "2026-07-02T04:30:59.684Z", "finishedAt": "2026-07-02T04:30:59.720Z", "retryCount": 0}]	2026-07-02 04:30:59.668	2026-07-02 04:30:59.721
+\.
+
+
+--
+-- Data for Name: cms_ai_agents; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_ai_agents (id, name, key, description, category, source, source_id, provider_id, model, system_prompt, is_enabled, execution_order, dependencies, timeout, retry_policy, version, health_status, metrics, metadata, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_ai_builders; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_ai_builders (id, key, name, logo, provider, model, "promptFormat", "systemPrompt", temperature, "maxTokens", supports_markdown, supports_streaming, supports_files, supports_images, supports_thinking, status, display_order, created_at, updated_at) FROM stdin;
+f958a865-08c8-4ae9-a33e-5b42628df5f4	claude-code	Claude Code	\N	Anthropic	claude-sonnet-4-20250514	markdown	\N	0.7	8192	t	t	t	f	t	ACTIVE	1	2026-06-30 18:14:09.157	2026-06-30 18:14:09.157
+204f446c-fde4-4277-9bba-ed6c5d02d8e5	opencode	OpenCode	\N	OpenCode	deepseek-v4	markdown	\N	0.7	8192	t	t	t	f	t	ACTIVE	2	2026-06-30 18:14:09.167	2026-06-30 18:14:09.167
+94d6c464-3ba7-4174-9326-075910b47274	cursor	Cursor	\N	Anthropic/OpenAI	claude-sonnet-4-20250514	markdown	\N	0.7	8192	t	f	t	f	f	ACTIVE	3	2026-06-30 18:14:09.169	2026-06-30 18:14:09.169
+55d53639-17d9-40ce-8dd6-c0dbe271d4b4	gemini-cli	Gemini CLI	\N	Google	gemini-2.5-pro	markdown	\N	0.7	8192	t	t	t	f	f	ACTIVE	4	2026-06-30 18:14:09.172	2026-06-30 18:14:09.172
+3882fb7d-d11b-40a0-91f3-52da9d589b11	chatgpt	ChatGPT	\N	OpenAI	gpt-4o	markdown	\N	0.7	4096	t	t	t	t	f	ACTIVE	5	2026-06-30 18:14:09.175	2026-06-30 18:14:09.175
+83ab7544-9a39-4098-add5-3fe61938b273	bolt	Bolt	\N	Bolt	bolt-default	markdown	\N	0.7	4096	t	f	f	f	f	ACTIVE	6	2026-06-30 18:14:09.178	2026-06-30 18:14:09.178
+289e300c-95c2-4059-b460-f1d85b1111de	lovable	Lovable	\N	Lovable	lovable-default	markdown	\N	0.7	4096	t	f	f	f	f	ACTIVE	7	2026-06-30 18:14:09.18	2026-06-30 18:14:09.18
+a7ba0841-a1f8-48c5-b7b0-bacd2e3b4dff	v0	v0	\N	Vercel	v0-default	markdown	\N	0.7	4096	t	f	f	f	f	ACTIVE	8	2026-06-30 18:14:09.182	2026-06-30 18:14:09.182
+4ee944dc-2bbd-432f-b5d6-ff200d581276	firebase-ai-studio	Firebase AI Studio	\N	Google	gemini-2.5-pro	markdown	\N	0.7	8192	t	t	f	f	f	ACTIVE	9	2026-06-30 18:14:09.185	2026-06-30 18:14:09.185
+daa778b7-2bee-4e6e-8ecd-f2f03157c087	openrouter	OpenRouter	\N	OpenRouter	multi-model	markdown	\N	0.7	4096	t	t	f	f	f	ACTIVE	10	2026-06-30 18:14:09.188	2026-06-30 18:14:09.188
+39b8a4e9-6a19-485b-979c-9b158c599b1e	test-builder	Test Builder	\N	Test	test-model	markdown	\N	0.7	4096	t	f	f	f	f	ACTIVE	99	2026-07-02 03:12:11.136	2026-07-02 03:12:11.136
+83450e64-873b-40b2-a3ca-190da937e582	temp-test-builder	Temp Test Builder	\N	Test	test	markdown	\N	0.5	2048	t	f	f	f	f	ACTIVE	100	2026-07-02 03:13:00.438	2026-07-02 03:13:00.438
+\.
+
+
+--
+-- Data for Name: cms_ai_costs; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_ai_costs (id, provider_id, agent_key, execution_id, cost, currency, description, category, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_ai_execution_steps; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_ai_execution_steps (id, execution_id, agent_key, agent_name, status, input_payload, output_payload, tokens_used, latency_ms, retry_count, error_message, started_at, completed_at, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_ai_providers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_ai_providers (id, name, key, provider, model, base_url, api_key, temperature, max_tokens, supports_streaming, supports_thinking, is_enabled, priority, cost_per_million_tokens, rate_limit, retry_policy, timeout, last_health_check, health_status, health_message, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_ai_settings; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_ai_settings (id, key, value, category, description, updated_at, created_at) FROM stdin;
+ad0c7885-69a3-4d73-9dae-4b7dc9ac124f	default_provider	"gemini"	provider	Default AI provider	2026-07-01 17:36:44.687	2026-07-01 17:36:44.687
+6726dca3-c13c-4608-b856-f7888277e09a	default_model	"gemini-1.5-pro"	provider	Default AI model	2026-07-01 17:36:44.74	2026-07-01 17:36:44.74
+fe2c63d3-0751-4773-a1ef-df5fd5dcff16	max_tokens_per_request	4096	limits	Maximum tokens per request	2026-07-01 17:36:44.746	2026-07-01 17:36:44.746
+a286fc94-ad8c-453b-b2f1-53339de040c4	rate_limit_requests_per_minute	60	limits	API rate limit	2026-07-01 17:36:44.75	2026-07-01 17:36:44.75
+61f0bc76-d7a1-42ee-a28c-e4548a04d332	max_retries	3	retry	Maximum retry attempts	2026-07-01 17:36:44.755	2026-07-01 17:36:44.755
+f52d7011-f485-44d7-b448-146f0c808758	retry_backoff_ms	1000	retry	Retry backoff in milliseconds	2026-07-01 17:36:44.761	2026-07-01 17:36:44.761
+9f73bb7a-4970-4824-b9de-f87c606e6830	streaming_enabled	true	features	Enable streaming by default	2026-07-01 17:36:44.766	2026-07-01 17:36:44.766
+14ceffce-9eda-47c2-88d7-4857f9767a64	thinking_enabled	false	features	Enable thinking/reasoning mode	2026-07-01 17:36:44.771	2026-07-01 17:36:44.771
+917a0937-f1a3-4667-99e9-7024277e9b7b	cache_ttl_seconds	300	cache	AI cache TTL in seconds	2026-07-01 17:36:44.775	2026-07-01 17:36:44.775
+08c207bd-09e3-441a-83f6-5da715f17db0	log_level	"INFO"	logging	AI logging level	2026-07-01 17:36:44.781	2026-07-01 17:36:44.781
+9a85f6dd-aa09-4d6f-bcec-2e3a30d00d17	health_check_interval_minutes	5	health	Provider health check interval	2026-07-01 17:36:44.786	2026-07-01 17:36:44.786
+a7eec355-377e-45f8-9162-92ca96c94302	cost_tracking_enabled	true	cost	Enable cost tracking	2026-07-01 17:36:44.789	2026-07-01 17:36:44.789
+dd8de7c4-4bad-4d90-9d46-c716b405d838	usage_tracking_enabled	true	usage	Enable usage tracking	2026-07-01 17:36:44.797	2026-07-01 17:36:44.797
+f1e499eb-d306-4bf6-b71f-5b4a73370e74	site_name	"Antaire CMS"	general	Site name	2026-07-01 17:51:26.404	2026-07-01 17:51:26.404
+f2a76f36-bc93-4f89-b1c4-cb5e3dc5f785	site_description	"Enterprise CMS Platform"	general	Site description	2026-07-01 17:51:26.521	2026-07-01 17:51:26.521
+cc3c2782-d552-498f-acca-d79d267f678c	support_email	"support@antaire.io"	general	Support email address	2026-07-01 17:51:26.53	2026-07-01 17:51:26.53
+489b3a42-6d4e-4754-8834-47cff1e7c300	support_phone	""	general	Support phone number	2026-07-01 17:51:26.537	2026-07-01 17:51:26.537
+c0f640a4-42c7-42da-8f80-7b990cc4800d	company_name	"Antaire"	general	Company name	2026-07-01 17:51:26.555	2026-07-01 17:51:26.555
+841827ae-5d57-477d-bda8-6d553e831eb4	company_address	""	general	Company address	2026-07-01 17:51:26.565	2026-07-01 17:51:26.565
+5ac0206f-fb9f-45da-a698-80d7c793f9d1	platform_version	"1.0.0"	general	Platform version	2026-07-01 17:51:26.575	2026-07-01 17:51:26.575
+b619c8c1-65ea-43de-be18-bae45bb476d0	license_key	""	general	License key	2026-07-01 17:51:26.582	2026-07-01 17:51:26.582
+82eddec6-3db3-4928-bd49-6db26b2b84c6	smtp_host	""	smtp	SMTP server hostname	2026-07-01 17:51:26.589	2026-07-01 17:51:26.589
+930474c8-30f2-49cb-9280-256b83e2041f	smtp_port	587	smtp	SMTP server port	2026-07-01 17:51:26.595	2026-07-01 17:51:26.595
+2cd1db08-f893-4004-b552-e786f735da85	smtp_secure	false	smtp	SMTP use TLS	2026-07-01 17:51:26.605	2026-07-01 17:51:26.605
+706889f3-3ffb-4eeb-ac82-9851d13436f2	smtp_user	""	smtp	SMTP username	2026-07-01 17:51:26.612	2026-07-01 17:51:26.612
+df232282-c50a-4a9c-9a33-70ce012ee94e	smtp_pass	""	smtp	SMTP password	2026-07-01 17:51:26.62	2026-07-01 17:51:26.62
+864f1ce6-0190-48da-aea1-d080002d3362	smtp_from_name	"Antaire CMS"	smtp	SMTP from name	2026-07-01 17:51:26.627	2026-07-01 17:51:26.627
+f1750935-d723-4bf8-b1dc-c468e37fb05b	smtp_from_email	"noreply@antaire.io"	smtp	SMTP from email	2026-07-01 17:51:26.637	2026-07-01 17:51:26.637
+8a532ffe-2c2f-4d74-9cfd-12e092d1c3b2	redis_url	""	redis	Redis connection URL	2026-07-01 17:51:26.644	2026-07-01 17:51:26.644
+c767c525-e73d-4246-911f-2d9c56fce2fa	redis_cache_ttl	300	redis	Default Redis cache TTL (seconds)	2026-07-01 17:51:26.654	2026-07-01 17:51:26.654
+d8ed40c7-e739-4312-aae1-204f0b0e16dd	queue_default_job_timeout	60000	queue	Default job timeout (ms)	2026-07-01 17:51:26.66	2026-07-01 17:51:26.66
+bd94dbf7-c05b-4ee2-8ebb-1c802d45ac23	queue_max_concurrent	5	queue	Max concurrent jobs	2026-07-01 17:51:26.667	2026-07-01 17:51:26.667
+580bd5bf-ac20-4037-baf1-b6448a3d2309	rate_limit_window_ms	900000	security	Rate limit window (ms)	2026-07-01 17:51:26.672	2026-07-01 17:51:26.672
+ae40af16-ff25-4a8e-aedb-7149e977ef5f	rate_limit_max_requests	500	security	Max requests per window	2026-07-01 17:51:26.679	2026-07-01 17:51:26.679
+b9a3aa9a-046a-4ee7-82e7-72c5da7f180c	jwt_expiry_hours	24	security	JWT token expiry (hours)	2026-07-01 17:51:26.687	2026-07-01 17:51:26.687
+5d584d3f-2648-4275-ac23-3634f127113c	cors_allowed_origins	"*"	security	Allowed CORS origins	2026-07-01 17:51:26.695	2026-07-01 17:51:26.695
+5fca08ae-0423-4259-86de-e64b187fa275	session_timeout_minutes	60	security	Session timeout (minutes)	2026-07-01 17:51:26.716	2026-07-01 17:51:26.716
+dc8b217c-f7d2-4929-93e7-b2eae13444d0	backup_enabled	false	backup	Enable automated backups	2026-07-01 17:51:26.725	2026-07-01 17:51:26.725
+2c4c09bc-10cc-47e3-94c2-9cd6d0e798fa	backup_schedule_cron	"0 2 * * *"	backup	Backup schedule (cron)	2026-07-01 17:51:26.733	2026-07-01 17:51:26.733
+e839d5b3-da03-44d4-95bc-2ef967b900aa	backup_retention_days	30	backup	Backup retention (days)	2026-07-01 17:51:26.741	2026-07-01 17:51:26.741
+ad9850d9-908f-4295-8b40-0bba1c6ece2a	backup_storage_path	""	backup	Backup storage path	2026-07-01 17:51:26.749	2026-07-01 17:51:26.749
+8c866614-f89e-46a8-9c2d-11cb7d9366d0	maintenance_mode	false	maintenance	Enable maintenance mode	2026-07-01 17:51:26.756	2026-07-01 17:51:26.756
+77fbcce0-f919-4439-900b-c06b97f73149	maintenance_message	"Under maintenance"	maintenance	Maintenance mode message	2026-07-01 17:51:26.763	2026-07-01 17:51:26.763
+dd77aaf4-0f01-4db2-98cd-1fb80f98548f	maintenance_scheduled_start	""	maintenance	Scheduled maintenance start	2026-07-01 17:51:26.77	2026-07-01 17:51:26.77
+3c59b377-df15-4a94-b2be-eb7cdb152cb4	maintenance_scheduled_end	""	maintenance	Scheduled maintenance end	2026-07-01 17:51:26.775	2026-07-01 17:51:26.775
+e10f55c6-f680-4fbe-9d5a-d20318b31d07	storage_provider	"auto"	storage	Default storage provider	2026-07-01 17:51:26.782	2026-07-01 17:51:26.782
+e889945c-83d0-4bf7-87c5-e0313017152c	storage_region	""	storage	Storage bucket region	2026-07-01 17:51:26.789	2026-07-01 17:51:26.789
+5fb9400a-81b0-480b-95a7-c6c7c2bd7ff5	storage_bucket	""	storage	Default storage bucket	2026-07-01 17:51:26.795	2026-07-01 17:51:26.795
+136ed3f9-c723-437f-9a7e-cceb603a8b4f	monitoring_retention_days	90	monitoring	Metrics retention (days)	2026-07-01 17:51:26.811	2026-07-01 17:51:26.811
+6494d714-a243-4b68-9016-261effe2bb7b	analytics_default_tracking_id	""	analytics	Default Google Analytics ID	2026-07-01 17:51:26.819	2026-07-01 17:51:26.819
+e07e40db-6128-452f-946b-39b1af5fcc3f	analytics_default_fb_pixel	""	analytics	Default Facebook Pixel ID	2026-07-01 17:51:26.826	2026-07-01 17:51:26.826
+a2af7a4d-81a2-4685-a478-7d4e17873c52	localization_default_language	"en"	localization	Default system language	2026-07-01 17:51:26.832	2026-07-01 17:51:26.832
+a9a216e6-1cf2-4f24-b04f-0b76d4149cce	localization_default_currency	"INR"	localization	Default currency	2026-07-01 17:51:26.84	2026-07-01 17:51:26.84
+c08a6dc1-37ec-4265-afc0-13e1e7606012	localization_default_timezone	"Asia/Kolkata"	localization	Default timezone	2026-07-01 17:51:26.847	2026-07-01 17:51:26.847
+21e2ae39-e817-4300-9be8-4e29bc4d97d5	integration_webhook_retry_count	3	integration	Webhook retry count	2026-07-01 17:51:26.856	2026-07-01 17:51:26.856
+cca601c1-7590-4db7-b585-9d167fbf4181	integration_webhook_timeout_ms	10000	integration	Webhook timeout (ms)	2026-07-01 17:51:26.861	2026-07-01 17:51:26.861
+f9fc5a8d-6b8d-4705-a7d6-0e6d226b666f	performance_cdn_enabled	false	performance	Enable CDN	2026-07-01 17:51:26.871	2026-07-01 17:51:26.871
+c8daa054-6ee7-40ba-a65f-ae9c8665d470	performance_cdn_url	""	performance	CDN base URL	2026-07-01 17:51:26.877	2026-07-01 17:51:26.877
+2c8712b8-d2b5-4cac-8d94-781f7b1bf268	performance_image_quality	80	performance	Image compression quality	2026-07-01 17:51:26.894	2026-07-01 17:51:26.894
+42dbb1ba-a994-4c21-9757-435a58030739	performance_max_upload_size_mb	10	performance	Max upload size (MB)	2026-07-01 17:51:26.903	2026-07-01 17:51:26.903
+6b922bde-f3fe-42a5-9c91-e0c680e1ec27	invoice_prefix	"INV"	invoice	Invoice number prefix	2026-07-01 18:15:31.336	2026-07-01 18:15:31.336
+41315651-e8dc-4bc2-98ca-cc0b048f469f	invoice_next_number	1001	invoice	Next invoice number	2026-07-01 18:15:31.353	2026-07-01 18:15:31.353
+75f86748-766d-40ec-9929-a35903a38c5f	invoice_due_days	15	invoice	Payment due days from invoice date	2026-07-01 18:15:31.357	2026-07-01 18:15:31.357
+c7443021-1580-4c3d-ab2c-a2ad9e8faf96	invoice_footer	"Thank you for your business"	invoice	Invoice footer text	2026-07-01 18:15:31.36	2026-07-01 18:15:31.36
+130cfb5b-c681-4583-ad31-8805c9d9635b	tax_name	"GST"	tax	Tax name	2026-07-01 18:15:31.368	2026-07-01 18:15:31.368
+98f4515b-9ffb-4288-8150-e3309f0adeef	tax_rate	5	tax	Default tax rate (%)	2026-07-01 18:15:31.372	2026-07-01 18:15:31.372
+e30e8982-69a3-416c-ae7b-e25eb4aa1ae3	tax_region	"IN"	tax	Tax region code	2026-07-01 18:15:31.375	2026-07-01 18:15:31.375
+3b7aa7b2-b1f5-4f97-97e5-50f0f9435c3e	tax_inclusive	true	tax	Tax inclusive in pricing	2026-07-01 18:15:31.379	2026-07-01 18:15:31.379
+dc2f06f8-b67f-44e5-9192-d2ea0d1b18b1	billing_cycle	"monthly"	billing	Default billing cycle	2026-07-01 18:15:31.384	2026-07-01 18:15:31.384
+7f7d96a9-4ee3-405d-801c-9794dfddb763	auto_renew	true	billing	Auto-renew subscriptions	2026-07-01 18:15:31.387	2026-07-01 18:15:31.387
+ada94015-26da-4398-b266-a7ed7d266b1c	grace_period_days	3	billing	Grace period after failed payment	2026-07-01 18:15:31.391	2026-07-01 18:15:31.391
+217161af-b69a-4353-8897-41dc1118da5c	ai_credit_rate	0.01	usage_metering	Cost per 1K AI tokens	2026-07-01 18:15:31.4	2026-07-01 18:15:31.4
+db8e36b6-d3fb-4ed2-b211-aae0d415ec34	deploy_credit_rate	0.5	usage_metering	Cost per deployment	2026-07-01 18:15:31.404	2026-07-01 18:15:31.404
+6801a3c0-0031-4821-b71d-729e9223772f	storage_rate_mb	0.001	usage_metering	Cost per MB storage per month	2026-07-01 18:15:31.407	2026-07-01 18:15:31.407
+a6628b3c-1050-441c-906a-a170e49f4b9b	bandwidth_rate_gb	0.1	usage_metering	Cost per GB bandwidth	2026-07-01 18:15:31.411	2026-07-01 18:15:31.411
+e19c7fb0-8bd5-4b19-b697-8cd5b38b2ac7	webhook_retry_count	3	webhook	Default webhook retry count	2026-07-01 18:15:31.416	2026-07-01 18:15:31.416
+90a50753-47f0-4037-8c57-9137b486c4fc	webhook_timeout_ms	10000	webhook	Webhook request timeout (ms)	2026-07-01 18:15:31.42	2026-07-01 18:15:31.42
+5e237bc4-c1e1-4823-a2a1-014d0b33df07	marketplace_name	"Antair Marketplace"	marketplace	Marketplace display name	2026-07-01 18:31:17.728	2026-07-01 18:31:17.728
+6ccb9a43-b62a-4f77-aa9b-a3070738e921	marketplace_description	"Extend your platform with plugins, themes, and integrations"	marketplace	Marketplace tagline	2026-07-01 18:31:17.742	2026-07-01 18:31:17.742
+98014184-c8a7-489a-8501-7184b89a9572	require_approval	true	marketplace	Require admin approval for new extensions	2026-07-01 18:31:17.745	2026-07-01 18:31:17.745
+4be73600-6721-4415-9996-49081cc463a5	allow_community	true	marketplace	Allow community submissions	2026-07-01 18:31:17.748	2026-07-01 18:31:17.748
+62796ce0-4c06-422c-a2b1-71734f193eca	max_free_installs	5	marketplace	Max free installations per business	2026-07-01 18:31:17.751	2026-07-01 18:31:17.751
+23ae8625-6881-4cbf-aeda-29c5d3460066	commission_rate	0.15	marketplace	Platform commission on paid extensions	2026-07-01 18:31:17.755	2026-07-01 18:31:17.755
+6b52bcbf-f050-40d5-9e4c-e7ca240f0e59	auto_verify_checksum	true	marketplace	Auto-verify package checksums	2026-07-01 18:31:17.759	2026-07-01 18:31:17.759
+ff15c26f-55b2-4577-ab8f-467c4b16c2be	sandbox_enabled	true	marketplace	Sandbox extension execution	2026-07-01 18:31:17.762	2026-07-01 18:31:17.762
+dbe38cec-746d-40c4-8187-aeada7530719	virus_scan_enabled	true	marketplace	Scan uploaded packages for malware	2026-07-01 18:31:17.765	2026-07-01 18:31:17.765
+df091451-b0b0-4ab4-95f7-8ab21fb3bdd1	max_version_age_days	365	marketplace	Max days before version deprecation	2026-07-01 18:31:17.768	2026-07-01 18:31:17.768
+a7c93013-7561-478f-bfa2-0b17c5df6188	dashboard_refresh_interval	30	monitoring	Dashboard auto-refresh interval (seconds)	2026-07-01 18:45:36.72	2026-07-01 18:45:36.72
+188baa19-1e82-43a7-907b-fb5d48d2fcb5	alert_threshold_cpu	90	monitoring	CPU alert threshold (%)	2026-07-01 18:45:36.732	2026-07-01 18:45:36.732
+3c0b9771-10dd-4db3-97d5-790683d3b3e4	alert_threshold_memory	85	monitoring	Memory alert threshold (%)	2026-07-01 18:45:36.735	2026-07-01 18:45:36.735
+d652082c-1f26-4948-8297-2195fd7fe9f1	alert_threshold_disk	90	monitoring	Disk usage alert threshold (%)	2026-07-01 18:45:36.737	2026-07-01 18:45:36.737
+7d7450de-f2e5-4128-94e0-ab5b7e387e19	alert_threshold_slow_requests	1000	monitoring	Slow request threshold (ms)	2026-07-01 18:45:36.739	2026-07-01 18:45:36.739
+622b9628-79c1-45a9-a4b9-818a0b02d4a7	alert_threshold_failed_logins	10	monitoring	Failed login alert threshold per hour	2026-07-01 18:45:36.744	2026-07-01 18:45:36.744
+e1a657a1-c78b-4933-bc69-61ccd69bd5cc	ssl_expiry_alert_days	30	monitoring	SSL expiry warning (days)	2026-07-01 18:45:36.748	2026-07-01 18:45:36.748
+059f4d89-729b-4bd7-9cde-01d0be7fb193	enable_security_monitoring	true	monitoring	Track security events	2026-07-01 18:45:36.75	2026-07-01 18:45:36.75
+66f51fe4-d27d-4107-a495-0674d41827e7	enable_performance_monitoring	true	monitoring	Track performance metrics	2026-07-01 18:45:36.752	2026-07-01 18:45:36.752
+0ce21645-d7cd-4f88-8155-3660a97fb631	enable_realtime_events	true	monitoring	Show real-time system events	2026-07-01 18:45:36.754	2026-07-01 18:45:36.754
+f48ba4bf-d3f3-4ff8-b05b-a301b0db6e81	monitoring_enabled	true	monitoring	Enable system monitoring	2026-07-02 03:13:45.067	2026-07-01 17:51:26.805
+6b3e0a85-9ed3-459c-933e-a1290efef666	settings	{"auto_invoice": true}	billing		2026-07-02 03:13:49.7	2026-07-01 18:15:31.504
+07865bc3-14e5-4df5-8bda-117038a3df30	workflow_template_ai-auto-fix	{"icon": "zap", "name": "AI Auto Fix", "slug": "ai-auto-fix", "color": "#A855F7", "engine": "ai-core", "stages": [{"name": "Detect Issue", "type": "detect-issue", "order": 1}, {"name": "Analyze", "type": "analyze", "order": 2}, {"name": "Generate Fix", "type": "generate-fix", "order": 3}, {"name": "Apply Fix", "type": "apply-fix", "order": 4}, {"name": "Verify", "type": "verify", "order": 5}], "category": "ai", "description": "Automatically detect and fix issues: detect → analyze → generate fix → apply → verify", "estimatedDuration": "3-5 min"}	workflow_template	Automatically detect and fix issues: detect → analyze → generate fix → apply → verify	2026-07-02 04:15:14.844	2026-07-01 19:17:40.712
+fe325163-9ed5-4174-86b5-b5b521546f6b	workflow_template_custom	{"icon": "settings", "name": "Custom Workflow", "slug": "custom", "color": "#6B7280", "engine": "ai-workflow", "stages": [], "category": "custom", "description": "Define your own workflow stages and configure each step manually", "estimatedDuration": "Variable"}	workflow_template	Define your own workflow stages and configure each step manually	2026-07-02 04:15:14.846	2026-07-01 19:17:40.721
+8ccfcd9f-3546-44bf-b8f3-7aa9a46c8ef4	workflow_template_website-publish	{"icon": "globe", "name": "Website Publish", "slug": "website-publish", "color": "#8B5CF6", "engine": "template-pipeline", "stages": [{"name": "Template Publish", "type": "template", "order": 1}, {"name": "Business Assignment", "type": "business-assignment", "order": 2}, {"name": "Deploy", "type": "deployment", "order": 3}], "category": "website-lifecycle", "description": "Publish a certified website: template publish → business assignment → deploy → health check → notify", "estimatedDuration": "15-20 min"}	workflow_template	Publish a certified website: template publish → business assignment → deploy → health check → notify	2026-07-02 04:15:14.817	2026-07-01 19:17:40.638
+b75c273d-6116-4b8f-b980-3df9ba2fa41e	workflow_template_deploy-website	{"icon": "rocket", "name": "Deploy Website", "slug": "deploy-website", "color": "#EF4444", "engine": "deployment", "stages": [{"name": "Create Environment", "type": "create-environment", "order": 1}, {"name": "Build", "type": "build", "order": 2}, {"name": "Validate", "type": "validate", "order": 3}, {"name": "Deploy", "type": "deploy", "order": 4}, {"name": "Health Check", "type": "health-check", "order": 5}], "category": "deployment", "description": "Full deployment pipeline: create environment → build → validate → deploy → health check", "estimatedDuration": "10-15 min"}	workflow_template	Full deployment pipeline: create environment → build → validate → deploy → health check	2026-07-02 04:15:14.823	2026-07-01 19:17:40.656
+0d2c4b49-6654-4a98-98f6-4be8d1ac3365	workflow_template_renew-ssl	{"icon": "shield", "name": "Renew SSL Certificate", "slug": "renew-ssl", "color": "#06B6D4", "engine": "deployment", "stages": [{"name": "Check Expiry", "type": "check-expiry", "order": 1}, {"name": "Provision Cert", "type": "provision-cert", "order": 2}, {"name": "Verify DNS", "type": "verify-dns", "order": 3}, {"name": "Deploy", "type": "deploy", "order": 4}, {"name": "Verify", "type": "verify", "order": 5}], "category": "maintenance", "description": "Automated SSL renewal: check expiry → provision cert → verify DNS → deploy → verify", "estimatedDuration": "5-10 min"}	workflow_template	Automated SSL renewal: check expiry → provision cert → verify DNS → deploy → verify	2026-07-02 04:15:14.825	2026-07-01 19:17:40.666
+a1b9ea34-17a3-4ec2-b493-940f5e921e7c	workflow_template_backup	{"icon": "download", "name": "Backup System", "slug": "backup", "color": "#6366F1", "engine": "ai-workflow", "stages": [{"name": "Snapshot DB", "type": "snapshot-db", "order": 1}, {"name": "Archive Storage", "type": "archive-storage", "order": 2}, {"name": "Upload S3", "type": "upload-s3", "order": 3}, {"name": "Verify", "type": "verify", "order": 4}, {"name": "Notification", "type": "notification", "order": 5}], "category": "maintenance", "description": "Full system backup: snapshot DB → archive storage → upload S3 → verify → notify", "estimatedDuration": "15-30 min"}	workflow_template	Full system backup: snapshot DB → archive storage → upload S3 → verify → notify	2026-07-02 04:15:14.827	2026-07-01 19:17:40.675
+e3525609-111d-4167-930b-480563b06977	workflow_template_website-upload	{"icon": "upload", "name": "Website Upload", "slug": "website-upload", "color": "#3B82F6", "engine": "ai-workflow", "stages": [{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}], "category": "website-lifecycle", "description": "Upload website codebase through verification, certification, AI fix, and validation report pipeline", "estimatedDuration": "10-15 min"}	workflow_template	Upload website codebase through verification, certification, AI fix, and validation report pipeline	2026-07-02 04:15:14.809	2026-07-01 19:17:40.608
+26171289-845b-4abd-b82e-f1bcf31a8b65	workflow_template_restore	{"icon": "rotate-ccw", "name": "Restore from Backup", "slug": "restore", "color": "#EC4899", "engine": "ai-workflow", "stages": [{"name": "Download Backup", "type": "download-backup", "order": 1}, {"name": "Restore DB", "type": "restore-db", "order": 2}, {"name": "Restore Storage", "type": "restore-storage", "order": 3}, {"name": "Verify", "type": "verify", "order": 4}, {"name": "Health Check", "type": "health-check", "order": 5}], "category": "maintenance", "description": "Restore system from backup: download → restore DB → restore storage → verify → health check", "estimatedDuration": "15-30 min"}	workflow_template	Restore system from backup: download → restore DB → restore storage → verify → health check	2026-07-02 04:15:14.829	2026-07-01 19:17:40.685
+07835f9f-3922-4567-b92a-995e476d834c	workflow_template_marketplace-publish	{"icon": "package", "name": "Marketplace Publish", "slug": "marketplace-publish", "color": "#14B8A6", "engine": "ai-workflow", "stages": [{"name": "Validate Manifest", "type": "validate-manifest", "order": 1}, {"name": "Review", "type": "review", "order": 2}, {"name": "Approve", "type": "approve", "order": 3}, {"name": "Publish", "type": "publish", "order": 4}, {"name": "Notification", "type": "notification", "order": 5}], "category": "marketplace", "description": "Publish an extension to the marketplace: validate manifest → review → approve → publish → notify", "estimatedDuration": "5-10 min"}	workflow_template	Publish an extension to the marketplace: validate manifest → review → approve → publish → notify	2026-07-02 04:15:14.831	2026-07-01 19:17:40.694
+fbe65a98-aef0-4729-81fd-d8824d7a10ac	workflow_template_subscription-renewal	{"icon": "credit-card", "name": "Subscription Renewal", "slug": "subscription-renewal", "color": "#F97316", "engine": "ai-workflow", "stages": [{"name": "Charge", "type": "charge", "order": 1}, {"name": "Verify Payment", "type": "verify-payment", "order": 2}, {"name": "Extend Subscription", "type": "extend-subscription", "order": 3}, {"name": "Notification", "type": "notification", "order": 4}], "category": "billing", "description": "Renew a subscription: charge → verify payment → extend subscription → notify", "estimatedDuration": "1-3 min"}	workflow_template	Renew a subscription: charge → verify payment → extend subscription → notify	2026-07-02 04:15:14.833	2026-07-01 19:17:40.703
+0e90bb46-63e2-4e17-9c77-e3b1c71b1df1	workflow_template_website-certification	{"icon": "check-circle", "name": "Website Certification", "slug": "website-certification", "color": "#10B981", "engine": "certification", "stages": [{"name": "Load Release", "type": "load-release", "order": 1}, {"name": "Parallel Audits", "type": "parallel-audits", "order": 2, "parallel": true}, {"name": "Visual Review", "type": "visual-review", "order": 3}, {"name": "Scoring Engine", "type": "scoring-engine", "order": 4}, {"name": "Complete", "type": "complete", "order": 5}], "category": "website-lifecycle", "description": "Run a comprehensive certification audit with parallel agents and scoring engine", "estimatedDuration": "5-8 min"}	workflow_template	Run a comprehensive certification audit with parallel agents and scoring engine	2026-07-02 04:15:14.814	2026-07-01 19:17:40.629
+6e7e97ee-5667-4f3f-afd1-c682e9a0f21a	workflow_template_business-onboarding	{"icon": "user-plus", "name": "Business Onboarding", "slug": "business-onboarding", "color": "#F59E0B", "engine": "ai-workflow", "stages": [{"name": "Create Business", "type": "business-assignment", "order": 1}, {"name": "Assign Template", "type": "template", "order": 2}, {"name": "Configure Domain", "type": "deployment", "order": 3}, {"name": "Setup SSL", "type": "deployment", "order": 4}, {"name": "Deploy", "type": "deployment", "order": 5}], "category": "onboarding", "description": "Onboard a new business: create → assign template → configure domain → setup SSL → deploy", "estimatedDuration": "20-30 min"}	workflow_template	Onboard a new business: create → assign template → configure domain → setup SSL → deploy	2026-07-02 04:15:14.82	2026-07-01 19:17:40.646
+\.
+
+
+--
+-- Data for Name: cms_ai_usage; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_ai_usage (id, provider_id, agent_key, execution_id, model, prompt_tokens, completion_tokens, total_tokens, cost, date, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_ai_workflows; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_ai_workflows (id, name, description, stages, status, trigger, schedule, event_trigger, created_at, updated_at) FROM stdin;
+e68d2406-aecf-415f-a925-603e170a810a	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:17:38.936	2026-07-01 19:17:38.936
+80c69472-0993-470b-b149-8b28788f1727	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:18:56.928	2026-07-01 19:18:56.928
+e4728902-708f-479a-805e-e81ca9a140b1	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:18:58.305	2026-07-01 19:18:58.305
+0da8a8ef-0853-438c-a738-b4a8c7fc08f0	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:19:47.268	2026-07-01 19:19:47.268
+70f28d5c-ec70-4450-9f77-391cf00ddaa0	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:19:48.632	2026-07-01 19:19:48.632
+2507ff74-f373-4ca2-94fa-cf9393a23ee6	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:19:58.591	2026-07-01 19:19:58.591
+6536be1e-794d-43c9-84ec-81b25ce2e279	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:19:59.949	2026-07-01 19:19:59.949
+3c4a26ce-cb4f-46cc-9156-d8724adec564	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:20:09.799	2026-07-01 19:20:09.799
+3f2ed7c2-014c-4307-88b0-b60e21d44988	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:20:11.133	2026-07-01 19:20:11.133
+d8b33e89-9859-4533-adf8-db15a13d9a65	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:20:27.916	2026-07-01 19:20:27.916
+9078aff3-c30b-4d1a-8cd2-5c5477f21960	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:20:29.284	2026-07-01 19:20:29.284
+8d3e3bd4-3089-4361-ba14-b5bef80d7499	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:20:39.365	2026-07-01 19:20:39.365
+2cfe9c21-a12f-4489-8211-71a1628f8c39	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:20:40.707	2026-07-01 19:20:40.707
+3242b9d7-77f1-41ae-9fa0-dce6bfb7485b	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:21:05.294	2026-07-01 19:21:05.294
+0fb27d95-fa5b-4bf0-93eb-4700a92add4c	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:21:06.657	2026-07-01 19:21:06.657
+87104f11-4291-4f00-899c-7f7a91697ceb	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:21:24.966	2026-07-01 19:21:24.966
+d8702ec7-0d54-4557-9b83-e04f7c80551a	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:21:26.341	2026-07-01 19:21:26.341
+95af0500-e83a-4652-9bb6-a3a9b3ef4b31	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:22:12.046	2026-07-01 19:22:12.046
+6c8e0211-23ad-409b-b5a7-a69ba6cc81c0	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:22:13.419	2026-07-01 19:22:13.419
+670e389b-676b-4f80-ab96-e002b6ae78b0	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:22:25.952	2026-07-01 19:22:25.952
+9b8872d2-9847-45b8-b4a5-a72dbd083347	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:22:27.308	2026-07-01 19:22:27.308
+b376615b-45a8-4b06-840a-c30099cb10be	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:23:37.904	2026-07-01 19:23:37.904
+c1f38d3e-12f0-45e4-88a2-f797f7881dae	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Upload", "type": "upload", "order": 1}, {"name": "Verification", "type": "verification", "order": 2}, {"name": "Certification", "type": "certification", "order": 3}, {"name": "AI Fix", "type": "ai-fix", "order": 4}, {"name": "Validation Report", "type": "validation-report", "order": 5}]	active	manual	\N	\N	2026-07-01 19:23:39.265	2026-07-01 19:23:39.265
+2b48ebaf-17b5-443e-b227-a5d549f6d055	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-01 19:24:56.736	2026-07-01 19:24:56.736
+1262987a-625c-4069-a13c-1f5abb44a038	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-01 19:24:58.43	2026-07-01 19:24:58.43
+ecd50e66-ebfc-4097-804d-5615e519a403	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 03:11:52.589	2026-07-02 03:11:52.589
+559b214f-6af3-4d25-893a-3c84f09e9e7c	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 03:11:54.109	2026-07-02 03:11:54.109
+7f08b223-4af8-4229-8dc7-6ee86a5f9b7f	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 03:12:17.603	2026-07-02 03:12:17.603
+39a7c5b4-24f0-49d0-b2eb-174de645d1ef	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 03:12:18.75	2026-07-02 03:12:18.75
+5e2938ab-767e-47e0-ba2c-5662370b309b	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 03:12:51.796	2026-07-02 03:12:51.796
+f1aa7f5c-c82b-4e35-b2b1-59a964f35f5f	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 03:12:54.744	2026-07-02 03:12:54.744
+6cc80948-4724-403a-ade9-3296103c212b	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 03:13:22.341	2026-07-02 03:13:22.341
+247540fc-25d0-4dfd-84d4-430eaf4606ef	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 03:13:46.668	2026-07-02 03:13:46.668
+370fb326-bbac-42ac-a96c-9692385254ff	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 03:13:49.474	2026-07-02 03:13:49.474
+d63fa1dc-2a47-423f-9a3f-d2b888c441f4	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 03:14:09.197	2026-07-02 03:14:09.197
+a4e96392-9b82-4584-908e-a3d6882355d0	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 03:14:10.753	2026-07-02 03:14:10.753
+1c085bb5-083f-4d66-aee0-72af4bbf9b74	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 04:15:13.216	2026-07-02 04:15:13.216
+c6294842-f85c-43fa-b232-091a458ba119	Website Upload	Upload website codebase through verification, certification, AI fix, and validation report pipeline	[{"name": "Verification", "type": "verification", "order": 1}, {"name": "Certification", "type": "certification", "order": 2}, {"name": "AI Fix", "type": "ai-fix", "order": 3}, {"name": "Validation Report", "type": "validation-report", "order": 4}]	active	manual	\N	\N	2026-07-02 04:15:14.73	2026-07-02 04:15:14.73
+\.
+
+
+--
+-- Data for Name: cms_assignment_configurations; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_assignment_configurations (id, assignment_id, business_id, theme, "primaryColor", "secondaryColor", logo_url, favicon_url, language, currency, timezone, contact_email, contact_phone, meta_title, meta_description, google_analytics_id, facebook_pixel_id, storage_provider, created_by, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_assignment_histories; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_assignment_histories (id, assignment_id, action, "previousStatus", "newStatus", changes, snapshot, performed_by, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_blueprint_apis; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_blueprint_apis (id, blueprint_template_id, path, method, response_schema) FROM stdin;
+f5449b1e-3d19-4a34-8f55-2da936385955	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	/api/v1/cart/add	POST	{"success": "boolean"}
+a533ac29-7e95-47db-a2ac-600da0f0fc99	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	/api/v1/cart/remove	DELETE	{"success": "boolean"}
+2facacea-75af-4a95-9e82-7b7970f3b247	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	/api/v1/checkout/custom-order	POST	{"success": "boolean"}
+\.
+
+
+--
+-- Data for Name: cms_blueprint_components; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_blueprint_components (id, page_id, component_name, props_schema) FROM stdin;
+034da952-2355-4b3d-9839-6a34790fdf22	d233c00e-c194-42ee-b082-0d91aa929a74	Navbar	{}
+fadc5c23-267f-44ae-a1be-a02c1700761d	d233c00e-c194-42ee-b082-0d91aa929a74	CartGrid	{}
+d67c19e5-9849-4cf7-9c3b-e7d6455acf11	d233c00e-c194-42ee-b082-0d91aa929a74	Footer	{}
+ff9f6781-082f-41e2-a4d3-e5f6483c081f	9cfce82e-d7d8-4244-8a36-bbbaf1c8aa3d	Navbar	{}
+3528d887-b593-487f-9c2b-e00060f628e0	9cfce82e-d7d8-4244-8a36-bbbaf1c8aa3d	GenericContainer	{}
+e4742d0b-5cd0-4678-9781-99c7c296e28f	9cfce82e-d7d8-4244-8a36-bbbaf1c8aa3d	Footer	{}
+b83ace9c-d1c7-4d79-b236-80ada15b378c	83ec9349-1aca-4603-818b-adee181f489a	Navbar	{}
+0f9f3631-17b7-4e86-b098-ff61407d63fe	83ec9349-1aca-4603-818b-adee181f489a	GenericContainer	{}
+85dc985a-6c1d-4cf4-8845-114d904908b0	83ec9349-1aca-4603-818b-adee181f489a	Footer	{}
+\.
+
+
+--
+-- Data for Name: cms_blueprint_features; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_blueprint_features (id, blueprint_template_id, requirement_id) FROM stdin;
+32436801-109d-45a9-833a-2c529d62a2f5	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	eea438b8-4078-472c-ba70-1f4fc29e79cb
+608825e0-203c-4921-8f86-2d43eb3d3653	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	77bc8810-f5cc-43e0-ae80-18d82fe20efd
+c632a5b0-aa92-43f0-a55e-97e3a034c3c9	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	a23f3403-d3c4-422d-b56a-1d4821e969c5
+d55497e0-3156-4faa-97bc-a1a56d6b74bf	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	b784c40d-a4d5-4bab-aceb-ed63dd4186ec
+463c189c-5614-4284-8437-7aa3b1f58f92	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	184f5f33-ff13-4645-a02f-f82ba65e5693
+\.
+
+
+--
+-- Data for Name: cms_blueprint_pages; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_blueprint_pages (id, blueprint_template_id, route, title) FROM stdin;
+d233c00e-c194-42ee-b082-0d91aa929a74	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	/cart	Cart Page
+9cfce82e-d7d8-4244-8a36-bbbaf1c8aa3d	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	/checkout/custom	Checkout/custom Page
+83ec9349-1aca-4603-818b-adee181f489a	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	/measurements	Measurements Page
+\.
+
+
+--
+-- Data for Name: cms_blueprint_template_versions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_blueprint_template_versions (id, blueprint_template_id, version, pages, components, apis, "databaseModels", features, status, description, created_by, created_at) FROM stdin;
+670b1d12-cf4e-48da-a63f-b622dc4bdb73	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	1	{"required": ["/", "/about", "/cart", "/checkout", "/orders"]}	{"required": ["Navbar", "Footer", "BoutiqueHero", "ProductCard"]}	{"required": ["GET /products", "POST /orders"]}	{"required": ["User", "Boutique", "Order"]}	{"required": ["Cart", "Checkout", "CustomMeasurements"]}	PUBLISHED	Boutique core expected blueprint	ee5b28e9-b55f-427e-b0ee-c5993787577f	2026-06-29 19:03:40.987
+0cf7ee48-4bff-47f4-86b0-4c4559f65365	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	2	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	TESTING	Compiled blueprint version 2	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:42:49.296
+6439807d-4135-44ba-8de4-9ccc44c0b3f7	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	3	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	TESTING	Compiled blueprint version 3	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:43:12.04
+f8c55eb7-2509-487d-8d0f-3fecc8d56cd8	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	4	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	TESTING	Compiled blueprint version 4	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:43:12.151
+e8fe3d5d-40c7-44c3-9d0f-0a6402bec6ec	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	5	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	TESTING	Compiled blueprint version 5	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:43:29.153
+5d85768b-3fe6-4a8b-8cf4-518f030adeed	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	6	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	TESTING	Compiled blueprint version 6	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:43:29.267
+59caf191-a774-43cd-8993-c85121ea071d	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	7	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	TESTING	Compiled blueprint version 7	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 20:06:25.013
+a6584f93-12dc-4477-b5b0-1438d92b82f1	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	8	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	TESTING	Compiled blueprint version 8	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 20:28:16.117
+aadf422a-a3c4-421e-8bb9-22212effa739	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	9	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	TESTING	Compiled blueprint version 9	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 20:28:16.199
+78adb73d-d9dc-4c0e-8e18-a3aa3cb04380	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	10	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	TESTING	Compiled blueprint version 10	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 20:32:10.681
+0f960306-596d-4a0f-875b-3b4a006d7529	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	11	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	TESTING	Compiled blueprint version 11	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-30 14:59:12.358
+c2732d74-e729-4a62-abba-f66914d488ce	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	12	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	TESTING	Compiled blueprint version 12	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-30 14:59:12.467
+609a6d4a-e7e8-4b66-87f1-220051033786	2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	13	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	TESTING	Compiled blueprint version 13	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-30 15:00:20.782
+\.
+
+
+--
+-- Data for Name: cms_blueprint_templates; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_blueprint_templates (id, key, name, status, version, standard_id, pages, components, apis, "databaseModels", features, is_enabled, is_deleted, created_at, updated_at) FROM stdin;
+2f6f0dc1-e302-462a-9f60-8f9371b7c8e7	boutique-ecom-blueprint	Boutique E-Commerce Blueprint	TESTING	13	202f7a48-fa99-4db4-822b-0176b952d2d7	{"/cart": "Cart Page", "/measurements": "Measurements Page", "/checkout/custom": "Checkout/custom Page"}	{"/cart": ["Navbar", "CartGrid", "Footer"], "/measurements": ["Navbar", "GenericContainer", "Footer"], "/checkout/custom": ["Navbar", "GenericContainer", "Footer"]}	{"POST /api/v1/cart/add": "Json", "DELETE /api/v1/cart/remove": "Json", "POST /api/v1/checkout/custom-order": "Json"}	{"required": ["User", "Boutique", "Order"]}	["https-enforce", "seo-meta", "ecom-license", "cart", "checkout-luxury", "custom-measurements"]	t	f	2026-06-29 19:03:40.984	2026-06-30 15:00:20.781
+\.
+
+
+--
+-- Data for Name: cms_builder_profile_versions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_builder_profile_versions (id, builder_profile_id, version, framework, "promptTemplate", "folderStructure", limitations, status, description, created_by, created_at) FROM stdin;
+4474e289-78c9-463e-8dab-907b847b08ae	a9fa116e-7ccb-40c9-9921-0eb6ddec0bee	1	Vite+React	React framework, tailwindcss, lucide icons. Target standard: {{standardName}}	{"requiredDirs": ["src/components", "src/pages", "src/services"]}	{"maxPageCount": 20}	PUBLISHED	Lovable active compilation profile	ee5b28e9-b55f-427e-b0ee-c5993787577f	2026-06-29 19:03:40.992
+\.
+
+
+--
+-- Data for Name: cms_builder_profiles; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_builder_profiles (id, key, name, status, version, standard_id, framework, "promptTemplate", "folderStructure", limitations, is_enabled, is_deleted, created_at, updated_at) FROM stdin;
+a9fa116e-7ccb-40c9-9921-0eb6ddec0bee	lovable-profile	Lovable Builder Profile	PUBLISHED	1	202f7a48-fa99-4db4-822b-0176b952d2d7	Vite+React	React framework, tailwindcss, lucide icons. Target standard: {{standardName}}	{"requiredDirs": ["src/components", "src/pages", "src/services"]}	{"maxPageCount": 20}	t	f	2026-06-29 19:03:40.99	2026-06-29 19:03:40.99
+\.
+
+
+--
+-- Data for Name: cms_prompt_audit_logs; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_audit_logs (id, prompt_id, action, field, "oldValue", "newValue", performed_by, created_at) FROM stdin;
+d3b24a84-e800-4279-9b1b-7aa13ae65900	1488160a-1d6f-4232-af9e-4d4189ea9fd2	update	title	"Update Test Prompt"	"Updated Title"	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:16.233
+db149692-f1ea-4b11-a2b2-4c5491836463	1488160a-1d6f-4232-af9e-4d4189ea9fd2	update	description	"Before update"	"After update"	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:16.332
+a556a4ad-58fa-4b39-b629-57355661127f	1488160a-1d6f-4232-af9e-4d4189ea9fd2	update	version	1	2	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:16.396
+100254d7-5766-4123-a3b0-4d89c4944704	1488160a-1d6f-4232-af9e-4d4189ea9fd2	update	updatedAt	"2026-07-02T03:12:15.228Z"	"2026-07-02T03:12:15.833Z"	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:16.461
+a6f7fefc-c9d9-4152-a3ca-ef43b1be182e	1488160a-1d6f-4232-af9e-4d4189ea9fd2	update	category	\N	null	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:16.527
+4120ef8d-ec08-4eb9-8d31-ff8ba3a86121	1488160a-1d6f-4232-af9e-4d4189ea9fd2	update	builder	\N	null	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:16.601
+30fafdbf-a6ec-49cd-8bee-02f1e13647eb	1cf343ac-ac6c-4403-b1b1-10e7f072d8d5	delete	isDeleted	false	true	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:17.336
+da257cec-218f-43bf-831c-8d62a13c2f7c	1cf343ac-ac6c-4403-b1b1-10e7f072d8d5	delete	updatedAt	"2026-07-02T03:12:16.751Z"	"2026-07-02T03:12:17.147Z"	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:17.399
+441bb786-39f8-43f2-8cd8-ee0789a2e75a	b9ea3c1c-f386-44fb-baf6-d28c47df133d	update	instructions	"v1 instructions"	"v2 instructions"	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.458
+108e4c31-22f1-48f8-a576-fe4ea8674744	b9ea3c1c-f386-44fb-baf6-d28c47df133d	update	version	1	2	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.496
+8906ec67-4320-4412-8e77-920affdb4fed	b9ea3c1c-f386-44fb-baf6-d28c47df133d	update	updatedAt	"2026-07-02T03:12:24.072Z"	"2026-07-02T03:12:24.287Z"	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.53
+170b35f2-6135-41b2-ac95-829ae6afe860	b9ea3c1c-f386-44fb-baf6-d28c47df133d	update	category	\N	null	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.56
+d293dc3e-c1e7-415b-993c-f3d160f52ceb	b9ea3c1c-f386-44fb-baf6-d28c47df133d	update	builder	\N	null	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.592
+2ac6bd1e-e856-474f-8bff-794c231b0ea5	5ed89a57-3ba9-4088-b900-a32826e90da1	update	instructions	"Original instructions"	"Updated instructions"	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:25.134
+aec66472-47b0-4879-9722-fd4d15077812	5ed89a57-3ba9-4088-b900-a32826e90da1	update	version	1	2	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:25.173
+6e375ac8-532b-414e-b288-80a90b8b3ad9	5ed89a57-3ba9-4088-b900-a32826e90da1	update	updatedAt	"2026-07-02T03:12:24.699Z"	"2026-07-02T03:12:24.917Z"	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:25.209
+0ed26953-b2db-4fa2-95c1-cba7694698b5	5ed89a57-3ba9-4088-b900-a32826e90da1	update	category	\N	null	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:25.243
+5f88f846-6b5d-4dc8-9d0d-fc2a85bd7cd9	5ed89a57-3ba9-4088-b900-a32826e90da1	update	builder	\N	null	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:25.277
+8e6164af-c0db-483d-9e06-9cbfee7b356b	12748b00-4910-4807-9555-e944f3d79f5b	update	title	"Update Test Prompt"	"Updated Title"	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:50.561
+fbd78d66-358d-43e1-afe5-a15f2db3e13a	12748b00-4910-4807-9555-e944f3d79f5b	update	description	"Before update"	"After update"	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:50.627
+26fbc1fe-bfb9-4efc-818a-3be78c3065b1	12748b00-4910-4807-9555-e944f3d79f5b	update	version	1	2	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:50.691
+4c786167-8604-4cb0-a5f7-d4eb171b560d	12748b00-4910-4807-9555-e944f3d79f5b	update	updatedAt	"2026-07-02T03:12:49.797Z"	"2026-07-02T03:12:50.207Z"	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:50.758
+3a6bbb77-925b-44ff-971f-9d91753db7f9	12748b00-4910-4807-9555-e944f3d79f5b	update	category	\N	null	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:50.821
+cb691c2f-b82a-4b2c-80bf-6505e02355ec	12748b00-4910-4807-9555-e944f3d79f5b	update	builder	\N	null	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:50.881
+bf06c5d0-9202-41e3-bd96-9a2332830559	fb20d3f6-bae0-482b-ab75-3e276bebcf40	delete	isDeleted	false	true	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:51.609
+2e034e8f-f54b-4018-ac2d-996a436e38b3	fb20d3f6-bae0-482b-ab75-3e276bebcf40	delete	updatedAt	"2026-07-02T03:12:51.038Z"	"2026-07-02T03:12:51.431Z"	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:51.668
+002710f2-5393-423a-a634-735c95ad2df8	bd714ff2-ce43-4495-99a2-7347e59b7289	update	instructions	"v1 instructions"	"v2 instructions"	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.476
+33a35d1e-0b25-4f6a-b1ff-cc97f2a4cdf4	bd714ff2-ce43-4495-99a2-7347e59b7289	update	version	1	2	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.502
+ac39163f-2e8a-48e0-9fa9-02ee18c5c581	bd714ff2-ce43-4495-99a2-7347e59b7289	update	updatedAt	"2026-07-02T03:12:59.139Z"	"2026-07-02T03:12:59.340Z"	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.523
+9447d73f-965b-404a-8608-ef5467aff7ef	bd714ff2-ce43-4495-99a2-7347e59b7289	update	category	\N	null	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.555
+5355398b-3e99-495a-85c3-16e9b9cc11ee	bd714ff2-ce43-4495-99a2-7347e59b7289	update	builder	\N	null	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.579
+dc810b61-d90b-4ac4-a616-22c80a087fda	e02da55f-4bc7-4e15-97b3-d5a18f548f94	update	instructions	"Original instructions"	"Updated instructions"	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:13:00.031
+227b6b46-4ec5-41fd-b25a-c78adf88302f	e02da55f-4bc7-4e15-97b3-d5a18f548f94	update	version	1	2	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:13:00.059
+7439ac5c-8e1d-40d2-83c4-b36ad6f301c3	e02da55f-4bc7-4e15-97b3-d5a18f548f94	update	updatedAt	"2026-07-02T03:12:59.675Z"	"2026-07-02T03:12:59.870Z"	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:13:00.084
+73aa2a05-865e-426b-b4eb-2a3f59ee1b82	e02da55f-4bc7-4e15-97b3-d5a18f548f94	update	category	\N	null	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:13:00.121
+393bff78-37fb-4443-9d69-7e4fb134a93a	e02da55f-4bc7-4e15-97b3-d5a18f548f94	update	builder	\N	null	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:13:00.156
+2ef71966-58da-4886-8de7-bfaf37a9e4f6	14b5b2d2-4781-4152-8311-f0e6f0cafc31	update	title	"Update Test Prompt"	"Updated Title"	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:21.235
+565a8f8e-07d8-43bd-9c18-0008a9fb2f5b	14b5b2d2-4781-4152-8311-f0e6f0cafc31	update	description	"Before update"	"After update"	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:21.344
+0cafbac7-94d4-4c26-8ce7-cf8866ff835a	14b5b2d2-4781-4152-8311-f0e6f0cafc31	update	version	1	2	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:21.399
+f1adbe0e-5f15-4cf1-a189-c8dc7709c77d	14b5b2d2-4781-4152-8311-f0e6f0cafc31	update	updatedAt	"2026-07-02T03:13:20.456Z"	"2026-07-02T03:13:20.907Z"	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:21.458
+cdf712b4-0d53-44f4-b0dc-5f09cf0b4fe0	14b5b2d2-4781-4152-8311-f0e6f0cafc31	update	category	\N	null	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:21.513
+eda51db3-2188-48cc-8995-3b22c85768c2	14b5b2d2-4781-4152-8311-f0e6f0cafc31	update	builder	\N	null	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:21.59
+6b48a512-fb49-4bb8-89d4-6c82c9b10689	1593dc6b-4d71-4ef8-bd2f-28ce24fda555	delete	isDeleted	false	true	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:22.261
+6e89349a-a45b-42f7-93d8-d6495226d53b	1593dc6b-4d71-4ef8-bd2f-28ce24fda555	delete	updatedAt	"2026-07-02T03:13:21.744Z"	"2026-07-02T03:13:22.101Z"	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:22.319
+2d319b82-81f6-4e5f-8cdd-49b4259adbf6	e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	update	title	"Update Test Prompt"	"Updated Title"	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:45.742
+62604eeb-4c3c-4462-91c0-c5a905f06401	e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	update	description	"Before update"	"After update"	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:45.81
+29712a49-d01a-47bb-91e4-fb280eab3c9f	e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	update	version	1	2	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:45.866
+bfdfb6d5-fba2-4bac-b9cb-f85c0453d7dc	e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	update	updatedAt	"2026-07-02T03:13:44.949Z"	"2026-07-02T03:13:45.408Z"	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:45.924
+ba2f6522-1557-43c7-972b-58a68613823b	e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	update	category	\N	null	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:45.984
+a1e3e578-a9a3-4246-9f05-5ca1d295eefb	e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	update	builder	\N	null	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:46.035
+72660408-a6d8-48e4-9d3e-b955f7438af5	600c15a5-2237-4923-99b7-a5d699841d3c	delete	isDeleted	false	true	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:46.71
+f6659bd0-ea45-4592-b0de-11f99e52e08e	600c15a5-2237-4923-99b7-a5d699841d3c	delete	updatedAt	"2026-07-02T03:13:46.168Z"	"2026-07-02T03:13:46.564Z"	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:46.765
+e764c9ef-2b09-4344-99f7-25c2d1e69154	882282c5-c238-4ff6-bdd4-1baee30462df	update	instructions	"v1 instructions"	"v2 instructions"	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.046
+0eb08562-66ef-4075-b8fd-873771cf11f0	882282c5-c238-4ff6-bdd4-1baee30462df	update	version	1	2	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.082
+57751b69-9d2f-4d2d-9634-2fa97eddd7ab	882282c5-c238-4ff6-bdd4-1baee30462df	update	updatedAt	"2026-07-02T03:13:53.601Z"	"2026-07-02T03:13:53.843Z"	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.114
+fbccc24d-69f2-4a2b-8261-7760ad38505b	882282c5-c238-4ff6-bdd4-1baee30462df	update	category	\N	null	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.146
+aa419290-e566-4ac4-a373-c1891e4fea9f	882282c5-c238-4ff6-bdd4-1baee30462df	update	builder	\N	null	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.177
+83a317cd-a7d1-4e76-8f51-36515dc3819b	01a94a3c-9b6a-4ba0-b474-79a911c37237	update	instructions	"Original instructions"	"Updated instructions"	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.751
+30de6ae7-10c1-435f-bcef-d415d7ba7a29	01a94a3c-9b6a-4ba0-b474-79a911c37237	update	version	1	2	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.789
+ce1f3105-ccfa-4121-a24d-15938db6b818	01a94a3c-9b6a-4ba0-b474-79a911c37237	update	updatedAt	"2026-07-02T03:13:54.285Z"	"2026-07-02T03:13:54.541Z"	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.825
+e14de5b3-bf44-4adc-9c22-f09e170203d0	01a94a3c-9b6a-4ba0-b474-79a911c37237	update	category	\N	null	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.861
+5a36a7b3-25e1-4c69-b557-7542df9f31c9	01a94a3c-9b6a-4ba0-b474-79a911c37237	update	builder	\N	null	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.898
+\.
+
+
+--
+-- Data for Name: cms_prompt_categories; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_categories (id, key, name, description, icon, display_order, created_at, updated_at) FROM stdin;
+d7b9dc02-4ab0-4f86-87e0-f3f70a8dec50	website	Website	Full website generation prompts	\N	1	2026-06-30 18:14:09.191	2026-06-30 18:14:09.191
+91f86792-ce04-462b-9ae1-6ae99e6bd5e1	frontend	Frontend	Frontend development prompts	\N	2	2026-06-30 18:14:09.194	2026-06-30 18:14:09.194
+c014e9d1-2b4a-4ad6-b21f-abab0ec12467	backend	Backend	Backend development prompts	\N	3	2026-06-30 18:14:09.196	2026-06-30 18:14:09.196
+bae71602-2192-4d28-ab28-1436103ccd1c	database	Database	Database design and migration prompts	\N	4	2026-06-30 18:14:09.198	2026-06-30 18:14:09.198
+1905d204-f11d-4c7f-b48b-a7c95455f014	authentication	Authentication	Auth system prompts	\N	5	2026-06-30 18:14:09.201	2026-06-30 18:14:09.201
+b483cc2f-6252-467e-9879-64a1b4509fe3	payments	Payments	Payment integration prompts	\N	6	2026-06-30 18:14:09.203	2026-06-30 18:14:09.203
+8d739f8d-37c9-474f-9614-9203951ff0cd	inventory	Inventory	Inventory management prompts	\N	7	2026-06-30 18:14:09.205	2026-06-30 18:14:09.205
+bb06fe94-558d-4a88-808c-6c24ba4c86d4	orders	Orders	Order management prompts	\N	8	2026-06-30 18:14:09.206	2026-06-30 18:14:09.206
+5fa6e076-1b0e-4f13-9dd0-20654feaa97c	analytics	Analytics	Analytics and reporting prompts	\N	9	2026-06-30 18:14:09.208	2026-06-30 18:14:09.208
+931ffd9b-49ff-4e24-8bc1-91d418eda744	seo	SEO	SEO optimization prompts	\N	10	2026-06-30 18:14:09.209	2026-06-30 18:14:09.209
+ec91cb7a-9e1b-43b9-9f58-bc59fad32646	accessibility	Accessibility	Accessibility compliance prompts	\N	11	2026-06-30 18:14:09.211	2026-06-30 18:14:09.211
+799228ee-93aa-422f-81e6-1db2eedb5d06	performance	Performance	Performance optimization prompts	\N	12	2026-06-30 18:14:09.213	2026-06-30 18:14:09.213
+ef5461e5-1b29-4317-87d2-c40983f8ddab	responsive	Responsive	Responsive design prompts	\N	13	2026-06-30 18:14:09.214	2026-06-30 18:14:09.214
+7fb608b7-94d0-4e22-945c-f41c60d1048f	cms	CMS	CMS-specific prompts	\N	14	2026-06-30 18:14:09.215	2026-06-30 18:14:09.215
+3cd4f9da-cebb-4e3a-8c84-f36765945cb7	deployment	Deployment	Deployment and DevOps prompts	\N	15	2026-06-30 18:14:09.217	2026-06-30 18:14:09.217
+0c17296e-e379-4290-b7a8-1ebaa4816b3d	security	Security	Security hardening prompts	\N	16	2026-06-30 18:14:09.219	2026-06-30 18:14:09.219
+e3c8b5bf-7246-43b5-bec1-e216ba37d6ba	documentation	Documentation	Documentation generation prompts	\N	17	2026-06-30 18:14:09.222	2026-06-30 18:14:09.222
+3efe755a-cb47-48f0-b627-e0a9613a2cb7	testing	Testing	Test category	\N	99	2026-07-02 03:12:10.872	2026-07-02 03:12:10.872
+633a9f98-8373-469c-a7fa-181576703939	temp-test-cat	Temp Test Category	\N	\N	100	2026-07-02 03:13:00.362	2026-07-02 03:13:00.362
+\.
+
+
+--
+-- Data for Name: cms_prompt_collection_items; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_collection_items (id, collection_id, prompt_id, display_order) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_prompt_collections; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_collections (id, name, description, user_id, is_deleted, created_at, updated_at) FROM stdin;
+3c078799-f837-4f73-88e5-ed9a650f60f9	Test Collection	A test collection	c0abbe7b-051b-420f-b009-2362c30e5322	f	2026-07-02 03:12:22.585	2026-07-02 03:12:22.585
+4e134cbe-d039-48c2-b87c-d6707b6f84ba	Item Test Collection	For item testing	c0abbe7b-051b-420f-b009-2362c30e5322	f	2026-07-02 03:12:22.627	2026-07-02 03:12:22.627
+3d7f1f26-9fc7-4e1a-b142-7ef9da306762	List Test Collection	\N	c0abbe7b-051b-420f-b009-2362c30e5322	f	2026-07-02 03:12:22.936	2026-07-02 03:12:22.936
+61580667-bc8b-4162-9c40-19cabc8205b0	Test Collection	A test collection	f6596463-415c-4c36-b12c-fe4d92ca0d69	f	2026-07-02 03:12:57.461	2026-07-02 03:12:57.461
+a34330e6-5a70-4def-bcdc-5722bfca957f	Item Test Collection	For item testing	f6596463-415c-4c36-b12c-fe4d92ca0d69	f	2026-07-02 03:12:57.513	2026-07-02 03:12:57.513
+eccd69b0-2cd5-45a9-9672-66bf939a148c	List Test Collection	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f	2026-07-02 03:12:57.862	2026-07-02 03:12:57.862
+681bc27f-83b1-4d1d-9de7-8bbee538fa8b	Test Collection	A test collection	3c719952-b7d9-455b-888e-2b079af11b4f	f	2026-07-02 03:13:51.995	2026-07-02 03:13:51.995
+b866895d-733d-4c54-9023-813fffa4ca71	Item Test Collection	For item testing	3c719952-b7d9-455b-888e-2b079af11b4f	f	2026-07-02 03:13:52.043	2026-07-02 03:13:52.043
+694f748f-124e-4ff9-8404-d25c15b2ff77	List Test Collection	\N	3c719952-b7d9-455b-888e-2b079af11b4f	f	2026-07-02 03:13:52.398	2026-07-02 03:13:52.398
+\.
+
+
+--
+-- Data for Name: cms_prompt_executions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_executions (id, prompt_id, builder_id, rendered_content, variables, status, started_at, completed_at, error, duration_ms, performed_by, created_at) FROM stdin;
+0bef3ed7-f212-4e3f-8ea4-640b3b79b40e	32fb96ca-1252-4620-9aa8-76243c073471	\N	Execute build-thing	{"task": "build-thing"}	COMPLETED	2026-07-02 03:12:23.485	2026-07-02 03:12:23.485	\N	0	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.487
+dc00e63f-dfe1-4472-b2f6-083b4c5c2adc	31126dda-87ce-4129-93ad-9c4d45f10e7b	\N	Execute build-thing	{"task": "build-thing"}	COMPLETED	2026-07-02 03:12:58.492	2026-07-02 03:12:58.492	\N	0	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:58.494
+cb4eeeea-08aa-499f-a89b-d973eb1914c5	8efa6ab8-ed70-43f0-b0ac-cfca32395831	\N	Execute build-thing	{"task": "build-thing"}	COMPLETED	2026-07-02 03:13:52.99	2026-07-02 03:13:52.99	\N	0	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:52.992
+\.
+
+
+--
+-- Data for Name: cms_prompt_favorites; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_favorites (id, prompt_id, user_id, created_at) FROM stdin;
+0c3717e3-f244-4332-9f6c-c65076fabcea	737ce8dd-2bdd-4e6c-ba8c-087775c1c74a	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:22.397
+647eef02-1ee2-4974-881e-1e2adb05f665	47aefc92-be82-4f80-8307-35ea72b3c787	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:57.267
+089e42b6-23bd-4e93-8df3-279491ff4003	5a5912ed-45d6-4ecb-b016-77c45e0df457	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:51.817
+\.
+
+
+--
+-- Data for Name: cms_prompt_histories; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_histories (id, prompt_id, action, snapshot, user_id, created_at) FROM stdin;
+0ce6d96b-5ef3-470a-be16-6c8dda383968	88f34fc9-f8a3-4050-a511-e35d8efa7f1f	created	\N	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-30 18:20:01.484
+f35029fb-0ae5-4368-99e3-507c7b4627c3	1226d258-3b76-4ecd-851e-372f29845790	cloned	\N	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-30 18:20:07.685
+6bae4ef1-2dc6-41ac-b5f5-02c114c8f2b2	1aff9cbd-d0aa-4cbd-b4f6-ff1bc2bf5851	created	\N	71b7312c-ead2-4591-908a-9dd924fcde0e	2026-07-01 03:30:09.802
+3ac1835b-7768-4e4f-9728-309de93bfcac	1795f0c6-63dc-4c76-b08d-94b1d2857899	created	\N	71b7312c-ead2-4591-908a-9dd924fcde0e	2026-07-01 03:30:11.861
+4100fae5-0cf4-4ac0-9cb3-7d23fd9309ca	0f6c373c-93d6-427e-86fa-41a078face16	created	\N	888bf9e6-e5d5-4b74-8325-93992a4b2a2d	2026-07-01 03:34:01.328
+a0ce1173-6be8-4396-acf1-dfe701938369	4a188eb5-859e-49b4-9741-09e34c0e23c9	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:12.542
+c0025b5f-8fcd-4ac0-8109-5142a70422fe	3b979383-2fbf-4dd4-b8f5-7d6ae7489dfc	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:13.537
+3f8d199f-6fe4-406d-b758-b6fefd7f5c8d	48b7e7f2-1526-4ba6-bafb-30473d9bb8ad	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:14.668
+847322df-ce4c-4fd6-ad0f-b94c3387b872	1488160a-1d6f-4232-af9e-4d4189ea9fd2	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:15.537
+15be17d4-e646-4d04-9dcd-4d81e57ea870	1488160a-1d6f-4232-af9e-4d4189ea9fd2	updated	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:16.079
+decf583a-022a-4141-a089-f6d3bbe73e8b	1cf343ac-ac6c-4403-b1b1-10e7f072d8d5	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:16.972
+51702f37-4a2d-41c9-a981-419d74d392af	1cf343ac-ac6c-4403-b1b1-10e7f072d8d5	deleted	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:17.2
+6e607bf6-9927-4044-94ff-be9142724671	b5c8ec58-50ab-408e-bd13-cf6804899462	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:17.96
+4351278e-a0cf-44d3-b2b2-9bd0b32be8c4	6d46a9a8-b221-436e-b9ed-524239e7b5d8	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:18.551
+415c33ec-2cd9-465b-b866-3e52c3718bbf	da06d292-8063-4acd-ba6c-0cdc51776130	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:19.105
+f621f0e7-87b4-4337-8d09-4646d0f1b36b	8f1c8aef-fbf9-4b83-8c82-61fdee2f1a84	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:19.68
+dbb62092-22b1-4743-baab-7593bcaf7578	74adc22a-f954-4acf-a413-f88562356ba5	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:20.628
+a8452c91-6872-4542-8c84-6b2346bb8bd2	95307de6-7e1e-4085-898a-f3205c9468ae	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:21.287
+ac47f6b8-b7f0-4388-9090-f21b8531a562	f40016ad-ae6d-4465-a5bb-fb70c93073c3	cloned	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:21.647
+96ae16ac-e3bc-4c22-8ae3-9d78fdbf7f18	d539a6d7-5ae5-409b-b12b-231794d27077	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:21.89
+23fe4dfd-9a4f-438e-87bd-c9ae35762088	737ce8dd-2bdd-4e6c-ba8c-087775c1c74a	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:22.294
+09069857-6f99-405e-84e6-58e9f60d61ef	86f6a3d0-f04b-441d-891c-141352b422bd	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:22.802
+c84457c1-d711-4348-899c-8be24135e22c	fa3b042e-84ff-42ba-8d9d-3361df9264f7	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.155
+02f09942-ff80-471a-b6bc-83521186f40c	32fb96ca-1252-4620-9aa8-76243c073471	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.403
+b8ed1ff3-9a28-448b-80fb-b91045b7f913	e6ea7c29-82de-4487-b13c-2a554612222a	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.71
+af1c7e6f-9780-42b7-b9c5-0008a2672d4e	2687d6d6-7fd5-42fc-acbf-4d9bfed1c1e8	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.939
+072e0581-bb91-4652-8571-caaba64e9dc6	b9ea3c1c-f386-44fb-baf6-d28c47df133d	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.16
+026fa21a-7333-472c-a34c-786a9a941dcf	b9ea3c1c-f386-44fb-baf6-d28c47df133d	updated	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.395
+47229833-494d-4726-af04-6b02e542df80	5ed89a57-3ba9-4088-b900-a32826e90da1	created	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.81
+436258d1-d17d-49e1-ba13-59e4b32f79ec	5ed89a57-3ba9-4088-b900-a32826e90da1	updated	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:25.057
+ec8aebdb-8fb4-444c-ad8f-cea25f546c4d	5ed89a57-3ba9-4088-b900-a32826e90da1	rollback	\N	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:25.383
+38938f61-95d7-4a53-8dfa-3e983844b184	0b7a932f-fb57-466e-91db-375e6ba409b1	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:47.744
+dcb8c462-9176-43c4-b9c8-f5eaffb5fd70	aa9e46ea-b2cf-4eb8-9c07-2d3112b740b2	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:48.549
+458544a3-3eab-4030-9c58-17453ca708d6	68e2bf2f-0982-4ad9-9098-0e10b825fc04	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:49.409
+27ec27d7-76fb-4c4c-a869-0b85588322fc	12748b00-4910-4807-9555-e944f3d79f5b	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:50.006
+2f3044f0-b9de-485c-a0d6-4763e9584b2b	12748b00-4910-4807-9555-e944f3d79f5b	updated	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:50.427
+6ba86014-dfc0-48fd-9a1d-13c8c202a4bf	fb20d3f6-bae0-482b-ab75-3e276bebcf40	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:51.262
+85f46cdb-1ed1-43a9-8ba0-bb2f84c4d822	fb20d3f6-bae0-482b-ab75-3e276bebcf40	deleted	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:51.488
+f4a8e359-c743-4789-a639-be5f2b6a9e79	085835c0-1809-4694-bcc7-f73d67500224	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:52.199
+461e8344-42a2-4c9a-bd8f-e7d34235b6ee	04235081-0363-4a6f-8954-cb10d8619f34	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:52.81
+fe856fed-08e6-4a24-95eb-c96f5fa1b643	f32be280-d9a7-4e49-8f73-258ddf5c54ee	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:53.627
+a2589808-245e-42f9-8f07-da05e52bb922	bc74eb87-58ad-48f3-a0de-abc2d69d2ccd	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:54.224
+dc3d8703-f6d4-4868-ac42-e112ac54c986	be776274-3092-4a57-a6c7-1652e52b3dfa	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:55.087
+7f8d8fb6-7a4d-4980-a299-3a2658459e65	8c303417-bfb8-4c0a-8b28-451ebeccb051	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:55.867
+755bb551-2aa2-4028-8fc5-fa369744e073	f08f8f2c-5b50-4645-ba91-72581f35b5c8	cloned	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:56.323
+12f8dc16-cdda-43c7-9cc3-f5a1da439f26	39eaadec-e945-424b-a1d7-c431462d183f	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:56.643
+e0195b9a-6455-41c2-9071-9313f6b9b0b8	47aefc92-be82-4f80-8307-35ea72b3c787	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:57.172
+38689621-5fbe-424c-bb21-c6c04292ea65	bd325322-fd89-472f-81bb-da3912dc3601	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:57.716
+f29be8cb-8303-4404-9a30-4038ded211eb	38187156-571f-4536-9548-401cd1560969	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:58.102
+0788e464-bc89-4bd7-98f6-1a74b52f36d2	31126dda-87ce-4129-93ad-9c4d45f10e7b	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:58.391
+22610428-c0f3-4a5a-9904-0c156129f242	e6a196a1-f02d-4da5-8493-c9df7e8c3c97	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:58.736
+d1e01da4-c43b-46fd-be40-f2e29f778b59	e55f54ef-0dd6-4e5d-8aa1-6a1d95ea5fe3	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59
+d1d1e1b4-fb9d-4111-9e9c-9d09c9658920	bd714ff2-ce43-4495-99a2-7347e59b7289	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.229
+9228f4c9-6814-458e-afde-99413f2516a1	bd714ff2-ce43-4495-99a2-7347e59b7289	updated	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.419
+36173c3b-0250-4bc0-a938-86bcdc48ca58	e02da55f-4bc7-4e15-97b3-d5a18f548f94	created	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.773
+feb5363a-6bf4-4ad4-961b-d34c157eecb0	e02da55f-4bc7-4e15-97b3-d5a18f548f94	updated	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.97
+3ebd8f0e-b929-45d3-85d8-570e9d20d1bf	e02da55f-4bc7-4e15-97b3-d5a18f548f94	rollback	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:13:00.252
+36523cfe-00c3-4fac-9094-4518144629e3	06dee9c7-026f-46cc-9a65-73b6ba27183c	created	\N	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:18.408
+185fdbc2-7c54-414b-8ceb-93072d9fe236	aac5766a-181d-45ec-8581-761848c48039	created	\N	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:19.177
+2849ca21-e4fc-4ea2-9dc8-0e756c841a98	a6a0edd1-d729-4712-8ea7-ef2a418d260c	created	\N	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:20.026
+69a9577a-5139-4a64-943c-104eac40b9a7	14b5b2d2-4781-4152-8311-f0e6f0cafc31	created	\N	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:20.678
+b91ed836-95e9-4de0-9ea5-bcbb1d637ad7	14b5b2d2-4781-4152-8311-f0e6f0cafc31	updated	\N	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:21.113
+cb5f9ee3-737b-450a-b0ee-b6d94430151e	1593dc6b-4d71-4ef8-bd2f-28ce24fda555	created	\N	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:21.933
+d070d6c8-a890-4f27-b590-8254ce8e9f47	1593dc6b-4d71-4ef8-bd2f-28ce24fda555	deleted	\N	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:22.156
+06ffb1ef-c7bf-46a0-a9e0-61660bcb15e0	71df28d5-ce27-4727-89ba-698596391cfe	created	\N	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:22.82
+1d939d9d-872f-4f33-827d-1973acad6757	3720d404-e0c8-4c9d-b253-e4c84a3c2970	created	\N	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:23.468
+72500c28-c230-4de4-bd65-a3ce63828001	346d6d77-f7cc-4571-af66-93b882892903	created	\N	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:24.294
+68f5a3ae-2942-42ee-b557-fe9674d67d7b	6436d832-0210-4a09-bfbb-e03f5c2cdd4a	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:42.815
+f9a8a2c2-09be-42aa-bd8f-bb54e4e5ac49	be7b7360-1d83-4230-b8a0-06406c9c1f11	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:43.669
+91347d9c-cd73-4d0e-8739-4f0a6ae71765	7d6f2fdf-13d9-4480-8689-9050aaf7217e	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:44.508
+2730b4d6-0915-4f9f-ad4f-dc5e9d06caea	e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:45.162
+383a3bef-e806-47b6-937e-56689e7124a1	e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	updated	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:45.61
+2d0567aa-31f9-42bd-850d-bb66802ae4f2	600c15a5-2237-4923-99b7-a5d699841d3c	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:46.409
+62bb7225-0326-48ef-8fa7-112243654411	600c15a5-2237-4923-99b7-a5d699841d3c	deleted	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:46.611
+b1a70e66-f1ba-4824-96df-4e96bb99b203	39298128-514d-467d-b982-700e853ee4d8	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:47.294
+eaf759e0-b0e6-49f0-8475-6ed3e960cbf7	0a9359df-20ed-401f-bb7b-45004f2cbe44	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:47.91
+e7ee71eb-0784-45f7-80af-5b716bbbaac5	e8388662-1642-4659-ac95-74959c3d4af1	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:48.543
+efffa733-4787-4593-aaa5-af49281b79be	e7c4d928-dafd-45b0-9158-ef6f91c62e12	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:49.19
+bc84622d-2d60-477a-b2a6-77cad84ffedf	bcac9209-9341-41ca-8461-fab9e892540f	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:49.916
+a5cb4477-3e78-4d9b-82ea-fba9ee71456e	c43f4f5e-922e-42dc-8fe5-7ac992a6ea98	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:50.557
+80f0d538-3a38-439a-bb75-87b783d589b0	ebea9f5d-5076-4c84-b75d-66b41ef9d21a	cloned	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:50.921
+01b2edd7-89e7-4c5a-9d47-9ebfe6d05f1e	fea35ad4-0f19-46ff-9b27-f7342fdbc686	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:51.214
+3dff901a-8613-4ef2-9b67-6e449a5a8e7a	5a5912ed-45d6-4ecb-b016-77c45e0df457	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:51.718
+8ba4cd25-ac7c-4452-960d-604ec720f67d	d038e24f-56f0-41d4-8633-944de79367d1	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:52.242
+21893ce2-1cec-463e-88c0-c0993b6ab338	9c3f457f-d993-49c8-86df-04eaec3b987c	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:52.642
+2bb23642-88b8-4e0c-8439-1b622bd66d2b	8efa6ab8-ed70-43f0-b0ac-cfca32395831	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:52.911
+3e885f64-f5cb-495a-97da-19c9e97b7a64	1d4cbe9a-5d19-4466-91ec-2cad7616a274	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:53.2
+58f08088-8fe1-44b0-ab61-575948998c47	125105b2-4233-4179-9f1c-d81d6e386f5f	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:53.452
+7b5fd3de-7821-48e3-a159-92c1d91e1a54	882282c5-c238-4ff6-bdd4-1baee30462df	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:53.713
+ef1c8d9d-4212-4e88-a1fb-2da3253270a9	882282c5-c238-4ff6-bdd4-1baee30462df	updated	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:53.977
+e5b960fc-55ed-4a2a-83ef-cffa5cfd29d1	01a94a3c-9b6a-4ba0-b474-79a911c37237	created	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.418
+d6336d4b-b1dd-4109-9e16-e9742a3ad64c	01a94a3c-9b6a-4ba0-b474-79a911c37237	updated	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.676
+2e9292b3-5466-4d3b-8ac6-fd3c42175426	01a94a3c-9b6a-4ba0-b474-79a911c37237	rollback	\N	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:55.001
+\.
+
+
+--
+-- Data for Name: cms_prompt_ratings; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_ratings (id, prompt_id, user_id, rating, comment, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_prompt_tag_prompts; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_tag_prompts (id, prompt_id, tag_id) FROM stdin;
+19f0f0e5-9cb1-45e7-a55d-489121a93284	4a188eb5-859e-49b4-9741-09e34c0e23c9	55f36fdd-2e13-414a-aede-bdf2f324086e
+280f0633-5423-427a-97b7-a8880ed731ca	3b979383-2fbf-4dd4-b8f5-7d6ae7489dfc	55f36fdd-2e13-414a-aede-bdf2f324086e
+0de19795-de69-4e57-b383-fdd5d0dd57e2	74adc22a-f954-4acf-a413-f88562356ba5	55f36fdd-2e13-414a-aede-bdf2f324086e
+cffc39c0-d22b-43b5-9466-6b2e732e2511	95307de6-7e1e-4085-898a-f3205c9468ae	55f36fdd-2e13-414a-aede-bdf2f324086e
+3277de7e-3fa6-40cb-97d5-cbeaeaa87765	f40016ad-ae6d-4465-a5bb-fb70c93073c3	55f36fdd-2e13-414a-aede-bdf2f324086e
+393544f4-8391-43d6-90d1-5c7ebe075bf3	0b7a932f-fb57-466e-91db-375e6ba409b1	55f36fdd-2e13-414a-aede-bdf2f324086e
+3ecfd398-2444-452e-a49e-9392ce5fbedb	aa9e46ea-b2cf-4eb8-9c07-2d3112b740b2	55f36fdd-2e13-414a-aede-bdf2f324086e
+2ab38f80-2071-405d-9fd7-9db6b3ab2cdf	be776274-3092-4a57-a6c7-1652e52b3dfa	55f36fdd-2e13-414a-aede-bdf2f324086e
+b2503f08-4383-4d66-9e07-aad2abd9fc2f	8c303417-bfb8-4c0a-8b28-451ebeccb051	55f36fdd-2e13-414a-aede-bdf2f324086e
+f7438ff0-805e-4097-8089-3e409b4cd702	f08f8f2c-5b50-4645-ba91-72581f35b5c8	55f36fdd-2e13-414a-aede-bdf2f324086e
+70c8008b-c5b5-4951-bf35-f909cc39688d	06dee9c7-026f-46cc-9a65-73b6ba27183c	55f36fdd-2e13-414a-aede-bdf2f324086e
+ea4dc78f-8d2c-4173-9028-b9de80c7bfaa	aac5766a-181d-45ec-8581-761848c48039	55f36fdd-2e13-414a-aede-bdf2f324086e
+61679357-36cc-4d5f-afc6-1564e4c94b5c	6436d832-0210-4a09-bfbb-e03f5c2cdd4a	55f36fdd-2e13-414a-aede-bdf2f324086e
+13f31ed0-a7d6-4556-a84e-0955aa4646f1	be7b7360-1d83-4230-b8a0-06406c9c1f11	55f36fdd-2e13-414a-aede-bdf2f324086e
+f8ca1354-23d1-49f7-aae0-f483cdf01ddb	bcac9209-9341-41ca-8461-fab9e892540f	55f36fdd-2e13-414a-aede-bdf2f324086e
+313d8cb5-a5f2-40e4-a757-52ad38ead546	c43f4f5e-922e-42dc-8fe5-7ac992a6ea98	55f36fdd-2e13-414a-aede-bdf2f324086e
+00c30c9c-069f-439d-9c43-f71fc32d6a20	ebea9f5d-5076-4c84-b75d-66b41ef9d21a	55f36fdd-2e13-414a-aede-bdf2f324086e
+\.
+
+
+--
+-- Data for Name: cms_prompt_tags; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_tags (id, key, name, created_at) FROM stdin;
+e7ee2feb-6a5a-42b3-bc8c-e0297109558b	type-website-generation	Website Generation	2026-06-30 18:14:09.256
+7c0e7ed8-9eb4-41e6-b547-874f9c3845d3	type-website-upgrade	Website Upgrade	2026-06-30 18:14:09.26
+9d28aaea-208b-488a-82de-41d6cb042619	type-website-fix	Website Fix	2026-06-30 18:14:09.263
+a05aedde-7065-4f36-9132-72d52a30223e	type-performance-fix	Performance Fix	2026-06-30 18:14:09.265
+b9806f28-bc27-4ee9-852f-379a8e42abf1	type-seo-fix	Seo Fix	2026-06-30 18:14:09.268
+e8fd37e4-9b45-4ec1-8428-7cd0e5ede723	type-accessibility-fix	Accessibility Fix	2026-06-30 18:14:09.27
+2c740c37-3317-42a2-9507-43d910b11ed3	type-security-fix	Security Fix	2026-06-30 18:14:09.272
+b80b332a-65c7-4501-a97a-4b28d140b107	type-deployment-fix	Deployment Fix	2026-06-30 18:14:09.274
+30329a63-6930-479a-9780-bcf068f38630	type-database-fix	Database Fix	2026-06-30 18:14:09.276
+a44bfd8e-37b8-4bf7-8dba-f2dd9b7cd07d	type-api-fix	Api Fix	2026-06-30 18:14:09.278
+6dd8a1d8-b1fc-49f5-8237-829974bcdc57	type-component-fix	Component Fix	2026-06-30 18:14:09.28
+335e4740-b52b-42b0-b781-984e3a23c591	type-tailwind-fix	Tailwind Fix	2026-06-30 18:14:09.282
+65c1aa6b-d2c9-4b8b-a498-a38b745f4653	type-react-fix	React Fix	2026-06-30 18:14:09.284
+dd5e727a-d7ac-4eed-a087-3384971ec277	type-nextjs-fix	Nextjs Fix	2026-06-30 18:14:09.286
+a95304c9-cdc4-4d1e-a14b-c72a33801f61	type-express-fix	Express Fix	2026-06-30 18:14:09.289
+e6564de0-09bf-4633-8707-7704fc38d5ee	type-prisma-fix	Prisma Fix	2026-06-30 18:14:09.291
+432304e7-35c5-4e62-b465-ca3d4aab45c1	type-typescript-fix	Typescript Fix	2026-06-30 18:14:09.293
+35f09aab-c27f-45b5-9545-af8ab64b3c4e	type-commerce	Commerce	2026-06-30 18:14:09.295
+a85c7ba9-0ddc-41ee-97e9-0d9591b05bf6	type-inventory	Inventory	2026-06-30 18:14:09.297
+5b3944df-6108-42a1-badc-ed6965778d2c	type-boutique	Boutique	2026-06-30 18:14:09.299
+8143361b-90eb-461d-88b3-60f786444963	type-salon	Salon	2026-06-30 18:14:09.303
+db257d42-97f0-4e24-8f54-33eaf2a2aab6	type-restaurant	Restaurant	2026-06-30 18:14:09.306
+046232ae-139e-4c87-909e-c203fa33f5e7	type-hotel	Hotel	2026-06-30 18:14:09.308
+11c70d36-6bd2-4909-9818-39b99cf74a7f	type-pharmacy	Pharmacy	2026-06-30 18:14:09.31
+e3518739-ff3c-42a6-b2c6-9a29c3b50929	type-education	Education	2026-06-30 18:14:09.312
+a70d7d79-618b-4475-a1d0-6c9dc3ef39ea	type-real-estate	Real Estate	2026-06-30 18:14:09.314
+55f36fdd-2e13-414a-aede-bdf2f324086e	test-tag	Test Tag	2026-07-02 03:12:11.437
+\.
+
+
+--
+-- Data for Name: cms_prompt_usage_analytics; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_usage_analytics (id, prompt_id, action, user_id, metadata, created_at) FROM stdin;
+90230e5f-6c61-4b1e-8643-b54de430c366	88f34fc9-f8a3-4050-a511-e35d8efa7f1f	created	6280f364-2664-49f8-a19b-14ca697e4fa6	\N	2026-06-30 18:20:01.493
+e2794611-0c7d-4611-bf0a-bed35ae61b15	88f34fc9-f8a3-4050-a511-e35d8efa7f1f	viewed	6280f364-2664-49f8-a19b-14ca697e4fa6	\N	2026-06-30 18:20:03.573
+507df24f-a801-46b0-be3f-6bb16b2df704	1226d258-3b76-4ecd-851e-372f29845790	cloned	6280f364-2664-49f8-a19b-14ca697e4fa6	\N	2026-06-30 18:20:07.69
+39df6117-07d9-4645-ad6d-0b3c2a09ca3b	1aff9cbd-d0aa-4cbd-b4f6-ff1bc2bf5851	created	71b7312c-ead2-4591-908a-9dd924fcde0e	\N	2026-07-01 03:30:10.109
+6c6aff60-1fd0-4117-8f55-5bc03a154ddb	1795f0c6-63dc-4c76-b08d-94b1d2857899	created	71b7312c-ead2-4591-908a-9dd924fcde0e	\N	2026-07-01 03:30:11.984
+6a18d1ba-5df6-4d5c-a539-97d2ee7247b2	0f6c373c-93d6-427e-86fa-41a078face16	created	888bf9e6-e5d5-4b74-8325-93992a4b2a2d	\N	2026-07-01 03:34:01.401
+2657dfba-dae3-4f75-a422-b6bacbe0d8b5	4a188eb5-859e-49b4-9741-09e34c0e23c9	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:12.669
+6c447b0e-d4cf-4db5-b6af-3d762fc0c4f6	3b979383-2fbf-4dd4-b8f5-7d6ae7489dfc	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:13.611
+dbb391ae-3ef8-4c8d-90b5-9e9e48253299	48b7e7f2-1526-4ba6-bafb-30473d9bb8ad	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:14.76
+01ee8976-e28b-4ed5-97ee-bee3582036e0	1488160a-1d6f-4232-af9e-4d4189ea9fd2	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:15.621
+6c69d2a8-9d20-4212-8ba2-210235dacb65	1488160a-1d6f-4232-af9e-4d4189ea9fd2	updated	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:16.157
+95fef643-ec42-453e-bc93-87e8c7defcd0	1cf343ac-ac6c-4403-b1b1-10e7f072d8d5	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:17.03
+49e5ebf5-a31d-4705-877e-2d592c57fd8d	1cf343ac-ac6c-4403-b1b1-10e7f072d8d5	deleted	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:17.269
+b91ba39c-0c0c-4e34-8b7e-d2289e8187df	b5c8ec58-50ab-408e-bd13-cf6804899462	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:18.018
+ed95b583-84d1-4c94-a90a-21a8a3ebd72d	6d46a9a8-b221-436e-b9ed-524239e7b5d8	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:18.599
+3dc27b61-6810-45a9-b13d-2fd0b67b19b6	da06d292-8063-4acd-ba6c-0cdc51776130	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:19.193
+c6d66237-0b22-45d3-99d0-4caab8083a5a	8f1c8aef-fbf9-4b83-8c82-61fdee2f1a84	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:19.812
+6b811962-c873-480b-8dd1-f57859f6f394	74adc22a-f954-4acf-a413-f88562356ba5	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:20.672
+d5e16af4-313f-4a2b-bf2f-39031c7a6814	95307de6-7e1e-4085-898a-f3205c9468ae	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:21.324
+4126fbd5-d826-4934-8c9a-4858ece3dcb8	f40016ad-ae6d-4465-a5bb-fb70c93073c3	cloned	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:21.681
+0137f318-9b2d-444b-80ff-66cf80c105fb	d539a6d7-5ae5-409b-b12b-231794d27077	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:21.918
+06b969d3-d893-4acb-a6c2-fc2fd618131f	d539a6d7-5ae5-409b-b12b-231794d27077	favorited	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:21.998
+332ced9e-3686-4744-8714-862f3afadd12	d539a6d7-5ae5-409b-b12b-231794d27077	unfavorited	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:22.083
+9952ea60-2fcc-43ae-8b0e-38494b4e6d23	737ce8dd-2bdd-4e6c-ba8c-087775c1c74a	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:22.33
+350034ab-90a5-4b9d-b778-bf203937fa6c	737ce8dd-2bdd-4e6c-ba8c-087775c1c74a	favorited	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:22.435
+276a110d-85f9-417c-991b-0443d7d0f189	86f6a3d0-f04b-441d-891c-141352b422bd	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:22.832
+205a2464-8217-481d-89a5-1bb0574dae49	fa3b042e-84ff-42ba-8d9d-3361df9264f7	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:23.182
+551bc76b-c481-4bfb-9a28-ecef22431b60	32fb96ca-1252-4620-9aa8-76243c073471	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:23.432
+aa5649b4-744b-493e-86bd-a39760263f32	32fb96ca-1252-4620-9aa8-76243c073471	executed	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:23.521
+d2ff3d65-f333-4c2c-b2ec-12ec4a4418a3	e6ea7c29-82de-4487-b13c-2a554612222a	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:23.735
+63ec97b6-edb3-4ddd-8a5f-c4ee7aea98ee	2687d6d6-7fd5-42fc-acbf-4d9bfed1c1e8	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:23.961
+e4746512-1710-485c-9e82-7202304e9e4c	b9ea3c1c-f386-44fb-baf6-d28c47df133d	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:24.186
+c6ced500-cc0a-48f1-b09d-2279aa836f45	b9ea3c1c-f386-44fb-baf6-d28c47df133d	updated	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:24.427
+fc9bd97b-fcd0-4cda-a708-4cc9643d403c	5ed89a57-3ba9-4088-b900-a32826e90da1	created	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:24.84
+60ab2557-1c9f-4dee-a7e6-21c968b904f1	5ed89a57-3ba9-4088-b900-a32826e90da1	updated	c0abbe7b-051b-420f-b009-2362c30e5322	\N	2026-07-02 03:12:25.095
+e71f40cd-1702-4ce3-a756-a31b310c6c28	0b7a932f-fb57-466e-91db-375e6ba409b1	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:47.813
+1593f85d-4fe3-4a1a-89e3-78f0720e18d7	aa9e46ea-b2cf-4eb8-9c07-2d3112b740b2	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:48.601
+0b32c3a9-0467-41ed-8ae5-6385c66e9577	68e2bf2f-0982-4ad9-9098-0e10b825fc04	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:49.467
+7f100cc9-4da5-405f-b9e9-799e223ad98a	12748b00-4910-4807-9555-e944f3d79f5b	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:50.058
+f55de042-90c3-4107-9c16-929afe21842e	12748b00-4910-4807-9555-e944f3d79f5b	updated	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:50.488
+f1618a1c-eca2-4720-a5ad-3d495bcfdc90	fb20d3f6-bae0-482b-ab75-3e276bebcf40	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:51.318
+8a206bb5-f6fc-48f3-9111-d1b81d6f52b9	fb20d3f6-bae0-482b-ab75-3e276bebcf40	deleted	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:51.55
+8d0c88d6-2ddc-4950-b6ba-1ea5da761177	085835c0-1809-4694-bcc7-f73d67500224	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:52.275
+f8b44bfc-cca0-4c5f-a7a3-013443b08bf5	04235081-0363-4a6f-8954-cb10d8619f34	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:52.88
+24d31826-281b-4694-87a6-8c14caf15347	f32be280-d9a7-4e49-8f73-258ddf5c54ee	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:53.693
+7e6a1abc-c80f-46d0-9c83-d4f68e798e15	bc74eb87-58ad-48f3-a0de-abc2d69d2ccd	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:54.271
+d406c070-287e-47ca-b791-5229bfec96d2	be776274-3092-4a57-a6c7-1652e52b3dfa	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:55.134
+d1cfdeb1-95c6-4b4c-b54b-4da6aa2c8dd1	8c303417-bfb8-4c0a-8b28-451ebeccb051	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:55.913
+28d88b78-9bcf-4bb9-b8f2-e22ae43b9b13	f08f8f2c-5b50-4645-ba91-72581f35b5c8	cloned	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:56.371
+fc7fa110-4e8a-4ab9-bbba-4578c66b8ca2	39eaadec-e945-424b-a1d7-c431462d183f	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:56.686
+ff6e16b9-bd16-4fc2-bbd0-f9c0cdeb04dc	39eaadec-e945-424b-a1d7-c431462d183f	favorited	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:56.804
+a23589f5-c4d0-4fa9-9878-a8751287f226	39eaadec-e945-424b-a1d7-c431462d183f	unfavorited	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:56.926
+c2465f1f-8005-4917-91dd-244248aa05c2	47aefc92-be82-4f80-8307-35ea72b3c787	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:57.203
+e88f13fd-9770-4767-a53d-565dbb14e2f6	47aefc92-be82-4f80-8307-35ea72b3c787	favorited	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:57.304
+71d9a1ac-88de-448b-8538-a2eadb7234ff	bd325322-fd89-472f-81bb-da3912dc3601	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:57.748
+7bca98e1-f50c-4f40-847a-2f845b77b4fd	38187156-571f-4536-9548-401cd1560969	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:58.139
+343c268a-fbbd-48b7-ae2a-88dd63c7b1e5	31126dda-87ce-4129-93ad-9c4d45f10e7b	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:58.425
+af7efa72-e0af-4826-8e1d-d4548ff7c8d0	31126dda-87ce-4129-93ad-9c4d45f10e7b	executed	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:58.529
+f674dc25-1b61-4318-8c79-96d128a28fca	e6a196a1-f02d-4da5-8493-c9df7e8c3c97	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:58.769
+ee7f5837-ca99-41c7-9ab4-245d6f834447	e55f54ef-0dd6-4e5d-8aa1-6a1d95ea5fe3	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:59.034
+e52de134-3b7b-426e-8bcb-64258fc0d8d4	bd714ff2-ce43-4495-99a2-7347e59b7289	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:59.249
+24921df4-c580-42b8-881a-aec16a1c12f4	bd714ff2-ce43-4495-99a2-7347e59b7289	updated	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:59.447
+57b0b4e6-c75d-400e-bad1-db33fe3c5806	e02da55f-4bc7-4e15-97b3-d5a18f548f94	created	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:59.8
+cda181b4-33b8-4328-800a-ef57df2fa664	e02da55f-4bc7-4e15-97b3-d5a18f548f94	updated	f6596463-415c-4c36-b12c-fe4d92ca0d69	\N	2026-07-02 03:12:59.999
+286917d2-d7ec-48f9-a882-646e8ef69bea	06dee9c7-026f-46cc-9a65-73b6ba27183c	created	bc4642a8-4837-47ab-a176-53c609b26d54	\N	2026-07-02 03:13:18.471
+60e8cfc8-617b-4593-8afb-3c7721d112f4	aac5766a-181d-45ec-8581-761848c48039	created	bc4642a8-4837-47ab-a176-53c609b26d54	\N	2026-07-02 03:13:19.233
+770a906d-f5bd-46dc-9de1-ed2c444dbdb6	a6a0edd1-d729-4712-8ea7-ef2a418d260c	created	bc4642a8-4837-47ab-a176-53c609b26d54	\N	2026-07-02 03:13:20.092
+26299b94-cc0d-45c8-a49a-c90427dd2adc	14b5b2d2-4781-4152-8311-f0e6f0cafc31	created	bc4642a8-4837-47ab-a176-53c609b26d54	\N	2026-07-02 03:13:20.746
+c3084cdf-b16b-4000-9377-c948b0ed9c11	14b5b2d2-4781-4152-8311-f0e6f0cafc31	updated	bc4642a8-4837-47ab-a176-53c609b26d54	\N	2026-07-02 03:13:21.173
+c4316a10-f6f6-4b34-8cc1-6b402ca67a23	1593dc6b-4d71-4ef8-bd2f-28ce24fda555	created	bc4642a8-4837-47ab-a176-53c609b26d54	\N	2026-07-02 03:13:21.992
+3230cd77-9771-4308-b2a9-d651f019d5ac	1593dc6b-4d71-4ef8-bd2f-28ce24fda555	deleted	bc4642a8-4837-47ab-a176-53c609b26d54	\N	2026-07-02 03:13:22.207
+2b56c1cf-e544-416d-a0b3-cc69fa46fdcb	71df28d5-ce27-4727-89ba-698596391cfe	created	bc4642a8-4837-47ab-a176-53c609b26d54	\N	2026-07-02 03:13:22.875
+af583790-1d0f-4115-be43-eea18b31fa4e	3720d404-e0c8-4c9d-b253-e4c84a3c2970	created	bc4642a8-4837-47ab-a176-53c609b26d54	\N	2026-07-02 03:13:23.534
+d338a9c0-9817-4590-b339-9dc57a00d122	346d6d77-f7cc-4571-af66-93b882892903	created	bc4642a8-4837-47ab-a176-53c609b26d54	\N	2026-07-02 03:13:24.391
+691f2366-e96f-47f5-8444-58423d7acf16	6436d832-0210-4a09-bfbb-e03f5c2cdd4a	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:42.887
+abd243c5-e0f2-49b5-912d-398e837f43b6	be7b7360-1d83-4230-b8a0-06406c9c1f11	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:43.75
+c169dede-25fc-4c85-909e-2d73d73355d9	7d6f2fdf-13d9-4480-8689-9050aaf7217e	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:44.573
+e83f56cb-6a91-45f8-85e3-25c548ae47e4	e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:45.245
+4ea5ab9a-9e2e-4511-9163-8f06c664f254	e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	updated	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:45.67
+97e6744a-eb88-401f-a69a-0b9273268957	600c15a5-2237-4923-99b7-a5d699841d3c	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:46.461
+68f9cc50-02ad-4e7e-8c30-f3b16146504b	600c15a5-2237-4923-99b7-a5d699841d3c	deleted	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:46.661
+a20e9964-c213-4c5b-addd-8fe8000ece0e	39298128-514d-467d-b982-700e853ee4d8	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:47.353
+7dc01f1a-6dfe-4596-9f17-2d72afd5e9a1	0a9359df-20ed-401f-bb7b-45004f2cbe44	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:47.959
+6426519c-67c7-45cf-ad5d-33d2cc7420ca	e8388662-1642-4659-ac95-74959c3d4af1	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:48.613
+8eb83cd7-5081-413c-9dda-696b913c2eb6	e7c4d928-dafd-45b0-9158-ef6f91c62e12	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:49.231
+a702cce2-56ee-49b0-b2c4-e3b57f52a532	bcac9209-9341-41ca-8461-fab9e892540f	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:49.947
+191df860-418b-4aee-acd2-7a09a3dcee67	c43f4f5e-922e-42dc-8fe5-7ac992a6ea98	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:50.59
+b6192935-d7ae-447d-9f9c-f2e83a4a0bba	ebea9f5d-5076-4c84-b75d-66b41ef9d21a	cloned	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:50.962
+6e36b9bf-e41c-4a49-9265-2e96ef534233	fea35ad4-0f19-46ff-9b27-f7342fdbc686	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:51.26
+91df2b1b-8c17-4d81-89d8-f317a1cd7bef	fea35ad4-0f19-46ff-9b27-f7342fdbc686	favorited	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:51.384
+6827a590-bb66-4057-ac24-243d913a3dec	fea35ad4-0f19-46ff-9b27-f7342fdbc686	unfavorited	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:51.491
+0ca68cd8-c4b8-42d5-92ae-eb0ddeed8cce	5a5912ed-45d6-4ecb-b016-77c45e0df457	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:51.752
+09c53698-5303-4200-9946-e94ae814933f	5a5912ed-45d6-4ecb-b016-77c45e0df457	favorited	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:51.851
+497782b6-a550-4072-9cce-4b97e5ec1c61	d038e24f-56f0-41d4-8633-944de79367d1	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:52.277
+a201f7ff-bfef-4624-b665-beafe0ee3881	9c3f457f-d993-49c8-86df-04eaec3b987c	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:52.677
+be1ba287-463b-4005-8e1f-f01e23b51750	8efa6ab8-ed70-43f0-b0ac-cfca32395831	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:52.934
+65e204c8-32d8-499a-8a5f-a5d8eb223b34	8efa6ab8-ed70-43f0-b0ac-cfca32395831	executed	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:53.021
+997adbfe-e3f4-4b16-bb11-41c3f39ec8ef	1d4cbe9a-5d19-4466-91ec-2cad7616a274	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:53.229
+3e1c13d6-2abb-4414-805f-8ccf452b5598	125105b2-4233-4179-9f1c-d81d6e386f5f	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:53.481
+9a41cb91-9ace-4c4c-a626-d19ee6cb5bef	882282c5-c238-4ff6-bdd4-1baee30462df	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:53.743
+4667bdf0-08c3-4955-8701-9965790b1eb7	882282c5-c238-4ff6-bdd4-1baee30462df	updated	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:54.01
+5a680341-9f14-474e-8eb6-eb57407ac5aa	01a94a3c-9b6a-4ba0-b474-79a911c37237	created	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:54.452
+978eca01-1fb1-4874-99ce-c1050eace6fd	01a94a3c-9b6a-4ba0-b474-79a911c37237	updated	3c719952-b7d9-455b-888e-2b079af11b4f	\N	2026-07-02 03:13:54.714
+\.
+
+
+--
+-- Data for Name: cms_prompt_variables; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_variables (id, key, label, description, default_value, variable_type, options, required, display_order, created_at, updated_at) FROM stdin;
+0a7b4e75-6c7d-4003-b4ea-5b45844e51a8	businessName	Business Name	Name of the business	\N	string	\N	t	1	2026-06-30 18:14:09.226	2026-06-30 18:14:09.226
+f7bb4dbb-aaef-432b-8961-37c5e5fe7a50	industry	Industry	Industry vertical	\N	select	["Boutique", "Salon", "Restaurant", "Hotel", "Pharmacy", "Education", "Real Estate", "E-commerce"]	f	2	2026-06-30 18:14:09.23	2026-06-30 18:14:09.23
+2ec38a63-ec0e-4b99-b405-ebc51f42f7e9	framework	Framework	Frontend framework	\N	select	["React", "Next.js", "Vue", "Nuxt", "Svelte", "Angular"]	f	3	2026-06-30 18:14:09.233	2026-06-30 18:14:09.233
+7b10b811-1b23-485a-99ee-5af699be0a63	theme	Theme	Visual theme	\N	string	\N	f	4	2026-06-30 18:14:09.236	2026-06-30 18:14:09.236
+11f84ef9-2357-4135-a42a-554d648a3703	primaryColor	Primary Color	Primary brand color	#6366f1	string	\N	f	5	2026-06-30 18:14:09.238	2026-06-30 18:14:09.238
+5c10f222-c432-4b59-99d1-2c10a0805256	secondaryColor	Secondary Color	Secondary brand color	#ec4899	string	\N	f	6	2026-06-30 18:14:09.24	2026-06-30 18:14:09.24
+882fd452-6b2b-47fa-b6c4-288aa6b0e71b	database	Database	Database type	PostgreSQL	select	["PostgreSQL", "MySQL", "SQLite", "MongoDB"]	f	7	2026-06-30 18:14:09.242	2026-06-30 18:14:09.242
+5e4d9574-0774-4307-8299-4bf0c3a6fae7	authentication	Authentication	Auth provider	JWT	select	["JWT", "NextAuth", "Clerk", "Auth0", "Firebase"]	f	8	2026-06-30 18:14:09.244	2026-06-30 18:14:09.244
+930d37c9-629d-4a70-99da-86d82cef6c44	paymentGateway	Payment Gateway	Payment provider	Razorpay	select	["Razorpay", "Stripe", "PayPal", "None"]	f	9	2026-06-30 18:14:09.245	2026-06-30 18:14:09.245
+9f7de792-9b5f-4620-aec8-00b0ad68238e	deployment	Deployment	Deployment target	\N	select	["Vercel", "Netlify", "AWS", "Railway", "Docker"]	f	10	2026-06-30 18:14:09.247	2026-06-30 18:14:09.247
+63ab9eee-6833-4ab6-8023-49e3031fe8b6	storage	Storage	File storage provider	AWS S3	select	["AWS S3", "Cloudflare R2", "Minio", "Local"]	f	11	2026-06-30 18:14:09.249	2026-06-30 18:14:09.249
+9695b861-0435-4370-90b2-9aa5c97ca9ae	language	Language	Programming language	TypeScript	select	["TypeScript", "JavaScript", "Python"]	f	12	2026-06-30 18:14:09.251	2026-06-30 18:14:09.251
+9c80a612-58be-455d-9dcc-9a4bc47f05e6	builder	Builder	AI builder tool	\N	select	["Claude Code", "OpenCode", "Cursor", "ChatGPT", "Bolt"]	f	13	2026-06-30 18:14:09.253	2026-06-30 18:14:09.253
+9ccbffc1-d459-4dd3-b74a-1a0429af1025	temp-test-var	Temp Test Variable	\N	\N	string	\N	f	100	2026-07-02 03:13:00.516	2026-07-02 03:13:00.516
+\.
+
+
+--
+-- Data for Name: cms_prompt_versions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompt_versions (id, prompt_id, version, title, description, instructions, rules, "outputFormat", "expectedFiles", "expectedFolderStructure", "codingStandards", "templateContent", variables, "changeNotes", created_by, created_at) FROM stdin;
+c8bfff0c-d162-4473-b00b-dc1d1aad1c30	88f34fc9-f8a3-4050-a511-e35d8efa7f1f	1	Test Prompt	Test	\N	\N	\N	null	null	\N	Build a {{framework}} website for {{businessName}}	{"framework": "React", "businessName": "My Shop"}	Initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-30 18:20:01.473
+cc363116-358f-49bb-a31d-f70795ed8af8	1226d258-3b76-4ecd-851e-372f29845790	1	Test Prompt (Clone)	Test	\N	\N	\N	null	null	\N	Build a {{framework}} website for {{businessName}}	{"framework": "React", "businessName": "My Shop"}	Cloned from 88f34fc9-f8a3-4050-a511-e35d8efa7f1f	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-30 18:20:07.681
+d3537d9d-b604-421e-b0d9-b6990933a88a	1aff9cbd-d0aa-4cbd-b4f6-ff1bc2bf5851	1	Test Prompt	A prompt for testing	Create a test website	Follow best practices	Full code	null	null	\N	Build a {{businessName}} website	{"businessName": "TestCo"}	Initial version	71b7312c-ead2-4591-908a-9dd924fcde0e	2026-07-01 03:30:09.659
+ca57ad0c-5966-48f0-8b8e-ca304053d09a	1795f0c6-63dc-4c76-b08d-94b1d2857899	1	List Test Prompt	For listing test	\N	\N	\N	null	null	\N	\N	null	Initial version	71b7312c-ead2-4591-908a-9dd924fcde0e	2026-07-01 03:30:11.752
+9c25157e-dae1-4373-9800-fe98cee1d21d	0f6c373c-93d6-427e-86fa-41a078face16	1	Test Prompt	A prompt for testing	Create a test website	Follow best practices	Full code	null	null	\N	Build a {{businessName}} website	{"businessName": "TestCo"}	Initial version	888bf9e6-e5d5-4b74-8325-93992a4b2a2d	2026-07-01 03:34:01.272
+e7eed1fe-8e93-4b00-8f8f-514bda27da15	4a188eb5-859e-49b4-9741-09e34c0e23c9	1	Test Prompt	A prompt for testing	Create a test website	Follow best practices	Full code	null	null	\N	Build a {{businessName}} website	{"businessName": "TestCo"}	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:12.411
+caa4fb8c-d6f9-4097-8c4e-3603d70ec0c5	3b979383-2fbf-4dd4-b8f5-7d6ae7489dfc	1	List Test Prompt	For listing test	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:13.448
+3bf69a28-d1fd-4650-ae56-01833b58297e	48b7e7f2-1526-4ba6-bafb-30473d9bb8ad	1	Get Test Prompt	For get test	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:14.566
+2bc0c68d-1e71-4052-94b5-08146c9f5ee0	1488160a-1d6f-4232-af9e-4d4189ea9fd2	1	Update Test Prompt	Before update	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:15.452
+05532050-fa16-4e2e-bf62-f8718f4a35c0	1488160a-1d6f-4232-af9e-4d4189ea9fd2	2	Updated Title	After update	\N	\N	\N	null	null	\N	\N	null	Updated for testing	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:16.014
+a94b9ddb-a00b-4415-988e-4643efaf7385	1cf343ac-ac6c-4403-b1b1-10e7f072d8d5	1	Delete Test Prompt	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:16.92
+3029f383-7522-42f7-b678-387f3641796d	b5c8ec58-50ab-408e-bd13-cf6804899462	1	Searchable Widget Builder	Builds custom widgets	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:17.897
+6e74af6d-6616-4be3-bf68-61ca873db929	6d46a9a8-b221-436e-b9ed-524239e7b5d8	1	Category Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:18.503
+06f995f9-2cc3-43b9-b9fb-d2e1bb01b1c1	da06d292-8063-4acd-ba6c-0cdc51776130	1	Type Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:19.062
+5fd45137-f5f2-4c95-ab1b-016ca79250ad	8f1c8aef-fbf9-4b83-8c82-61fdee2f1a84	1	Builder Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:19.623
+96765387-8fb2-45fd-b5c7-14948b10b385	74adc22a-f954-4acf-a413-f88562356ba5	1	Tag Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:20.575
+9c84d66c-8670-4da4-85e3-af1a045d5dd0	95307de6-7e1e-4085-898a-f3205c9468ae	1	Source Prompt	Original description	Original instructions	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:21.25
+ceae2ad0-88aa-43f0-b049-efeef99f848c	f40016ad-ae6d-4465-a5bb-fb70c93073c3	1	Source Prompt (Clone)	Original description	Original instructions	\N	\N	null	null	\N	\N	null	Cloned from 95307de6-7e1e-4085-898a-f3205c9468ae	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:21.611
+61d8637d-588f-451f-b935-eec147ff3d22	d539a6d7-5ae5-409b-b12b-231794d27077	1	Favorite Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:21.858
+d001a128-beda-4159-88c6-48b4f1950060	737ce8dd-2bdd-4e6c-ba8c-087775c1c74a	1	Favorites List Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:22.258
+2ee3b374-38ab-48c7-acd6-83e118792859	86f6a3d0-f04b-441d-891c-141352b422bd	1	Collection Item Prompt	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:22.77
+a5704781-2524-45be-abda-4991a9c34962	fa3b042e-84ff-42ba-8d9d-3361df9264f7	1	Render Test	\N	\N	\N	\N	null	null	\N	Hello {{name}}, welcome to {{place}}!	{"name": "User", "place": "TestLand"}	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.127
+e97ab981-29ea-4da2-9816-1251f4efb8fe	32fb96ca-1252-4620-9aa8-76243c073471	1	Execute Test	\N	\N	\N	\N	null	null	\N	Execute {{task}}	{"task": "default-task"}	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.369
+334d159e-4df9-450f-86f4-128ec96d3f35	e6ea7c29-82de-4487-b13c-2a554612222a	1	Preview Test	\N	\N	\N	\N	null	null	\N	Preview {{item}}	{"item": "default-item"}	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.68
+c2b09b53-c4a3-4630-81d1-4effaac73c67	2687d6d6-7fd5-42fc-acbf-4d9bfed1c1e8	1	History Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.913
+124de436-bd11-48c4-81bf-b91405f58450	b9ea3c1c-f386-44fb-baf6-d28c47df133d	1	Versions Test	\N	v1 instructions	\N	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.134
+f2328612-6207-4a09-b475-67df92593095	b9ea3c1c-f386-44fb-baf6-d28c47df133d	2	Versions Test	\N	v2 instructions	\N	\N	null	null	\N	\N	null	Updated instructions	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.365
+5b049299-57b3-494a-90dd-6b487ed0a067	5ed89a57-3ba9-4088-b900-a32826e90da1	1	Rollback Test	\N	Original instructions	Original rules	\N	null	null	\N	\N	null	Initial version	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.776
+1cba2f50-68eb-405e-90f5-b883e2720493	5ed89a57-3ba9-4088-b900-a32826e90da1	2	Rollback Test	\N	Updated instructions	Original rules	\N	null	null	\N	\N	null	Test update before rollback	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:25.019
+20f78bad-c142-4135-a1ed-974d178c5dab	0b7a932f-fb57-466e-91db-375e6ba409b1	1	Test Prompt	A prompt for testing	Create a test website	Follow best practices	Full code	null	null	\N	Build a {{businessName}} website	{"businessName": "TestCo"}	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:47.672
+8fb532c4-ea65-4126-a646-f01ef66c3eb9	aa9e46ea-b2cf-4eb8-9c07-2d3112b740b2	1	List Test Prompt	For listing test	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:48.486
+9c8bc1f5-58cc-4c01-a9de-b5a877159289	68e2bf2f-0982-4ad9-9098-0e10b825fc04	1	Get Test Prompt	For get test	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:49.349
+14df502d-2dc2-46ba-8225-bd3727b491b9	12748b00-4910-4807-9555-e944f3d79f5b	1	Update Test Prompt	Before update	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:49.952
+1255e8f2-6ef7-4523-b5b6-d6788916b781	12748b00-4910-4807-9555-e944f3d79f5b	2	Updated Title	After update	\N	\N	\N	null	null	\N	\N	null	Updated for testing	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:50.361
+dbabd3f4-8738-4b3b-9ae9-c1dc648ea6be	fb20d3f6-bae0-482b-ab75-3e276bebcf40	1	Delete Test Prompt	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:51.202
+d020de3e-ef57-47c4-ac0a-260d7cd396c0	085835c0-1809-4694-bcc7-f73d67500224	1	Searchable Widget Builder	Builds custom widgets	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:52.13
+6e94920a-d784-42f9-8253-0ba88bb65fc8	04235081-0363-4a6f-8954-cb10d8619f34	1	Category Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:52.754
+07d090b3-9dc3-4fe0-aed3-483303cd1c09	f32be280-d9a7-4e49-8f73-258ddf5c54ee	1	Type Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:53.57
+014576ff-9e57-43ee-a02a-f7ecde5c872d	bc74eb87-58ad-48f3-a0de-abc2d69d2ccd	1	Builder Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:54.174
+81958816-7964-467f-8374-9acaed5721b2	be776274-3092-4a57-a6c7-1652e52b3dfa	1	Tag Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:55.03
+774dd696-38f9-4f38-9bb5-7f65d7ed04d0	8c303417-bfb8-4c0a-8b28-451ebeccb051	1	Source Prompt	Original description	Original instructions	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:55.817
+f31ddaa7-3f48-4ad3-8194-3a79ae83efa5	f08f8f2c-5b50-4645-ba91-72581f35b5c8	1	Source Prompt (Clone)	Original description	Original instructions	\N	\N	null	null	\N	\N	null	Cloned from 8c303417-bfb8-4c0a-8b28-451ebeccb051	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:56.278
+6bd452da-b833-4e28-855b-d1040b711cfb	39eaadec-e945-424b-a1d7-c431462d183f	1	Favorite Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:56.603
+3d76cdc3-818b-4097-be79-1322434e00c7	47aefc92-be82-4f80-8307-35ea72b3c787	1	Favorites List Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:57.133
+ddde2002-a98d-4282-af6a-a70f0b286f35	bd325322-fd89-472f-81bb-da3912dc3601	1	Collection Item Prompt	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:57.676
+8e37f49a-8e40-4031-a179-9a9e670b36ff	38187156-571f-4536-9548-401cd1560969	1	Render Test	\N	\N	\N	\N	null	null	\N	Hello {{name}}, welcome to {{place}}!	{"name": "User", "place": "TestLand"}	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:58.066
+7f6ede63-346d-4b51-9e21-90ec17df78d1	31126dda-87ce-4129-93ad-9c4d45f10e7b	1	Execute Test	\N	\N	\N	\N	null	null	\N	Execute {{task}}	{"task": "default-task"}	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:58.353
+de1bd21e-61a5-487b-a5a7-2e58e5cb9d9d	e6a196a1-f02d-4da5-8493-c9df7e8c3c97	1	Preview Test	\N	\N	\N	\N	null	null	\N	Preview {{item}}	{"item": "default-item"}	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:58.699
+94a8775c-45f5-4d53-be93-c7e7bea2d02f	e55f54ef-0dd6-4e5d-8aa1-6a1d95ea5fe3	1	History Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:58.971
+f5de7eab-9e2a-4856-9107-2567433ab45d	bd714ff2-ce43-4495-99a2-7347e59b7289	1	Versions Test	\N	v1 instructions	\N	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.207
+c60cf084-6edf-470d-b07c-aa918a2af6ad	bd714ff2-ce43-4495-99a2-7347e59b7289	2	Versions Test	\N	v2 instructions	\N	\N	null	null	\N	\N	null	Updated instructions	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.393
+30a3b7dc-6ddd-402c-bea7-aebdefea2783	e02da55f-4bc7-4e15-97b3-d5a18f548f94	1	Rollback Test	\N	Original instructions	Original rules	\N	null	null	\N	\N	null	Initial version	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.745
+a32064de-19ae-4fe2-a6fc-e33b7369a6ca	e02da55f-4bc7-4e15-97b3-d5a18f548f94	2	Rollback Test	\N	Updated instructions	Original rules	\N	null	null	\N	\N	null	Test update before rollback	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.938
+8651727c-6746-45e3-aa13-448f68315235	06dee9c7-026f-46cc-9a65-73b6ba27183c	1	Test Prompt	A prompt for testing	Create a test website	Follow best practices	Full code	null	null	\N	Build a {{businessName}} website	{"businessName": "TestCo"}	Initial version	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:18.327
+698f909f-d97b-45bb-93ba-a4c0b6e96f5d	aac5766a-181d-45ec-8581-761848c48039	1	List Test Prompt	For listing test	\N	\N	\N	null	null	\N	\N	null	Initial version	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:19.116
+b9b4fc05-7fa9-43e1-82b6-ec75220f85c5	a6a0edd1-d729-4712-8ea7-ef2a418d260c	1	Get Test Prompt	For get test	\N	\N	\N	null	null	\N	\N	null	Initial version	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:19.953
+96c6f5b3-3aab-483c-a08b-ee014da060be	14b5b2d2-4781-4152-8311-f0e6f0cafc31	1	Update Test Prompt	Before update	\N	\N	\N	null	null	\N	\N	null	Initial version	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:20.618
+b251b43b-eba1-4141-9787-a5cc6775dd5a	14b5b2d2-4781-4152-8311-f0e6f0cafc31	2	Updated Title	After update	\N	\N	\N	null	null	\N	\N	null	Updated for testing	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:21.054
+3c4bf82a-0607-448f-9c44-cfd0b89bd6ca	1593dc6b-4d71-4ef8-bd2f-28ce24fda555	1	Delete Test Prompt	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:21.883
+52e9115c-8f45-411e-bc7a-dc624d128505	71df28d5-ce27-4727-89ba-698596391cfe	1	Searchable Widget Builder	Builds custom widgets	\N	\N	\N	null	null	\N	\N	null	Initial version	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:22.766
+78868a17-92a2-430c-a633-681b77d79486	3720d404-e0c8-4c9d-b253-e4c84a3c2970	1	Category Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:23.394
+8634505f-c4b8-4141-bc8c-3611e509a2f8	346d6d77-f7cc-4571-af66-93b882892903	1	Type Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:24.239
+e0e99ab0-7e84-44de-aa48-0678853b5a98	6436d832-0210-4a09-bfbb-e03f5c2cdd4a	1	Test Prompt	A prompt for testing	Create a test website	Follow best practices	Full code	null	null	\N	Build a {{businessName}} website	{"businessName": "TestCo"}	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:42.723
+074186a0-7ac5-4bc2-aee6-861fc12e4837	be7b7360-1d83-4230-b8a0-06406c9c1f11	1	List Test Prompt	For listing test	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:43.591
+a7de82fc-8035-4935-b061-cf2f3dcdcd08	7d6f2fdf-13d9-4480-8689-9050aaf7217e	1	Get Test Prompt	For get test	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:44.449
+d3186a72-655e-4b35-b34e-8ffb2a84af58	e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	1	Update Test Prompt	Before update	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:45.1
+2effec87-7d14-4b5a-9b2b-6a1a62b4bdab	e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	2	Updated Title	After update	\N	\N	\N	null	null	\N	\N	null	Updated for testing	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:45.557
+4cf17384-b4ee-4dbc-8469-8288a46554e0	600c15a5-2237-4923-99b7-a5d699841d3c	1	Delete Test Prompt	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:46.35
+9a5907d2-b49e-4560-8e5b-d97be7e1d20a	39298128-514d-467d-b982-700e853ee4d8	1	Searchable Widget Builder	Builds custom widgets	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:47.214
+227086e5-c6fe-4885-bf44-93332e81a09e	0a9359df-20ed-401f-bb7b-45004f2cbe44	1	Category Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:47.852
+06eeffb4-f2be-4685-ad14-d4e174634b1c	e8388662-1642-4659-ac95-74959c3d4af1	1	Type Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:48.482
+07e85b90-0623-40d5-b91b-1b63db90fd85	e7c4d928-dafd-45b0-9158-ef6f91c62e12	1	Builder Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:49.145
+f25ed523-7a43-4058-8ea1-658004e9bd92	bcac9209-9341-41ca-8461-fab9e892540f	1	Tag Filter Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:49.879
+4b7a04c6-9926-4387-8247-95d1e98058f6	c43f4f5e-922e-42dc-8fe5-7ac992a6ea98	1	Source Prompt	Original description	Original instructions	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:50.52
+7cf7df3a-71c8-4cba-8487-a69ed978087c	ebea9f5d-5076-4c84-b75d-66b41ef9d21a	1	Source Prompt (Clone)	Original description	Original instructions	\N	\N	null	null	\N	\N	null	Cloned from c43f4f5e-922e-42dc-8fe5-7ac992a6ea98	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:50.884
+7f062830-9eb0-429f-89af-6d95fde21e89	fea35ad4-0f19-46ff-9b27-f7342fdbc686	1	Favorite Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:51.171
+60c04adc-a01d-46a5-8b75-bbf6d6172895	5a5912ed-45d6-4ecb-b016-77c45e0df457	1	Favorites List Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:51.681
+427a1506-d0f4-43c0-9489-a2476fb467fc	d038e24f-56f0-41d4-8633-944de79367d1	1	Collection Item Prompt	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:52.205
+cca5b0c3-4b09-4ace-b048-fc6818e2b3e7	9c3f457f-d993-49c8-86df-04eaec3b987c	1	Render Test	\N	\N	\N	\N	null	null	\N	Hello {{name}}, welcome to {{place}}!	{"name": "User", "place": "TestLand"}	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:52.609
+6caf3e98-d5b1-438f-8357-167f70568e1f	8efa6ab8-ed70-43f0-b0ac-cfca32395831	1	Execute Test	\N	\N	\N	\N	null	null	\N	Execute {{task}}	{"task": "default-task"}	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:52.877
+a178a08b-52a8-4f48-8aaa-4094bfaa2af9	1d4cbe9a-5d19-4466-91ec-2cad7616a274	1	Preview Test	\N	\N	\N	\N	null	null	\N	Preview {{item}}	{"item": "default-item"}	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:53.169
+7f72eabc-3b5a-4f7d-99c1-e12d13c5b871	125105b2-4233-4179-9f1c-d81d6e386f5f	1	History Test	\N	\N	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:53.425
+146add7f-dc7b-48d0-8dac-a6d81ed27337	882282c5-c238-4ff6-bdd4-1baee30462df	1	Versions Test	\N	v1 instructions	\N	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:53.682
+1a97aba4-9c92-463f-a157-c0dfab04da16	882282c5-c238-4ff6-bdd4-1baee30462df	2	Versions Test	\N	v2 instructions	\N	\N	null	null	\N	\N	null	Updated instructions	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:53.927
+cbba9eb5-9ead-45b3-990a-c1f04bc658ad	01a94a3c-9b6a-4ba0-b474-79a911c37237	1	Rollback Test	\N	Original instructions	Original rules	\N	null	null	\N	\N	null	Initial version	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.381
+e80dbb54-3b21-4aba-8ba7-132375cc67bb	01a94a3c-9b6a-4ba0-b474-79a911c37237	2	Rollback Test	\N	Updated instructions	Original rules	\N	null	null	\N	\N	null	Test update before rollback	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.639
+\.
+
+
+--
+-- Data for Name: cms_prompts; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_prompts (id, title, description, "promptType", category_id, builder_id, instructions, rules, "outputFormat", "expectedFiles", "expectedFolderStructure", "codingStandards", framework, libraries, dependencies, "apiRequirements", "dbRequirements", "responsiveRules", "performanceRules", "securityRules", "accessibilityRules", "seoRules", "testingRules", "acceptanceCriteria", variables, "templateContent", version, is_deleted, business_id, created_by, updated_by, created_at, updated_at, reference_id, reference_type) FROM stdin;
+88f34fc9-f8a3-4050-a511-e35d8efa7f1f	Test Prompt	Test	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"framework": "React", "businessName": "My Shop"}	Build a {{framework}} website for {{businessName}}	1	f	\N	6280f364-2664-49f8-a19b-14ca697e4fa6	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-30 18:20:01.457	2026-06-30 18:20:01.457	\N	\N
+1226d258-3b76-4ecd-851e-372f29845790	Test Prompt (Clone)	Test	website-generation	\N	\N	\N	\N	\N	null	null	\N	\N	null	null	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"framework": "React", "businessName": "My Shop"}	Build a {{framework}} website for {{businessName}}	1	f	\N	6280f364-2664-49f8-a19b-14ca697e4fa6	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-30 18:20:07.675	2026-06-30 18:20:07.675	\N	\N
+5ed89a57-3ba9-4088-b900-a32826e90da1	Rollback Test	\N	website-generation	\N	\N	Original instructions	Original rules	\N	null	null	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	null	\N	3	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.699	2026-07-02 03:12:25.353	\N	\N
+0b7a932f-fb57-466e-91db-375e6ba409b1	Test Prompt	A prompt for testing	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	39b8a4e9-6a19-485b-979c-9b158c599b1e	Create a test website	Follow best practices	Full code	\N	\N	\N	React	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"businessName": "TestCo"}	Build a {{businessName}} website	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:47.189	2026-07-02 03:12:47.189	\N	\N
+4a188eb5-859e-49b4-9741-09e34c0e23c9	Test Prompt	A prompt for testing	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	39b8a4e9-6a19-485b-979c-9b158c599b1e	Create a test website	Follow best practices	Full code	\N	\N	\N	React	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"businessName": "TestCo"}	Build a {{businessName}} website	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:11.91	2026-07-02 03:12:11.91	\N	\N
+3b979383-2fbf-4dd4-b8f5-7d6ae7489dfc	List Test Prompt	For listing test	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:13.102	2026-07-02 03:12:13.102	\N	\N
+6d46a9a8-b221-436e-b9ed-524239e7b5d8	Category Filter Test	\N	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:18.326	2026-07-02 03:12:18.326	\N	\N
+8f1c8aef-fbf9-4b83-8c82-61fdee2f1a84	Builder Filter Test	\N	website-generation	\N	39b8a4e9-6a19-485b-979c-9b158c599b1e	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:19.432	2026-07-02 03:12:19.432	\N	\N
+95307de6-7e1e-4085-898a-f3205c9468ae	Source Prompt	Original description	website-generation	\N	\N	Original instructions	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:21.094	2026-07-02 03:12:21.094	\N	\N
+f40016ad-ae6d-4465-a5bb-fb70c93073c3	Source Prompt (Clone)	Original description	website-generation	\N	\N	Original instructions	\N	\N	null	null	\N	\N	null	null	\N	\N	\N	\N	\N	\N	\N	\N	\N	null	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:21.455	2026-07-02 03:12:21.455	\N	\N
+d539a6d7-5ae5-409b-b12b-231794d27077	Favorite Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:21.769	2026-07-02 03:12:21.769	\N	\N
+737ce8dd-2bdd-4e6c-ba8c-087775c1c74a	Favorites List Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:22.159	2026-07-02 03:12:22.159	\N	\N
+b9ea3c1c-f386-44fb-baf6-d28c47df133d	Versions Test	\N	website-generation	\N	\N	v2 instructions	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:24.072	2026-07-02 03:12:24.287	\N	\N
+aa9e46ea-b2cf-4eb8-9c07-2d3112b740b2	List Test Prompt	For listing test	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:48.121	2026-07-02 03:12:48.121	\N	\N
+085835c0-1809-4694-bcc7-f73d67500224	Searchable Widget Builder	Builds custom widgets	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:51.981	2026-07-02 03:12:51.981	\N	\N
+04235081-0363-4a6f-8954-cb10d8619f34	Category Filter Test	\N	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:52.561	2026-07-02 03:12:52.561	\N	\N
+be776274-3092-4a57-a6c7-1652e52b3dfa	Tag Filter Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:54.778	2026-07-02 03:12:54.778	\N	\N
+bd325322-fd89-472f-81bb-da3912dc3601	Collection Item Prompt	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:57.581	2026-07-02 03:12:57.581	\N	\N
+38187156-571f-4536-9548-401cd1560969	Render Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"name": "User", "place": "TestLand"}	Hello {{name}}, welcome to {{place}}!	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:57.977	2026-07-02 03:12:57.977	\N	\N
+31126dda-87ce-4129-93ad-9c4d45f10e7b	Execute Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"task": "default-task"}	Execute {{task}}	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:58.251	2026-07-02 03:12:58.251	\N	\N
+e6a196a1-f02d-4da5-8493-c9df7e8c3c97	Preview Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"item": "default-item"}	Preview {{item}}	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:58.605	2026-07-02 03:12:58.605	\N	\N
+e55f54ef-0dd6-4e5d-8aa1-6a1d95ea5fe3	History Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:58.899	2026-07-02 03:12:58.899	\N	\N
+bd714ff2-ce43-4495-99a2-7347e59b7289	Versions Test	\N	website-generation	\N	\N	v2 instructions	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.139	2026-07-02 03:12:59.34	\N	\N
+1593dc6b-4d71-4ef8-bd2f-28ce24fda555	Delete Test Prompt	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	t	\N	bc4642a8-4837-47ab-a176-53c609b26d54	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:21.744	2026-07-02 03:13:22.101	\N	\N
+e02da55f-4bc7-4e15-97b3-d5a18f548f94	Rollback Test	\N	website-generation	\N	\N	Original instructions	Original rules	\N	null	null	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	null	\N	3	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:59.675	2026-07-02 03:13:00.218	\N	\N
+06dee9c7-026f-46cc-9a65-73b6ba27183c	Test Prompt	A prompt for testing	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	39b8a4e9-6a19-485b-979c-9b158c599b1e	Create a test website	Follow best practices	Full code	\N	\N	\N	React	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"businessName": "TestCo"}	Build a {{businessName}} website	1	f	\N	bc4642a8-4837-47ab-a176-53c609b26d54	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:17.848	2026-07-02 03:13:17.848	\N	\N
+aac5766a-181d-45ec-8581-761848c48039	List Test Prompt	For listing test	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	bc4642a8-4837-47ab-a176-53c609b26d54	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:18.8	2026-07-02 03:13:18.8	\N	\N
+3720d404-e0c8-4c9d-b253-e4c84a3c2970	Category Filter Test	\N	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	bc4642a8-4837-47ab-a176-53c609b26d54	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:23.177	2026-07-02 03:13:23.177	\N	\N
+b984e93b-fa91-4176-88b6-378ea5200fb6	List Test Prompt	For listing test	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	888bf9e6-e5d5-4b74-8325-93992a4b2a2d	888bf9e6-e5d5-4b74-8325-93992a4b2a2d	2026-07-01 03:34:01.667	2026-07-01 03:34:01.667	\N	\N
+6436d832-0210-4a09-bfbb-e03f5c2cdd4a	Test Prompt	A prompt for testing	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	39b8a4e9-6a19-485b-979c-9b158c599b1e	Create a test website	Follow best practices	Full code	\N	\N	\N	React	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"businessName": "TestCo"}	Build a {{businessName}} website	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:42.273	2026-07-02 03:13:42.273	\N	\N
+be7b7360-1d83-4230-b8a0-06406c9c1f11	List Test Prompt	For listing test	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:43.282	2026-07-02 03:13:43.282	\N	\N
+39298128-514d-467d-b982-700e853ee4d8	Searchable Widget Builder	Builds custom widgets	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:47.059	2026-07-02 03:13:47.059	\N	\N
+e8388662-1642-4659-ac95-74959c3d4af1	Type Filter Test	\N	performance-fix	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:48.344	2026-07-02 03:13:48.344	\N	\N
+bcac9209-9341-41ca-8461-fab9e892540f	Tag Filter Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:49.687	2026-07-02 03:13:49.687	\N	\N
+1795f0c6-63dc-4c76-b08d-94b1d2857899	List Test Prompt	For listing test	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	71b7312c-ead2-4591-908a-9dd924fcde0e	71b7312c-ead2-4591-908a-9dd924fcde0e	2026-07-01 03:30:10.987	2026-07-01 03:30:10.987	\N	\N
+e117f6d5-6e34-4aee-ba76-2b4eb73fecc1	Get Test Prompt	For get test	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	71b7312c-ead2-4591-908a-9dd924fcde0e	71b7312c-ead2-4591-908a-9dd924fcde0e	2026-07-01 03:30:13.294	2026-07-01 03:30:13.294	\N	\N
+1aff9cbd-d0aa-4cbd-b4f6-ff1bc2bf5851	Test Prompt	A prompt for testing	website-generation	\N	\N	Create a test website	Follow best practices	Full code	\N	\N	\N	React	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"businessName": "TestCo"}	Build a {{businessName}} website	1	f	\N	71b7312c-ead2-4591-908a-9dd924fcde0e	71b7312c-ead2-4591-908a-9dd924fcde0e	2026-07-01 03:30:08.448	2026-07-01 03:30:08.448	\N	\N
+52293e1e-6e3d-4258-9b7c-e15a8a4d0a67	Test Prompt	A prompt for testing	website-generation	\N	\N	Create a test website	Follow best practices	Full code	\N	\N	\N	React	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"businessName": "TestCo"}	Build a {{businessName}} website	1	f	\N	3e7510f6-0a87-4389-bfb4-06944191245a	3e7510f6-0a87-4389-bfb4-06944191245a	2026-07-01 03:31:02.823	2026-07-01 03:31:02.823	\N	\N
+0f6c373c-93d6-427e-86fa-41a078face16	Test Prompt	A prompt for testing	website-generation	\N	\N	Create a test website	Follow best practices	Full code	\N	\N	\N	React	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"businessName": "TestCo"}	Build a {{businessName}} website	1	f	\N	888bf9e6-e5d5-4b74-8325-93992a4b2a2d	888bf9e6-e5d5-4b74-8325-93992a4b2a2d	2026-07-01 03:34:00.139	2026-07-01 03:34:00.139	\N	\N
+f08f8f2c-5b50-4645-ba91-72581f35b5c8	Source Prompt (Clone)	Original description	website-generation	\N	\N	Original instructions	\N	\N	null	null	\N	\N	null	null	\N	\N	\N	\N	\N	\N	\N	\N	\N	null	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:56.079	2026-07-02 03:12:56.079	\N	\N
+39eaadec-e945-424b-a1d7-c431462d183f	Favorite Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:56.491	2026-07-02 03:12:56.491	\N	\N
+48b7e7f2-1526-4ba6-bafb-30473d9bb8ad	Get Test Prompt	For get test	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:14.301	2026-07-02 03:12:14.301	\N	\N
+1488160a-1d6f-4232-af9e-4d4189ea9fd2	Updated Title	After update	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:15.228	2026-07-02 03:12:15.833	\N	\N
+1cf343ac-ac6c-4403-b1b1-10e7f072d8d5	Delete Test Prompt	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	t	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:16.751	2026-07-02 03:12:17.147	\N	\N
+b5c8ec58-50ab-408e-bd13-cf6804899462	Searchable Widget Builder	Builds custom widgets	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:17.742	2026-07-02 03:12:17.742	\N	\N
+da06d292-8063-4acd-ba6c-0cdc51776130	Type Filter Test	\N	performance-fix	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:18.944	2026-07-02 03:12:18.944	\N	\N
+74adc22a-f954-4acf-a413-f88562356ba5	Tag Filter Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:20.372	2026-07-02 03:12:20.372	\N	\N
+86f6a3d0-f04b-441d-891c-141352b422bd	Collection Item Prompt	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:22.684	2026-07-02 03:12:22.684	\N	\N
+fa3b042e-84ff-42ba-8d9d-3361df9264f7	Render Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"name": "User", "place": "TestLand"}	Hello {{name}}, welcome to {{place}}!	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.049	2026-07-02 03:12:23.049	\N	\N
+32fb96ca-1252-4620-9aa8-76243c073471	Execute Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"task": "default-task"}	Execute {{task}}	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.278	2026-07-02 03:12:23.278	\N	\N
+e6ea7c29-82de-4487-b13c-2a554612222a	Preview Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"item": "default-item"}	Preview {{item}}	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.6	2026-07-02 03:12:23.6	\N	\N
+2687d6d6-7fd5-42fc-acbf-4d9bfed1c1e8	History Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	c0abbe7b-051b-420f-b009-2362c30e5322	c0abbe7b-051b-420f-b009-2362c30e5322	2026-07-02 03:12:23.842	2026-07-02 03:12:23.842	\N	\N
+68e2bf2f-0982-4ad9-9098-0e10b825fc04	Get Test Prompt	For get test	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:49.146	2026-07-02 03:12:49.146	\N	\N
+12748b00-4910-4807-9555-e944f3d79f5b	Updated Title	After update	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:49.797	2026-07-02 03:12:50.207	\N	\N
+fb20d3f6-bae0-482b-ab75-3e276bebcf40	Delete Test Prompt	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	t	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:51.038	2026-07-02 03:12:51.431	\N	\N
+f32be280-d9a7-4e49-8f73-258ddf5c54ee	Type Filter Test	\N	performance-fix	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:53.314	2026-07-02 03:12:53.314	\N	\N
+bc74eb87-58ad-48f3-a0de-abc2d69d2ccd	Builder Filter Test	\N	website-generation	\N	39b8a4e9-6a19-485b-979c-9b158c599b1e	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:53.984	2026-07-02 03:12:53.984	\N	\N
+8c303417-bfb8-4c0a-8b28-451ebeccb051	Source Prompt	Original description	website-generation	\N	\N	Original instructions	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:55.621	2026-07-02 03:12:55.621	\N	\N
+47aefc92-be82-4f80-8307-35ea72b3c787	Favorites List Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	f6596463-415c-4c36-b12c-fe4d92ca0d69	f6596463-415c-4c36-b12c-fe4d92ca0d69	2026-07-02 03:12:57.026	2026-07-02 03:12:57.026	\N	\N
+a6a0edd1-d729-4712-8ea7-ef2a418d260c	Get Test Prompt	For get test	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	bc4642a8-4837-47ab-a176-53c609b26d54	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:19.715	2026-07-02 03:13:19.715	\N	\N
+14b5b2d2-4781-4152-8311-f0e6f0cafc31	Updated Title	After update	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2	f	\N	bc4642a8-4837-47ab-a176-53c609b26d54	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:20.456	2026-07-02 03:13:20.907	\N	\N
+71df28d5-ce27-4727-89ba-698596391cfe	Searchable Widget Builder	Builds custom widgets	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	bc4642a8-4837-47ab-a176-53c609b26d54	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:22.62	2026-07-02 03:13:22.62	\N	\N
+346d6d77-f7cc-4571-af66-93b882892903	Type Filter Test	\N	performance-fix	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	bc4642a8-4837-47ab-a176-53c609b26d54	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:23.963	2026-07-02 03:13:23.963	\N	\N
+42e61ac8-08e8-4237-b636-2bb502ef86d2	Builder Filter Test	\N	website-generation	\N	39b8a4e9-6a19-485b-979c-9b158c599b1e	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	bc4642a8-4837-47ab-a176-53c609b26d54	bc4642a8-4837-47ab-a176-53c609b26d54	2026-07-02 03:13:24.731	2026-07-02 03:13:24.731	\N	\N
+7d6f2fdf-13d9-4480-8689-9050aaf7217e	Get Test Prompt	For get test	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:44.274	2026-07-02 03:13:44.274	\N	\N
+e4b41ce4-a514-4e2e-86a7-17c0fe7b6418	Updated Title	After update	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:44.949	2026-07-02 03:13:45.408	\N	\N
+600c15a5-2237-4923-99b7-a5d699841d3c	Delete Test Prompt	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	t	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:46.168	2026-07-02 03:13:46.564	\N	\N
+0a9359df-20ed-401f-bb7b-45004f2cbe44	Category Filter Test	\N	website-generation	3efe755a-cb47-48f0-b627-e0a9613a2cb7	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:47.651	2026-07-02 03:13:47.651	\N	\N
+e7c4d928-dafd-45b0-9158-ef6f91c62e12	Builder Filter Test	\N	website-generation	\N	39b8a4e9-6a19-485b-979c-9b158c599b1e	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:48.966	2026-07-02 03:13:48.966	\N	\N
+c43f4f5e-922e-42dc-8fe5-7ac992a6ea98	Source Prompt	Original description	website-generation	\N	\N	Original instructions	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:50.354	2026-07-02 03:13:50.354	\N	\N
+ebea9f5d-5076-4c84-b75d-66b41ef9d21a	Source Prompt (Clone)	Original description	website-generation	\N	\N	Original instructions	\N	\N	null	null	\N	\N	null	null	\N	\N	\N	\N	\N	\N	\N	\N	\N	null	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:50.727	2026-07-02 03:13:50.727	\N	\N
+fea35ad4-0f19-46ff-9b27-f7342fdbc686	Favorite Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:51.066	2026-07-02 03:13:51.066	\N	\N
+5a5912ed-45d6-4ecb-b016-77c45e0df457	Favorites List Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:51.581	2026-07-02 03:13:51.581	\N	\N
+d038e24f-56f0-41d4-8633-944de79367d1	Collection Item Prompt	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:52.109	2026-07-02 03:13:52.109	\N	\N
+9c3f457f-d993-49c8-86df-04eaec3b987c	Render Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"name": "User", "place": "TestLand"}	Hello {{name}}, welcome to {{place}}!	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:52.519	2026-07-02 03:13:52.519	\N	\N
+8efa6ab8-ed70-43f0-b0ac-cfca32395831	Execute Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"task": "default-task"}	Execute {{task}}	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:52.79	2026-07-02 03:13:52.79	\N	\N
+1d4cbe9a-5d19-4466-91ec-2cad7616a274	Preview Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	{"item": "default-item"}	Preview {{item}}	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:53.085	2026-07-02 03:13:53.085	\N	\N
+125105b2-4233-4179-9f1c-d81d6e386f5f	History Test	\N	website-generation	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:53.343	2026-07-02 03:13:53.343	\N	\N
+882282c5-c238-4ff6-bdd4-1baee30462df	Versions Test	\N	website-generation	\N	\N	v2 instructions	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	2	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:53.601	2026-07-02 03:13:53.843	\N	\N
+01a94a3c-9b6a-4ba0-b474-79a911c37237	Rollback Test	\N	website-generation	\N	\N	Original instructions	Original rules	\N	null	null	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	null	\N	3	f	\N	3c719952-b7d9-455b-888e-2b079af11b4f	3c719952-b7d9-455b-888e-2b079af11b4f	2026-07-02 03:13:54.285	2026-07-02 03:13:54.968	\N	\N
+\.
+
+
+--
+-- Data for Name: cms_requirement_relations; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_requirement_relations (id, source_requirement_id, target_requirement_id, type) FROM stdin;
+9435ffcc-62cb-4a55-b62e-096b66f5ed62	a23f3403-d3c4-422d-b56a-1d4821e969c5	1ee19611-cd5f-49ea-aee6-14a4fc4c558d	DEPENDS_ON
+65d4a20e-a73d-45ee-9ad9-a41f41d03d11	927a06b2-af0c-478a-8652-1c8c52e67710	a23f3403-d3c4-422d-b56a-1d4821e969c5	REQUIRES
+220f8652-72b9-47df-a8c7-cca6624fdea4	927a06b2-af0c-478a-8652-1c8c52e67710	b784c40d-a4d5-4bab-aceb-ed63dd4186ec	CONFLICTS_WITH
+d4d27ca2-7fd9-44cb-bbdb-c1d2e60919b5	184f5f33-ff13-4645-a02f-f82ba65e5693	b784c40d-a4d5-4bab-aceb-ed63dd4186ec	RECOMMENDED_WITH
+35842ff3-a03b-4e45-a9a0-6809103e3a59	6f39c5c8-71f9-45cf-b8b9-ac856b8c6f7c	c7ed1384-811e-4442-96b9-c4208670178f	REPLACES
+\.
+
+
+--
+-- Data for Name: cms_requirement_templates; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_requirement_templates (id, key, name, description, created_at, updated_at) FROM stdin;
+d7e47f43-6bb8-45fe-af70-578cbc6e92f5	template-boutique	Antair Boutique Preset	Preconfigured requirements for digital fashion boutiques.	2026-06-29 19:15:38.257	2026-06-29 19:15:38.257
+96de2d67-4bcc-454d-b172-925edea2e169	template-salon	Antair Salon Preset	Preconfigured calendar appointment and client scheduling preset.	2026-06-29 19:15:38.267	2026-06-29 19:15:38.267
+6595a4c0-938f-4b42-848c-3cd02652be8a	template-tailor	Antair Custom Tailor Preset	Premium custom fit tailoring measurements selector.	2026-06-29 19:15:38.272	2026-06-29 19:15:38.272
+3e9cad55-3c69-44c9-b021-fdf8ab05ed0b	template-ecommerce	Antair Generic E-commerce Store	Generic shopping store with Stripe standard payments gateway.	2026-06-29 19:15:38.279	2026-06-29 19:15:38.279
+\.
+
+
+--
+-- Data for Name: cms_requirement_versions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_requirement_versions (id, requirement_id, version, config_schema, status, description, created_by, created_at) FROM stdin;
+4d84f2bf-742d-4d0e-bf86-fb5c993b28b6	eea438b8-4078-472c-ba70-1f4fc29e79cb	1	{"features": ["https-enforce"]}	ACTIVE	Seeded initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:15:38.202
+41f551d4-4d2e-4714-95be-f55d4de352ff	77bc8810-f5cc-43e0-ae80-18d82fe20efd	1	{"features": ["seo-meta"]}	ACTIVE	Seeded initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:15:38.208
+756f8485-867b-4756-8b85-ed1cf2df5c78	cb125528-cdc8-4d7f-9159-e709cc446173	1	{"features": ["a11y-check"]}	ACTIVE	Seeded initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:15:38.212
+5431ed12-8e26-45ea-b92e-f94cf26eff2f	1ee19611-cd5f-49ea-aee6-14a4fc4c558d	1	{"features": ["ecom-license"]}	ACTIVE	Seeded initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:15:38.216
+3f9f17a9-b8c0-4e9d-a538-057a8de9c687	a23f3403-d3c4-422d-b56a-1d4821e969c5	1	{"apis": ["POST /api/v1/cart/add", "DELETE /api/v1/cart/remove"], "pages": ["/cart"], "features": ["cart"]}	ACTIVE	Seeded initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:15:38.22
+0806f64f-7853-48f7-ac44-c0ef13a5468b	927a06b2-af0c-478a-8652-1c8c52e67710	1	{"apis": ["POST /api/v1/checkout/create-order"], "pages": ["/checkout"], "features": ["checkout-gateway"]}	ACTIVE	Seeded initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:15:38.223
+b9398de8-aae6-43f8-aed2-d2d523110c35	b784c40d-a4d5-4bab-aceb-ed63dd4186ec	1	{"apis": ["POST /api/v1/checkout/custom-order"], "pages": ["/checkout/custom"], "features": ["checkout-luxury"]}	ACTIVE	Seeded initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:15:38.227
+62904c4f-b451-4a91-8fe0-3ee699c62bef	014990df-235a-49c7-9822-3118e14a5dbc	1	{"apis": ["POST /api/v1/booking/reserve"], "pages": ["/book"], "features": ["appointments"]}	ACTIVE	Seeded initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:15:38.23
+fa240cf8-c1d1-4ca6-9ea2-7aca010f5642	184f5f33-ff13-4645-a02f-f82ba65e5693	1	{"pages": ["/measurements"], "features": ["custom-measurements"]}	ACTIVE	Seeded initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:15:38.234
+fd0c39aa-62fe-44a4-9774-dd61df2e1580	6f39c5c8-71f9-45cf-b8b9-ac856b8c6f7c	1	{"apis": ["POST /api/v1/stripe/charge"]}	ACTIVE	Seeded initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:15:38.238
+eb344a4b-79b5-47e5-a0e0-51d625adf8f5	c7ed1384-811e-4442-96b9-c4208670178f	1	{"apis": ["POST /api/v1/razorpay/charge"]}	ACTIVE	Seeded initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:15:38.242
+7fa7832a-1a0a-4ff6-86a3-99a069505681	b3277fd2-4954-418c-98dd-b957b248202e	1	{"features": ["ai-sales-bot"]}	ACTIVE	Seeded initial version	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-29 19:15:38.245
+02d83f6b-69d4-4603-bbed-a176b2d161f7	dc3a0f0e-7cc2-481a-b56c-c7e52a51faa8	1	{"theme": "dark"}	ACTIVE	Initial creation	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-30 14:58:52.422
+73135935-2967-4434-8e08-e640b2ac72dc	dc3a0f0e-7cc2-481a-b56c-c7e52a51faa8	2	{"theme": "light"}	ACTIVE	Updated version 2	6280f364-2664-49f8-a19b-14ca697e4fa6	2026-06-30 14:58:52.439
+\.
+
+
+--
+-- Data for Name: cms_requirements; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_requirements (id, key, name, category, description, status, version, priority, criticality, business_value, development_cost, ai_complexity, verification_weight, certification_weight, config_schema, is_deleted, created_at, updated_at) FROM stdin;
+eea438b8-4078-472c-ba70-1f4fc29e79cb	req-ssl-enforced	SSL/HTTPS Enforcement	SECURITY	Force all traffic to load securely over HTTPS.	ACTIVE	1	5	5	3	3	3	1	1	{"features": ["https-enforce"]}	f	2026-06-29 19:15:38.196	2026-06-29 19:15:38.196
+77bc8810-f5cc-43e0-ae80-18d82fe20efd	req-seo-meta	SEO Metadata Injection	SEO	Auto-inject SEO meta tags, descriptions, and sitemaps.	ACTIVE	1	4	4	3	3	3	1	1	{"features": ["seo-meta"]}	f	2026-06-29 19:15:38.205	2026-06-29 19:15:38.205
+cb125528-cdc8-4d7f-9159-e709cc446173	req-wcag-a11y	WCAG Accessibility Compliance	ACCESSIBILITY	Enforce WCAG 2.1 AA accessibility guidelines.	ACTIVE	1	4	3	3	3	3	1	1	{"features": ["a11y-check"]}	f	2026-06-29 19:15:38.21	2026-06-29 19:15:38.21
+1ee19611-cd5f-49ea-aee6-14a4fc4c558d	req-ecom-license	E-commerce Core License	BUSINESS	Required commercial license to enable selling items online.	ACTIVE	1	5	5	3	3	3	1	1	{"features": ["ecom-license"]}	f	2026-06-29 19:15:38.214	2026-06-29 19:15:38.214
+a23f3403-d3c4-422d-b56a-1d4821e969c5	req-ecom-cart	Shopping Cart System	FUNCTIONAL	Adds active customer shopping carts and local storage persistence.	ACTIVE	1	5	4	3	3	3	1	1	{"apis": ["POST /api/v1/cart/add", "DELETE /api/v1/cart/remove"], "pages": ["/cart"], "features": ["cart"]}	f	2026-06-29 19:15:38.218	2026-06-29 19:15:38.218
+927a06b2-af0c-478a-8652-1c8c52e67710	req-standard-checkout	Standard Payment Checkout	FUNCTIONAL	Simple card checkout using standard gateways.	ACTIVE	1	5	5	3	3	3	1	1	{"apis": ["POST /api/v1/checkout/create-order"], "pages": ["/checkout"], "features": ["checkout-gateway"]}	f	2026-06-29 19:15:38.221	2026-06-29 19:15:38.221
+b784c40d-a4d5-4bab-aceb-ed63dd4186ec	req-luxury-checkout	Luxury Tailoring Checkout	FUNCTIONAL	Checkout with premium tailoring measurements and custom scheduling.	ACTIVE	1	4	4	3	3	3	1	1	{"apis": ["POST /api/v1/checkout/custom-order"], "pages": ["/checkout/custom"], "features": ["checkout-luxury"]}	f	2026-06-29 19:15:38.225	2026-06-29 19:15:38.225
+014990df-235a-49c7-9822-3118e14a5dbc	req-salon-booking	Salon Appointment Booking	FUNCTIONAL	Calendar appointment selector for salon service times.	ACTIVE	1	5	5	3	3	3	1	1	{"apis": ["POST /api/v1/booking/reserve"], "pages": ["/book"], "features": ["appointments"]}	f	2026-06-29 19:15:38.228	2026-06-29 19:15:38.228
+184f5f33-ff13-4645-a02f-f82ba65e5693	req-tailor-measurements	Tailor Measurements Capture	FUNCTIONAL	Forms fields capturing shoulders, chest, and height specifications.	ACTIVE	1	4	4	3	3	3	1	1	{"pages": ["/measurements"], "features": ["custom-measurements"]}	f	2026-06-29 19:15:38.232	2026-06-29 19:15:38.232
+6f39c5c8-71f9-45cf-b8b9-ac856b8c6f7c	req-stripe-api	Stripe Gateway API	API	Integrates Stripe payments endpoint services.	ACTIVE	1	4	4	3	3	3	1	1	{"apis": ["POST /api/v1/stripe/charge"]}	f	2026-06-29 19:15:38.236	2026-06-29 19:15:38.236
+c7ed1384-811e-4442-96b9-c4208670178f	req-razorpay-api	Razorpay Gateway API	API	Integrates Razorpay payments endpoint services.	ACTIVE	1	4	4	3	3	3	1	1	{"apis": ["POST /api/v1/razorpay/charge"]}	f	2026-06-29 19:15:38.24	2026-06-29 19:15:38.24
+b3277fd2-4954-418c-98dd-b957b248202e	req-ai-chatbot	AI Sales Assistant Chatbot	AI	AI chatbot agent engaging store visitors to increase sales.	ACTIVE	1	3	2	3	3	3	1	1	{"features": ["ai-sales-bot"]}	f	2026-06-29 19:15:38.244	2026-06-29 19:15:38.244
+dc3a0f0e-7cc2-481a-b56c-c7e52a51faa8	req-test-crud	CRUD Updated Name	UI	\N	ACTIVE	2	3	3	3	3	3	1	1	{"theme": "light"}	t	2026-06-30 14:58:52.415	2026-06-30 14:58:52.455
+\.
+
+
+--
+-- Data for Name: cms_standard_audit_logs; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_standard_audit_logs (id, standard_id, action, user_id, old_value, new_value, ip_address, reason, created_at) FROM stdin;
+b35cb936-b36b-41c2-8f1b-ffefbfff1a45	202f7a48-fa99-4db4-822b-0176b952d2d7	UPDATE	ee5b28e9-b55f-427e-b0ee-c5993787577f	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"primaryColor": "#FF5733", "backgroundColor": "#000000"}}	127.0.0.1	Update boutique color palette for winter theme	2026-06-29 19:04:11.847
+10a62f26-60e2-446f-8f99-75264322c91d	202f7a48-fa99-4db4-822b-0176b952d2d7	UPDATE	ee5b28e9-b55f-427e-b0ee-c5993787577f	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"primaryColor": "#FF5733", "backgroundColor": "#000000"}}	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	127.0.0.1	Rollback to version 1	2026-06-29 19:04:11.856
+39ab6add-1663-4527-98d2-f418c02c565f	202f7a48-fa99-4db4-822b-0176b952d2d7	UPDATE	ee5b28e9-b55f-427e-b0ee-c5993787577f	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"primaryColor": "#FF5733", "backgroundColor": "#000000"}}	127.0.0.1	Update boutique color palette for winter theme	2026-06-29 20:27:30.212
+59a93c06-d5d0-4386-9d1d-032223bab88c	202f7a48-fa99-4db4-822b-0176b952d2d7	UPDATE	ee5b28e9-b55f-427e-b0ee-c5993787577f	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"primaryColor": "#FF5733", "backgroundColor": "#000000"}}	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	127.0.0.1	Rollback to version 1	2026-06-29 20:27:30.223
+595d4f63-1701-4119-bd49-67d3e7791b23	202f7a48-fa99-4db4-822b-0176b952d2d7	UPDATE	ee5b28e9-b55f-427e-b0ee-c5993787577f	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"primaryColor": "#FF5733", "backgroundColor": "#000000"}}	127.0.0.1	Update boutique color palette for winter theme	2026-06-29 20:27:57.573
+150cf7ad-a1cb-45ab-96ec-af6b1c34fef2	202f7a48-fa99-4db4-822b-0176b952d2d7	UPDATE	ee5b28e9-b55f-427e-b0ee-c5993787577f	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"primaryColor": "#FF5733", "backgroundColor": "#000000"}}	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	127.0.0.1	Rollback to version 1	2026-06-29 20:27:57.583
+729b9d9f-5b93-48d7-bdd2-f4bf7987803f	202f7a48-fa99-4db4-822b-0176b952d2d7	UPDATE	ee5b28e9-b55f-427e-b0ee-c5993787577f	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"primaryColor": "#FF5733", "backgroundColor": "#000000"}}	127.0.0.1	Update boutique color palette for winter theme	2026-06-30 14:58:37.861
+546a0e1d-0ffc-4b5d-9dac-beaab87770d1	202f7a48-fa99-4db4-822b-0176b952d2d7	UPDATE	ee5b28e9-b55f-427e-b0ee-c5993787577f	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"primaryColor": "#FF5733", "backgroundColor": "#000000"}}	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	127.0.0.1	Rollback to version 1	2026-06-30 14:58:37.874
+\.
+
+
+--
+-- Data for Name: cms_standard_versions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_standard_versions (id, standard_id, version, config, status, description, created_by, created_at) FROM stdin;
+1515b862-6843-4cb1-9ffc-b7e6409c6776	246df5e9-a77d-412d-9733-3d142586c36c	1	{"security": {"requireHttps": true, "corsAllowedOrigins": ["*"], "contentSecurityPolicy": "default-src 'self'"}, "performance": {"lazyLoadImages": true, "maxBundleSizeKb": 2048}}	PUBLISHED	Global master seed standards	ee5b28e9-b55f-427e-b0ee-c5993787577f	2026-06-29 19:03:40.978
+7fa3a2e4-de58-4d13-a677-9d0a8e630976	202f7a48-fa99-4db4-822b-0176b952d2d7	1	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	PUBLISHED	Boutique layout overrides	ee5b28e9-b55f-427e-b0ee-c5993787577f	2026-06-29 19:03:40.982
+9e8a404f-ad93-4223-8710-b7f888d2b3e6	202f7a48-fa99-4db4-822b-0176b952d2d7	2	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"primaryColor": "#FF5733", "backgroundColor": "#000000"}}	PUBLISHED	Update boutique color palette for winter theme	ee5b28e9-b55f-427e-b0ee-c5993787577f	2026-06-29 19:04:11.842
+9607be08-c7c6-40bc-8652-d2297c9c2a88	202f7a48-fa99-4db4-822b-0176b952d2d7	3	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	PUBLISHED	Rollback to version 1	ee5b28e9-b55f-427e-b0ee-c5993787577f	2026-06-29 19:04:11.854
+954d8b09-f678-4f85-8260-46e3b8dd6f5b	202f7a48-fa99-4db4-822b-0176b952d2d7	4	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"primaryColor": "#FF5733", "backgroundColor": "#000000"}}	PUBLISHED	Update boutique color palette for winter theme	ee5b28e9-b55f-427e-b0ee-c5993787577f	2026-06-29 20:27:30.207
+f0540f26-0c40-42e0-8f25-d48b685e987b	202f7a48-fa99-4db4-822b-0176b952d2d7	5	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	PUBLISHED	Rollback to version 1	ee5b28e9-b55f-427e-b0ee-c5993787577f	2026-06-29 20:27:30.221
+84d4d16a-b84d-49b7-98ab-07e214a1e54d	202f7a48-fa99-4db4-822b-0176b952d2d7	6	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"primaryColor": "#FF5733", "backgroundColor": "#000000"}}	PUBLISHED	Update boutique color palette for winter theme	ee5b28e9-b55f-427e-b0ee-c5993787577f	2026-06-29 20:27:57.567
+e3ff74cb-6246-4a23-93b0-5f65142a8f09	202f7a48-fa99-4db4-822b-0176b952d2d7	7	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	PUBLISHED	Rollback to version 1	ee5b28e9-b55f-427e-b0ee-c5993787577f	2026-06-29 20:27:57.581
+76591bb6-83ff-4bed-8e95-1f306363e377	202f7a48-fa99-4db4-822b-0176b952d2d7	8	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"primaryColor": "#FF5733", "backgroundColor": "#000000"}}	PUBLISHED	Update boutique color palette for winter theme	ee5b28e9-b55f-427e-b0ee-c5993787577f	2026-06-30 14:58:37.825
+44148a15-7202-4f7f-b77b-03a8c59b7d4f	202f7a48-fa99-4db4-822b-0176b952d2d7	9	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	PUBLISHED	Rollback to version 1	ee5b28e9-b55f-427e-b0ee-c5993787577f	2026-06-30 14:58:37.871
+\.
+
+
+--
+-- Data for Name: cms_standards; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_standards (id, category, key, name, status, version, is_enabled, parent_id, config, is_deleted, created_at, updated_at) FROM stdin;
+246df5e9-a77d-412d-9733-3d142586c36c	GLOBAL	global-rules	Global Platform Standards	PUBLISHED	1	t	\N	{"security": {"requireHttps": true, "corsAllowedOrigins": ["*"], "contentSecurityPolicy": "default-src 'self'"}, "performance": {"lazyLoadImages": true, "maxBundleSizeKb": 2048}}	f	2026-06-29 19:03:40.975	2026-06-29 19:03:40.975
+202f7a48-fa99-4db4-822b-0176b952d2d7	DESIGN_SYSTEM	boutique-standard	Boutique Design & Layout Standard	PUBLISHED	9	t	246df5e9-a77d-412d-9733-3d142586c36c	{"seo": {"requiredTags": ["title", "description", "og:image"]}, "theme": {"fontFamily": "Outfit", "primaryColor": "#C89B3C", "backgroundColor": "#1A1A1A"}}	f	2026-06-29 19:03:40.98	2026-06-30 14:58:37.87
+\.
+
+
+--
+-- Data for Name: cms_template_analytics; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_template_analytics (id, template_id, action, user_id, metadata, created_at) FROM stdin;
+79b1dd66-1743-4d6a-a336-561f973d73a5	5c7028a4-4856-4e41-a045-cea92412d4a2	created	f618a4f3-c440-4efc-95d5-393266e2a317	\N	2026-07-01 03:34:01.07
+637e3ffb-727b-497b-b780-44f205609ad3	f1c9d4e3-97dc-453f-b120-d99075b94421	created	f618a4f3-c440-4efc-95d5-393266e2a317	\N	2026-07-01 03:34:01.703
+2d70ed11-1550-4136-9ef6-019c3aba87a2	ba66caed-2eaf-4797-a6be-0bf4b215c26f	created	f618a4f3-c440-4efc-95d5-393266e2a317	\N	2026-07-01 03:34:03.186
+a9530989-60d4-48fd-90d3-cd1e1a65d25c	a353e499-fcc1-4429-9e40-bf53f56b0d6a	created	f9db09b6-48d4-4653-89dc-702b14ae6250	\N	2026-07-01 03:30:09.132
+14d9a36e-a8f7-4e41-9618-edb0fa707647	d7555d37-d2c2-4f5e-ba34-b5a22f5fc3ee	created	f9db09b6-48d4-4653-89dc-702b14ae6250	\N	2026-07-01 03:30:10.906
+e2af989a-bf0e-4142-9bc5-d9e3f326cb23	5edb94b2-77e2-4a18-ba19-ca5b46777389	created	f9db09b6-48d4-4653-89dc-702b14ae6250	\N	2026-07-01 03:30:12.919
+b2bd62c9-edfc-479f-acd0-301507525471	3ab1d5f1-d9d0-4be2-b9f8-57bb50fbbb63	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:13.806
+e8c0a1a0-bbb5-4216-bee2-13188ca27efa	dfdf7668-8960-4273-b2b0-4d150cf1eb9f	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:14.678
+956783d1-282e-40de-b71f-9a9d12b449b4	19e29f07-d58c-430a-bbf0-75fbfbdee44c	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:15.503
+db77d469-c0df-4a1e-93b0-bfd7d2edd828	1df445ae-34b1-4168-b0d6-c45a6fe11823	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:16.3
+f9ea5bf3-f13e-44b6-af12-6a67558cb666	1df445ae-34b1-4168-b0d6-c45a6fe11823	updated	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:16.864
+2a8560b3-581b-4965-97f1-31fada0a47d4	cb77a75a-b35f-47dc-bb22-147aa06ca1c4	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:17.208
+a81ebba6-bad0-4a5e-99df-f84bfaf042ea	cb77a75a-b35f-47dc-bb22-147aa06ca1c4	deleted	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:17.387
+82af01bd-e7a2-487c-a054-6f064cebb688	9f9c95a7-a3a1-4406-856c-cd4e97896f53	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:17.968
+e15f8ed0-ef1d-4b25-83be-804db3505413	9f9c95a7-a3a1-4406-856c-cd4e97896f53	published	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:18.236
+31d0cf00-d2ca-4f90-b73f-44b8d8b84c7e	556e9f0a-15e7-4d56-840c-527cb27725b1	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:18.53
+9225c181-2252-4162-8815-76f5e52cf1a6	556e9f0a-15e7-4d56-840c-527cb27725b1	archived	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:18.667
+da3e52f5-a27e-4bf9-b907-b2ced7252e3a	b4e3a084-a363-4f0a-b9be-87e061070101	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:18.932
+bfd698ed-fe97-4654-9d55-bbfa1f75954e	b4e3a084-a363-4f0a-b9be-87e061070101	deprecated	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:19.063
+94bef3fe-560d-4aff-a021-64979ca4713d	923b7786-36e9-469b-9d41-fdeda8c052cf	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:19.346
+10aa5bd6-0b58-45ff-9324-6dfa904f91bd	923b7786-36e9-469b-9d41-fdeda8c052cf	version_created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:19.486
+72c56888-a54f-4cfc-97f8-d3c2c668079d	1efdaa00-2549-41a7-97e1-153ca0db021a	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:19.857
+a5ae07a0-bd43-417a-9e79-083258cd1f19	1efdaa00-2549-41a7-97e1-153ca0db021a	updated	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:20.308
+40e810fd-079c-49a1-b1cf-01d5cf781c3c	0a8cd02d-6458-4136-b69b-bc42913ba6b0	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:20.625
+d6301bdd-34cd-41d2-83b0-b30726a0b29d	0a8cd02d-6458-4136-b69b-bc42913ba6b0	updated	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:20.975
+78a88464-3bbe-4e64-b7bd-2b05b93f8417	0a8cd02d-6458-4136-b69b-bc42913ba6b0	rollback	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:21.084
+a78d0df5-9959-444b-8c48-3c8e1978be0f	77f2411c-ef47-452f-8a99-3500c385294e	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:21.298
+12c576ab-1d4b-4a31-9249-025b568f2d17	77f2411c-ef47-452f-8a99-3500c385294e	favorited	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:21.405
+d8b6e1f9-cb8f-4003-8989-11b9515dd0c1	77f2411c-ef47-452f-8a99-3500c385294e	unfavorited	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:21.498
+a6a03e36-c556-4e8a-b8a6-76e592f8b5f6	a15c214e-3063-473e-b638-d77a9eb395ad	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:21.694
+21f62a87-ef0e-4421-ab99-dc8305ee394d	a15c214e-3063-473e-b638-d77a9eb395ad	favorited	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:21.784
+e3f0d984-9166-4fec-88d0-57e528cc5239	f10c20e2-3121-4cb3-94a3-91c1bdcd0670	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:22.048
+2f748426-3795-4e48-959d-12245ba64bdb	f1744907-0825-49fc-bc96-be5904f4ebe8	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:22.542
+11416d03-8a7f-46a7-82ba-4b4624370f60	f1744907-0825-49fc-bc96-be5904f4ebe8	pipeline:PROMPT	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:22.663
+105a8c0f-55e9-4432-b45b-b55b4128b02e	2fb5fd86-fe01-42e1-8be3-19bc0b8bc172	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:22.957
+baea7c4d-7204-4bbd-81e6-1a8f8bcf5258	2fb5fd86-fe01-42e1-8be3-19bc0b8bc172	pipeline:PROMPT	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:23.078
+fe7e8eb4-448b-475e-9400-aa6418055c86	a742bcce-afb6-451e-b8cb-a92e563535f8	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:23.266
+3c7e67da-fe67-48ae-aef8-9467f3f66be4	77cdd8b3-6b99-4cdb-90eb-f8a69d768afa	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:23.534
+f5199803-0f15-446a-8f46-2bda4089c2c8	695c631b-e502-4dbe-8ca8-5dd83a9f970d	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:23.786
+7004e76a-742d-4bcf-9e06-7051dc682caa	e2a49049-6f3f-4aed-afe3-6f12b08d6de4	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:24.023
+6834bd69-ad3b-4046-b279-1208ed0dc097	1a9484bd-27e9-4fbc-b97f-fc4428aa7434	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:24.279
+40ecbce4-3f2e-433c-b03d-d1e9909fc357	99c23b7f-7b2a-4005-b470-ee565cd0ff33	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:24.489
+cf38ed0c-96ba-4ee1-9531-01c2a4d28e32	91f6d936-c019-4f30-a049-724fdc77bac0	created	ee667eb1-70cc-4abc-8d50-05e31f9992bd	\N	2026-07-02 03:12:24.696
+2cb8e36e-3b56-46eb-8fa2-00baaa213f78	2f73e701-e8aa-4c6d-b6be-3646e619a94e	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:47.583
+09b64f21-c4dc-4886-964b-549d19582ebe	c2c94939-e339-40e9-913f-e5e20ba748f9	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:48.256
+b4ce5a6d-f6d6-4d5c-9389-b534159e4353	1c3c4790-f543-4a33-8bbf-65959d4b53f6	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:49.119
+4de2c73e-1222-4dd7-9b65-579701a9d248	1ec3fcd9-cf59-488b-a88d-c70b70dccd64	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:49.716
+89b70e40-0798-4c64-be85-647271ad7374	1ec3fcd9-cf59-488b-a88d-c70b70dccd64	updated	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:50.184
+d38ac4ed-f613-4f29-978d-44144487775b	06fb2972-b35a-4afa-9c7c-5afb6f6ce8ca	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:50.516
+41127c3f-4c3a-4d71-a23b-16cb5a00bf9a	06fb2972-b35a-4afa-9c7c-5afb6f6ce8ca	deleted	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:50.692
+01acc74b-b002-46de-b5d1-d75b028e5504	4120a112-c012-4150-9763-824a8f07005c	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:51.302
+68576331-3527-4c9d-a6cd-44afca459517	4120a112-c012-4150-9763-824a8f07005c	published	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:51.551
+298d9708-c0bf-4f64-98de-9d8f0d199335	74a27daa-52d3-4060-91b9-9eb63b15986c	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:51.902
+25df89ed-e8d6-4a76-8e50-d57510eef28b	74a27daa-52d3-4060-91b9-9eb63b15986c	archived	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:52.073
+2947670d-f000-493d-bbab-48abb7381bd4	177bd6e6-92f9-467c-b0ac-0e5eda2bcc30	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:52.43
+02cd57aa-9f1c-4f11-9ba4-1355622b7017	177bd6e6-92f9-467c-b0ac-0e5eda2bcc30	deprecated	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:52.589
+edc938ac-8817-4d66-81c0-4147e239653f	ac2d8dba-f404-449a-be30-276b01c6b1fc	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:52.924
+073946df-4146-48c8-828d-d1011852f998	ac2d8dba-f404-449a-be30-276b01c6b1fc	version_created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:53.094
+9ea240aa-c771-42f6-9249-88ac6928ca1d	5617ce1d-0b95-4e03-bde9-08c619bdfca0	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:53.436
+8c5ecb23-523a-4a09-95ea-8bf33e0a9207	5617ce1d-0b95-4e03-bde9-08c619bdfca0	updated	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:54.007
+f1bdd1bd-9800-47da-adbb-3f7e0c8b4b61	6c7bb393-df20-4761-9632-f3adf931b21a	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:54.354
+03e78b39-eeee-4bd8-8605-3bc6f81a2561	6c7bb393-df20-4761-9632-f3adf931b21a	updated	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:54.74
+8ce0bb12-e15c-4cbb-babe-05bc876fae87	6c7bb393-df20-4761-9632-f3adf931b21a	rollback	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:54.923
+bff9553c-1ab8-4ef1-ad36-6a5997263135	516a4404-0c5d-4fbd-9fb7-9b07594ece17	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:55.228
+7ded30d7-9b44-42de-a84d-c788c6e3cee1	516a4404-0c5d-4fbd-9fb7-9b07594ece17	favorited	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:55.369
+b8550dc2-5357-4e3c-a7b5-654cbb5df4f3	516a4404-0c5d-4fbd-9fb7-9b07594ece17	unfavorited	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:55.496
+b5edd334-bb3e-4590-a239-b0f7051a6a3e	7a5a5064-a3ef-474d-bd69-24507cc6d15e	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:55.765
+7e4e2238-b0f9-4311-addf-df5a7b363831	7a5a5064-a3ef-474d-bd69-24507cc6d15e	favorited	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:55.895
+c8e3b4cc-8347-4242-9dba-8e1ec747d3af	56bec9ae-bdcf-4317-ada8-856b7a7716f1	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:56.325
+b4c8441a-d4cb-4f39-a10d-8aefd0e8d30c	1d02cb7b-df9d-444f-8ae3-aaef8ccaf89b	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:56.89
+b40ce730-3804-4203-a1a7-2836828eb92e	1d02cb7b-df9d-444f-8ae3-aaef8ccaf89b	pipeline:PROMPT	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:57.062
+b9066d7e-3998-4762-99d3-ca81de12f750	d10de2c7-ea69-41d1-8049-2b339c023629	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:57.428
+63da729b-b696-409f-b700-c3961d97ebcd	d10de2c7-ea69-41d1-8049-2b339c023629	pipeline:PROMPT	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:57.559
+39a5e57a-dd40-4d13-93de-783c37d5b82e	97dd32fc-d6b0-453a-b1ff-bd32129b4a40	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:57.797
+1eb72e77-6a18-4238-b5a3-384cb4394948	58db54bd-726f-4bd2-9094-01064d467a87	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:58.058
+0e79aa09-5cd4-4e8e-a1cb-452ecb4856ef	8501a3ff-47cd-4b65-b24f-fa0b0d5315b8	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:58.322
+33ba6fb9-74bb-45f6-b949-02730d08e075	28051b5b-e500-4bdd-9b0e-684cbb837313	created	bb6dd159-b5ae-49ad-9b79-697a171aa45a	\N	2026-07-02 03:12:58.627
+91a52a7b-f33c-43b8-a186-13c561dc397d	762d936b-e555-43a0-96d6-69ce1841e118	created	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:18.806
+09a96dbc-654e-440e-86ee-39d7ebdc302e	fd2d1745-d73e-4091-9958-ddeb6bc65acc	created	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:19.506
+72c33bb2-7fe5-4733-afa8-41d12fd53cd1	c8dad024-d6e0-45c8-bc71-6e3cc2ab25c7	created	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:20.341
+a69fd7cd-2808-428b-b48f-fbdeb9f9243b	f8516d14-4e8a-4c84-8595-43da6cd5df21	created	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:20.968
+8dddd80c-070b-40e8-b4bc-d59f9bbb869e	f8516d14-4e8a-4c84-8595-43da6cd5df21	updated	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:21.472
+fb57219d-dded-4743-b036-adc46e32d0d7	0d90a331-6d16-4a64-a944-511c6d44846c	created	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:21.845
+ddc298d9-4054-467d-91ae-76582b75f9e7	0d90a331-6d16-4a64-a944-511c6d44846c	deleted	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:21.993
+cfde5d6d-f2c3-4593-a1d2-26000012fa2e	7af98fbb-ca3e-46e0-9dfb-3c216ba625fa	created	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:22.536
+d39e3c2b-5efd-4b84-8b40-ce065785bd55	7af98fbb-ca3e-46e0-9dfb-3c216ba625fa	published	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:22.815
+12f51cfb-64a4-4313-bd3c-b972dabe9b6c	e668be8c-57ee-454b-b3ba-89b4a7557c6d	created	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:23.128
+750ed41b-e352-44cb-81d7-76ce43789579	e668be8c-57ee-454b-b3ba-89b4a7557c6d	archived	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:23.332
+b2bfbe18-4893-4707-b928-6ce83ff0c02b	87651beb-270f-4c99-9bab-d6a1072cc797	created	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:23.688
+002ec5db-b2f3-48de-8e64-a5e647652495	87651beb-270f-4c99-9bab-d6a1072cc797	deprecated	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:23.878
+70cf414d-d4ea-4e83-8c30-b000a5e25635	61d02517-5e46-4b0d-a508-d218e1ac1373	created	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:24.39
+74e72fd3-84ff-4a51-a99b-32c56f05c08d	61d02517-5e46-4b0d-a508-d218e1ac1373	version_created	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	\N	2026-07-02 03:13:24.626
+7a1e2eca-3505-43b7-b0fb-bc1ea2678493	4f2fc04a-52bd-41a1-8964-1d8cf2036b6b	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:43.499
+a60ef28a-463d-4814-b62c-46ad00bc9a63	75ac25d9-ae07-4e89-aef8-428a43c0fd95	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:44.145
+faaad7c6-d2ee-43b8-af27-f6ee9b45caa2	5ea86caa-a9d8-48dc-9d3a-21f3172c8106	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:44.904
+656579e9-732b-4063-a5cf-325f92caff8a	7125469b-e575-4385-8d8d-f53b78f1fc18	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:45.611
+d6a042f9-1644-4c3c-a597-9c1eee52a44e	7125469b-e575-4385-8d8d-f53b78f1fc18	updated	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:46.091
+63726f06-bd0a-4490-9804-6664183814bd	19eb8b29-6cf2-4146-9fb9-3d3d01da67b4	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:46.475
+fc891d6f-69ee-42dd-8a33-8a26710821cb	19eb8b29-6cf2-4146-9fb9-3d3d01da67b4	deleted	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:46.627
+54393a0d-4a78-4076-82be-6ccaec05eac7	d7aa7dcd-90aa-44a3-84c6-1d0ddb3d560a	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:47.14
+e4d35c4d-1b60-4051-afc1-ac182abae52c	d7aa7dcd-90aa-44a3-84c6-1d0ddb3d560a	published	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:47.382
+6314bd8f-946b-4a42-a22e-e2eef67ac13a	07e40334-552f-4cd2-bc34-3b06ba4cdb45	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:47.713
+ca37df9f-3992-437f-a147-a4beb7d0a0ae	07e40334-552f-4cd2-bc34-3b06ba4cdb45	archived	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:47.864
+16cbe0cc-a183-4000-9fff-d3ec78ea20a7	eba4113f-b4d4-440d-aa8c-3f88cfe889ee	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:48.166
+692404ec-16b0-45a2-bfbd-836204baa189	eba4113f-b4d4-440d-aa8c-3f88cfe889ee	deprecated	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:48.313
+55f75584-4235-4207-a54f-4516dd2d900a	5b440362-419c-4022-8ed9-e587b317ca86	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:48.66
+6991f81a-bebb-4fb9-b892-cb40b83955da	5b440362-419c-4022-8ed9-e587b317ca86	version_created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:48.919
+91c62da9-1e90-454f-816d-5e3e59e51a71	f3f6c666-e556-47e6-a76c-d29dc4379d7b	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:49.209
+287b73d3-d80b-46fe-a6da-81aea187d5b6	f3f6c666-e556-47e6-a76c-d29dc4379d7b	updated	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:49.558
+19888dcd-1243-40f0-ac9d-0e8125ddd12f	e14aebad-a9d7-46a7-865b-45af97bf2a63	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:49.852
+93764b09-35a6-466b-82ac-78f8fe9aec5f	e14aebad-a9d7-46a7-865b-45af97bf2a63	updated	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:50.153
+897d67e4-e14c-4268-8ac0-4a883e5122c7	e14aebad-a9d7-46a7-865b-45af97bf2a63	rollback	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:50.263
+09f767e6-a425-4c04-9601-498971027fb2	8716da53-ffce-4cd8-9f83-0b9c1547cd45	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:50.493
+223d8a85-520f-4fb4-b73f-ed52dbe111e8	8716da53-ffce-4cd8-9f83-0b9c1547cd45	favorited	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:50.607
+b71fa206-d91d-4a4e-bf00-7003e8a18a3f	8716da53-ffce-4cd8-9f83-0b9c1547cd45	unfavorited	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:50.712
+e9797578-def4-43f9-bcff-5adc81e489b7	739490a5-8631-4720-9789-80f358028f42	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:50.915
+33aa6faa-f2fa-4d59-8174-adbded364e7f	739490a5-8631-4720-9789-80f358028f42	favorited	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:51.027
+0525b52a-11d2-48db-aeef-5496de9d4b59	613f5390-6cec-4d8e-a762-b225f2da53e2	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:51.403
+7c539814-b0d9-40b4-bed8-95605b9fe447	30b73aec-4b21-476b-a960-aebc92b786f9	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:51.884
+ef18cad9-e456-4316-9d39-f313b49b0458	30b73aec-4b21-476b-a960-aebc92b786f9	pipeline:PROMPT	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:52.02
+01c10dcf-74e3-4404-b380-7b41f6381d9e	4e938aae-f4c5-4f5f-86ab-ac290654585c	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:52.362
+e1529753-9e50-4a61-8a5b-c04c9e05654b	4e938aae-f4c5-4f5f-86ab-ac290654585c	pipeline:PROMPT	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:52.475
+a751e9f1-1fd6-48e3-aa3c-f385ad6f1954	c53850ca-9b65-4161-8ff1-903977fe1af2	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:52.712
+ecdc025a-ad8c-4524-9602-11f34010744b	1b98bf13-83e3-43da-bee6-d96fdf885c10	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:52.973
+24c90fa6-0462-4ff4-98a1-799647f7e67a	87ccb77c-54a8-4857-87d5-e38a282ce6b6	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:53.216
+32a35683-2d2b-48d6-bdd7-a5c22530579b	bf8dfeae-8745-4709-8adc-db5558b951de	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:53.471
+3e20a1be-93d0-4389-b0d9-0b960b1895e3	3840ddc3-d55d-4684-ab4b-441e040a748f	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:53.734
+6b6b10a1-6b0e-4b84-ae53-82a53e5282f3	d2c9874d-2449-4c8d-b274-60d35bad6438	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:53.95
+19f544de-8542-40ea-b4e4-5a10c69f9661	40f85730-ca3f-4402-9005-b0daa43b4c63	created	01149cb1-efe3-4f8d-815d-80f53fa14a6c	\N	2026-07-02 03:13:54.173
+\.
+
+
+--
+-- Data for Name: cms_template_builder_compat; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_template_builder_compat (id, template_id, builder_key) FROM stdin;
+15674f78-83ef-4ce4-a311-0bff5699ca79	8f90822f-0821-49a3-bcd3-58e59459f040	claude-code
+60fd10d0-33bb-4ac4-9d4b-cd49228a666a	8f90822f-0821-49a3-bcd3-58e59459f040	opencode
+af0797a5-9a77-4322-b04c-aa2d68014a79	8f90822f-0821-49a3-bcd3-58e59459f040	cursor
+dcc531d2-857f-4e18-a2df-029d45b2957a	8f90822f-0821-49a3-bcd3-58e59459f040	chatgpt
+7d6bba72-3f48-4ae0-bf95-a271fc35339e	70be4b81-015b-454f-bfce-ed7f4f60132b	claude-code
+f92f2acf-dcab-4d6b-b683-69d872bc48ac	70be4b81-015b-454f-bfce-ed7f4f60132b	opencode
+3a06d109-e101-468b-b3f8-c4271cc3bfbb	70be4b81-015b-454f-bfce-ed7f4f60132b	cursor
+eeb5eb5c-f3d4-4290-84e0-d210c925b3f7	70be4b81-015b-454f-bfce-ed7f4f60132b	chatgpt
+9292069b-c2da-4c5f-81a6-81651225acf1	09a3da37-048c-41d6-9230-2a92f7610af2	claude-code
+ac49437a-82cc-4d18-84d6-f08ec52718f6	09a3da37-048c-41d6-9230-2a92f7610af2	opencode
+f9d275b3-ec82-46db-a5f9-40d2a103afe0	09a3da37-048c-41d6-9230-2a92f7610af2	bolt
+5d638b9e-291b-4f95-9219-f44206ae4974	09a3da37-048c-41d6-9230-2a92f7610af2	lovable
+8604cc33-1f6d-49ff-bf13-9b67c3c43a74	9635b280-5d5a-4694-a2b2-5e11212fe414	claude-code
+1dd8877b-988f-43cd-9e9e-cf489e467743	9635b280-5d5a-4694-a2b2-5e11212fe414	opencode
+db6aa999-daf1-4a67-9310-d5d0d6d57ba7	9635b280-5d5a-4694-a2b2-5e11212fe414	chatgpt
+ff77f906-666c-4ebd-8745-543810a4ea5d	9635b280-5d5a-4694-a2b2-5e11212fe414	gemini-cli
+1d8678cf-b705-4fff-ad84-50e94cdcc25d	a353e499-fcc1-4429-9e40-bf53f56b0d6a	claude-code
+8acbc0f3-7672-4386-b633-1c2e6ff82200	a353e499-fcc1-4429-9e40-bf53f56b0d6a	opencode
+2fac3110-33e2-49a2-8522-05c00505f239	f68d7b6a-6eec-4439-a207-3c35e4954b8e	claude-code
+9c9b883f-4aa9-400b-98e0-85f35e7a4a78	f68d7b6a-6eec-4439-a207-3c35e4954b8e	opencode
+5f5ffe4b-c7ad-4014-9617-2069f5f7e972	5c7028a4-4856-4e41-a045-cea92412d4a2	claude-code
+6cdb84fc-58ae-4a7e-ba28-2224762267f6	5c7028a4-4856-4e41-a045-cea92412d4a2	opencode
+3eb50382-51bd-400d-8610-8da2a9d415f5	3ab1d5f1-d9d0-4be2-b9f8-57bb50fbbb63	claude-code
+72e2b07f-1a08-41c4-a43e-289b2bbdded4	3ab1d5f1-d9d0-4be2-b9f8-57bb50fbbb63	opencode
+d6762ff8-c035-4200-af0c-d160c87def6b	2f73e701-e8aa-4c6d-b6be-3646e619a94e	claude-code
+ee9c77ac-9a27-440a-ba5b-ca32adea7b9f	2f73e701-e8aa-4c6d-b6be-3646e619a94e	opencode
+88f0ae80-6993-475c-b9eb-6eb703db4e2d	762d936b-e555-43a0-96d6-69ce1841e118	claude-code
+d494a3f4-eda3-4d68-b670-14255700e590	762d936b-e555-43a0-96d6-69ce1841e118	opencode
+ae9ca5bc-5b62-459e-b3da-aaffbe435b13	4f2fc04a-52bd-41a1-8964-1d8cf2036b6b	claude-code
+cb2af547-cf8d-41c1-a7be-b519d84d44cc	4f2fc04a-52bd-41a1-8964-1d8cf2036b6b	opencode
+\.
+
+
+--
+-- Data for Name: cms_template_categories; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_template_categories (id, key, name, description, display_order, created_at, updated_at) FROM stdin;
+c98c9a1c-5123-4290-b141-92743181d89b	ecommerce	E-Commerce	\N	1	2026-06-30 19:50:21.407	2026-06-30 19:51:46.346
+6cf204a1-d21a-4a02-9409-499a29042b7a	salon	Salon & Beauty	\N	2	2026-06-30 19:50:21.419	2026-06-30 19:51:46.354
+564fb439-b113-4d1e-a5f2-600111a02f34	restaurant	Restaurant & Cafe	\N	3	2026-06-30 19:50:21.422	2026-06-30 19:51:46.359
+a081a9f1-5324-4ed3-92da-455242250fae	hotel	Hotel & Hospitality	\N	4	2026-06-30 19:50:21.425	2026-06-30 19:51:46.361
+29b48e31-0d04-4560-a917-7e63b3c81bc0	pharmacy	Pharmacy & Healthcare	\N	5	2026-06-30 19:50:21.428	2026-06-30 19:51:46.363
+d5c74be1-4192-4dd2-be5b-b83c0c536aa1	education	Education & Learning	\N	6	2026-06-30 19:50:21.43	2026-06-30 19:51:46.365
+6fb8d5f6-c5c9-47fd-ba2a-f099c7951e86	real-estate	Real Estate	\N	7	2026-06-30 19:50:21.432	2026-06-30 19:51:46.368
+414ebf9b-d464-4a66-b599-d35b97a77f9e	portfolio	Portfolio & Personal	\N	8	2026-06-30 19:50:21.436	2026-06-30 19:51:46.37
+95ebb6c1-5e41-4b7d-9315-b6f3063cade1	test-template-cat	Test Template Category	\N	99	2026-07-02 03:12:12.029	2026-07-02 03:12:12.029
+cf70f509-229c-4058-b5cd-1bb3c07349b4	temp-test-tmpl-cat	Temp Test Template Category	\N	100	2026-07-02 03:12:22.215	2026-07-02 03:12:22.215
+\.
+
+
+--
+-- Data for Name: cms_template_favorites; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_template_favorites (id, template_id, user_id, created_at) FROM stdin;
+fc3de0c7-69c1-487a-9f3c-b9e43f8139ff	a15c214e-3063-473e-b638-d77a9eb395ad	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:21.75
+1867912b-4c86-4e33-9d70-af0ac94871e3	7a5a5064-a3ef-474d-bd69-24507cc6d15e	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:55.852
+693eaaed-23ee-456a-b052-2f8cdc265bf4	739490a5-8631-4720-9789-80f358028f42	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:50.99
+\.
+
+
+--
+-- Data for Name: cms_template_pipeline_stages; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_template_pipeline_stages (id, template_id, stage, started_at, finished_at, duration_ms, status, input_artifact, output_artifact, retry_count, agent, error) FROM stdin;
+04335168-184a-4c73-8a64-da3efb20666d	f1744907-0825-49fc-bc96-be5904f4ebe8	PROMPT	2026-07-02 03:12:22.593	2026-07-02 03:12:22.593	\N	COMPLETED	\N	\N	0	test-agent	\N
+19dd5645-d48c-478c-850e-ab6d08ea3c69	2fb5fd86-fe01-42e1-8be3-19bc0b8bc172	PROMPT	2026-07-02 03:12:23.016	2026-07-02 03:12:23.016	\N	COMPLETED	\N	\N	0	\N	\N
+f0c58ff3-cf83-4ed2-8d89-11a1901bd617	1d02cb7b-df9d-444f-8ae3-aaef8ccaf89b	PROMPT	2026-07-02 03:12:56.971	2026-07-02 03:12:56.971	\N	COMPLETED	\N	\N	0	test-agent	\N
+8a869ea1-c15e-4e03-b60e-3cd568b86cec	d10de2c7-ea69-41d1-8049-2b339c023629	PROMPT	2026-07-02 03:12:57.495	2026-07-02 03:12:57.495	\N	COMPLETED	\N	\N	0	\N	\N
+c15efa50-2c7a-41b9-a972-c768da7b1bb2	30b73aec-4b21-476b-a960-aebc92b786f9	PROMPT	2026-07-02 03:13:51.953	2026-07-02 03:13:51.953	\N	COMPLETED	\N	\N	0	test-agent	\N
+99a83993-5d19-4e06-9ef5-57486151730e	4e938aae-f4c5-4f5f-86ab-ac290654585c	PROMPT	2026-07-02 03:13:52.414	2026-07-02 03:13:52.414	\N	COMPLETED	\N	\N	0	\N	\N
+\.
+
+
+--
+-- Data for Name: cms_template_ratings; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_template_ratings (id, template_id, user_id, rating, comment, created_at, updated_at) FROM stdin;
+a2ed3c54-9e48-44a2-b1db-2d7d61d5fd18	f10c20e2-3121-4cb3-94a3-91c1bdcd0670	ee667eb1-70cc-4abc-8d50-05e31f9992bd	4	Good	2026-07-02 03:12:22.081	2026-07-02 03:12:22.113
+f4858654-b466-46ae-b55c-7da09eaabb94	56bec9ae-bdcf-4317-ada8-856b7a7716f1	bb6dd159-b5ae-49ad-9b79-697a171aa45a	4	Good	2026-07-02 03:12:56.375	2026-07-02 03:12:56.421
+e6f90b68-0a55-431f-9456-37f431af287c	613f5390-6cec-4d8e-a762-b225f2da53e2	01149cb1-efe3-4f8d-815d-80f53fa14a6c	4	Good	2026-07-02 03:13:51.441	2026-07-02 03:13:51.482
+\.
+
+
+--
+-- Data for Name: cms_template_requirement_joins; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_template_requirement_joins (id, template_id, requirement_id) FROM stdin;
+d58c2fd1-9a22-4538-9eca-6d0ba23ac622	d7e47f43-6bb8-45fe-af70-578cbc6e92f5	eea438b8-4078-472c-ba70-1f4fc29e79cb
+7abe3b6d-f2b4-41b5-abe7-88a0f67b5693	d7e47f43-6bb8-45fe-af70-578cbc6e92f5	77bc8810-f5cc-43e0-ae80-18d82fe20efd
+eba91fe0-cce2-435e-b10c-53a67bd4f9a4	d7e47f43-6bb8-45fe-af70-578cbc6e92f5	a23f3403-d3c4-422d-b56a-1d4821e969c5
+7509ffbe-2f29-40c2-a826-a3ed46e22cff	d7e47f43-6bb8-45fe-af70-578cbc6e92f5	b784c40d-a4d5-4bab-aceb-ed63dd4186ec
+40ddd7e5-7de0-439b-bc5c-dc586f069d1c	d7e47f43-6bb8-45fe-af70-578cbc6e92f5	184f5f33-ff13-4645-a02f-f82ba65e5693
+c369b413-c1e8-4d27-b483-f40b79e267d5	96de2d67-4bcc-454d-b172-925edea2e169	eea438b8-4078-472c-ba70-1f4fc29e79cb
+1d4bcd60-2022-4aa1-9844-67105a9321df	96de2d67-4bcc-454d-b172-925edea2e169	77bc8810-f5cc-43e0-ae80-18d82fe20efd
+920b7b2b-7707-417c-bc62-db1c7216451e	96de2d67-4bcc-454d-b172-925edea2e169	014990df-235a-49c7-9822-3118e14a5dbc
+299579cc-25ab-4c07-a451-c823d309dcfa	6595a4c0-938f-4b42-848c-3cd02652be8a	eea438b8-4078-472c-ba70-1f4fc29e79cb
+22adf038-52c1-44ed-84c8-f1b3809c5fa2	6595a4c0-938f-4b42-848c-3cd02652be8a	77bc8810-f5cc-43e0-ae80-18d82fe20efd
+97ab2013-390b-40df-8138-51a8274516e9	6595a4c0-938f-4b42-848c-3cd02652be8a	184f5f33-ff13-4645-a02f-f82ba65e5693
+6e736ed9-5e31-4e20-8de0-874c960700be	3e9cad55-3c69-44c9-b021-fdf8ab05ed0b	eea438b8-4078-472c-ba70-1f4fc29e79cb
+c3c4c144-547c-4849-9d94-07f1f16b0dac	3e9cad55-3c69-44c9-b021-fdf8ab05ed0b	77bc8810-f5cc-43e0-ae80-18d82fe20efd
+5c1adbf3-2228-4455-bd46-c6386b0a1365	3e9cad55-3c69-44c9-b021-fdf8ab05ed0b	a23f3403-d3c4-422d-b56a-1d4821e969c5
+be2f1f8c-6c43-4076-9716-16965556667c	3e9cad55-3c69-44c9-b021-fdf8ab05ed0b	927a06b2-af0c-478a-8652-1c8c52e67710
+d28736eb-3c5a-4087-9a03-811b73861f75	3e9cad55-3c69-44c9-b021-fdf8ab05ed0b	6f39c5c8-71f9-45cf-b8b9-ac856b8c6f7c
+\.
+
+
+--
+-- Data for Name: cms_template_tag_template; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_template_tag_template (id, template_id, tag_id) FROM stdin;
+e0cd8002-dd91-4311-8c10-32b4b482e627	8f90822f-0821-49a3-bcd3-58e59459f040	a1307d5d-e60c-44af-8738-1f5bfad0a8f1
+b78a51e8-fea9-455f-b44f-01927be2e15b	8f90822f-0821-49a3-bcd3-58e59459f040	983b6748-1ad9-486e-9226-2c880bb07fd2
+581288bc-9b2d-41d4-a199-3fa436284a2d	8f90822f-0821-49a3-bcd3-58e59459f040	15bdcf89-3e11-419b-b7f9-c9ae2c3cd4d1
+cf16ccc1-4ddd-4793-a9b2-71be705071bd	8f90822f-0821-49a3-bcd3-58e59459f040	04bfd534-8dd9-4a91-b7d6-386ca51fd7a5
+0488446a-8188-462a-be7b-d13207f9c082	70be4b81-015b-454f-bfce-ed7f4f60132b	a1307d5d-e60c-44af-8738-1f5bfad0a8f1
+fcc14eff-e855-47c7-a9bb-6ba03f4364cb	70be4b81-015b-454f-bfce-ed7f4f60132b	983b6748-1ad9-486e-9226-2c880bb07fd2
+1ede5157-12bb-4264-82cf-40ac4fd4bfa3	70be4b81-015b-454f-bfce-ed7f4f60132b	15bdcf89-3e11-419b-b7f9-c9ae2c3cd4d1
+6e00c92f-90c5-4792-94b7-37bca7a65b2f	70be4b81-015b-454f-bfce-ed7f4f60132b	04bfd534-8dd9-4a91-b7d6-386ca51fd7a5
+3a3780b0-00a4-4910-895c-0320ca8f757f	09a3da37-048c-41d6-9230-2a92f7610af2	a1307d5d-e60c-44af-8738-1f5bfad0a8f1
+2cd1f7c1-e080-4202-b7ba-674938ae773e	09a3da37-048c-41d6-9230-2a92f7610af2	1cde62f1-29e7-4c0a-8fa4-25fe4df1693e
+de7be48c-7c7b-44a1-8daa-2fdc4f9bf7fc	09a3da37-048c-41d6-9230-2a92f7610af2	0d560069-70ce-4875-975a-7564dc121898
+00f12f83-4b19-47f7-b0f2-f16929d7a208	9635b280-5d5a-4694-a2b2-5e11212fe414	a1307d5d-e60c-44af-8738-1f5bfad0a8f1
+0f55fcd7-abce-4a72-a400-db08cff94d57	9635b280-5d5a-4694-a2b2-5e11212fe414	1cde62f1-29e7-4c0a-8fa4-25fe4df1693e
+cfe695d5-d84b-4cda-a576-3420ff435b01	9635b280-5d5a-4694-a2b2-5e11212fe414	51172034-27c2-4e56-9370-6dfd6c601d96
+694484d1-1a7b-44cf-9805-6f2e625bfa44	3ab1d5f1-d9d0-4be2-b9f8-57bb50fbbb63	5dec6668-ada4-4529-ab0e-c824b1bdec3c
+5fe9ecc7-8d19-466b-b780-64104c48f73f	dfdf7668-8960-4273-b2b0-4d150cf1eb9f	5dec6668-ada4-4529-ab0e-c824b1bdec3c
+dad6599c-2a7e-4285-ae29-26b3cd76263f	2f73e701-e8aa-4c6d-b6be-3646e619a94e	5dec6668-ada4-4529-ab0e-c824b1bdec3c
+39ee1c7a-f819-4087-87ea-c30913b76dc8	c2c94939-e339-40e9-913f-e5e20ba748f9	5dec6668-ada4-4529-ab0e-c824b1bdec3c
+6099a27d-23ba-4516-8c99-dba512148848	762d936b-e555-43a0-96d6-69ce1841e118	5dec6668-ada4-4529-ab0e-c824b1bdec3c
+52747b55-d86f-41c9-8a78-10387e1e8f71	fd2d1745-d73e-4091-9958-ddeb6bc65acc	5dec6668-ada4-4529-ab0e-c824b1bdec3c
+393db9bd-cd9f-4baf-949e-da4d3e908607	4f2fc04a-52bd-41a1-8964-1d8cf2036b6b	5dec6668-ada4-4529-ab0e-c824b1bdec3c
+601c5045-bbc1-4b99-bf8d-b6927c4e1ffc	75ac25d9-ae07-4e89-aef8-428a43c0fd95	5dec6668-ada4-4529-ab0e-c824b1bdec3c
+\.
+
+
+--
+-- Data for Name: cms_template_tags; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_template_tags (id, key, name, created_at) FROM stdin;
+a1307d5d-e60c-44af-8738-1f5bfad0a8f1	responsive-design	Responsive Design	2026-06-30 19:50:21.438
+983b6748-1ad9-486e-9226-2c880bb07fd2	seo-optimized	Seo Optimized	2026-06-30 19:50:21.444
+5b0d02a2-81b4-4a0f-960c-1bc7b6cb691a	multi-language	Multi Language	2026-06-30 19:50:21.446
+959f3676-8808-48e4-88cd-899361942956	dark-mode	Dark Mode	2026-06-30 19:50:21.449
+51172034-27c2-4e56-9370-6dfd6c601d96	analytics-ready	Analytics Ready	2026-06-30 19:50:21.451
+15bdcf89-3e11-419b-b7f9-c9ae2c3cd4d1	payment-integrated	Payment Integrated	2026-06-30 19:50:21.454
+1cde62f1-29e7-4c0a-8fa4-25fe4df1693e	booking-system	Booking System	2026-06-30 19:50:21.46
+2a8c7b20-5bf1-4519-9102-273c121eaff5	blog-enabled	Blog Enabled	2026-06-30 19:50:21.462
+0d560069-70ce-4875-975a-7564dc121898	social-integration	Social Integration	2026-06-30 19:50:21.465
+04bfd534-8dd9-4a91-b7d6-386ca51fd7a5	pwa-ready	Pwa Ready	2026-06-30 19:50:21.467
+5dec6668-ada4-4529-ab0e-c824b1bdec3c	test-tmpl-tag	Test Template Tag	2026-07-02 03:12:12.374
+7c83c08e-4e98-4ed8-914d-3725b95c854f	temp-test-tmpl-tag	Temp Test Template Tag	2026-07-02 03:12:22.333
+\.
+
+
+--
+-- Data for Name: cms_template_versions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_template_versions (id, template_id, version, name, description, manifest, thumbnail, preview_image, preview_video, live_demo_url, zip_artifact, manifest_url, change_notes, created_by, created_at) FROM stdin;
+57569610-f96c-4d4e-9d17-7a962d9b7ba7	5c7028a4-4856-4e41-a045-cea92412d4a2	1	Test Template	A template for testing	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	\N	\N	\N	Initial version	f618a4f3-c440-4efc-95d5-393266e2a317	2026-07-01 03:34:00.999
+b75dedb4-507f-40c9-ae31-809cac3337da	f1c9d4e3-97dc-453f-b120-d99075b94421	1	List Test Template	For listing test	null	\N	\N	\N	\N	\N	\N	Initial version	f618a4f3-c440-4efc-95d5-393266e2a317	2026-07-01 03:34:01.663
+a912d9de-f42d-419b-a81b-e9650f4a33b0	ba66caed-2eaf-4797-a6be-0bf4b215c26f	1	Get Test Template	For get test	null	\N	\N	\N	\N	\N	\N	Initial version	f618a4f3-c440-4efc-95d5-393266e2a317	2026-07-01 03:34:03.038
+e22198d7-404c-4887-a942-81a35fb62b30	70be4b81-015b-454f-bfce-ed7f4f60132b	1	Modern E-Commerce Store	A complete e-commerce solution with product catalog, cart, checkout, payment integration, order management, and admin dashboard.	{"apis": ["products", "cart", "orders", "payments", "auth"], "pages": ["Home", "Shop", "ProductDetail", "Cart", "Checkout", "Orders", "Admin"], "seoRules": "Meta tags, Open Graph, sitemap.xml, robots.txt", "components": ["Navbar", "Footer", "ProductCard", "CartDrawer", "SearchBar"], "sdkVersion": "1.0.0", "dependencies": ["react", "nextjs", "prisma", "stripe", "tailwindcss"], "securityRules": "HTTPS enforced, XSS protection, CSRF tokens, Rate limiting", "databaseModels": ["Product", "Category", "Order", "User", "Cart"], "generatedArtifacts": ["api/", "components/", "pages/", "styles/", "utils/"], "environmentVariables": ["DATABASE_URL", "PAYMENT_KEY", "STORAGE_BUCKET"]}	/assets/templates/ecommerce-thumb.jpg	/assets/templates/ecommerce-preview.jpg	\N	https://demo.example.com/ecommerce	\N	\N	Initial version	\N	2026-06-30 19:51:46.412
+6a273a11-73e8-4502-b604-149b49353ef0	09a3da37-048c-41d6-9230-2a92f7610af2	1	Salon & Beauty Booking	A salon website with online booking, service catalog, staff management, gallery, and customer reviews.	{"apis": ["services", "booking", "staff", "reviews", "contact"], "pages": ["Home", "Services", "Booking", "Staff", "Gallery", "Reviews", "Contact"], "seoRules": "Meta tags, Open Graph, local business schema", "components": ["Navbar", "Footer", "ServiceCard", "BookingForm", "StaffCard", "ReviewCard"], "sdkVersion": "1.0.0", "dependencies": ["react", "nextjs", "prisma", "tailwindcss"], "securityRules": "HTTPS enforced, XSS protection, CSRF tokens", "databaseModels": ["Service", "Booking", "Staff", "Review", "Customer"], "generatedArtifacts": ["api/", "components/", "pages/", "styles/"], "environmentVariables": ["DATABASE_URL", "BOOKING_API_KEY"]}	/assets/templates/salon-thumb.jpg	/assets/templates/salon-preview.jpg	\N	https://demo.example.com/salon	\N	\N	Initial version	\N	2026-06-30 19:51:46.429
+81c63982-cb05-4185-8706-1b815546a27c	9635b280-5d5a-4694-a2b2-5e11212fe414	1	Restaurant & Cafe Menu	A restaurant website with menu display, online ordering, table reservation, and location information.	{"apis": ["menu", "reservations", "gallery", "contact"], "pages": ["Home", "Menu", "Reservation", "Gallery", "Contact", "About"], "seoRules": "Meta tags, Open Graph, restaurant schema", "components": ["Navbar", "Footer", "MenuItem", "ReservationForm", "GalleryGrid", "Map"], "sdkVersion": "1.0.0", "dependencies": ["react", "nextjs", "prisma", "tailwindcss"], "securityRules": "HTTPS enforced, XSS protection", "databaseModels": ["MenuItem", "Category", "Reservation", "Gallery"], "generatedArtifacts": ["api/", "components/", "pages/", "styles/"], "environmentVariables": ["DATABASE_URL"]}	/assets/templates/restaurant-thumb.jpg	/assets/templates/restaurant-preview.jpg	\N	https://demo.example.com/restaurant	\N	\N	Initial version	\N	2026-06-30 19:51:46.442
+420d6113-7f9c-445a-9cf9-c080b844fbf3	a353e499-fcc1-4429-9e40-bf53f56b0d6a	1	Test Template	A template for testing	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	\N	\N	\N	Initial version	f9db09b6-48d4-4653-89dc-702b14ae6250	2026-07-01 03:30:08.907
+efec1392-2852-4a83-8b1b-d854e68323b9	d7555d37-d2c2-4f5e-ba34-b5a22f5fc3ee	1	List Test Template	For listing test	null	\N	\N	\N	\N	\N	\N	Initial version	f9db09b6-48d4-4653-89dc-702b14ae6250	2026-07-01 03:30:10.78
+da7c6228-7870-4bda-a2a3-37da3ebab503	5edb94b2-77e2-4a18-ba19-ca5b46777389	1	Get Test Template	For get test	null	\N	\N	\N	\N	\N	\N	Initial version	f9db09b6-48d4-4653-89dc-702b14ae6250	2026-07-01 03:30:12.717
+86c2134c-6205-47dc-b11e-5928155c3eac	3ab1d5f1-d9d0-4be2-b9f8-57bb50fbbb63	1	Test Template	A template for testing	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:13.455
+741d3870-860b-4e38-93de-aed017be4496	dfdf7668-8960-4273-b2b0-4d150cf1eb9f	1	List Test Template	For listing test	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:14.562
+93325975-3724-4da5-a90c-382de06d3668	19e29f07-d58c-430a-bbf0-75fbfbdee44c	1	Get Test Template	For get test	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:15.423
+24e5846b-099c-479e-943c-eada85d32300	1df445ae-34b1-4168-b0d6-c45a6fe11823	1	Update Test Template	Before update	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:16.232
+13de54de-abbd-41f1-862e-101f5661be6a	1df445ae-34b1-4168-b0d6-c45a6fe11823	2	Updated Name	After update	null	\N	\N	\N	\N	\N	\N	Updated for testing	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:16.801
+0b1f4579-ad0c-4f81-b594-ec72184ca8d1	cb77a75a-b35f-47dc-bb22-147aa06ca1c4	1	Delete Test Template	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:17.145
+77504f45-8450-40e0-9f65-71b6ee47712d	9f9c95a7-a3a1-4406-856c-cd4e97896f53	1	Publish Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:17.908
+86677879-8129-4bad-8fbb-c5be4cebea3a	9f9c95a7-a3a1-4406-856c-cd4e97896f53	2	Publish Test	\N	null	\N	\N	\N	\N	\N	\N	Published	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:18.18
+f4d75177-db73-4ba4-aa59-346dcea56d79	556e9f0a-15e7-4d56-840c-527cb27725b1	1	Archive Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:18.481
+c1eb1bef-993f-4077-9f7d-e4c01c4fbcce	b4e3a084-a363-4f0a-b9be-87e061070101	1	Deprecate Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:18.886
+b4747ae8-32ce-4224-87a3-82b370a600a9	923b7786-36e9-469b-9d41-fdeda8c052cf	1	Version Create Test	Original	{"pages": ["Home"]}	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:19.298
+a8137a81-ffa6-4c00-b4c7-75a2a3e337b6	923b7786-36e9-469b-9d41-fdeda8c052cf	2	Version 2 Name	Original	{"pages": ["Home"]}	\N	\N	\N	\N	\N	\N	Second version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:19.434
+3bc9cc4f-3809-4c78-ae19-256588e276e6	1efdaa00-2549-41a7-97e1-153ca0db021a	1	Versions List Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:19.762
+a56a3df0-63c1-43e7-b653-ee4a8a61dd4f	1efdaa00-2549-41a7-97e1-153ca0db021a	2	Updated for versions	\N	null	\N	\N	\N	\N	\N	\N	Second version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:20.257
+808a8db4-7a61-4573-a305-c1972fc51f55	0a8cd02d-6458-4136-b69b-bc42913ba6b0	1	Rollback Test	Original description	null	/original/thumb.jpg	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:20.575
+2e1a44e5-2886-470a-8457-7394144c08a5	0a8cd02d-6458-4136-b69b-bc42913ba6b0	2	Rollback Test	Updated description	null	/updated/thumb.jpg	\N	\N	\N	\N	\N	Before rollback	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:20.937
+dd18e1e5-b6d5-4c16-9f69-cadf2ca61eec	77f2411c-ef47-452f-8a99-3500c385294e	1	Favorite Toggle Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:21.262
+61cf89f8-2c4c-422d-a3df-e2e21031609a	a15c214e-3063-473e-b638-d77a9eb395ad	1	Favorites List Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:21.659
+ddc93f1f-6bb2-485e-a10f-97dc3509b891	f10c20e2-3121-4cb3-94a3-91c1bdcd0670	1	Rating Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:22.024
+1600ceca-bfcb-4716-ac25-8958fc41f84d	f1744907-0825-49fc-bc96-be5904f4ebe8	1	Pipeline Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:22.512
+d0ef2f28-f9e5-4154-b298-61e15d786df8	2fb5fd86-fe01-42e1-8be3-19bc0b8bc172	1	Pipeline Status Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:22.925
+b9c82b3e-57a7-44cf-891a-5307c308f792	a742bcce-afb6-451e-b8cb-a92e563535f8	1	Featured Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:23.235
+fd745176-ea6a-475c-be20-3ff1af4a8151	77cdd8b3-6b99-4cdb-90eb-f8a69d768afa	1	Latest Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:23.499
+c222abe4-09aa-4e41-95f7-0ddbb39679af	695c631b-e502-4dbe-8ca8-5dd83a9f970d	1	Popular Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:23.755
+1c467897-166c-421a-ba6d-2da1bd68613e	e2a49049-6f3f-4aed-afe3-6f12b08d6de4	1	Tier Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:23.993
+e0cf3919-46c4-4b45-be34-d80753280e1d	1a9484bd-27e9-4fbc-b97f-fc4428aa7434	1	Assign Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:24.25
+2604e13d-7460-401a-8a9b-d2f0e5147fa2	99c23b7f-7b2a-4005-b470-ee565cd0ff33	1	Unassign Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:24.458
+2819473c-f83b-4f23-94f8-b157ebd73937	91f6d936-c019-4f30-a049-724fdc77bac0	1	Business Assignments Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:24.665
+b29b1d64-7a68-4d21-8940-fe43873fb12b	2f73e701-e8aa-4c6d-b6be-3646e619a94e	1	Test Template	A template for testing	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:47.497
+617d8dbf-ea2a-4626-a63b-dd392b4b52e1	c2c94939-e339-40e9-913f-e5e20ba748f9	1	List Test Template	For listing test	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:48.2
+d7b8c188-620c-4c4c-8246-98e503a7ccac	1c3c4790-f543-4a33-8bbf-65959d4b53f6	1	Get Test Template	For get test	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:49.057
+0368bc4c-fdb5-4177-ad12-36645b5ad8b9	1ec3fcd9-cf59-488b-a88d-c70b70dccd64	1	Update Test Template	Before update	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:49.661
+6fb5c6f6-a23b-4aca-bd1a-c1f0dfd06a70	1ec3fcd9-cf59-488b-a88d-c70b70dccd64	2	Updated Name	After update	null	\N	\N	\N	\N	\N	\N	Updated for testing	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:50.13
+2fbda88f-c59a-4475-94b1-b037282b344f	06fb2972-b35a-4afa-9c7c-5afb6f6ce8ca	1	Delete Test Template	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:50.46
+44a50e4d-5868-4916-951b-12dec969b57e	4120a112-c012-4150-9763-824a8f07005c	1	Publish Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:51.249
+d4beb718-feef-46ac-8677-b75020e61865	4120a112-c012-4150-9763-824a8f07005c	2	Publish Test	\N	null	\N	\N	\N	\N	\N	\N	Published	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:51.485
+90c4e677-4a7b-4705-8839-78f6a31fe9df	74a27daa-52d3-4060-91b9-9eb63b15986c	1	Archive Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:51.846
+77b90f6c-cf4e-4806-b8ab-fa793fa48014	177bd6e6-92f9-467c-b0ac-0e5eda2bcc30	1	Deprecate Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:52.378
+8ab2d22e-9977-449b-88f9-afe1ee5fe69e	ac2d8dba-f404-449a-be30-276b01c6b1fc	1	Version Create Test	Original	{"pages": ["Home"]}	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:52.847
+9a182387-b8c1-46df-bf70-bfb987008256	ac2d8dba-f404-449a-be30-276b01c6b1fc	2	Version 2 Name	Original	{"pages": ["Home"]}	\N	\N	\N	\N	\N	\N	Second version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:53.037
+a36dcf27-54e9-43f4-93d4-7cb4ebc96f88	5617ce1d-0b95-4e03-bde9-08c619bdfca0	1	Versions List Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:53.373
+28bebb3f-9bb5-44eb-b0a5-096b89fcf134	5617ce1d-0b95-4e03-bde9-08c619bdfca0	2	Updated for versions	\N	null	\N	\N	\N	\N	\N	\N	Second version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:53.951
+16630b44-d1c9-4039-bbde-16dd06781f53	6c7bb393-df20-4761-9632-f3adf931b21a	1	Rollback Test	Original description	null	/original/thumb.jpg	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:54.299
+1f08f97c-e730-4b3b-a68d-3a931fce0926	6c7bb393-df20-4761-9632-f3adf931b21a	2	Rollback Test	Updated description	null	/updated/thumb.jpg	\N	\N	\N	\N	\N	Before rollback	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:54.693
+22f62a46-ef27-49a7-8af7-4d111eb9cc7f	516a4404-0c5d-4fbd-9fb7-9b07594ece17	1	Favorite Toggle Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:55.183
+c224294a-afbd-4e83-9a9e-5613edaf9106	7a5a5064-a3ef-474d-bd69-24507cc6d15e	1	Favorites List Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:55.715
+1d49001c-2f56-425f-be9f-5ac8f5bc16fe	56bec9ae-bdcf-4317-ada8-856b7a7716f1	1	Rating Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:56.279
+af764f25-186a-4180-8088-b08efc0dd700	1d02cb7b-df9d-444f-8ae3-aaef8ccaf89b	1	Pipeline Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:56.846
+e48b00a0-41a2-49db-ad87-c808f3db7bea	d10de2c7-ea69-41d1-8049-2b339c023629	1	Pipeline Status Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:57.392
+b77456a4-7c0d-4733-a8a0-3440048bdf6b	97dd32fc-d6b0-453a-b1ff-bd32129b4a40	1	Featured Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:57.764
+8bf6a434-9cd1-4d51-beda-d0f7950013d1	58db54bd-726f-4bd2-9094-01064d467a87	1	Latest Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:58.025
+cf9072f1-3c36-4559-a0b7-22879d287b77	8501a3ff-47cd-4b65-b24f-fa0b0d5315b8	1	Popular Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:58.287
+c08ecc20-3bf1-4f32-9b2f-d3f2c6ae03f0	28051b5b-e500-4bdd-9b0e-684cbb837313	1	Tier Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:58.591
+5055e125-d2cc-4555-8407-4b1855303b0f	762d936b-e555-43a0-96d6-69ce1841e118	1	Test Template	A template for testing	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	\N	\N	\N	Initial version	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:18.728
+4a786e15-b247-42b0-8be2-58181285f6d3	fd2d1745-d73e-4091-9958-ddeb6bc65acc	1	List Test Template	For listing test	null	\N	\N	\N	\N	\N	\N	Initial version	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:19.446
+171207d5-8bbe-4c3a-be6b-903e4cc48246	c8dad024-d6e0-45c8-bc71-6e3cc2ab25c7	1	Get Test Template	For get test	null	\N	\N	\N	\N	\N	\N	Initial version	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:20.281
+a9d65ea3-59fd-46e0-8355-abea26b8c13f	f8516d14-4e8a-4c84-8595-43da6cd5df21	1	Update Test Template	Before update	null	\N	\N	\N	\N	\N	\N	Initial version	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:20.905
+f35019f3-b184-4110-86bf-335e0fb0754c	f8516d14-4e8a-4c84-8595-43da6cd5df21	2	Updated Name	After update	null	\N	\N	\N	\N	\N	\N	Updated for testing	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:21.403
+a6354a9d-585b-4399-8348-a055ec7c0d5f	0d90a331-6d16-4a64-a944-511c6d44846c	1	Delete Test Template	\N	null	\N	\N	\N	\N	\N	\N	Initial version	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:21.79
+7671ca03-5e39-4ffd-a839-7268ac4d9027	7af98fbb-ca3e-46e0-9dfb-3c216ba625fa	1	Publish Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:22.469
+528e2f68-9c74-4b83-a424-b9a528cef41d	7af98fbb-ca3e-46e0-9dfb-3c216ba625fa	2	Publish Test	\N	null	\N	\N	\N	\N	\N	\N	Published	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:22.755
+fc034239-a650-4d11-9a6d-f4a99436eee9	e668be8c-57ee-454b-b3ba-89b4a7557c6d	1	Archive Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:23.068
+4e2df3ad-06b8-40f5-b045-10ff534da6cd	87651beb-270f-4c99-9bab-d6a1072cc797	1	Deprecate Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:23.622
+07d77637-ebd0-44c0-9fd0-a663fdd77139	61d02517-5e46-4b0d-a508-d218e1ac1373	1	Version Create Test	Original	{"pages": ["Home"]}	\N	\N	\N	\N	\N	\N	Initial version	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:24.315
+b1bc6ccb-aa9d-4927-88c6-ce9c3c1663f8	61d02517-5e46-4b0d-a508-d218e1ac1373	2	Version 2 Name	Original	{"pages": ["Home"]}	\N	\N	\N	\N	\N	\N	Second version	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:24.54
+b4c212b1-43fb-4f89-a682-05ba355aa302	4f2fc04a-52bd-41a1-8964-1d8cf2036b6b	1	Test Template	A template for testing	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:43.412
+29ba7081-bec0-4ef6-8b33-ea98a73c6beb	75ac25d9-ae07-4e89-aef8-428a43c0fd95	1	List Test Template	For listing test	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:44.083
+695c395e-0328-4ead-9a6e-bc2ee55cc000	5ea86caa-a9d8-48dc-9d3a-21f3172c8106	1	Get Test Template	For get test	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:44.839
+7bc8fd88-795d-4567-940d-e9ba5e04341f	7125469b-e575-4385-8d8d-f53b78f1fc18	1	Update Test Template	Before update	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:45.549
+f8f466be-ef2c-458b-aaaa-ff0096555d0f	7125469b-e575-4385-8d8d-f53b78f1fc18	2	Updated Name	After update	null	\N	\N	\N	\N	\N	\N	Updated for testing	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:46.033
+82d487fe-906c-4f49-8883-04909ba36dfe	19eb8b29-6cf2-4146-9fb9-3d3d01da67b4	1	Delete Test Template	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:46.416
+b97105f0-dcac-46d1-921a-88a8ca22c6bc	d7aa7dcd-90aa-44a3-84c6-1d0ddb3d560a	1	Publish Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:47.085
+da66f13d-c52f-4687-b547-0dde05660d4b	d7aa7dcd-90aa-44a3-84c6-1d0ddb3d560a	2	Publish Test	\N	null	\N	\N	\N	\N	\N	\N	Published	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:47.323
+ffaa6d7e-2273-4d4d-a53b-e0448f9b42a6	07e40334-552f-4cd2-bc34-3b06ba4cdb45	1	Archive Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:47.651
+431bb3fb-32d5-48f1-aa37-13d33070f9f6	eba4113f-b4d4-440d-aa8c-3f88cfe889ee	1	Deprecate Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:48.111
+de40f0e2-5bf5-432c-934e-795354a7fe0a	5b440362-419c-4022-8ed9-e587b317ca86	1	Version Create Test	Original	{"pages": ["Home"]}	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:48.588
+dc53e205-1613-46d4-b2a0-d8c853e054a2	5b440362-419c-4022-8ed9-e587b317ca86	2	Version 2 Name	Original	{"pages": ["Home"]}	\N	\N	\N	\N	\N	\N	Second version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:48.861
+ae144428-1796-48a6-a4d1-e2d212fd9678	f3f6c666-e556-47e6-a76c-d29dc4379d7b	1	Versions List Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:49.166
+93ee570e-8e6d-409c-a590-3c5be5e99b41	f3f6c666-e556-47e6-a76c-d29dc4379d7b	2	Updated for versions	\N	null	\N	\N	\N	\N	\N	\N	Second version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:49.512
+9e061da2-dd2d-4787-aa3e-b08002da15ac	e14aebad-a9d7-46a7-865b-45af97bf2a63	1	Rollback Test	Original description	null	/original/thumb.jpg	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:49.81
+2389bdda-05d3-4263-8ec8-093e22568768	e14aebad-a9d7-46a7-865b-45af97bf2a63	2	Rollback Test	Updated description	null	/updated/thumb.jpg	\N	\N	\N	\N	\N	Before rollback	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:50.115
+3a0ff8f8-f838-4ad3-bd41-3820cf0f4fe2	8716da53-ffce-4cd8-9f83-0b9c1547cd45	1	Favorite Toggle Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:50.453
+712d9cdb-d89f-4f0b-a315-d4cdb9cdfc05	739490a5-8631-4720-9789-80f358028f42	1	Favorites List Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:50.878
+6b6fb5f7-2fa6-4cdd-8cbb-7860c6c21558	613f5390-6cec-4d8e-a762-b225f2da53e2	1	Rating Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:51.365
+6a543ed4-d9b2-4e0b-998e-cd1ca981331e	30b73aec-4b21-476b-a960-aebc92b786f9	1	Pipeline Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:51.849
+9ae4b51b-5fc8-454b-bd29-3cf398a7a610	4e938aae-f4c5-4f5f-86ab-ac290654585c	1	Pipeline Status Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:52.329
+0746e593-69cb-409b-9be0-ef8d6f2eee64	c53850ca-9b65-4161-8ff1-903977fe1af2	1	Featured Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:52.677
+39b506fb-a776-416e-94bf-d5534c85480f	1b98bf13-83e3-43da-bee6-d96fdf885c10	1	Latest Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:52.94
+dcf46c91-ae46-4323-940b-51bbf205ad9f	87ccb77c-54a8-4857-87d5-e38a282ce6b6	1	Popular Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:53.18
+9963aa35-58f3-41e4-a697-ff458cd3b731	bf8dfeae-8745-4709-8adc-db5558b951de	1	Tier Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:53.44
+ea9ed9b1-819d-4c6a-a4d5-0b478a99ca6f	3840ddc3-d55d-4684-ab4b-441e040a748f	1	Assign Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:53.702
+afdb4848-603c-4062-8fcd-c4de45181dd8	d2c9874d-2449-4c8d-b274-60d35bad6438	1	Unassign Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:53.907
+fb04606d-af09-46b3-891c-f12ef5b2da58	40f85730-ca3f-4402-9005-b0daa43b4c63	1	Business Assignments Test	\N	null	\N	\N	\N	\N	\N	\N	Initial version	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:54.141
+\.
+
+
+--
+-- Data for Name: cms_templates; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_templates (id, name, description, industry, status, tier, version, "isFeatured", "isActive", is_deleted, thumbnail, preview_image, preview_video, live_demo_url, zip_artifact, manifest_url, manifest, prompt_id, blueprint_id, certification_id, category_id, created_by, updated_by, created_at, updated_at) FROM stdin;
+09a3da37-048c-41d6-9230-2a92f7610af2	Salon & Beauty Booking	A salon website with online booking, service catalog, staff management, gallery, and customer reviews.	salon	PUBLISHED	STARTER	1	f	t	f	/assets/templates/salon-thumb.jpg	/assets/templates/salon-preview.jpg	\N	https://demo.example.com/salon	\N	\N	{"apis": ["services", "booking", "staff", "reviews", "contact"], "pages": ["Home", "Services", "Booking", "Staff", "Gallery", "Reviews", "Contact"], "seoRules": "Meta tags, Open Graph, local business schema", "components": ["Navbar", "Footer", "ServiceCard", "BookingForm", "StaffCard", "ReviewCard"], "sdkVersion": "1.0.0", "dependencies": ["react", "nextjs", "prisma", "tailwindcss"], "securityRules": "HTTPS enforced, XSS protection, CSRF tokens", "databaseModels": ["Service", "Booking", "Staff", "Review", "Customer"], "generatedArtifacts": ["api/", "components/", "pages/", "styles/"], "environmentVariables": ["DATABASE_URL", "BOOKING_API_KEY"]}	\N	\N	\N	6cf204a1-d21a-4a02-9409-499a29042b7a	\N	\N	2026-06-30 19:51:46.415	2026-06-30 19:51:46.415
+3ab1d5f1-d9d0-4be2-b9f8-57bb50fbbb63	Test Template	A template for testing	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	95ebb6c1-5e41-4b7d-9315-b6f3063cade1	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:12.858	2026-07-02 03:12:12.858
+dfdf7668-8960-4273-b2b0-4d150cf1eb9f	List Test Template	For listing test	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	95ebb6c1-5e41-4b7d-9315-b6f3063cade1	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:14.14	2026-07-02 03:12:14.14
+9635b280-5d5a-4694-a2b2-5e11212fe414	Restaurant & Cafe Menu	A restaurant website with menu display, online ordering, table reservation, and location information.	restaurant	PUBLISHED	FREE	1	t	t	f	/assets/templates/restaurant-thumb.jpg	/assets/templates/restaurant-preview.jpg	\N	https://demo.example.com/restaurant	\N	\N	{"apis": ["menu", "reservations", "gallery", "contact"], "pages": ["Home", "Menu", "Reservation", "Gallery", "Contact", "About"], "seoRules": "Meta tags, Open Graph, restaurant schema", "components": ["Navbar", "Footer", "MenuItem", "ReservationForm", "GalleryGrid", "Map"], "sdkVersion": "1.0.0", "dependencies": ["react", "nextjs", "prisma", "tailwindcss"], "securityRules": "HTTPS enforced, XSS protection", "databaseModels": ["MenuItem", "Category", "Reservation", "Gallery"], "generatedArtifacts": ["api/", "components/", "pages/", "styles/"], "environmentVariables": ["DATABASE_URL"]}	\N	\N	\N	564fb439-b113-4d1e-a5f2-600111a02f34	\N	\N	2026-06-30 19:51:46.433	2026-06-30 19:51:46.433
+9f9c95a7-a3a1-4406-856c-cd4e97896f53	Publish Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:17.709	2026-07-02 03:12:18.125
+556e9f0a-15e7-4d56-840c-527cb27725b1	Archive Test	\N	ecommerce	ARCHIVED	FREE	1	f	f	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:18.307	2026-07-02 03:12:18.623
+5c7028a4-4856-4e41-a045-cea92412d4a2	Test Template	A template for testing	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	\N	f618a4f3-c440-4efc-95d5-393266e2a317	f618a4f3-c440-4efc-95d5-393266e2a317	2026-07-01 03:34:00.028	2026-07-01 03:34:00.028
+f1c9d4e3-97dc-453f-b120-d99075b94421	List Test Template	For listing test	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	f618a4f3-c440-4efc-95d5-393266e2a317	f618a4f3-c440-4efc-95d5-393266e2a317	2026-07-01 03:34:01.302	2026-07-01 03:34:01.302
+b4e3a084-a363-4f0a-b9be-87e061070101	Deprecate Test	\N	ecommerce	ARCHIVED	FREE	1	f	f	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:18.724	2026-07-02 03:12:19.022
+923b7786-36e9-469b-9d41-fdeda8c052cf	Version Create Test	Original	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	{"pages": ["Home"]}	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:19.13	2026-07-02 03:12:19.13
+1efdaa00-2549-41a7-97e1-153ca0db021a	Updated for versions	\N	ecommerce	DRAFT	FREE	2	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:19.543	2026-07-02 03:12:20.075
+2f73e701-e8aa-4c6d-b6be-3646e619a94e	Test Template	A template for testing	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	95ebb6c1-5e41-4b7d-9315-b6f3063cade1	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:47.001	2026-07-02 03:12:47.001
+0a8cd02d-6458-4136-b69b-bc42913ba6b0	Rollback Test	Original description	ecommerce	DRAFT	FREE	3	f	t	f	/original/thumb.jpg	\N	\N	\N	\N	\N	null	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:20.41	2026-07-02 03:12:21.049
+77f2411c-ef47-452f-8a99-3500c385294e	Favorite Toggle Test	\N	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:21.141	2026-07-02 03:12:21.141
+a15c214e-3063-473e-b638-d77a9eb395ad	Favorites List Test	\N	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:21.538	2026-07-02 03:12:21.538
+c2c94939-e339-40e9-913f-e5e20ba748f9	List Test Template	For listing test	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	95ebb6c1-5e41-4b7d-9315-b6f3063cade1	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:47.824	2026-07-02 03:12:47.824
+4120a112-c012-4150-9763-824a8f07005c	Publish Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:51.012	2026-07-02 03:12:51.411
+8f90822f-0821-49a3-bcd3-58e59459f040	Modern E-Commerce Store	A complete e-commerce solution with product catalog, cart, checkout, payment integration, order management, and admin dashboard.	ecommerce	PUBLISHED	PROFESSIONAL	1	t	t	f	/assets/templates/ecommerce-thumb.jpg	/assets/templates/ecommerce-preview.jpg	\N	https://demo.example.com/ecommerce	\N	\N	{"apis": ["products", "cart", "orders", "payments", "auth"], "pages": ["Home", "Shop", "ProductDetail", "Cart", "Checkout", "Orders", "Admin"], "seoRules": "Meta tags, Open Graph, sitemap.xml, robots.txt", "components": ["Navbar", "Footer", "ProductCard", "CartDrawer", "SearchBar"], "sdkVersion": "1.0.0", "dependencies": ["react", "nextjs", "prisma", "stripe", "tailwindcss"], "securityRules": "HTTPS enforced, XSS protection, CSRF tokens, Rate limiting", "databaseModels": ["Product", "Category", "Order", "User", "Cart"], "generatedArtifacts": ["api/", "components/", "pages/", "styles/", "utils/"], "environmentVariables": ["DATABASE_URL", "PAYMENT_KEY", "STORAGE_BUCKET"]}	\N	\N	\N	c98c9a1c-5123-4290-b141-92743181d89b	\N	\N	2026-06-30 19:51:26.808	2026-06-30 19:51:26.808
+70be4b81-015b-454f-bfce-ed7f4f60132b	Modern E-Commerce Store	A complete e-commerce solution with product catalog, cart, checkout, payment integration, order management, and admin dashboard.	ecommerce	PUBLISHED	PROFESSIONAL	1	t	t	f	/assets/templates/ecommerce-thumb.jpg	/assets/templates/ecommerce-preview.jpg	\N	https://demo.example.com/ecommerce	\N	\N	{"apis": ["products", "cart", "orders", "payments", "auth"], "pages": ["Home", "Shop", "ProductDetail", "Cart", "Checkout", "Orders", "Admin"], "seoRules": "Meta tags, Open Graph, sitemap.xml, robots.txt", "components": ["Navbar", "Footer", "ProductCard", "CartDrawer", "SearchBar"], "sdkVersion": "1.0.0", "dependencies": ["react", "nextjs", "prisma", "stripe", "tailwindcss"], "securityRules": "HTTPS enforced, XSS protection, CSRF tokens, Rate limiting", "databaseModels": ["Product", "Category", "Order", "User", "Cart"], "generatedArtifacts": ["api/", "components/", "pages/", "styles/", "utils/"], "environmentVariables": ["DATABASE_URL", "PAYMENT_KEY", "STORAGE_BUCKET"]}	\N	\N	\N	c98c9a1c-5123-4290-b141-92743181d89b	\N	\N	2026-06-30 19:51:46.398	2026-06-30 19:51:46.398
+74a27daa-52d3-4060-91b9-9eb63b15986c	Archive Test	\N	ecommerce	ARCHIVED	FREE	1	f	f	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:51.623	2026-07-02 03:12:52.016
+177bd6e6-92f9-467c-b0ac-0e5eda2bcc30	Deprecate Test	\N	ecommerce	ARCHIVED	FREE	1	f	f	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:52.141	2026-07-02 03:12:52.541
+ac2d8dba-f404-449a-be30-276b01c6b1fc	Version Create Test	Original	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	{"pages": ["Home"]}	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:52.665	2026-07-02 03:12:52.665
+5617ce1d-0b95-4e03-bde9-08c619bdfca0	Updated for versions	\N	ecommerce	DRAFT	FREE	2	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:53.161	2026-07-02 03:12:53.715
+1c3c4790-f543-4a33-8bbf-65959d4b53f6	Get Test Template	For get test	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	95ebb6c1-5e41-4b7d-9315-b6f3063cade1	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:48.812	2026-07-02 03:12:48.812
+1ec3fcd9-cf59-488b-a88d-c70b70dccd64	Updated Name	After update	ecommerce	DRAFT	FREE	2	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:49.463	2026-07-02 03:12:49.928
+ba66caed-2eaf-4797-a6be-0bf4b215c26f	Get Test Template	For get test	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	f618a4f3-c440-4efc-95d5-393266e2a317	f618a4f3-c440-4efc-95d5-393266e2a317	2026-07-01 03:34:02.825	2026-07-01 03:34:02.825
+19e29f07-d58c-430a-bbf0-75fbfbdee44c	Get Test Template	For get test	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	95ebb6c1-5e41-4b7d-9315-b6f3063cade1	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:15.131	2026-07-02 03:12:15.131
+1df445ae-34b1-4168-b0d6-c45a6fe11823	Updated Name	After update	ecommerce	DRAFT	FREE	2	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:15.987	2026-07-02 03:12:16.573
+cb77a75a-b35f-47dc-bb22-147aa06ca1c4	Delete Test Template	\N	ecommerce	DRAFT	FREE	1	f	t	t	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:16.935	2026-07-02 03:12:17.326
+f10c20e2-3121-4cb3-94a3-91c1bdcd0670	Rating Test	\N	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:21.922	2026-07-02 03:12:21.922
+f1744907-0825-49fc-bc96-be5904f4ebe8	Pipeline Test	\N	ecommerce	VERIFYING	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:22.388	2026-07-02 03:12:22.631
+2fb5fd86-fe01-42e1-8be3-19bc0b8bc172	Pipeline Status Test	\N	ecommerce	VERIFYING	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:22.814	2026-07-02 03:12:23.05
+a742bcce-afb6-451e-b8cb-a92e563535f8	Featured Test	\N	ecommerce	PUBLISHED	FREE	1	t	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:23.137	2026-07-02 03:12:23.137
+77cdd8b3-6b99-4cdb-90eb-f8a69d768afa	Latest Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:23.393	2026-07-02 03:12:23.393
+695c631b-e502-4dbe-8ca8-5dd83a9f970d	Popular Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:23.655	2026-07-02 03:12:23.655
+e2a49049-6f3f-4aed-afe3-6f12b08d6de4	Tier Test	\N	ecommerce	PUBLISHED	PROFESSIONAL	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:23.898	2026-07-02 03:12:23.898
+1a9484bd-27e9-4fbc-b97f-fc4428aa7434	Assign Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:24.151	2026-07-02 03:12:24.151
+a353e499-fcc1-4429-9e40-bf53f56b0d6a	Test Template	A template for testing	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	\N	f9db09b6-48d4-4653-89dc-702b14ae6250	f9db09b6-48d4-4653-89dc-702b14ae6250	2026-07-01 03:30:07.834	2026-07-01 03:30:07.834
+d7555d37-d2c2-4f5e-ba34-b5a22f5fc3ee	List Test Template	For listing test	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	f9db09b6-48d4-4653-89dc-702b14ae6250	f9db09b6-48d4-4653-89dc-702b14ae6250	2026-07-01 03:30:09.795	2026-07-01 03:30:09.795
+5edb94b2-77e2-4a18-ba19-ca5b46777389	Get Test Template	For get test	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	f9db09b6-48d4-4653-89dc-702b14ae6250	f9db09b6-48d4-4653-89dc-702b14ae6250	2026-07-01 03:30:11.924	2026-07-01 03:30:11.924
+f68d7b6a-6eec-4439-a207-3c35e4954b8e	Test Template	A template for testing	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	\N	d2f315ab-b762-438b-b085-a0f87001e4cb	d2f315ab-b762-438b-b085-a0f87001e4cb	2026-07-01 03:31:02.765	2026-07-01 03:31:02.765
+99c23b7f-7b2a-4005-b470-ee565cd0ff33	Unassign Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:24.35	2026-07-02 03:12:24.35
+91f6d936-c019-4f30-a049-724fdc77bac0	Business Assignments Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	ee667eb1-70cc-4abc-8d50-05e31f9992bd	ee667eb1-70cc-4abc-8d50-05e31f9992bd	2026-07-02 03:12:24.557	2026-07-02 03:12:24.557
+06fb2972-b35a-4afa-9c7c-5afb6f6ce8ca	Delete Test Template	\N	ecommerce	DRAFT	FREE	1	f	t	t	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:50.249	2026-07-02 03:12:50.637
+6c7bb393-df20-4761-9632-f3adf931b21a	Rollback Test	Original description	ecommerce	DRAFT	FREE	3	f	t	f	/original/thumb.jpg	\N	\N	\N	\N	\N	null	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:54.125	2026-07-02 03:12:54.861
+516a4404-0c5d-4fbd-9fb7-9b07594ece17	Favorite Toggle Test	\N	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:55.008	2026-07-02 03:12:55.008
+7a5a5064-a3ef-474d-bd69-24507cc6d15e	Favorites List Test	\N	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:55.557	2026-07-02 03:12:55.557
+56bec9ae-bdcf-4317-ada8-856b7a7716f1	Rating Test	\N	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:56.12	2026-07-02 03:12:56.12
+1d02cb7b-df9d-444f-8ae3-aaef8ccaf89b	Pipeline Test	\N	ecommerce	VERIFYING	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:56.704	2026-07-02 03:12:57.018
+d10de2c7-ea69-41d1-8049-2b339c023629	Pipeline Status Test	\N	ecommerce	VERIFYING	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:57.267	2026-07-02 03:12:57.53
+97dd32fc-d6b0-453a-b1ff-bd32129b4a40	Featured Test	\N	ecommerce	PUBLISHED	FREE	1	t	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:57.644	2026-07-02 03:12:57.644
+58db54bd-726f-4bd2-9094-01064d467a87	Latest Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:57.914	2026-07-02 03:12:57.914
+8501a3ff-47cd-4b65-b24f-fa0b0d5315b8	Popular Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:58.16	2026-07-02 03:12:58.16
+28051b5b-e500-4bdd-9b0e-684cbb837313	Tier Test	\N	ecommerce	PUBLISHED	PROFESSIONAL	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	bb6dd159-b5ae-49ad-9b79-697a171aa45a	bb6dd159-b5ae-49ad-9b79-697a171aa45a	2026-07-02 03:12:58.463	2026-07-02 03:12:58.463
+762d936b-e555-43a0-96d6-69ce1841e118	Test Template	A template for testing	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	95ebb6c1-5e41-4b7d-9315-b6f3063cade1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:18.214	2026-07-02 03:13:18.214
+fd2d1745-d73e-4091-9958-ddeb6bc65acc	List Test Template	For listing test	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	95ebb6c1-5e41-4b7d-9315-b6f3063cade1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:19.089	2026-07-02 03:13:19.089
+c8dad024-d6e0-45c8-bc71-6e3cc2ab25c7	Get Test Template	For get test	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	95ebb6c1-5e41-4b7d-9315-b6f3063cade1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:20.023	2026-07-02 03:13:20.023
+f8516d14-4e8a-4c84-8595-43da6cd5df21	Updated Name	After update	ecommerce	DRAFT	FREE	2	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:20.711	2026-07-02 03:13:21.186
+0d90a331-6d16-4a64-a944-511c6d44846c	Delete Test Template	\N	ecommerce	DRAFT	FREE	1	f	t	t	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:21.555	2026-07-02 03:13:21.943
+7af98fbb-ca3e-46e0-9dfb-3c216ba625fa	Publish Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:22.271	2026-07-02 03:13:22.671
+e668be8c-57ee-454b-b3ba-89b4a7557c6d	Archive Test	\N	ecommerce	ARCHIVED	FREE	1	f	f	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:22.879	2026-07-02 03:13:23.266
+87651beb-270f-4c99-9bab-d6a1072cc797	Deprecate Test	\N	ecommerce	ARCHIVED	FREE	1	f	f	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:23.421	2026-07-02 03:13:23.808
+61d02517-5e46-4b0d-a508-d218e1ac1373	Version Create Test	Original	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	{"pages": ["Home"]}	\N	\N	\N	\N	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:24.045	2026-07-02 03:13:24.045
+ad3db0fb-e6d8-4c78-a769-fa4d6d8eee31	Versions List Test	\N	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	e918e6e3-d225-4f89-bb3c-c19f8e7917a1	2026-07-02 03:13:24.738	2026-07-02 03:13:24.738
+4f2fc04a-52bd-41a1-8964-1d8cf2036b6b	Test Template	A template for testing	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	{"pages": ["Home"], "components": ["Navbar"]}	\N	\N	\N	95ebb6c1-5e41-4b7d-9315-b6f3063cade1	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:42.855	2026-07-02 03:13:42.855
+75ac25d9-ae07-4e89-aef8-428a43c0fd95	List Test Template	For listing test	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	95ebb6c1-5e41-4b7d-9315-b6f3063cade1	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:43.748	2026-07-02 03:13:43.748
+5ea86caa-a9d8-48dc-9d3a-21f3172c8106	Get Test Template	For get test	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	95ebb6c1-5e41-4b7d-9315-b6f3063cade1	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:44.583	2026-07-02 03:13:44.583
+7125469b-e575-4385-8d8d-f53b78f1fc18	Updated Name	After update	ecommerce	DRAFT	FREE	2	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:45.353	2026-07-02 03:13:45.838
+19eb8b29-6cf2-4146-9fb9-3d3d01da67b4	Delete Test Template	\N	ecommerce	DRAFT	FREE	1	f	t	t	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:46.162	2026-07-02 03:13:46.579
+d7aa7dcd-90aa-44a3-84c6-1d0ddb3d560a	Publish Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:46.902	2026-07-02 03:13:47.263
+613f5390-6cec-4d8e-a762-b225f2da53e2	Rating Test	\N	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:51.217	2026-07-02 03:13:51.217
+07e40334-552f-4cd2-bc34-3b06ba4cdb45	Archive Test	\N	ecommerce	ARCHIVED	FREE	1	f	f	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:47.445	2026-07-02 03:13:47.813
+eba4113f-b4d4-440d-aa8c-3f88cfe889ee	Deprecate Test	\N	ecommerce	ARCHIVED	FREE	1	f	f	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:47.93	2026-07-02 03:13:48.265
+5b440362-419c-4022-8ed9-e587b317ca86	Version Create Test	Original	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	{"pages": ["Home"]}	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:48.394	2026-07-02 03:13:48.394
+f3f6c666-e556-47e6-a76c-d29dc4379d7b	Updated for versions	\N	ecommerce	DRAFT	FREE	2	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:48.981	2026-07-02 03:13:49.364
+e14aebad-a9d7-46a7-865b-45af97bf2a63	Rollback Test	Original description	ecommerce	DRAFT	FREE	3	f	t	f	/original/thumb.jpg	\N	\N	\N	\N	\N	null	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:49.668	2026-07-02 03:13:50.224
+8716da53-ffce-4cd8-9f83-0b9c1547cd45	Favorite Toggle Test	\N	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:50.321	2026-07-02 03:13:50.321
+739490a5-8631-4720-9789-80f358028f42	Favorites List Test	\N	ecommerce	DRAFT	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:50.758	2026-07-02 03:13:50.758
+3840ddc3-d55d-4684-ab4b-441e040a748f	Assign Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:53.609	2026-07-02 03:13:53.609
+d2c9874d-2449-4c8d-b274-60d35bad6438	Unassign Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:53.803	2026-07-02 03:13:53.803
+40f85730-ca3f-4402-9005-b0daa43b4c63	Business Assignments Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:54.026	2026-07-02 03:13:54.026
+30b73aec-4b21-476b-a960-aebc92b786f9	Pipeline Test	\N	ecommerce	VERIFYING	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:51.727	2026-07-02 03:13:51.99
+4e938aae-f4c5-4f5f-86ab-ac290654585c	Pipeline Status Test	\N	ecommerce	VERIFYING	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:52.205	2026-07-02 03:13:52.445
+c53850ca-9b65-4161-8ff1-903977fe1af2	Featured Test	\N	ecommerce	PUBLISHED	FREE	1	t	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:52.56	2026-07-02 03:13:52.56
+1b98bf13-83e3-43da-bee6-d96fdf885c10	Latest Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:52.833	2026-07-02 03:13:52.833
+87ccb77c-54a8-4857-87d5-e38a282ce6b6	Popular Test	\N	ecommerce	PUBLISHED	FREE	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:53.069	2026-07-02 03:13:53.069
+bf8dfeae-8745-4709-8adc-db5558b951de	Tier Test	\N	ecommerce	PUBLISHED	PROFESSIONAL	1	f	t	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	01149cb1-efe3-4f8d-815d-80f53fa14a6c	01149cb1-efe3-4f8d-815d-80f53fa14a6c	2026-07-02 03:13:53.345	2026-07-02 03:13:53.345
+\.
+
+
+--
+-- Data for Name: cms_uploads; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_uploads (id, business_id, filename, size_bytes, blueprint_id, status, progress_percent, virus_scan_result, sandbox_path, error_details, created_by, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_validation_report_analytics; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_validation_report_analytics (business_id, period_start, period_end, total_reports, avg_score, pass_count, fail_count, section_averages, score_distribution, created_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_validation_report_comparisons; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_validation_report_comparisons (business_id, report_id_1, report_id_2, diff_data, summary, created_by, created_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_validation_report_exports; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_validation_report_exports (report_id, format, status, file_url, file_size, error_details, created_by, created_at, completed_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_validation_report_history; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_validation_report_history (report_id, action, previous_status, new_status, changes, performed_by, created_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_validation_report_sections; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_validation_report_sections (report_id, section_type, score, max_score, status, issues, suggestions, data, execution_order, created_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cms_validation_reports; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.cms_validation_reports (business_id, upload_id, certification_id, template_id, certification_summary, ai_recommendations, template_version, overall_score, status, generated_by, source_type, source_label, created_at, updated_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: commerce_order_histories; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.commerce_order_histories (id, order_id, from_status, to_status, note, changed_by, changed_by_id, created_at) FROM stdin;
-82ea61c1-9d9d-4d3f-a891-80fa9930cf61	42bc1fe2-d4f1-42d0-aa05-e9faac7be447	\N	PENDING	Order created	customer	e00770ea-ef70-470f-9b29-1a5d6df59470	2026-06-25 07:26:59.055
-da11501e-7ebc-4bc9-bc63-bb6592e4b58e	0cbc45e3-3c91-4dcb-a0c3-0044f7858b0a	\N	PENDING	Order created	customer	e00770ea-ef70-470f-9b29-1a5d6df59470	2026-06-25 07:39:18.877
-ea3b8604-80ea-41f3-93e0-e95ca1bd9422	42bc1fe2-d4f1-42d0-aa05-e9faac7be447	PENDING	CANCELLED	Reservation expired	system	\N	2026-06-25 08:31:00.317
-592d74bc-0e9e-4304-89fa-8b9d0a00a13a	0cbc45e3-3c91-4dcb-a0c3-0044f7858b0a	PENDING	CANCELLED	Reservation expired	system	\N	2026-06-25 08:40:59.545
+a4223925-05f0-424e-86b6-486c641ec534	5a560267-743e-4d5e-a1b9-ac8bf0f4d622	\N	PENDING	Order created	customer	92720bc1-0ccc-4a03-aa9d-931df0ffb1de	2026-06-30 16:29:18.619
+d2c9eb34-6169-4208-8af7-ebb6026f8b33	9c61792d-5ef6-40dd-94a6-a9a2655240fd	\N	PENDING	Test order	system	\N	2026-06-30 16:29:19.497
+b8718313-92ff-45c8-9d63-bd6c60e09fb6	9c61792d-5ef6-40dd-94a6-a9a2655240fd	PENDING	CONFIRMED	Payment verified	system	\N	2026-06-30 16:29:19.67
+e8ff0962-a85c-4def-8e49-6aed6991625d	b2e73882-f972-4d80-87f4-9be6b3080b79	\N	PENDING	Order created	customer	67de23cd-74e3-4337-8e48-46756d114f15	2026-07-01 03:34:01.673
 \.
 
 
 --
--- Data for Name: commerce_order_items; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: commerce_order_items; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.commerce_order_items (id, order_id, product_id, variant_id, product_name, variant_name, sku, quantity, unit_price, total_price, image_url, attributes, discount_amount, tax_amount, tax_rate) FROM stdin;
-78deea36-540f-442d-a062-be2478d56526	42bc1fe2-d4f1-42d0-aa05-e9faac7be447	dcd60b0d-54f7-4e92-8a22-99e4eb5edea3	4eeda7ca-e8da-4d94-96c2-0d7b83102c61	Stress Product 1782112020354	Stress Variant 1782112020354	\N	2	500.00	1000.00	\N	\N	0.00	0.00	\N
-0b1390ad-7a9b-4412-81c2-d135d98c4ced	0cbc45e3-3c91-4dcb-a0c3-0044f7858b0a	dcd60b0d-54f7-4e92-8a22-99e4eb5edea3	\N	Stress Product 1782112020354	\N	\N	1	500.00	500.00	\N	\N	0.00	0.00	\N
+22cf88fd-105a-42d4-bae4-95035deb72ae	d17507f7-fe6b-4db5-ad2b-86aa3f77acee	c593a490-07cb-4795-b517-3eeb08601458	\N	Review Test Product	\N	\N	1	500.00	500.00	\N	\N	0.00	0.00	\N
+8c8f63a0-6be5-4b63-a8c4-2a442cfb4f9f	588745c4-f05a-4205-a358-1cd291f20948	8b5afa40-8fe1-4201-b710-99e2fea3a089	\N	Tracking Test Product	\N	\N	1	1000.00	1000.00	\N	\N	0.00	0.00	\N
+2935217b-657a-496f-be6c-d8dcda557922	e7a45ee9-90c3-4ff6-b433-8e75fd4b5c15	c593a490-07cb-4795-b517-3eeb08601458	\N	Review Test Product	\N	\N	1	500.00	500.00	\N	\N	0.00	0.00	\N
+8492d444-638c-41ae-b58b-96df6638c005	a3cdb1a9-fb34-40cc-b294-c949a4357302	8b5afa40-8fe1-4201-b710-99e2fea3a089	\N	Tracking Test Product	\N	\N	1	1000.00	1000.00	\N	\N	0.00	0.00	\N
+d0e6be96-aee1-4915-9cea-29285ed314d9	a3cdb1a9-fb34-40cc-b294-c949a4357302	0b87cc59-7dd5-4580-96ea-4bdb5dac9925	\N	Tracking Test Product 2	\N	\N	1	500.00	500.00	\N	\N	0.00	0.00	\N
+81cc0bb5-0a97-475e-8819-665bb71f0808	9e71943b-3522-4a07-bc26-d305fce37130	c593a490-07cb-4795-b517-3eeb08601458	\N	Test	\N	\N	1	500.00	500.00	\N	\N	0.00	0.00	\N
+c52a340a-d203-4d22-8187-0957df84de93	9c61792d-5ef6-40dd-94a6-a9a2655240fd	c6ed3c61-624a-4565-b8cd-b2bbe279eb51	9ef10bff-1112-4f13-833d-4227e56a05aa	Test Product	\N	\N	2	1000.00	2000.00	\N	\N	0.00	0.00	\N
+55c8e314-063e-46a6-9eab-bfc848cc20f1	1fb03753-703c-4843-b672-e1aa30c7b766	0b87cc59-7dd5-4580-96ea-4bdb5dac9925	\N	Tracking Test Product 2	\N	\N	1	750.00	750.00	\N	\N	0.00	0.00	\N
+58fac5b3-2d87-4ac8-abde-8400874bfe31	8221b860-6b7c-4db0-a896-350df0bcc643	c6ed3c61-624a-4565-b8cd-b2bbe279eb51	9ef10bff-1112-4f13-833d-4227e56a05aa	Test Product	\N	\N	1	1000.00	1000.00	\N	\N	0.00	0.00	\N
+669217d3-222d-4b16-a704-aa4ddbef6154	6ecf6e7c-bf58-43d0-a057-790b7dca6946	e16177ce-d621-472c-b141-be23f142723b	\N	Review Test Product	\N	\N	1	500.00	500.00	\N	\N	0.00	0.00	\N
+0aa00599-dee6-4ebc-a702-22a9a0ca3452	5d81a46e-e8f0-4b70-9c02-745d9dc9a758	f8a8a6c6-0415-4f64-b1ff-052c8ff52e66	\N	Tracking Test Product	\N	\N	1	1000.00	1000.00	\N	\N	0.00	0.00	\N
+4066207c-95e9-4dec-87d5-e3cbecc6f6f0	faeeca13-6114-4008-94b6-8b43ff967018	e16177ce-d621-472c-b141-be23f142723b	\N	Review Test Product	\N	\N	1	500.00	500.00	\N	\N	0.00	0.00	\N
+eaf2d9dd-ce16-480b-8c92-94be65e23489	5580c3da-0a49-4a89-aa13-74c038481ccc	f8a8a6c6-0415-4f64-b1ff-052c8ff52e66	\N	Tracking Test Product	\N	\N	1	1000.00	1000.00	\N	\N	0.00	0.00	\N
+613b0a96-29d5-4817-b0cc-4de538faaa5d	5580c3da-0a49-4a89-aa13-74c038481ccc	6b109b19-9335-44ce-9d96-110d3d863ee5	\N	Tracking Test Product 2	\N	\N	1	500.00	500.00	\N	\N	0.00	0.00	\N
+06e110d2-2e08-4dee-8f21-a310548db48b	76a54ff2-08fc-4de0-aa78-96c4c212620b	e16177ce-d621-472c-b141-be23f142723b	\N	Test	\N	\N	1	500.00	500.00	\N	\N	0.00	0.00	\N
+92d39f6d-292f-4bf2-8fd2-27cc2c760d74	7debcd0c-279a-407e-a1c8-86ce544a19c8	bf25ad06-69c8-4e20-a799-32921352c9cb	\N	Tracking Test Product 2	\N	\N	1	750.00	750.00	\N	\N	0.00	0.00	\N
+972b60de-4155-4a23-9264-d343ed715864	160defbb-e5d0-4474-a924-244fb4f51c72	79909fa2-8c47-46a8-a4f0-fe1bc8f6d5a6	\N	Tracking Test Product	\N	\N	1	500.00	500.00	\N	\N	0.00	0.00	\N
+2d52323c-bbb9-4712-a588-68e2e74e4b7a	6fe7ed9e-9aa4-4582-9ff9-71f3dbd3aa46	79909fa2-8c47-46a8-a4f0-fe1bc8f6d5a6	\N	Tracking Test Product	\N	\N	1	250.00	250.00	\N	\N	0.00	0.00	\N
+ab13e1c9-eb3c-45c5-af21-049d9c639af0	ea300349-11fb-4f1d-b9f3-ea7ac254fae7	79909fa2-8c47-46a8-a4f0-fe1bc8f6d5a6	\N	Tracking Test Product	\N	\N	1	1000.00	1000.00	\N	\N	0.00	0.00	\N
+1e6a8976-abff-43c4-8499-6814e21ecfe4	1f29d7fa-17b6-477b-9aa1-326b83dd8332	79909fa2-8c47-46a8-a4f0-fe1bc8f6d5a6	\N	Tracking Test Product	\N	\N	1	1000.00	1000.00	\N	\N	0.00	0.00	\N
+0a7fac3e-e84c-404d-a600-553a8d7c880a	1f29d7fa-17b6-477b-9aa1-326b83dd8332	bf25ad06-69c8-4e20-a799-32921352c9cb	\N	Tracking Test Product 2	\N	\N	1	500.00	500.00	\N	\N	0.00	0.00	\N
 \.
 
 
 --
--- Data for Name: commerce_orders; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: commerce_orders; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.commerce_orders (id, order_id, user_id, boutique_id, shipping_address_id, subtotal, discount_amount, shipping_amount, tax_amount, total_amount, coupon_id, status, payment_status, customer_note, admin_note, paid_at, shipped_at, delivered_at, cancelled_at, created_at, updated_at, cancellation_reason, commission_amount, currency, net_amount, out_for_delivery_at, packed_at, payment_details, payment_method, refund_amount, refunded_at, reservation_expires_at) FROM stdin;
-76ae1dc1-9acf-4b69-9c39-efbbf0367810	CPN1782109497881	ec909aba-e303-45a3-9cea-531477024eff	e348a642-ac02-419e-9c90-dd8ed38616bf	\N	100.00	0.00	0.00	0.00	100.00	\N	PENDING	PENDING	\N	\N	\N	\N	\N	\N	2026-06-22 06:24:57.883	2026-06-22 06:24:57.883	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
-de1a1cc8-960b-4ac4-b89f-6df29cf3094b	CPN21782109501987	ec909aba-e303-45a3-9cea-531477024eff	e348a642-ac02-419e-9c90-dd8ed38616bf	\N	100.00	0.00	0.00	0.00	100.00	\N	PENDING	PENDING	\N	\N	\N	\N	\N	\N	2026-06-22 06:25:01.988	2026-06-22 06:25:01.988	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
-42bc1fe2-d4f1-42d0-aa05-e9faac7be447	ORD-20260625-0001	e00770ea-ef70-470f-9b29-1a5d6df59470	d31a980d-407e-4511-a5eb-436a186d5092	95255891-8ad3-4062-8647-cff02c80961e	1000.00	0.00	0.00	0.00	1000.00	\N	CANCELLED	PENDING	\N	\N	\N	\N	\N	2026-06-25 08:30:59.009	2026-06-25 07:26:56.789	2026-06-25 08:30:59.013	Reservation expired	0.00	INR	\N	\N	\N	\N	\N	\N	\N	2026-06-25 07:56:56.787
-0cbc45e3-3c91-4dcb-a0c3-0044f7858b0a	ORD-20260625-0006	e00770ea-ef70-470f-9b29-1a5d6df59470	d31a980d-407e-4511-a5eb-436a186d5092	95255891-8ad3-4062-8647-cff02c80961e	500.00	0.00	0.00	0.00	500.00	\N	CANCELLED	PENDING	\N	\N	\N	\N	\N	2026-06-25 08:40:59.142	2026-06-25 07:39:16.937	2026-06-25 08:40:59.145	Reservation expired	0.00	INR	\N	\N	\N	\N	\N	\N	\N	2026-06-25 08:09:16.934
+d17507f7-fe6b-4db5-ad2b-86aa3f77acee	RVT1782836957976	872b7072-0403-4d62-8172-e9710e895814	52ce0656-6d86-4e27-ba2d-58f09b95e7dd	\N	500.00	0.00	0.00	0.00	500.00	\N	DELIVERED	PAID	\N	\N	\N	\N	\N	\N	2026-06-30 16:29:17.979	2026-06-30 16:29:17.979	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+588745c4-f05a-4205-a358-1cd291f20948	TRK1782836958053	5be1beff-60fe-49ff-b05f-a3fb13a85477	b086a84e-c9a3-4dc8-8ede-aa698668a0b2	\N	1000.00	0.00	0.00	0.00	1000.00	\N	PROCESSING	PAID	\N	\N	\N	\N	\N	\N	2026-06-30 16:29:18.056	2026-06-30 16:29:18.056	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+e7a45ee9-90c3-4ff6-b433-8e75fd4b5c15	RVT21782836958061	872b7072-0403-4d62-8172-e9710e895814	52ce0656-6d86-4e27-ba2d-58f09b95e7dd	\N	500.00	0.00	0.00	0.00	500.00	\N	PENDING	PENDING	\N	\N	\N	\N	\N	\N	2026-06-30 16:29:18.064	2026-06-30 16:29:18.064	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+a3cdb1a9-fb34-40cc-b294-c949a4357302	TRK21782836958130	3ec6863c-fbc5-45ee-8c5a-22e75618c7fd	b086a84e-c9a3-4dc8-8ede-aa698668a0b2	\N	1500.00	0.00	0.00	0.00	1500.00	\N	DELIVERED	PAID	\N	\N	\N	\N	\N	\N	2026-06-30 16:29:18.133	2026-06-30 16:29:18.133	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+5a560267-743e-4d5e-a1b9-ac8bf0f4d622	TEST-1782836958581	92720bc1-0ccc-4a03-aa9d-931df0ffb1de	6447b13c-38b3-4e98-bb17-03e04d0f8d3e	\N	1000.00	0.00	0.00	0.00	1000.00	\N	PENDING	PENDING	\N	\N	\N	\N	\N	\N	2026-06-30 16:29:18.583	2026-06-30 16:29:18.583	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+731aac53-3fce-45f5-9065-4b842aaf81e9	TEST-PAY-1782836958661	92720bc1-0ccc-4a03-aa9d-931df0ffb1de	6447b13c-38b3-4e98-bb17-03e04d0f8d3e	\N	500.00	0.00	0.00	0.00	500.00	\N	PENDING	PENDING	\N	\N	\N	\N	\N	\N	2026-06-30 16:29:18.664	2026-06-30 16:29:18.664	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+9e71943b-3522-4a07-bc26-d305fce37130	RVT31782836958681	7ce08474-2a06-4006-9db1-05e2a90a7152	52ce0656-6d86-4e27-ba2d-58f09b95e7dd	\N	500.00	0.00	0.00	0.00	500.00	\N	DELIVERED	PAID	\N	\N	\N	\N	\N	\N	2026-06-30 16:29:18.683	2026-06-30 16:29:18.683	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+9c61792d-5ef6-40dd-94a6-a9a2655240fd	ORD-20260630-0002	92720bc1-0ccc-4a03-aa9d-931df0ffb1de	6447b13c-38b3-4e98-bb17-03e04d0f8d3e	\N	2000.00	0.00	0.00	0.00	2000.00	\N	CONFIRMED	PAID	\N	\N	2026-06-30 16:29:19.611	\N	\N	\N	2026-06-30 16:29:19.384	2026-06-30 16:29:19.613	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+1fb03753-703c-4843-b672-e1aa30c7b766	TRK31782836959669	5be1beff-60fe-49ff-b05f-a3fb13a85477	b086a84e-c9a3-4dc8-8ede-aa698668a0b2	\N	750.00	0.00	0.00	0.00	750.00	\N	PACKED	PAID	\N	\N	\N	\N	\N	\N	2026-06-30 16:29:19.671	2026-06-30 16:29:19.671	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+8221b860-6b7c-4db0-a896-350df0bcc643	ORD-20260630-0003	92720bc1-0ccc-4a03-aa9d-931df0ffb1de	6447b13c-38b3-4e98-bb17-03e04d0f8d3e	\N	1000.00	0.00	0.00	0.00	1000.00	\N	PENDING	PENDING	\N	\N	\N	\N	\N	\N	2026-06-30 16:29:19.756	2026-06-30 16:29:19.756	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+6ecf6e7c-bf58-43d0-a057-790b7dca6946	RVT1782876839402	85beff7c-fc07-4673-bbc0-371a2c8144bb	7364b9da-43dd-4b71-9f6d-a7afb48cc091	\N	500.00	0.00	0.00	0.00	500.00	\N	DELIVERED	PAID	\N	\N	\N	\N	\N	\N	2026-07-01 03:33:59.407	2026-07-01 03:33:59.407	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+5d81a46e-e8f0-4b70-9c02-745d9dc9a758	TRK1782876839593	6f4f06e9-e517-4f4b-851f-40fd90d25112	0bc91246-24c6-4373-851f-d6c025d6a61d	\N	1000.00	0.00	0.00	0.00	1000.00	\N	PROCESSING	PAID	\N	\N	\N	\N	\N	\N	2026-07-01 03:33:59.596	2026-07-01 03:33:59.596	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+faeeca13-6114-4008-94b6-8b43ff967018	RVT21782876839623	85beff7c-fc07-4673-bbc0-371a2c8144bb	7364b9da-43dd-4b71-9f6d-a7afb48cc091	\N	500.00	0.00	0.00	0.00	500.00	\N	PENDING	PENDING	\N	\N	\N	\N	\N	\N	2026-07-01 03:33:59.625	2026-07-01 03:33:59.625	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+5580c3da-0a49-4a89-aa13-74c038481ccc	TRK21782876839740	6201239f-58f3-4564-abde-ea64491c83c9	0bc91246-24c6-4373-851f-d6c025d6a61d	\N	1500.00	0.00	0.00	0.00	1500.00	\N	DELIVERED	PAID	\N	\N	\N	\N	\N	\N	2026-07-01 03:33:59.744	2026-07-01 03:33:59.744	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+b2e73882-f972-4d80-87f4-9be6b3080b79	TEST-1782876841626	67de23cd-74e3-4337-8e48-46756d114f15	cda137f3-6d97-4c4a-95d7-f0b9fb15d533	\N	1000.00	0.00	0.00	0.00	1000.00	\N	PENDING	PENDING	\N	\N	\N	\N	\N	\N	2026-07-01 03:34:01.627	2026-07-01 03:34:01.627	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+54fd10e9-2b7d-4cd3-b6fe-867165423f37	TEST-PAY-1782876841742	67de23cd-74e3-4337-8e48-46756d114f15	cda137f3-6d97-4c4a-95d7-f0b9fb15d533	\N	500.00	0.00	0.00	0.00	500.00	\N	PENDING	PENDING	\N	\N	\N	\N	\N	\N	2026-07-01 03:34:01.743	2026-07-01 03:34:01.743	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+76a54ff2-08fc-4de0-aa78-96c4c212620b	RVT31782876842029	1c8a49fb-d614-46ce-b9cf-be8df207718a	7364b9da-43dd-4b71-9f6d-a7afb48cc091	\N	500.00	0.00	0.00	0.00	500.00	\N	DELIVERED	PAID	\N	\N	\N	\N	\N	\N	2026-07-01 03:34:02.031	2026-07-01 03:34:02.031	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+ea300349-11fb-4f1d-b9f3-ea7ac254fae7	TRK1782961997226	4d2237e6-3f4a-4ca7-9496-0cf03c099f60	19007c86-b45a-4dd7-be2d-bf38ed9dc2cc	\N	1000.00	0.00	0.00	0.00	1000.00	\N	PROCESSING	PAID	\N	\N	\N	\N	\N	\N	2026-07-02 03:13:17.229	2026-07-02 03:13:17.229	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+1f29d7fa-17b6-477b-9aa1-326b83dd8332	TRK21782961997463	e2b30073-c2cf-491b-ab65-f32612db945a	19007c86-b45a-4dd7-be2d-bf38ed9dc2cc	\N	1500.00	0.00	0.00	0.00	1500.00	\N	DELIVERED	PAID	\N	\N	\N	\N	\N	\N	2026-07-02 03:13:17.465	2026-07-02 03:13:17.465	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+7debcd0c-279a-407e-a1c8-86ce544a19c8	TRK31782962001287	4d2237e6-3f4a-4ca7-9496-0cf03c099f60	19007c86-b45a-4dd7-be2d-bf38ed9dc2cc	\N	750.00	0.00	0.00	0.00	750.00	\N	PACKED	PAID	\N	\N	\N	\N	\N	\N	2026-07-02 03:13:21.289	2026-07-02 03:13:21.289	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+66c632b6-1b3f-41af-9f24-dd4533d74e4d	CPN1782962002065	5177ce60-10c8-4636-9fee-320b7706c8cf	9c0180cc-8287-419a-a7de-f5961fcd0e01	\N	100.00	0.00	0.00	0.00	100.00	\N	PENDING	PENDING	\N	\N	\N	\N	\N	\N	2026-07-02 03:13:22.067	2026-07-02 03:13:22.067	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+e69e8881-bb13-45d0-973c-96bb262578a5	CPN21782962002365	5177ce60-10c8-4636-9fee-320b7706c8cf	9c0180cc-8287-419a-a7de-f5961fcd0e01	\N	100.00	0.00	0.00	0.00	100.00	\N	PENDING	PENDING	\N	\N	\N	\N	\N	\N	2026-07-02 03:13:22.368	2026-07-02 03:13:22.368	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+2e805f1a-745a-4294-a52c-0cf15dd9df26	CONCORD_1782961995604	5177ce60-10c8-4636-9fee-320b7706c8cf	9c0180cc-8287-419a-a7de-f5961fcd0e01	\N	100.00	0.00	0.00	0.00	100.00	\N	PENDING	PENDING	\N	\N	\N	\N	\N	\N	2026-07-02 03:13:23.019	2026-07-02 03:13:23.019	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+160defbb-e5d0-4474-a924-244fb4f51c72	TRK41782962003104	4d2237e6-3f4a-4ca7-9496-0cf03c099f60	19007c86-b45a-4dd7-be2d-bf38ed9dc2cc	\N	500.00	0.00	0.00	0.00	500.00	\N	PROCESSING	PAID	\N	\N	\N	\N	\N	\N	2026-07-02 03:13:23.106	2026-07-02 03:13:23.106	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
+6fe7ed9e-9aa4-4582-9ff9-71f3dbd3aa46	TRK51782962004445	4d2237e6-3f4a-4ca7-9496-0cf03c099f60	19007c86-b45a-4dd7-be2d-bf38ed9dc2cc	\N	250.00	0.00	0.00	0.00	250.00	\N	CONFIRMED	PAID	\N	\N	\N	\N	\N	\N	2026-07-02 03:13:24.447	2026-07-02 03:13:24.447	\N	0.00	INR	\N	\N	\N	\N	\N	\N	\N	\N
 \.
 
 
 --
--- Data for Name: commerce_payments; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: commerce_payments; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.commerce_payments (id, commerce_order_id, amount, method, status, razorpay_order_id, razorpay_payment_id, razorpay_signature, refund_id, refund_amount, refund_reason, created_at) FROM stdin;
+257d12f8-8be2-44a5-8a3c-718ad0c60cc0	731aac53-3fce-45f5-9065-4b842aaf81e9	500.00	card	PENDING	rzp_test_123	\N	\N	\N	\N	\N	2026-06-30 16:29:18.688
+51c9a57f-fe7b-40ea-9927-66f8b4d30b4c	9c61792d-5ef6-40dd-94a6-a9a2655240fd	2000.00	card	PAID	rzp_test	pay_test	sign	\N	\N	\N	2026-06-30 16:29:19.559
+9bc04da5-846e-4db5-ba6d-7473605c5acb	54fd10e9-2b7d-4cd3-b6fe-867165423f37	500.00	card	PENDING	rzp_test_1782876841784	\N	\N	\N	\N	\N	2026-07-01 03:34:01.786
 \.
 
 
 --
--- Data for Name: coupon_usages; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: content_translations; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.content_translations (id, content_id, locale, "translatedText", "translatedSeo", created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: coupon_usages; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.coupon_usages (id, coupon_id, user_id, order_id, created_at) FROM stdin;
@@ -2317,82 +7042,47 @@ COPY public.coupon_usages (id, coupon_id, user_id, order_id, created_at) FROM st
 
 
 --
--- Data for Name: coupons; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: coupons; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.coupons (id, code, boutique_id, description, discount_type, discount_value, min_order_amount, max_discount, max_uses, current_uses, max_uses_per_user, is_active, starts_at, expires_at, created_at, applicable_ids, applicable_type, first_order_only) FROM stdin;
-2739aebc-4bea-431f-a41b-15d802087227	OWNER20	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 04:47:39.392	{}	ALL	f
-fcf81249-ffab-4e94-8c62-d55f6a4dd1a1	SAVE10_86716	\N	10% off everything	PERCENTAGE	10.00	500.00	200.00	100	0	1	t	\N	\N	2026-06-22 04:49:52.48	{}	ALL	f
-160252fd-b096-4f06-8195-1fecd3dc36c4	SAVE10_66643	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	f	\N	\N	2026-06-22 04:54:33.044	{}	ALL	f
-c7c58740-a9fd-4e78-b9e4-4e462d168803	OWNER20_66643	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 04:54:45.79	{}	ALL	f
-674eb8ef-66ce-4281-8a32-8cccec57fac5	SAVE10_57200	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	f	\N	\N	2026-06-22 04:51:03.449	{}	ALL	f
-93b4c6da-dae8-45b9-835c-d175ace33641	SAVE10_5091	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	0	1	t	\N	\N	2026-06-22 04:50:11.054	{}	ALL	f
-e9ab34de-e645-4b71-abd6-1d0132dad00c	SAVE10_1782104425453	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	f	\N	\N	2026-06-22 05:00:32.207	{}	ALL	f
-94674543-2ecb-458c-bd98-a7ca24bf0008	OWNER20_1782104425453	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 05:00:44.843	{}	ALL	f
-b17551b9-330f-47a7-a7eb-b7199899c1ae	BOUTIQUE20_57200	\N	\N	PERCENTAGE	10.00	\N	\N	0	0	1	t	\N	\N	2026-06-22 04:51:15.685	{}	ALL	f
-0625f01f-4823-463f-a49f-482fd77fb435	LIMITED	\N	\N	FIXED	20.00	\N	\N	1	0	1	t	\N	\N	2026-06-22 04:43:24.772	{}	ALL	f
-9f41ead3-00f2-4bad-94ab-1c4da697cfc4	BOUTIQUE20_5091	41c3ef8d-4fba-4c34-8178-407099d4712f	\N	PERCENTAGE	10.00	\N	\N	0	0	1	t	\N	\N	2026-06-22 04:50:22.501	{}	ALL	f
-ec6c231a-638c-46b7-ad4b-a066fbbdc3cd	OWNER20_5091	41c3ef8d-4fba-4c34-8178-407099d4712f	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 04:50:23.888	{}	ALL	f
-a826f958-2855-48b5-878a-46210e5476d3	OWNER20_57200	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 04:51:16.907	{}	ALL	f
-560d9beb-3e95-4aa1-be7d-343ecf235188	SAVE10	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 04:42:59.445	{}	ALL	f
-4108f362-8a98-4bf0-a608-d5c5c430af7c	OWNER20	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 04:43:15.598	{}	ALL	f
-3a14166d-4f4f-41a4-a732-7b48a9cd9a95	SAVE10_22130	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	f	\N	\N	2026-06-22 04:55:28.22	{}	ALL	f
-22e8e613-0a76-4610-92ae-aa5fc7bce8df	SAVE10_1782106118384	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 05:28:44.296	{}	ALL	f
-29c8501d-0555-4173-af2d-81f02c154319	OWNER20_1782106118384	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 05:28:56.053	{}	ALL	f
-fbb7a1ed-cdbf-4a9c-9d30-a582b7e7078e	LIMITED_22130	\N	\N	FIXED	20.00	\N	\N	1	0	1	t	\N	\N	2026-06-22 04:55:51.652	{}	ALL	f
-bfba183f-b384-42c7-9abf-1cff03103003	LIMITED_57200	\N	\N	FIXED	20.00	\N	\N	1	0	1	t	\N	\N	2026-06-22 04:51:26.697	{}	ALL	f
-5cd3d5f8-31a6-4ebf-8855-21af8efea101	OWNER20_22130	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 04:55:41.737	{}	ALL	f
-70e3e35e-f844-482e-af83-f0f8b2f85c78	OWNER20_1782104865368	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 05:08:03.377	{}	ALL	f
-ecfa04b7-e4ff-4acb-bf5b-42ea49966e33	LIMITED_1782104697495	\N	\N	FIXED	20.00	\N	\N	1	0	1	t	\N	\N	2026-06-22 05:05:25.897	{}	ALL	f
-1b46d7a1-ea1c-4079-a257-e58c805785a2	OWNER20	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 04:44:31.015	{}	ALL	f
-f8d102a9-4cc9-40cb-a7e9-96e757212fe9	LIMITED_1782107635197	\N	\N	FIXED	20.00	\N	\N	1	1	1	t	\N	\N	2026-06-22 05:54:26.644	{}	ALL	f
-0fa5465d-f287-4ad3-b399-68fa46c5410e	SAVE10_1782104697495	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 05:05:03.953	{}	ALL	f
-8d8e8fa4-3e30-4f40-9659-03805e301cd5	OWNER20	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 04:45:55.884	{}	ALL	f
-d9f6c4f7-401e-4702-8862-0ef7f45d6afc	OWNER20_1782104697495	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 05:05:15.978	{}	ALL	f
-4d303e61-47b5-4cf0-bf79-ba9c3ac4ae30	TEMP	\N	\N	FIXED	50.00	\N	\N	0	0	1	t	\N	\N	2026-06-22 04:47:11.982	{}	ALL	f
-3ff0ab5d-c392-4882-8b62-81fc8aa14aa1	LIMITED_1727	\N	\N	FIXED	20.00	\N	\N	1	0	1	t	\N	\N	2026-06-22 04:53:52.106	{}	ALL	f
-ace5c518-876e-4733-858c-bb79bb62977a	LIMITED_57869	\N	\N	FIXED	20.00	\N	\N	1	0	1	t	\N	\N	2026-06-22 04:58:09.73	{}	ALL	f
-41fc0b8d-7c60-49fe-91d3-14cc19195a51	SAVE10_57869	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	f	\N	\N	2026-06-22 04:57:44.93	{}	ALL	f
-e9876c67-a8e5-4104-a2ce-e7307a09ae69	SAVE10_1782107635197	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 05:54:02.203	{}	ALL	f
-f84e6b07-8a12-405d-b243-6076939f3ebe	OWNER20_57869	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 04:57:59.79	{}	ALL	f
-afe7363e-3895-4f4c-987c-7f48a37a27a5	OWNER20_1782107635197	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 05:54:15.7	{}	ALL	f
-86296c2f-274a-4699-b016-51c27a650a4e	LIMITED_1782104360950	\N	\N	FIXED	20.00	\N	\N	1	0	1	t	\N	\N	2026-06-22 04:59:48.569	{}	ALL	f
-c9c5983c-8b25-4d92-944c-cf14caa41fe3	SAVE10_1727	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	f	\N	\N	2026-06-22 04:53:28.935	{}	ALL	f
-e1ea8675-5eb9-458c-9944-a8cae4ea6d1f	OWNER20_1727	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 04:53:42.374	{}	ALL	f
-ed915b26-02aa-4d9f-8417-ca76f04b0c7a	OWNER20_1782107740544	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 05:56:01.332	{}	ALL	f
-461a3039-7094-44fe-b8ea-ba2a0aba39cb	SAVE10_1782104802248	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 05:06:48.658	{}	ALL	f
-1e1eeb78-9d88-4c1d-a874-693d2665d1e9	LIMITED_66643	\N	\N	FIXED	20.00	\N	\N	1	0	1	t	\N	\N	2026-06-22 04:54:55.543	{}	ALL	f
-d8e5363c-2d69-4d66-93ba-61c69b3e103d	OWNER20_1782104802248	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 05:07:00.991	{}	ALL	f
-eae1c0b5-e431-434c-b156-4c966c074437	SAVE10_1782104360950	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	f	\N	\N	2026-06-22 04:59:27.369	{}	ALL	f
-68e127cf-c3b3-43a8-9ae7-e62dc9e2cc27	OWNER20_1782104360950	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 04:59:39.302	{}	ALL	f
-b0706e7e-54e5-40f5-9f08-eda5a3870c3c	SAVE10_1782107740544	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 05:55:47.58	{}	ALL	f
-0cb172f7-9606-4190-a29b-5e06f607a134	LIMITED_1782104425453	\N	\N	FIXED	20.00	\N	\N	1	0	1	t	\N	\N	2026-06-22 05:00:54.566	{}	ALL	f
-e8516ff2-ca0e-414f-b408-1c7d721a80d4	OWNER20_1782109438041	e348a642-ac02-419e-9c90-dd8ed38616bf	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 06:24:36.62	{}	ALL	f
-583f1ff9-60b3-45e7-b8dd-677c4d0fdb0d	SAVE10_1782104865368	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 05:07:51.505	{}	ALL	f
-26b06987-eee5-4f86-8e09-c87f5bbef812	CONC_1782109438041	\N	\N	FIXED	10.00	\N	\N	999	1	1	t	\N	\N	2026-06-22 06:25:07.852	{}	ALL	f
-67764fa5-90e1-40d8-b58c-b86902415ad9	CONC3_1782109438041	\N	\N	FIXED	10.00	\N	\N	3	2	999	t	\N	\N	2026-06-22 06:25:13.481	{}	ALL	f
-0ee416d7-5fbb-459c-8356-4b636e273c3e	SAVE10_1782109438041	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 06:24:13.338	{}	ALL	f
-e3ec7e0e-4ef2-42ae-b35c-d90232d6060a	SAVE10_1782109715044	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 06:28:42.326	{}	ALL	f
-9b37ab47-b3e8-4d9b-9797-3a83fb569443	OWNER20_1782109715044	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 06:28:56.782	{}	ALL	f
-16c5f3e9-bd9e-4aaf-a639-375332bff28b	SAVE10_1782372685020	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-25 07:31:29.824	{}	ALL	f
-a526946f-21c6-43a6-9ec4-18111dcb6c25	OWNER20_1782372685020	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-25 07:31:38.824	{}	ALL	f
-1471d059-4d25-4f74-ad79-419cd5d8dc21	SAVE10_1782110282541	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 06:38:09.603	{}	ALL	f
-2893c5f6-d7c1-4570-9a6b-33e26610a86e	OWNER20_1782110282541	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 06:38:23.362	{}	ALL	f
-bcaa6fdd-cc10-459b-ad60-e3813a2463a1	SAVE10_1782109795783	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 06:30:03.119	{}	ALL	f
-515cfd8f-d3e0-4fb8-aa9a-802a3d4bb5c8	OWNER20_1782109795783	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 06:30:17.919	{}	ALL	f
-2d555d61-63f3-4958-ad82-ef781f7fe372	SAVE10_1782109883404	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 06:31:31.019	{}	ALL	f
-c86383c7-07b0-4a33-a27b-d2518c634337	OWNER20_1782109883404	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 06:31:45.038	{}	ALL	f
-292dfa30-5104-42d2-9225-5ee3718f4421	SAVE10_1782109981898	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 06:33:09.05	{}	ALL	f
-d7b59ac3-670e-46e3-acd7-e5e139f77774	OWNER20_1782109981898	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 06:33:23.201	{}	ALL	f
-00fb1276-084d-403a-a5a0-f34249938298	SAVE10_1782111768012	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-22 07:02:56.015	{}	ALL	f
-81f8b425-194d-4adf-a20b-d428f9240dc9	OWNER20_1782111768012	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-22 07:03:11.026	{}	ALL	f
-7b5b053d-426e-431e-a362-85c825271ef0	SAVE10_1782371853472	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-25 07:17:38.422	{}	ALL	f
-365e6af1-8c42-4a13-a6a8-1b1e45129bf7	OWNER20_1782371853472	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-25 07:17:47.028	{}	ALL	f
+45300e30-b3f0-4de5-9b72-e4eb76fda884	OWNER20_1782849114792	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-30 19:51:54.97	{}	ALL	f
+df02ac4b-40c7-45ce-983b-bf0c7f4b5fdc	OWNER20_1782836957453	10eb5784-f69e-4085-8eaa-133c2f79d21a	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-30 16:29:19.03	{}	ALL	f
+662a5579-577f-416f-bac6-b03ba7f5b609	SAVE10_1782836957453	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	0	1	t	\N	\N	2026-06-30 16:29:18.081	{}	ALL	f
+ecb7a722-2067-4fac-b59f-48e9924088af	LIMITED_1782836957453	\N	\N	FIXED	20.00	\N	\N	1	1	1	t	\N	\N	2026-06-30 16:29:19.852	{}	ALL	f
+40540a7f-30c1-4feb-a3bf-05375abd90cb	OWNER20_1782961929446	f3a7ef2d-7ea5-43fc-8107-24f9bc7bf199	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-07-02 03:12:19.229	{}	ALL	f
+54e09ac5-2ed1-4232-8fd4-2bbcf36d0f2d	SAVE10_1782836993104	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-30 16:29:53.215	{}	ALL	f
+7df7e4f6-55e9-4e4f-96bc-70a6e5430827	OWNER20_1782836993104	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-30 16:29:53.275	{}	ALL	f
+9be52719-eb52-459d-b398-4413eac5d9b3	SAVE10_1782876838613	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	0	1	t	\N	\N	2026-07-01 03:33:59.991	{}	ALL	f
+1cbc904a-fcb8-4d0a-808b-55c51c1824d2	OWNER20_1782876838613	664f6ef7-a082-4dd9-a00c-1aa3e22a690c	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-07-01 03:34:02.681	{}	ALL	f
+b3fabb73-37c7-417a-8d12-c8cf85942fe7	MAXCAP_1782876838613	\N	\N	PERCENTAGE	50.00	\N	100.00	0	0	1	t	\N	\N	2026-07-01 03:34:02.804	{}	ALL	f
+07739188-c1bf-4354-a61e-df7dba72c354	SAVE10_1782844334717	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-30 18:32:14.808	{}	ALL	f
+f95aa5e1-e6d6-4ac1-b923-50363eb4ab1c	SAVE10_1782876928254	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-07-01 03:35:28.394	{}	ALL	f
+ee49457a-e9e5-4567-865d-2148e39f53e9	OWNER20_1782876928254	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-07-01 03:35:28.463	{}	ALL	f
+69fd90d5-d58f-41f2-ac63-a3d016f17df9	OWNER20_1782844334717	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-30 18:32:14.846	{}	ALL	f
+6a4ae47e-0add-49ca-9875-7950e6fc5c28	SAVE10_1782961929446	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-07-02 03:12:17.003	{}	ALL	f
+e5dfeeef-ffc9-4bad-99ef-57e4578d1770	SAVE10_1782849114792	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-30 19:51:54.892	{}	ALL	f
+ab471cf9-001e-4209-b562-09c1e95c5f7d	SAVE10_1782844341799	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-06-30 18:32:21.883	{}	ALL	f
+53bd14c5-5356-46fa-a7b2-5ecd8bbbf370	OWNER20_1782961995604	9c0180cc-8287-419a-a7de-f5961fcd0e01	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-07-02 03:13:19.709	{}	ALL	f
+d2aae556-4e95-4c57-92df-3941c3aeca69	OWNER20_1782844341799	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-06-30 18:32:21.93	{}	ALL	f
+a4b576be-2a4a-497c-ad5c-24a8d2c5274b	SAVE10_1782961965146	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-07-02 03:12:48.062	{}	ALL	f
+30f9a168-fe94-41bb-a1ae-63225039fcb6	OWNER20_1782961965146	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-07-02 03:12:50.195	{}	ALL	f
+fa19dc4c-6c27-4f62-97fc-dd4a7d2db46d	SAVE10_1782876872629	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-07-01 03:34:32.758	{}	ALL	f
+b733acc5-a5d7-43f9-90c0-e9c63bfe278e	OWNER20_1782876872629	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-07-01 03:34:32.819	{}	ALL	f
+b8a10a9f-0d26-4afc-a76d-69ef21351a87	SAVE10_1782876966998	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-07-01 03:36:07.202	{}	ALL	f
+9936ebf9-9f80-430b-bb34-437550b2ebb0	SAVE10_1782876901158	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	0	1	t	\N	\N	2026-07-01 03:35:01.294	{}	ALL	f
+448ef5cb-5858-4d7e-93e5-32203a9ea968	OWNER20_1782876966998	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-07-01 03:36:07.306	{}	ALL	f
+4a338475-11eb-42a6-ba67-ac96f1efd616	SAVE10_1782961995604	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	0	1	t	\N	\N	2026-07-02 03:13:17.354	{}	ALL	f
+dd577aea-ca53-411c-8cd6-cbd32849dc20	SAVE10_1782877516888	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-07-01 03:45:17.14	{}	ALL	f
+91c90629-65be-432e-86ba-e4eb3abf4de8	OWNER20_1782877516888	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-07-01 03:45:17.383	{}	ALL	f
+2f27422d-9c6a-4c5a-ba38-74004ed2de91	CONC3_1782961995604	\N	\N	FIXED	10.00	\N	\N	3	0	999	t	\N	\N	2026-07-02 03:13:24.745	{}	ALL	f
+fead9e96-aa5f-478c-a672-48d467fe321c	SAVE10_1782962020221	\N	Updated: 10% off	PERCENTAGE	10.00	500.00	250.00	100	1	1	t	\N	\N	2026-07-02 03:13:41.908	{}	ALL	f
+b7b64e0d-7c3b-431f-b0d9-aea31d312fdb	OWNER20_1782962020221	\N	20% off	PERCENTAGE	20.00	\N	300.00	0	0	1	t	\N	\N	2026-07-02 03:13:44.234	{}	ALL	f
 \.
 
 
 --
--- Data for Name: custom_plan_requests; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: custom_plan_requests; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.custom_plan_requests (id, boutique_id, owner_id, requested_designs, requested_orders, requested_gallery, requested_staff, reason, status, created_at) FROM stdin;
@@ -2400,7 +7090,7 @@ COPY public.custom_plan_requests (id, boutique_id, owner_id, requested_designs, 
 
 
 --
--- Data for Name: customer_addresses; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: customer_addresses; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.customer_addresses (id, user_id, address_line1, address_line2, city, state, pincode, is_default, created_at) FROM stdin;
@@ -2408,44 +7098,130 @@ COPY public.customer_addresses (id, user_id, address_line1, address_line2, city,
 
 
 --
--- Data for Name: customer_notifications; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: customer_notifications; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.customer_notifications (id, customer_id, type, title, message, entity_type, entity_id, is_read, metadata, created_at, updated_at) FROM stdin;
-69520498-7b7e-4543-ad05-e508d630de59	e00770ea-ef70-470f-9b29-1a5d6df59470	ORDER_PLACED	Order Placed Successfully	Your order ORD-20260625-0001 has been placed. Complete payment to confirm.	commerce_order	ORD-20260625-0001	f	null	2026-06-25 07:27:00.097	2026-06-25 07:27:00.097
-417b6b04-0ade-4417-ab53-6013639e705c	e00770ea-ef70-470f-9b29-1a5d6df59470	ORDER_PLACED	Order Placed Successfully	Your order ORD-20260625-0006 has been placed. Complete payment to confirm.	commerce_order	ORD-20260625-0006	f	null	2026-06-25 07:39:19.936	2026-06-25 07:39:19.936
 \.
 
 
 --
--- Data for Name: delivery_tracking; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: delivery_tracking; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.delivery_tracking (id, order_id, carrier, tracking_number, status, location, note, estimated_delivery, delivered_at, created_at, tracking_url) FROM stdin;
+ca5af2f4-bb99-4f42-beba-262f7924b069	588745c4-f05a-4205-a358-1cd291f20948	Delhivery	DEL1782836958208	RETURNED	\N	\N	2026-07-03 16:29:18.208	2026-06-30 16:29:19.051	2026-06-30 16:29:18.283	https://delhivery.com/track/1782836958208
+8350c0c8-371e-4613-a7b6-7b81e68e4012	1fb03753-703c-4843-b672-e1aa30c7b766	Blue Dart	BD1782836959715	PACKED	\N	\N	2026-07-05 16:29:19.715	\N	2026-06-30 16:29:19.761	\N
+c11ab3b4-f878-4bb1-b2b3-ad02a8cfbd9a	7debcd0c-279a-407e-a1c8-86ce544a19c8	Blue Dart	BD1782962001461	DELIVERED	\N	\N	2026-07-07 03:13:21.461	2026-07-02 03:13:22.573	2026-07-02 03:13:21.605	\N
+f6d06343-3da0-4f0a-ab54-a53d287da779	160defbb-e5d0-4474-a924-244fb4f51c72	Test Carrier	FAIL1782962003288	RETURNED	\N	\N	\N	\N	2026-07-02 03:13:23.399	\N
+064ebd07-66ba-4fb3-8113-53e55e917e8b	5d81a46e-e8f0-4b70-9c02-745d9dc9a758	Delhivery	DEL1782876839935	OUT_FOR_DELIVERY	\N	\N	2026-07-04 03:33:59.935	\N	2026-07-01 03:34:00.079	https://delhivery.com/track/1782876839935
+70a8dce7-c09a-4842-957d-c1add1ee219b	ea300349-11fb-4f1d-b9f3-ea7ac254fae7	Delhivery	DEL1782961997685	RETURNED	\N	\N	2026-07-05 03:13:17.685	2026-07-02 03:13:19.798	2026-07-02 03:13:17.891	https://delhivery.com/track/1782961997685
 \.
 
 
 --
--- Data for Name: delivery_tracking_history; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: delivery_tracking_history; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.delivery_tracking_history (id, tracking_id, from_status, to_status, note, created_at) FROM stdin;
+bae64009-e4b9-4129-aa12-0dacff17ed84	ca5af2f4-bb99-4f42-beba-262f7924b069	\N	PACKED	Shipment created	2026-06-30 16:29:18.307
+f7e235ad-04d8-4ec1-ba67-1feba5c5b505	ca5af2f4-bb99-4f42-beba-262f7924b069	PACKED	SHIPPED	Order Shipped via Delhivery	2026-06-30 16:29:18.671
+6b100549-6990-4f36-ac33-25ad90dfa723	ca5af2f4-bb99-4f42-beba-262f7924b069	SHIPPED	OUT_FOR_DELIVERY	Out For Delivery	2026-06-30 16:29:18.81
+9cedf436-b770-4070-bcf5-b6abc62a2408	ca5af2f4-bb99-4f42-beba-262f7924b069	OUT_FOR_DELIVERY	DELIVERED	Package delivered successfully	2026-06-30 16:29:19.076
+e875740c-4a69-4595-b5e0-bf56715df5f7	ca5af2f4-bb99-4f42-beba-262f7924b069	DELIVERED	RETURNED	Customer returned the package	2026-06-30 16:29:19.333
+3fcd29ee-132a-46c9-8d80-7a47d3dd298c	8350c0c8-371e-4613-a7b6-7b81e68e4012	\N	PACKED	Shipment created	2026-06-30 16:29:19.778
+78bbd0b3-3a4c-4343-b596-cb9e5b01c9bc	064ebd07-66ba-4fb3-8113-53e55e917e8b	\N	PACKED	Shipment created	2026-07-01 03:34:00.275
+03f54120-0879-4168-b653-28bb736aad40	064ebd07-66ba-4fb3-8113-53e55e917e8b	PACKED	SHIPPED	Order Shipped via Delhivery	2026-07-01 03:34:00.748
+71220783-1305-495d-8df4-0766809e0776	064ebd07-66ba-4fb3-8113-53e55e917e8b	SHIPPED	OUT_FOR_DELIVERY	Out For Delivery	2026-07-01 03:34:02.362
+7e6a031c-1624-4a3a-974c-85fd8fa3c1ec	70a8dce7-c09a-4842-957d-c1add1ee219b	\N	PACKED	Shipment created	2026-07-02 03:13:17.965
+ddcc7ac4-5a60-4c20-8687-2630ed89873f	70a8dce7-c09a-4842-957d-c1add1ee219b	PACKED	SHIPPED	Order Shipped via Delhivery	2026-07-02 03:13:18.956
+7096462f-3bc1-4ea3-9e7e-088bca40e23e	70a8dce7-c09a-4842-957d-c1add1ee219b	SHIPPED	OUT_FOR_DELIVERY	Out For Delivery	2026-07-02 03:13:19.301
+62cffefd-7db3-4e79-b7fa-054d7ee89fc5	70a8dce7-c09a-4842-957d-c1add1ee219b	OUT_FOR_DELIVERY	DELIVERED	Package delivered successfully	2026-07-02 03:13:19.848
+d2016c51-b64f-43bf-8c81-41a8558bd8e0	70a8dce7-c09a-4842-957d-c1add1ee219b	DELIVERED	RETURNED	Customer returned the package	2026-07-02 03:13:20.429
+6a9054d9-37f2-4542-8c0f-64f2b8c6e630	c11ab3b4-f878-4bb1-b2b3-ad02a8cfbd9a	\N	PACKED	Shipment created	2026-07-02 03:13:21.691
+3f5c1ae1-35ea-40d2-9976-61581ddefde5	c11ab3b4-f878-4bb1-b2b3-ad02a8cfbd9a	PACKED	SHIPPED	Order Shipped	2026-07-02 03:13:21.981
+e6c65fc9-3f3b-42e5-90ac-00780125704f	c11ab3b4-f878-4bb1-b2b3-ad02a8cfbd9a	SHIPPED	OUT_FOR_DELIVERY	Out For Delivery	2026-07-02 03:13:22.294
+0c636a4a-7b0d-4f37-8431-eba6a7fdda1d	c11ab3b4-f878-4bb1-b2b3-ad02a8cfbd9a	OUT_FOR_DELIVERY	DELIVERED	Delivered	2026-07-02 03:13:22.643
+4e37470e-1e6f-47d2-a0c0-28de7de15a59	f6d06343-3da0-4f0a-ab54-a53d287da779	\N	PACKED	Shipment created	2026-07-02 03:13:23.453
+e307645a-8195-440b-baa0-7e0352c5f84b	f6d06343-3da0-4f0a-ab54-a53d287da779	PACKED	FAILED	Package damaged in transit	2026-07-02 03:13:23.76
+966ba071-2bb0-46ea-afa0-0b29c912d576	f6d06343-3da0-4f0a-ab54-a53d287da779	FAILED	RETURNED	Return initiated after failure	2026-07-02 03:13:24.268
 \.
 
 
 --
--- Data for Name: designs; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: deployment_artifacts; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.designs (id, boutique_id, name, description, category, images, price, tags, is_featured, is_available, is_deleted, created_at, is_ready_made) FROM stdin;
-0a821036-397c-47dc-bbca-2de894aa5655	9713de00-8c88-48c2-9ecc-902b86954f96	Organza	a variation in spelling for a saree (or sari), a traditional garment from the Indian subcontinent, often featured in online retail collections	Saree	{}	500.00	{}	f	t	t	2026-04-30 09:13:48.24	f
-e27e6d01-211e-429a-8dec-eb5128d73245	9713de00-8c88-48c2-9ecc-902b86954f96	Simulator 	a variation in spelling for a saree (or sari), a traditional garment from the Indian subcontinent, often featured in online retail collections	Blouse	{https://vs-boutique-images.s3.ap-south-1.amazonaws.com/uploads/gallery/1777984773846-1862cac3-73a2-472e-8d1f-869063884817.png}	600.00	{}	f	t	f	2026-04-30 09:22:05.782	f
-acfbc0e2-0851-401f-953e-7a28293167c3	9713de00-8c88-48c2-9ecc-902b86954f96	google	pink	Blouse	{https://vs-boutique-images.s3.ap-south-1.amazonaws.com/uploads/gallery/1777984860863-ee08c8a3-416f-4f0a-ab44-891d0f560f05.png}	400.00	{}	f	t	f	2026-05-05 12:41:06.923	f
+COPY public.deployment_artifacts (id, deployment_id, name, type, url, size, checksum, metadata, created_at) FROM stdin;
 \.
 
 
 --
--- Data for Name: exchange_requests; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: deployment_build_logs; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.deployment_build_logs (id, deployment_id, level, message, metadata, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: deployment_domains; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.deployment_domains (id, business_id, environment_id, domain, type, status, dns_verified, ssl_enabled, ssl_status, ssl_expires_at, cname_target, txt_record, propagation_status, last_checked_at, is_primary, is_deleted, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: deployment_environment_variables; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.deployment_environment_variables (id, environment_id, key, encrypted_value, is_secret, version, created_by, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: deployment_environments; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.deployment_environments (id, name, type, business_id, is_active, sort_order, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: deployment_variable_histories; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.deployment_variable_histories (id, variable_id, key, encrypted_value, is_secret, version, changed_by, changed_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: deployments; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.deployments (id, business_id, environment_id, version, blueprint_version, requirement_version, commit_hash, builder, status, duration, logs, metadata, artifact_url, artifact_checksum, deployed_by, rollback_target_id, is_deleted, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: designs; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.designs (id, boutique_id, name, description, category, images, price, tags, is_featured, is_available, is_ready_made, is_deleted, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: developer_api_keys; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.developer_api_keys (id, business_id, name, key, prefix, scopes, status, environment, created_by, expires_at, last_used_at, rotated_at, revoked_at, usage_count, last_ip_address, "allowedIps", rate_limit_override, webhook_signing_secret, metadata, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: exchange_requests; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.exchange_requests (id, exchange_number, order_id, order_item_id, customer_id, reason, notes, status, requested_at, approved_at, completed_at, created_at, updated_at) FROM stdin;
@@ -2453,25 +7229,115 @@ COPY public.exchange_requests (id, exchange_number, order_id, order_item_id, cus
 
 
 --
--- Data for Name: measurements; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: immutable_releases; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.immutable_releases (id, business_id, release_tag, status, environment, "payloadDump", checksum, created_by, created_at) FROM stdin;
+ab34527c-2596-41c3-ae3a-678547a68a54	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.98	PUBLISHED	DEV	{"pages": [{"id": "db45bd2a-3637-45cd-8b36-9853ef76e407", "slug": "contact", "title": "Contact", "status": "PUBLISHED", "createdAt": "2026-06-29T19:03:58.038Z", "isEnabled": true, "updatedAt": "2026-06-29T19:03:58.038Z", "websiteId": "01b539cf-c7ab-44b6-9854-4001f2033bbb", "components": [{"id": "2a6a8918-14a0-49fa-8c21-2cd1aa8c13c6", "name": "Contact Messaging Form", "type": "Contact", "order": 1, "pageId": "db45bd2a-3637-45cd-8b36-9853ef76e407", "variant": "default", "parentId": null, "createdAt": "2026-06-29T19:03:59.276Z", "updatedAt": "2026-06-29T19:03:59.276Z", "animations": null, "permissions": null, "styleTokens": {"padding": "md"}, "dataSourceBind": null, "contentKeysBind": ["contact-intro-text"], "responsiveRules": {"mobileCols": 12, "desktopCols": 6}, "visibilityRules": null, "editableProperties": {"requiresVerification": false}}]}, {"id": "500115dc-2875-40b9-b202-809a36bef2ce", "slug": "home", "title": "Home", "status": "PUBLISHED", "createdAt": "2026-06-29T19:03:58.031Z", "isEnabled": true, "updatedAt": "2026-06-29T19:03:58.031Z", "websiteId": "01b539cf-c7ab-44b6-9854-4001f2033bbb", "components": [{"id": "072ebfbe-b6c8-4a77-b032-d3c665a8dcdb", "name": "Dynamic Hero Panel", "type": "Hero", "order": 1, "pageId": "500115dc-2875-40b9-b202-809a36bef2ce", "variant": "default", "parentId": null, "createdAt": "2026-06-29T19:03:59.280Z", "updatedAt": "2026-06-29T19:03:59.280Z", "animations": null, "permissions": null, "styleTokens": {"padding": "lg", "textAlignment": "center"}, "dataSourceBind": null, "contentKeysBind": ["home-hero-headline"], "responsiveRules": {"mobileCols": 12, "desktopCols": 12}, "visibilityRules": null, "editableProperties": {"showCtaButton": true}}, {"id": "4bee319f-1b0b-43bd-8fa4-1d5d7648f53e", "name": "Feature Collections Showcase", "type": "ProductGrid", "order": 2, "pageId": "500115dc-2875-40b9-b202-809a36bef2ce", "variant": "default", "parentId": null, "createdAt": "2026-06-29T19:03:59.281Z", "updatedAt": "2026-06-29T19:03:59.281Z", "animations": null, "permissions": null, "styleTokens": {"margin": "md"}, "dataSourceBind": "products", "contentKeysBind": ["home-featured-title"], "responsiveRules": {"mobileCols": 12, "desktopCols": 3}, "visibilityRules": null, "editableProperties": {"limit": 4}}]}, {"id": "da28847a-a95a-4dc8-bfb0-287d0b0883e6", "slug": "shop", "title": "Shop", "status": "PUBLISHED", "createdAt": "2026-06-29T19:03:58.036Z", "isEnabled": true, "updatedAt": "2026-06-29T19:03:58.036Z", "websiteId": "01b539cf-c7ab-44b6-9854-4001f2033bbb", "components": []}, {"id": "0935addb-633a-4a84-8aec-682ea9cdc0a4", "slug": "tailoring", "title": "Tailoring", "status": "PUBLISHED", "createdAt": "2026-06-29T19:03:58.037Z", "isEnabled": true, "updatedAt": "2026-06-29T19:03:58.037Z", "websiteId": "01b539cf-c7ab-44b6-9854-4001f2033bbb", "components": []}], "theme": {"id": "f00aaf09-9a86-4cc1-b383-3bc434603b1e", "createdAt": "2026-06-29T19:03:57.412Z", "updatedAt": "2026-06-29T19:03:57.412Z", "businessId": "519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b", "colorsDark": {"primary": "#6366f1", "surface": "#1f2937", "secondary": "#34d399", "background": "#111827"}, "typography": {"baseSize": "16px", "bodyFont": "Inter", "headingFont": "Playfair Display"}, "colorsLight": {"primary": "#4f46e5", "surface": "#ffffff", "secondary": "#10b981", "background": "#f9fafb"}, "borderStyles": {"radiusLg": "16px", "radiusMd": "8px", "radiusSm": "4px"}, "spacingScale": {"lg": "24px", "md": "16px", "sm": "8px", "xs": "4px"}, "animationScale": {"duration": "0.2s"}, "elevationShadows": {"low": "0 1px 2px rgba(0,0,0,0.05)", "medium": "0 4px 6px rgba(0,0,0,0.1)"}, "accessibilityTheme": null}, "timestamp": "2026-06-29T19:04:02.071Z"}	sha256_zj1o6	AI-Orchestrator	2026-06-29 19:04:02.072
+7d71e12a-a161-4abc-8c83-00ea3337d5ba	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	v1.0.62	QA	DEV	{"pages": [{"id": "page-home", "slug": "home", "title": "Home", "components": [{"id": "comp-hero", "name": "Hero Section", "type": "Hero", "styleTokens": {"padding": "none"}, "contentKeysBind": ["headline-hero"]}, {"id": "comp-grid", "name": "Product Catalog", "type": "ProductGrid", "styleTokens": {"cols": {"md": 3}}, "contentKeysBind": ["title-grid"]}]}], "theme": {"typography": {"headingFont": "http://fonts.googleapis.com/css?family=Montserrat"}, "colorsLight": {"primary": "#ffffff"}}, "assets": [{"id": "asset-1", "meta": {"sizeBytes": 1500000}, "name": "hero-banner.png", "type": "IMAGE"}, {"id": "asset-2", "meta": {"sizeBytes": 12000}, "name": "logo-vector.svg", "type": "IMAGE"}], "contents": [{"id": "content-autofix-b5288292-1f91-40b9-b42d-5c2a29f8b3b1", "key": "home-meta-description", "baseText": "Bespoke tailoring, custom design couture and premium alterations for Home. Discover high quality fabrics."}]}	remediationchecksum123	system-remediation-baseline	2026-07-02 04:30:59.623
+\.
+
+
+--
+-- Data for Name: marketplace_capabilities; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.marketplace_capabilities (id, version_id, type, handler_path, config_schema) FROM stdin;
+39a41e8d-c1fa-41d5-a230-62e31d2514bd	bb0d534a-b2f7-4030-b7b0-cc86e066e68e	theme	dist/styles/neon.css	{"glowIntensity": "number"}
+c8b3f549-c16d-4e7e-ae17-18b1cef19e3b	c4d89190-063f-4d40-972d-92d7cc1a5a1a	ai-agent	dist/agents/sales_bot.json	{"welcomeMsg": "string"}
+96ea1d77-cf8f-43b0-a70e-e408b6261892	20f829a9-2761-4c5a-b077-7a15f39517ea	workflow-stage	dist/stages/pos_sync.js	{"syncInterval": "number"}
+\.
+
+
+--
+-- Data for Name: marketplace_dependencies; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.marketplace_dependencies (id, version_id, dependency_slug, version_constraint) FROM stdin;
+\.
+
+
+--
+-- Data for Name: marketplace_installations; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.marketplace_installations (id, business_id, package_id, installed_version_id, is_enabled, settings_json, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: marketplace_licenses; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.marketplace_licenses (id, business_id, package_id, license_key, status, expires_at, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: marketplace_packages; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.marketplace_packages (id, publisher_id, name, slug, description, status, ratings_avg, reviews_count, downloads, created_at, updated_at) FROM stdin;
+622c2652-3478-474f-b80d-b7d755090716	b0cf8abe-b689-4b90-9996-f24b36bea53e	Dark Neon Stylesheet Pack	dark-neon-theme	Vibrant cyberpunk neon styling, variables, and dark UI templates.	APPROVED	0	0	0	2026-06-29 19:04:05.236	2026-06-29 19:04:05.236
+f1e6bedd-1ef3-4352-aa84-3d0e95f7c544	b0cf8abe-b689-4b90-9996-f24b36bea53e	Sales Chatbot Assistant	sales-chatbot-agent	AI-native lead generation assistant that greets visitors and routes leads to CRM.	APPROVED	0	0	0	2026-06-29 19:04:05.249	2026-06-29 19:04:05.249
+eb3c28c9-4330-46e1-8a80-216e2a4274aa	b0cf8abe-b689-4b90-9996-f24b36bea53e	Enterprise POS Sync Bridge	pos-sync-workflow	Synchronizes storefront transactions, stock counts, and orders with POS systems.	APPROVED	0	0	0	2026-06-29 19:04:05.256	2026-06-29 19:04:05.256
+\.
+
+
+--
+-- Data for Name: marketplace_publishers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.marketplace_publishers (id, owner_id, name, email, website, role, is_verified, created_at, updated_at) FROM stdin;
+b0cf8abe-b689-4b90-9996-f24b36bea53e	6280f364-2664-49f8-a19b-14ca697e4fa6	Antair Core Labs	registry@antair.io	https://antair.io	ADMIN	t	2026-06-29 19:04:05.228	2026-06-29 19:04:05.228
+\.
+
+
+--
+-- Data for Name: marketplace_reviews; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.marketplace_reviews (id, package_id, business_id, rating, comment, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: marketplace_versions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.marketplace_versions (id, package_id, version, manifest_json, download_url, checksum, created_at) FROM stdin;
+bb0d534a-b2f7-4030-b7b0-cc86e066e68e	622c2652-3478-474f-b80d-b7d755090716	1.0.0	{"id": "dark-neon-theme", "type": "THEME", "version": "1.0.0", "capabilities": [{"type": "theme", "entrypoint": "dist/styles/neon.css", "configSchema": {"glowIntensity": "number"}}], "dependencies": {}}	https://registry.antair.io/bundles/dark-neon-theme-1.0.0.zip	2d1a618107e0e6318ea6bda27322ec06725fdc3e80bbbad67ad3473d5b5ca0ad	2026-06-29 19:04:05.24
+c4d89190-063f-4d40-972d-92d7cc1a5a1a	f1e6bedd-1ef3-4352-aa84-3d0e95f7c544	1.2.0	{"id": "sales-chatbot-agent", "type": "AGENT", "version": "1.2.0", "capabilities": [{"type": "ai-agent", "entrypoint": "dist/agents/sales_bot.json", "configSchema": {"welcomeMsg": "string"}}], "dependencies": {}}	https://registry.antair.io/bundles/sales-chatbot-agent-1.2.0.zip	214e13d6e98f1001c388cd60a04efa064330500f3945e3daf2075862127f5a08	2026-06-29 19:04:05.251
+20f829a9-2761-4c5a-b077-7a15f39517ea	eb3c28c9-4330-46e1-8a80-216e2a4274aa	2.0.0	{"id": "pos-sync-workflow", "type": "WORKFLOW", "version": "2.0.0", "capabilities": [{"type": "workflow-stage", "entrypoint": "dist/stages/pos_sync.js", "configSchema": {"syncInterval": "number"}}], "dependencies": {}}	https://registry.antair.io/bundles/pos-sync-workflow-2.0.0.zip	60c1b725e2241ae8602524ef94e17f1a5dc8eb4bd858107fe2c0a6350b274275	2026-06-29 19:04:05.258
+\.
+
+
+--
+-- Data for Name: measurements; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.measurements (id, user_id, chest, waist, length, shoulder, sleeve_length, neck, notes, updated_at) FROM stdin;
-51379918-1281-468f-ae12-3caa39869ead	05969429-152d-4041-b84d-edc8786bbde3	38.50	34.00	28.00	\N	\N	\N		2026-06-05 02:57:10.88
 \.
 
 
 --
--- Data for Name: notification_campaigns; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: mobile_apps; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.mobile_apps (id, business_id, app_name, bundle_id, status, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: notification_campaigns; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.notification_campaigns (id, name, title, message, target_type, target_value, channels, scheduled_at, status, created_at, updated_at) FROM stdin;
-df7617fb-478c-4f09-b36a-9f4e0051ad61	VIP Customer Update Campaign	Special VIP Offer	Exclusive 20% discount on boutique designer dresses.	VIP_CUSTOMERS	\N	{push,email}	\N	completed	2026-06-04 19:59:10.711	2026-06-04 19:59:10.711
 \.
 
 
 --
--- Data for Name: notification_receipts; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: notification_receipts; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.notification_receipts (id, notification_id, recipient_owner_id, recipient_user_id, sent_at, delivered_at, opened_at, clicked_at) FROM stdin;
@@ -2479,7 +7345,7 @@ COPY public.notification_receipts (id, notification_id, recipient_owner_id, reci
 
 
 --
--- Data for Name: notification_templates; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: notification_templates; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.notification_templates (id, name, subject, body, channels, created_at, updated_at) FROM stdin;
@@ -2487,20 +7353,15 @@ COPY public.notification_templates (id, name, subject, body, channels, created_a
 
 
 --
--- Data for Name: notifications; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: notifications; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.notifications (id, recipient_role, recipient_id, recipient_user_id, boutique_id, title, message, type, status, is_read, scheduled_at, is_broadcast, created_at, target_type, target_value, sent_push, sent_email, sent_sms, campaign_id) FROM stdin;
-b7f61e79-60c2-43b3-88e5-4695ad8a4798	owner	\N	\N	9713de00-8c88-48c2-9ecc-902b86954f96	Appointment Status Update: Completed	Your booking request for 7/6/2026 is Completed. Note: Design consultation finished and order converted successfully	SYSTEM	sent	f	\N	f	2026-06-04 19:22:02.437	\N	\N	f	f	f	\N
-9e63eca0-d66a-4fcc-99d5-15b2d8b64af4	owner	\N	\N	9713de00-8c88-48c2-9ecc-902b86954f96	Appointment Status Update: Completed	Your booking request for 7/6/2026 is Completed. Note: Design consultation finished and order converted successfully	SYSTEM	sent	f	\N	f	2026-06-04 19:23:16.812	\N	\N	f	f	f	\N
-212a1c5b-648b-49f8-8ef2-44bc49168ecf	owner	\N	\N	9713de00-8c88-48c2-9ecc-902b86954f96	Appointment Status Update: Completed	Your booking request for 7/6/2026 is Completed. Note: Design consultation finished and order converted successfully	SYSTEM	sent	f	\N	f	2026-06-04 19:23:42.805	\N	\N	f	f	f	\N
-b7b626d0-246e-4cf8-affa-6b5c90b9138e	owner	\N	\N	9713de00-8c88-48c2-9ecc-902b86954f96	Appointment Status Update: Completed	Your booking request for 7/6/2026 is Completed. Note: Design consultation finished and order converted successfully	SYSTEM	sent	f	\N	f	2026-06-04 19:23:54.449	\N	\N	f	f	f	\N
-3a40ddc5-7e14-48b9-a1aa-3e2f2a355aea	owner	\N	\N	9713de00-8c88-48c2-9ecc-902b86954f96	Appointment Status Update: Completed	Your booking request for 7/6/2026 is Completed. Note: Design consultation finished and order converted successfully	SYSTEM	sent	f	\N	f	2026-06-04 19:26:50.781	\N	\N	f	f	f	\N
 \.
 
 
 --
--- Data for Name: order_histories; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: order_histories; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.order_histories (id, order_id, status, note, "timestamp") FROM stdin;
@@ -2508,44 +7369,26 @@ COPY public.order_histories (id, order_id, status, note, "timestamp") FROM stdin
 
 
 --
--- Data for Name: order_sequences; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: order_sequences; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.order_sequences (id, date, last_number, created_at) FROM stdin;
-86310cb4-bd6e-4f87-abd7-27d1b87e7c0f	2026-06-22	20	2026-06-22 03:49:05.611
-94c28afb-9ee7-4ee6-93b6-beb601069951	2026-06-25	6	2026-06-25 07:26:56.366
+7d24ca4e-1d9d-4675-8c35-c37756d11201	2026-06-30	26	2026-06-30 16:29:18.099
+0cfba2f7-fbcb-4dd9-8bc9-9013102e7f9b	2026-07-01	13	2026-07-01 03:33:59.67
+33c8e74b-9e9f-40ff-ae2a-556b972b02c9	2026-07-02	12	2026-07-02 03:12:11.422
 \.
 
 
 --
--- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.orders (id, order_id, boutique_id, owner_id, customer_name, customer_phone, customer_address, design_id, design_name, category, measurement_bust, measurement_waist, measurement_hip, measurement_shoulder, measurement_sleeve_length, measurement_blouse_length, measurement_notes, price, advance_paid, remaining_amount, order_status, payment_status, order_date, expected_delivery_date, actual_delivery_date, is_deleted, created_at, updated_at) FROM stdin;
-a06444b3-8f9a-40ca-a1e1-835fb4f90f6d	ORD-1780628224464-0	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Aranya Sen	9876543200	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	12000.00	12000.00	0.00	delivered	captured	2026-06-05 02:57:04.464	\N	\N	f	2026-06-05 02:57:04.464	2026-06-05 02:57:04.464
-18438d1a-646f-48b2-9cab-6cd0d41c16f1	ORD-1780628224464-1	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Bhavya Rao	9876543201	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	8000.00	8000.00	0.00	pending	captured	2026-06-05 02:57:04.464	\N	\N	f	2026-06-05 02:57:04.464	2026-06-05 02:57:04.464
-aa79a373-0486-4c02-8099-6fefdbbbd010	ORD-1780628224464-2	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Deepika Padukone	9876543202	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	5000.00	5000.00	0.00	delivered	captured	2026-06-05 02:57:04.464	\N	\N	f	2026-06-05 02:57:04.464	2026-06-05 02:57:04.464
-e2341de8-1a28-4866-a724-dc787c498997	ORD-1780628224464-3	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Esha Deol	9876543203	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	15000.00	0.00	15000.00	pending	failed	2026-06-05 02:57:04.464	\N	\N	f	2026-06-05 02:57:04.464	2026-06-05 02:57:04.464
-daf4de09-6e65-4a48-a9fe-3b5044280e33	ORD-1780541824464-4	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Gauri Khan	9876543204	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	10000.00	10000.00	0.00	delivered	captured	2026-06-04 02:57:04.464	\N	\N	f	2026-06-04 02:57:04.464	2026-06-04 02:57:04.464
-d2ffc7af-bf10-459b-aec7-0dd8cd132ce2	ORD-1780541824464-5	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Ishita Sharma	9876543205	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	12000.00	12000.00	0.00	delivered	captured	2026-06-04 02:57:04.464	\N	\N	f	2026-06-04 02:57:04.464	2026-06-04 02:57:04.464
-bb55fdf1-2125-4303-a935-c08ccf736fe5	ORD-1780369024464-6	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Kriti Sanon	9876543206	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	15000.00	15000.00	0.00	delivered	captured	2026-06-02 02:57:04.464	\N	\N	f	2026-06-02 02:57:04.464	2026-06-02 02:57:04.464
-61afc9a3-e7df-43b5-8176-1b0728259330	ORD-1780196224464-7	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Meera Rajput	9876543207	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	9000.00	9000.00	0.00	delivered	captured	2026-05-31 02:57:04.464	\N	\N	f	2026-05-31 02:57:04.464	2026-05-31 02:57:04.464
-92755504-baa2-4cc5-9d4d-9915f08be21f	ORD-1779937024464-8	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Neha Dhupia	9876543208	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	22000.00	22000.00	0.00	delivered	captured	2026-05-28 02:57:04.464	\N	\N	f	2026-05-28 02:57:04.464	2026-05-28 02:57:04.464
-c296e7a1-d9a6-474a-a77c-6622a06f9ce8	ORD-1779764224464-9	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Priyanka Chopra	9876543209	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	18000.00	18000.00	0.00	delivered	captured	2026-05-26 02:57:04.464	\N	\N	f	2026-05-26 02:57:04.464	2026-05-26 02:57:04.464
-8d91be37-2788-4bd5-afe7-762d98d0aa9a	ORD-1779591424464-10	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Rhea Chakraborty	9876543210	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	14000.00	14000.00	0.00	pending	captured	2026-05-24 02:57:04.464	\N	\N	f	2026-05-24 02:57:04.464	2026-05-24 02:57:04.464
-37764aa1-23b7-4875-9756-281a34c58a14	ORD-1779332224464-11	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Shraddha Kapoor	9876543211	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	30000.00	30000.00	0.00	delivered	captured	2026-05-21 02:57:04.464	\N	\N	f	2026-05-21 02:57:04.464	2026-05-21 02:57:04.464
-e23b2747-9259-4425-a19c-3814d94da88a	ORD-1779073024464-12	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Taapsee Pannu	9876543212	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	25000.00	25000.00	0.00	delivered	captured	2026-05-18 02:57:04.464	\N	\N	f	2026-05-18 02:57:04.464	2026-05-18 02:57:04.464
-0f1e111b-f026-47b5-953d-f51a204b0bc9	ORD-1778900224464-13	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Vidya Balan	9876543213	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	8500.00	8500.00	0.00	delivered	captured	2026-05-16 02:57:04.464	\N	\N	f	2026-05-16 02:57:04.464	2026-05-16 02:57:04.464
-bc3274ba-cc30-4a1f-9113-d29d1ab5e1d2	ORD-1778727424464-14	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Yami Gautam	9876543214	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	11000.00	11000.00	0.00	delivered	captured	2026-05-14 02:57:04.464	\N	\N	f	2026-05-14 02:57:04.464	2026-05-14 02:57:04.464
-55d00626-0ebd-40fd-ab46-7e7b61063a2e	ORD-1778468224464-15	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Aranya Sen	9876543200	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	16000.00	16000.00	0.00	delivered	captured	2026-05-11 02:57:04.464	\N	\N	f	2026-05-11 02:57:04.464	2026-05-11 02:57:04.464
-cc57d890-2688-4dd1-92e9-b5d986824ddf	ORD-1778209024464-16	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Bhavya Rao	9876543201	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	45000.00	45000.00	0.00	delivered	captured	2026-05-08 02:57:04.464	\N	\N	f	2026-05-08 02:57:04.464	2026-05-08 02:57:04.464
-d5deea96-b1b9-4502-8dcd-9303521f3bd0	ORD-1779418624464-17	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Deepika Padukone	9876543202	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	7500.00	0.00	7500.00	pending	failed	2026-05-22 02:57:04.464	\N	\N	f	2026-05-22 02:57:04.464	2026-05-22 02:57:04.464
-ee6d989b-0704-4255-bbe5-df8358651bc5	ORD-1778813824464-18	3b360640-f08b-460c-b06e-4f4ba821e298	d3350b54-b045-480f-99c0-a62951f906a1	Esha Deol	9876543203	\N	0a821036-397c-47dc-bbca-2de894aa5655	Organza	Saree	\N	\N	\N	\N	\N	\N	\N	9800.00	0.00	9800.00	pending	failed	2026-05-15 02:57:04.464	\N	\N	f	2026-05-15 02:57:04.464	2026-05-15 02:57:04.464
 \.
 
 
 --
--- Data for Name: owner_feature_permissions; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: owner_feature_permissions; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.owner_feature_permissions (id, owner_id, can_manage_orders, can_manage_bookings, can_manage_reviews, can_manage_payments, can_manage_payouts, can_manage_gallery, can_manage_designs, can_manage_analytics, can_manage_notifications, can_manage_staff, can_manage_customers, can_manage_measurements, can_manage_inventory, can_manage_expenses, can_manage_production, can_manage_delivery, can_manage_marketing, can_manage_roles, can_manage_branches, can_export_reports, created_at, updated_at, can_manage_products) FROM stdin;
@@ -2553,169 +7396,120 @@ COPY public.owner_feature_permissions (id, owner_id, can_manage_orders, can_mana
 
 
 --
--- Data for Name: owners; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: owners; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.owners (id, owner_name, username, email, mobile_number, password, role, status, assigned_boutique_id, invite_token_hash, invite_expires_at, reset_password_token, reset_password_expire, must_reset_password, email_verified, last_login, is_deleted, created_at, login_enabled, read_only_mode, can_edit_profile, can_edit_services, can_edit_gallery, can_manage_designs, can_manage_orders, can_manage_bookings, can_manage_reviews, can_manage_media, can_view_analytics, can_manage_customers, can_manage_measurements, can_manage_inventory, can_manage_expenses, can_manage_production, can_manage_delivery, can_manage_marketing, can_manage_roles, can_manage_branches, can_export_reports) FROM stdin;
-d9dbed07-d640-4d1e-846a-30d6211874a6	Test Boutique Owner	boutiqueowner_1780603150678	boutiqueowner_1780603150678@test.com	9999999912	mock_password_hash	owner	Active	444d0792-6d4b-4912-870d-a7084fb4000d	\N	\N	\N	\N	t	f	\N	f	2026-06-04 19:59:10.679	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
-b17ed420-862f-4cad-8d4a-64e9bb67de1a	Test Super Admin	superadmin_1780603150681	superadmin_1780603150681@test.com	9999999913	mock_password_hash	super-admin	Active	\N	\N	\N	\N	\N	t	f	\N	f	2026-06-04 19:59:10.682	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
-8775c411-56ab-4bba-b4c6-2b55f49ae545	Test Owner	testowner_1781721095218	testowner_1781721095218@test.com	9999999988	mock_password_hash	owner	Active	e93b248c-0e8a-4db9-9915-c2fec8f46845	\N	\N	\N	\N	t	f	\N	f	2026-06-17 18:31:35.22	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
-f2191c23-335d-4330-b3c8-e65128c64faf	Wishlist Owner	wishlistowner	wishlistowner@test.com	9555555552	$2b$10$UbG7GpMVrFWGE/GmFkaur.z2K1SCmO3tNKAeutKSsWvXK5QJUd5H2	owner	Active	6900ca7f-05c5-4a4a-a636-8d1f9fc3eba8	\N	\N	\N	\N	f	t	\N	f	2026-06-18 18:20:06.253	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
-9270afe8-2ed2-45fc-931c-0d144deca0d9	Audit Owner	auditowner	auditowner@test.com	9888888882	$2b$10$zKogkHV2X.Rw/i9Ot2gvseW9A7CfraHiYlLAwV5H3PJYqBi2WEO0O	owner	Active	416af8dc-b903-425c-92cd-f12ca2483386	\N	\N	\N	\N	f	t	\N	f	2026-06-18 18:37:09.306	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
-feb9ae23-eb39-423a-9bd8-cdb70ec3b2ab	Wrong Owner	wrongowner1782103080631	wrong1782103080631@test.com	9222222223	$2b$10$K0rUMA0Kx6APt/poHS7g.O/CDyStyNyDvh9xMwFK9zdP61.7VvYte	owner	Active	c8bc3d3d-f4d3-4197-9592-4274146afaac	\N	\N	\N	\N	f	t	\N	f	2026-06-22 04:38:00.633	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
-72113f32-8253-4630-b3c5-0417c2ecb46b	Wrong Owner	wrongowner1781805723489	wrong1781805723489@test.com	9222222223	$2b$10$Bri/4k9PnFveLtkCEuvQFexvtU.36EKWHv1QUUfqUBup4tv3MyUeS	owner	Active	49421d96-d408-4133-b700-7977aabbf112	\N	\N	\N	\N	f	t	2026-06-18 18:02:07.461	f	2026-06-18 18:02:03.491	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
-0b0e0c27-63ab-4aac-b138-99d46e7cbd47	Owner Product Tester	ownerproducttester	ownerproducttest@test.com	9111111112	$2b$10$mj9kW026VRodxnaFUTvQXuwfIV.gkC0jlZHycfJtPiiGkhkfK6zd6	owner	Active	5ab54e5a-4ef6-4911-8ea1-4224617df55c	\N	\N	\N	\N	f	t	2026-06-18 18:03:15.728	f	2026-06-18 18:02:02.159	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
-f74f1bbe-4788-44ff-adf3-f10e1a7636e1	Wrong Owner	wrongowner1781805792774	wrong1781805792774@test.com	9222222223	$2b$10$vBZtbtJb1q5ZuRLc4r5kl.qyfw2FCI7abSl027aQMfaaX0glOeHjq	owner	Active	aeebf623-d51b-4f89-bd8e-d28d83364469	\N	\N	\N	\N	f	t	2026-06-18 18:03:16.513	f	2026-06-18 18:03:12.775	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
-7f882ccb-f565-4f42-a33d-56c411d82415	Product Tester	producttester	producttest@owner.com	9999888776	$2b$10$aS62Phvpflpo5kF9hlF1auG9EcD06El9uWexrdoO0Hqx5sImDQjGW	owner	Active	154c28b2-97e5-4179-824e-8179589d5547	\N	\N	\N	\N	f	t	2026-06-22 06:13:06.122	f	2026-06-18 17:16:59.341	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
-f190aceb-e440-4cb2-b483-403ab4bb0797	Super Administrator	superadmin	admin@vsboutique.com	0000000000	$2b$10$EVAZy6.waStoWIU4GGI.eelBUagqirP./eN6tXaeLV2x1WUfcup3K	super-admin	Active	\N	\N	\N	\N	\N	f	f	2026-06-22 09:44:55.193	f	2026-04-29 06:51:20.945	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
-d3350b54-b045-480f-99c0-a62951f906a1	Sanjana Kapoor	sanjana_tiny_admin	hello@tinytucks.com	9052011447	$2b$10$Bh9EIIVWCJN00q0JWMOQEO8fHcQsB7rECsshupXaWM6THjWdXTO9i	owner	Active	9713de00-8c88-48c2-9ecc-902b86954f96	\N	\N	\N	\N	f	t	2026-06-22 09:49:07.197	f	2026-04-29 13:13:23.243	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
+6280f364-2664-49f8-a19b-14ca697e4fa6	Super Admin	superadmin	admin@vsboutique.com	9999999999	$2b$10$sbRUTU5bcMTxuuQ0Egd5L.CDT40tB/4ZN/OO9gaAKTzAN.vcmYWPO	super-admin	Active	\N	\N	\N	\N	\N	f	t	2026-06-30 18:19:53.124	f	2026-06-29 19:03:40.399	t	f	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
 \.
 
 
 --
--- Data for Name: payments; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: page_component_nodes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.page_component_nodes (id, page_id, parent_id, name, type, variant, "order", "styleTokens", "editableProperties", "responsiveRules", animations, "visibilityRules", permissions, "contentKeysBind", data_source_bind, created_at, updated_at) FROM stdin;
+2a6a8918-14a0-49fa-8c21-2cd1aa8c13c6	db45bd2a-3637-45cd-8b36-9853ef76e407	\N	Contact Messaging Form	Contact	default	1	{"padding": "md"}	{"requiresVerification": false}	{"mobileCols": 12, "desktopCols": 6}	\N	\N	\N	["contact-intro-text"]	\N	2026-06-29 19:03:59.276	2026-06-29 19:03:59.276
+072ebfbe-b6c8-4a77-b032-d3c665a8dcdb	500115dc-2875-40b9-b202-809a36bef2ce	\N	Dynamic Hero Panel	Hero	default	1	{"padding": "lg", "textAlignment": "center"}	{"showCtaButton": true}	{"mobileCols": 12, "desktopCols": 12}	\N	\N	\N	["home-hero-headline"]	\N	2026-06-29 19:03:59.28	2026-06-29 19:03:59.28
+4bee319f-1b0b-43bd-8fa4-1d5d7648f53e	500115dc-2875-40b9-b202-809a36bef2ce	\N	Feature Collections Showcase	ProductGrid	default	2	{"margin": "md"}	{"limit": 4}	{"mobileCols": 12, "desktopCols": 3}	\N	\N	\N	["home-featured-title"]	products	2026-06-29 19:03:59.281	2026-06-29 19:03:59.281
+\.
+
+
+--
+-- Data for Name: payments; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.payments (id, order_id, boutique_id, customer_id, amount, currency, status, method, commission_amount, net_amount, payout_status, payout_id, refund_id, refund_reason, razorpay_order_id, razorpay_payment_id, razorpay_signature, receipt, description, metadata, created_at) FROM stdin;
-19a153e1-cc8d-4821-8d99-4e1178354794	a06444b3-8f9a-40ca-a1e1-835fb4f90f6d	3b360640-f08b-460c-b06e-4f4ba821e298	b29700ad-222e-42e1-9137-ef0f389be22f	12000.00	INR	captured	Razorpay	1200.00	10800.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-06-05 02:57:04.464
-8d560a5d-df7b-4fe5-a031-4ca74fa9c4d9	18438d1a-646f-48b2-9cab-6cd0d41c16f1	3b360640-f08b-460c-b06e-4f4ba821e298	6d8d307c-ca33-4b53-b7a2-4726acf44c0e	8000.00	INR	captured	Razorpay	800.00	7200.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-06-05 02:57:04.464
-2f46b237-e04f-461f-a08f-8ec563143cc4	aa79a373-0486-4c02-8099-6fefdbbbd010	3b360640-f08b-460c-b06e-4f4ba821e298	7a003ffa-76ed-4e4a-8f98-316e8a95dfc5	5000.00	INR	captured	Razorpay	500.00	4500.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-06-05 02:57:04.464
-f3e4d58e-0c50-4e5c-a8e1-3ec1bb53f24e	e2341de8-1a28-4866-a724-dc787c498997	3b360640-f08b-460c-b06e-4f4ba821e298	f0b801e0-baa1-4344-8897-6c1f83b3dcba	15000.00	INR	failed	Razorpay	1500.00	13500.00	failed	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-06-05 02:57:04.464
-bbd02789-d34b-4b13-ba40-06559fadfff7	daf4de09-6e65-4a48-a9fe-3b5044280e33	3b360640-f08b-460c-b06e-4f4ba821e298	ed855518-26d3-4eaf-9e17-43b290fbadfd	10000.00	INR	captured	Razorpay	1000.00	9000.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-06-04 02:57:04.464
-4940f5de-284b-4e8f-bbca-9f66ce7cb7e8	d2ffc7af-bf10-459b-aec7-0dd8cd132ce2	3b360640-f08b-460c-b06e-4f4ba821e298	98402b40-f980-4afd-94c9-24e655be507f	12000.00	INR	captured	Razorpay	1200.00	10800.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-06-04 02:57:04.464
-5005feb1-6c2e-43b7-83f1-42e1d7cafbb3	bb55fdf1-2125-4303-a935-c08ccf736fe5	3b360640-f08b-460c-b06e-4f4ba821e298	c253196e-0a2f-42be-9d25-0703dc299a11	15000.00	INR	captured	Razorpay	1500.00	13500.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-06-02 02:57:04.464
-8fbdb492-a105-4012-8bba-2737787fab61	61afc9a3-e7df-43b5-8176-1b0728259330	3b360640-f08b-460c-b06e-4f4ba821e298	e4cac1e9-af60-43e1-95d3-f1e25cc16aab	9000.00	INR	captured	Razorpay	900.00	8100.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-05-31 02:57:04.464
-c6b0e3d6-68dd-42fa-ab28-bd2f31061bb6	92755504-baa2-4cc5-9d4d-9915f08be21f	3b360640-f08b-460c-b06e-4f4ba821e298	d7ff1fc4-53d3-4c65-8099-5b1df71612da	22000.00	INR	captured	Razorpay	2200.00	19800.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-05-28 02:57:04.464
-f9f5eabc-80d4-4703-b1a1-42399d04032e	c296e7a1-d9a6-474a-a77c-6622a06f9ce8	3b360640-f08b-460c-b06e-4f4ba821e298	a0e40168-e5a0-4d52-8c38-5dc7b699a801	18000.00	INR	captured	Razorpay	1800.00	16200.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-05-26 02:57:04.464
-19e69781-f359-4829-8bf1-98e221cffabc	8d91be37-2788-4bd5-afe7-762d98d0aa9a	3b360640-f08b-460c-b06e-4f4ba821e298	9a52b57d-9943-4e91-9482-de1d2700fb0c	14000.00	INR	captured	Razorpay	1400.00	12600.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-05-24 02:57:04.464
-56b69dac-db70-4050-879a-a94d18feef2b	37764aa1-23b7-4875-9756-281a34c58a14	3b360640-f08b-460c-b06e-4f4ba821e298	ddc3a65c-48f8-47aa-903a-f168e46332b7	30000.00	INR	captured	Razorpay	3000.00	27000.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-05-21 02:57:04.464
-f9819aa3-e6ae-46ab-9f79-1ba4b8f64125	e23b2747-9259-4425-a19c-3814d94da88a	3b360640-f08b-460c-b06e-4f4ba821e298	23a107f5-551c-4bb6-8a82-905048ddbd09	25000.00	INR	captured	Razorpay	2500.00	22500.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-05-18 02:57:04.464
-a71f66a1-c213-44fa-97ff-a5e192b9d93a	0f1e111b-f026-47b5-953d-f51a204b0bc9	3b360640-f08b-460c-b06e-4f4ba821e298	67487184-01c0-457c-b4b0-b213bd587291	8500.00	INR	captured	Razorpay	850.00	7650.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-05-16 02:57:04.464
-0f36a269-4119-44d7-8f4b-d0910a1e7646	bc3274ba-cc30-4a1f-9113-d29d1ab5e1d2	3b360640-f08b-460c-b06e-4f4ba821e298	54b57369-6046-4e12-8855-c5c8a0dd5825	11000.00	INR	captured	Razorpay	1100.00	9900.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-05-14 02:57:04.464
-397827a2-5148-4c1d-b104-d1954df15b76	55d00626-0ebd-40fd-ab46-7e7b61063a2e	3b360640-f08b-460c-b06e-4f4ba821e298	b29700ad-222e-42e1-9137-ef0f389be22f	16000.00	INR	captured	Razorpay	1600.00	14400.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-05-11 02:57:04.464
-5d18507e-d4a3-4479-a938-c52e6bcd6c9a	cc57d890-2688-4dd1-92e9-b5d986824ddf	3b360640-f08b-460c-b06e-4f4ba821e298	6d8d307c-ca33-4b53-b7a2-4726acf44c0e	45000.00	INR	captured	Razorpay	4500.00	40500.00	pending	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-05-08 02:57:04.464
-370918d3-fec0-4024-8e19-94a92d80e19e	d5deea96-b1b9-4502-8dcd-9303521f3bd0	3b360640-f08b-460c-b06e-4f4ba821e298	7a003ffa-76ed-4e4a-8f98-316e8a95dfc5	7500.00	INR	failed	Razorpay	750.00	6750.00	failed	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-05-22 02:57:04.464
-2d93b5d8-0e18-41dc-a350-ebbfa4a1a1a5	ee6d989b-0704-4255-bbe5-df8358651bc5	3b360640-f08b-460c-b06e-4f4ba821e298	f0b801e0-baa1-4344-8897-6c1f83b3dcba	9800.00	INR	failed	Razorpay	980.00	8820.00	failed	\N	\N	\N	\N	\N	\N	\N	\N	null	2026-05-15 02:57:04.464
 \.
 
 
 --
--- Data for Name: payouts; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: payouts; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.payouts (id, boutique_id, amount, status, payout_id, reference_code, payout_date, error_msg, created_at, updated_at) FROM stdin;
-f8da7619-8b47-4563-9669-1949d89b61ea	3b360640-f08b-460c-b06e-4f4ba821e298	15000.00	PENDING	\N	\N	\N	\N	2026-06-04 02:57:04.464	2026-06-04 02:57:04.464
-a2484bcb-35c2-4ee8-a9b8-c4a3fab07650	3b360640-f08b-460c-b06e-4f4ba821e298	25000.00	APPROVED	\N	\N	\N	\N	2026-06-02 02:57:04.464	2026-06-02 02:57:04.464
-64d5f951-6dcc-45ef-93c0-09b928eff4b9	3b360640-f08b-460c-b06e-4f4ba821e298	45000.00	PENDING	\N	\N	\N	\N	2026-05-26 02:57:04.464	2026-05-26 02:57:04.464
-67d52f68-b5ef-41b6-a468-9f0bb6961099	3b360640-f08b-460c-b06e-4f4ba821e298	35000.00	RELEASED	PAY-1779591424464	REF-1779591424464	2026-05-24 02:57:04.464	\N	2026-05-24 02:57:04.464	2026-05-24 02:57:04.464
-add270db-045c-4aa7-b14b-b31e06c876f2	3b360640-f08b-460c-b06e-4f4ba821e298	20000.00	RELEASED	PAY-1778900224464	REF-1778900224464	2026-05-16 02:57:04.464	\N	2026-05-16 02:57:04.464	2026-05-16 02:57:04.464
 \.
 
 
 --
--- Data for Name: platform_settings; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: platform_settings; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.platform_settings (id, global_commission_rate, category_commissions, updated_at) FROM stdin;
-7314c117-a9d5-42dd-9e05-334d7690dbd6	12.00	{"Saree": 15, "Lehenga": 20}	2026-06-04 19:37:53.57
 \.
 
 
 --
--- Data for Name: product_analytics; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: product_analytics; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.product_analytics (id, product_id, period_start, period_end, views, unique_views, add_to_cart_count, order_count, revenue, created_at, updated_at) FROM stdin;
+dd693647-8484-4647-a89d-a0d6d99ba825	8b5afa40-8fe1-4201-b710-99e2fea3a089	2026-05-31 18:30:00	2026-06-30 18:29:59.999	0	0	0	1	1000.00	2026-06-30 16:29:19.147	2026-06-30 16:29:19.147
+c12396d9-a234-49f0-9ff5-eb0fccdb7191	79909fa2-8c47-46a8-a4f0-fe1bc8f6d5a6	2026-06-30 18:30:00	2026-07-31 18:29:59.999	0	0	0	1	1000.00	2026-07-02 03:13:20.022	2026-07-02 03:13:20.022
+b8b9434c-4262-4f00-83eb-42dfabf9be03	bf25ad06-69c8-4e20-a799-32921352c9cb	2026-06-30 18:30:00	2026-07-31 18:29:59.999	0	0	0	1	750.00	2026-07-02 03:13:22.797	2026-07-02 03:13:22.797
 \.
 
 
 --
--- Data for Name: product_brands; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: product_brands; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.product_brands (id, name, description, logo, boutique_id, is_active, created_at, updated_at) FROM stdin;
-d0c06ed9-3f3d-4ca6-997c-68d04a4d78ac	Test Brand 1782103176158	\N	\N	154c28b2-97e5-4179-824e-8179589d5547	t	2026-06-22 04:39:40.377	2026-06-22 04:39:40.377
-dd6db5a6-f2be-4458-9f14-6dffc80b6c7a	Test	\N	\N	154c28b2-97e5-4179-824e-8179589d5547	t	2026-06-22 04:40:19.658	2026-06-22 04:40:19.658
-8030e266-ef49-4963-adc9-3c36f92c55aa	E2E Brand	\N	\N	154c28b2-97e5-4179-824e-8179589d5547	t	2026-06-22 04:43:37.75	2026-06-22 04:43:37.75
-003ac880-776e-4b84-95b4-23e1ffd8e799	E2E Brand 1782103531674	\N	\N	154c28b2-97e5-4179-824e-8179589d5547	t	2026-06-22 04:45:37.014	2026-06-22 04:45:37.014
-e70ee2b1-84ff-41b7-beb2-3bbc003968b9	E2E Brand 1782103723366	\N	\N	154c28b2-97e5-4179-824e-8179589d5547	t	2026-06-22 04:48:48.141	2026-06-22 04:48:48.141
-663309c9-c87d-4589-9ef3-4c94d9930892	E2E Brand 1782108788974	\N	\N	154c28b2-97e5-4179-824e-8179589d5547	t	2026-06-22 06:13:11.885	2026-06-22 06:13:11.885
 \.
 
 
 --
--- Data for Name: product_images; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: product_images; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.product_images (id, product_id, url, alt, sort_order, is_primary) FROM stdin;
-98edaa53-6efc-44c9-9365-51cd37e67d66	39d029a5-b0aa-4f31-8b3a-0f256bbe86d3	https://placehold.co/600x400	Test	1	t
-37b0590e-48ee-4835-9751-baebbc2cd1b7	5d3f8cfb-5c57-4234-92b1-54e5775cc71f	https://placehold.co/600x400	Test	1	t
-d9467c6c-b50f-4065-9d4b-f0a12fe1b7bf	9e953786-5208-482b-9aad-9fd59d522801	https://placehold.co/600x400	Test	1	t
 \.
 
 
 --
--- Data for Name: product_inventory; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: product_inventory; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.product_inventory (id, variant_id, quantity, reserved_quantity, low_stock_threshold, track_inventory, version) FROM stdin;
-4f6acad5-6b7a-4a54-bc0a-850365001d8b	ad4279f2-c1bc-4d18-be91-f5f44204b621	100	0	10	t	0
-717c0779-c636-4f66-b73e-26bdedbd9cef	21e2f17f-5f31-4a1d-aa73-5adf50c75d5d	100	0	10	t	0
-44cd9c75-c135-44c1-944f-06596292c850	cdd72089-0945-41f9-b773-0cddf3f83552	100	0	10	t	0
-cae7ad28-a14c-48d4-a14b-9626aea63c87	9803bbed-b544-4c21-8419-8447bdab7c56	0	0	5	t	0
-636a2c97-67b9-4d6b-93f2-5e9691f5fc30	36caacef-7a28-439a-9f65-c45f51bc2f09	100	0	10	t	0
-965fa60b-c631-4fb8-b96b-056171ac05e5	d604659d-c292-4dd0-967d-e1611b0fb37c	10	0	5	t	0
-76055194-3aeb-4422-83b5-9f18050ac0e9	3a96d63b-93eb-4631-9619-7392e42a7709	0	0	5	t	0
-9505b11f-8574-44db-854c-5f0df2d49acf	97d3cfa3-57b5-47e8-ae55-17631860babf	10	0	5	t	0
-f347da93-3c9a-401c-abb6-b00835814804	bee1418c-6741-4e87-bc17-cd9a0af7c405	0	0	5	t	0
-5ffa93b7-e228-48aa-b66c-86cd6eb0de9b	743d5892-97a6-4d89-b5ff-810668b6c243	10	0	5	t	0
-38343eca-40c8-4b9e-bb79-ccd100c31e8a	5a5b4424-e24b-4486-9387-b26c97e54c27	0	0	5	t	0
-fc652c6f-d59a-4640-b96e-ba7790379edb	e489bcf4-42bc-4a45-b0ed-7fdd8345ae52	10	0	5	t	0
-1110bb7b-0c78-41bc-b35c-5d64ca9d30b0	433e36de-7ac8-48e3-889f-1a02c7b49755	0	0	5	t	0
-4260d455-e926-406c-8d94-7c3c24ed3ba0	66ecd178-f1ea-46ab-a38c-5cbcdc714f6e	10	0	5	t	0
-fb9866e2-c2a5-4e8f-b618-eda57707a1ba	179a2ce9-3b42-4873-a4ce-cc7594d95ee7	0	0	5	t	0
-ee111402-2746-428c-93e9-ae95e2c2c517	c2af1f7b-96c4-48c7-a743-140a367eb2ba	10	0	5	t	0
-b9ecd88c-c041-467c-8fcc-b3321072e9c6	4eeda7ca-e8da-4d94-96c2-0d7b83102c61	50	13	5	t	15
-c0af1d54-ca4f-458c-882e-a22a525ff1db	6bf206e2-a522-48fb-a71b-36cabdd11509	0	0	5	t	0
-e7899b97-6467-4163-acfa-fbc062ee13fa	c7e8df3d-fd36-40f7-8dce-f0e8d94dc669	75	0	10	t	0
+cb9397d0-6486-4a3b-bb56-0cc71274a850	264e1cb6-328f-4bd0-ae99-639321f4b0cf	50	50	5	t	50
+0d8d77a8-4b43-430e-be36-7243860efa36	48ed838a-fd33-4db6-9094-507dc86142cd	2	2	5	t	3
+32372b3f-243c-46ee-842c-7e0ba3ce3b8e	9ef10bff-1112-4f13-833d-4227e56a05aa	1	1	2	t	9
+c1ccbab8-aa33-4d47-a859-a0b8c7fbd535	bddc1a63-94ee-475b-8097-794f36ba7e8d	50	2	5	t	2
+3a49f8cd-fe8b-4d02-b8b5-7475fc76c2c2	9a6c349d-f0b6-41a4-ad0d-23cbed6d5057	3	2	2	t	5
+1d2cbcb9-955e-46e5-a069-72b6e971099f	d62e56c6-108c-4471-b5cd-528409285a5c	5	0	5	t	0
 \.
 
 
 --
--- Data for Name: product_inventory_logs; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: product_inventory_logs; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.product_inventory_logs (id, product_id, variant_id, change, quantity_before, quantity_after, reason, reference, created_by, created_at) FROM stdin;
-a0643581-9e5c-434f-8f97-08c21cdf4dfd	cf950f37-6a80-4d8f-8a55-22395ccd8cad	ad4279f2-c1bc-4d18-be91-f5f44204b621	50	100	150	STOCK_ADDITION	Manual restock	7f882ccb-f565-4f42-a33d-56c411d82415	2026-06-18 17:24:46.429
-2604e429-663d-48aa-b1a3-bb147025139c	bfde2c1b-a675-4c10-9164-583039eec97a	21e2f17f-5f31-4a1d-aa73-5adf50c75d5d	50	100	150	STOCK_ADDITION	Manual restock	7f882ccb-f565-4f42-a33d-56c411d82415	2026-06-18 17:26:30.337
-0616ab87-92d4-4e3f-a624-16bd5f174dd6	42a91c88-7d36-4df1-bd3c-764192fc9cff	cdd72089-0945-41f9-b773-0cddf3f83552	50	100	150	STOCK_ADDITION	Manual restock	7f882ccb-f565-4f42-a33d-56c411d82415	2026-06-18 17:28:55.72
-7d613250-5150-4759-b46a-72d10fa47bd0	e146c366-ec72-40f4-a985-43a011c8d79f	36caacef-7a28-439a-9f65-c45f51bc2f09	50	100	150	STOCK_ADDITION	Manual restock	7f882ccb-f565-4f42-a33d-56c411d82415	2026-06-18 18:17:40.36
 \.
 
 
 --
--- Data for Name: product_reviews; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: product_reviews; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.product_reviews (id, product_id, user_id, order_id, rating, title, comment, images, is_verified_purchase, status, created_at, reply, updated_at) FROM stdin;
+a8632e42-970d-4024-bc89-347a33214284	c593a490-07cb-4795-b517-3eeb08601458	872b7072-0403-4d62-8172-e9710e895814	d17507f7-fe6b-4db5-ad2b-86aa3f77acee	5	Great product!	Really loved this product. Quality is amazing.	{https://example.com/img1.jpg}	t	APPROVED	2026-06-30 16:29:18.296	\N	2026-06-30 16:29:18.296
+38dd3263-9cef-48d9-aa4f-85e4e95c331e	c593a490-07cb-4795-b517-3eeb08601458	7ce08474-2a06-4006-9db1-05e2a90a7152	9e71943b-3522-4a07-bc26-d305fce37130	4	Updated title	Actually pretty good after using more	{}	t	HIDDEN	2026-06-30 16:29:18.744	Glad you liked it!	2026-06-30 16:29:19.77
+a1da98a5-4071-47ef-b52d-10dbcd8e87de	e16177ce-d621-472c-b141-be23f142723b	85beff7c-fc07-4673-bbc0-371a2c8144bb	6ecf6e7c-bf58-43d0-a057-790b7dca6946	5	Great product!	Really loved this product. Quality is amazing.	{https://example.com/img1.jpg}	t	APPROVED	2026-07-01 03:34:00.259	\N	2026-07-01 03:34:00.259
+508ea5a3-21d5-4283-b09f-bd7eefe45b8d	e16177ce-d621-472c-b141-be23f142723b	1c8a49fb-d614-46ce-b9cf-be8df207718a	76a54ff2-08fc-4de0-aa78-96c4c212620b	4	Updated title	Actually pretty good after using more	{}	t	APPROVED	2026-07-01 03:34:02.128	\N	2026-07-01 03:34:02.509
 \.
 
 
 --
--- Data for Name: product_tags; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: product_tags; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.product_tags (id, name, boutique_id, is_active, created_at) FROM stdin;
-c01299c2-8e4c-4b1a-8398-5a819e817ea1	Test Tag 1782103180936	154c28b2-97e5-4179-824e-8179589d5547	t	2026-06-22 04:39:43.605
-2dfe4031-ae38-4c67-964c-87eb7d2f5932	E2E Tag	154c28b2-97e5-4179-824e-8179589d5547	t	2026-06-22 04:43:44.652
-fc4d7943-f8ce-4e64-8a01-5d06858f3c39	E2E Tag 1782103538226	154c28b2-97e5-4179-824e-8179589d5547	t	2026-06-22 04:45:42.217
-6fe072e6-7b8a-4acd-b466-f936c359686a	E2E Tag 1782103728780	154c28b2-97e5-4179-824e-8179589d5547	t	2026-06-22 04:48:51.457
-e2e8899b-4eb9-4c92-ad26-925cd257d16e	E2E Tag 1782108792523	154c28b2-97e5-4179-824e-8179589d5547	t	2026-06-22 06:13:16.48
 \.
 
 
 --
--- Data for Name: product_variant_attributes; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: product_variant_attributes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.product_variant_attributes (id, product_id, name, "values") FROM stdin;
@@ -2723,117 +7517,74 @@ COPY public.product_variant_attributes (id, product_id, name, "values") FROM std
 
 
 --
--- Data for Name: product_variants; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: product_variants; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.product_variants (id, product_id, sku, name, attributes, price, compare_at_price, status, sort_order) FROM stdin;
-ad4279f2-c1bc-4d18-be91-f5f44204b621	cf950f37-6a80-4d8f-8a55-22395ccd8cad	VAR-1781803472424	Medium	{"Size": "M"}	1199.99	\N	ACTIVE	1
-21e2f17f-5f31-4a1d-aa73-5adf50c75d5d	bfde2c1b-a675-4c10-9164-583039eec97a	VAR-1781803578649	Medium	{"Size": "M"}	1199.99	\N	ACTIVE	1
-cdd72089-0945-41f9-b773-0cddf3f83552	42a91c88-7d36-4df1-bd3c-764192fc9cff	VAR-1781803722311	Medium	{"Size": "M"}	1199.99	\N	ACTIVE	1
-9803bbed-b544-4c21-8419-8447bdab7c56	292d4168-93db-4fe9-9d98-f6295e9a4d72	VAR-1781806524861	Medium	{"Size": "M"}	1199.99	\N	ACTIVE	1
-36caacef-7a28-439a-9f65-c45f51bc2f09	e146c366-ec72-40f4-a985-43a011c8d79f	VAR-1781806640328	Medium	{"Size": "M"}	1199.99	\N	ACTIVE	1
-d604659d-c292-4dd0-967d-e1611b0fb37c	eda35e98-7d92-455e-8f2c-89e6d3648f11	AUDIT-V1-1781807824326	Size M	\N	1100.00	\N	ACTIVE	0
-3a96d63b-93eb-4631-9619-7392e42a7709	eda35e98-7d92-455e-8f2c-89e6d3648f11	AUDIT-V2-1781807824326	Size L	\N	1200.00	\N	ACTIVE	0
-97d3cfa3-57b5-47e8-ae55-17631860babf	0e1a9224-820b-4e11-92c8-0f76c57eab3f	AUDIT-V1-1781808669195	Size M	\N	1100.00	\N	ACTIVE	0
-bee1418c-6741-4e87-bc17-cd9a0af7c405	0e1a9224-820b-4e11-92c8-0f76c57eab3f	AUDIT-V2-1781808669195	Size L	\N	1200.00	\N	ACTIVE	0
-743d5892-97a6-4d89-b5ff-810668b6c243	405e28d5-4e8b-46f0-8f7a-8f0582c438c3	AUDIT-V1-1781809114924	Size M	\N	1100.00	\N	ACTIVE	0
-5a5b4424-e24b-4486-9387-b26c97e54c27	405e28d5-4e8b-46f0-8f7a-8f0582c438c3	AUDIT-V2-1781809114924	Size L	\N	1200.00	\N	ACTIVE	0
-e489bcf4-42bc-4a45-b0ed-7fdd8345ae52	50b5e987-1a09-4714-8293-501d38452549	AUDIT-V1-1781809334074	Size M	\N	1100.00	\N	ACTIVE	0
-433e36de-7ac8-48e3-889f-1a02c7b49755	50b5e987-1a09-4714-8293-501d38452549	AUDIT-V2-1781809334074	Size L	\N	1200.00	\N	ACTIVE	0
-66ecd178-f1ea-46ab-a38c-5cbcdc714f6e	aa35c61c-9cf8-4669-a0d2-0e583774bc3f	AUDIT-V1-1781809480752	Size M	\N	1100.00	\N	ACTIVE	0
-179a2ce9-3b42-4873-a4ce-cc7594d95ee7	aa35c61c-9cf8-4669-a0d2-0e583774bc3f	AUDIT-V2-1781809480752	Size L	\N	1200.00	\N	ACTIVE	0
-c2af1f7b-96c4-48c7-a743-140a367eb2ba	e787b99c-23a4-40dd-b0e5-598467c46da8	CONST-1781809514628	Test	\N	200.00	\N	ACTIVE	0
-6bf206e2-a522-48fb-a71b-36cabdd11509	22fbfc8a-46fa-471e-b1e2-87aac5b94414	VT-SKU-1782108770226	Small	{"size": "S"}	899.00	\N	ACTIVE	0
-c7e8df3d-fd36-40f7-8dce-f0e8d94dc669	9e953786-5208-482b-9aad-9fd59d522801	VAR-1782108832499	Large	{"size": "L"}	1799.00	\N	ACTIVE	0
-4eeda7ca-e8da-4d94-96c2-0d7b83102c61	dcd60b0d-54f7-4e92-8a22-99e4eb5edea3	\N	Stress Variant 1782112020354	\N	500.00	\N	ACTIVE	0
+9ef10bff-1112-4f13-833d-4227e56a05aa	c6ed3c61-624a-4565-b8cd-b2bbe279eb51	\N	Size M	\N	1000.00	\N	ACTIVE	0
+bddc1a63-94ee-475b-8097-794f36ba7e8d	126a165b-4c1c-4261-a02e-229cff5520bf	\N	Stress Variant 1782836957475	\N	500.00	\N	ACTIVE	0
+48ed838a-fd33-4db6-9094-507dc86142cd	5831ce0f-1378-4192-b831-a4f618394892	\N	Stress Variant 1782961995437	\N	500.00	\N	ACTIVE	0
+264e1cb6-328f-4bd0-ae99-639321f4b0cf	07a52c01-2676-427b-a79d-4c10a3ae69f2	\N	Stress Variant 1782962020011	\N	500.00	\N	ACTIVE	0
+9a6c349d-f0b6-41a4-ad0d-23cbed6d5057	3aaca081-97e9-44a3-9165-699951d5f1db	\N	Size M	\N	1000.00	\N	ACTIVE	0
+d62e56c6-108c-4471-b5cd-528409285a5c	34263d96-02a1-402b-a4c5-ae5965a805f4	\N	Stress Variant 1782876838261	\N	500.00	\N	ACTIVE	0
 \.
 
 
 --
--- Data for Name: product_wishlists; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: product_wishlists; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.product_wishlists (id, user_id, product_id, created_at) FROM stdin;
-89475ebb-666f-4d4e-abc9-da5ca1563f7b	c4c6b80e-7521-42db-9aca-f5ba44393974	a1e2ae9a-db7e-41a2-9dc3-0c3886526342	2026-06-18 18:20:26.922
-1b7c224b-ab8f-40a5-b5f4-33f0673f2a81	d354509d-581a-492a-9d6f-5b5bf8a0da00	dcd60b0d-54f7-4e92-8a22-99e4eb5edea3	2026-06-23 03:30:55.364
-7bd581c8-79df-415c-912c-72041f16e506	d354509d-581a-492a-9d6f-5b5bf8a0da00	6d454bed-36d1-456e-95e8-18897fe26f1c	2026-06-23 03:30:56.134
-a7d5b84d-9e11-490b-9610-9ed725d4cf5e	a57183cb-996a-41dc-aecb-27a68b06212e	dcd60b0d-54f7-4e92-8a22-99e4eb5edea3	2026-06-23 03:30:58.94
-d010b50c-6b5e-4306-830e-ade6ba40e755	e00770ea-ef70-470f-9b29-1a5d6df59470	dcd60b0d-54f7-4e92-8a22-99e4eb5edea3	2026-06-25 07:35:03.681
 \.
 
 
 --
--- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.products (id, boutique_id, brand_id, category_id, sub_category_id, product_type, name, description, short_description, sku, barcode, base_price, compare_at_price, cost_price, delivery_type, weight, length, width, height, status, is_featured, is_marketplace_visible, is_taxable, is_deleted, seo_title, seo_description, seo_slug, created_at, updated_at, average_rating, review_count) FROM stdin;
-eda35e98-7d92-455e-8f2c-89e6d3648f11	416af8dc-b903-425c-92cd-f12ca2483386	\N	0411488f-4570-4640-9531-fd242a384295	23ef7a87-ea4d-4ad5-988b-aaa443b4ebe9	READY_MADE	Audit Prod 1 1781807824326	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:37:10.395	2026-06-18 18:37:10.395	0	0
-cf950f37-6a80-4d8f-8a55-22395ccd8cad	154c28b2-97e5-4179-824e-8179589d5547	\N	\N	\N	READY_MADE	Updated Product	Updated description	Test product short desc	SKU-1781803440277	\N	1499.99	\N	\N	STANDARD	\N	\N	\N	\N	DRAFT	t	t	t	t	\N	\N	\N	2026-06-18 17:24:01.863	2026-06-18 17:24:53.529	0	0
-6ec10ba4-c9a8-4d47-ae7c-e2f4a87cc267	416af8dc-b903-425c-92cd-f12ca2483386	\N	0411488f-4570-4640-9531-fd242a384295	23ef7a87-ea4d-4ad5-988b-aaa443b4ebe9	READY_MADE	Audit Prod 2 1781807824326	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:37:11.068	2026-06-18 18:37:11.068	0	0
-bfde2c1b-a675-4c10-9164-583039eec97a	154c28b2-97e5-4179-824e-8179589d5547	\N	\N	\N	READY_MADE	Updated Product	Updated description	Test product short desc	SKU-1781803550509	\N	1499.99	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	t	t	t	t	\N	\N	\N	2026-06-18 17:25:52.356	2026-06-18 17:26:40.868	0	0
-9277f24d-3008-4d04-8c1e-da1551747912	af5c6060-19c5-4706-bef9-55ba9fd574a7	\N	0411488f-4570-4640-9531-fd242a384295	23ef7a87-ea4d-4ad5-988b-aaa443b4ebe9	READY_MADE	Boutique B Product 1781807824326	\N	\N	\N	\N	999.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:37:11.325	2026-06-18 18:37:11.325	0	0
-42a91c88-7d36-4df1-bd3c-764192fc9cff	154c28b2-97e5-4179-824e-8179589d5547	\N	\N	\N	READY_MADE	Updated Product	Updated description	Test product short desc	SKU-1781803687825	\N	1499.99	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	t	t	t	t	\N	\N	\N	2026-06-18 17:28:09.371	2026-06-18 17:29:10.258	0	0
-b6334ebb-7a64-4da4-930b-1e889c1998ce	154c28b2-97e5-4179-824e-8179589d5547	\N	\N	\N	READY_MADE	Direct Test 1781804386075	\N	\N	DIR-1781804386075	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	DRAFT	f	t	t	f	\N	\N	\N	2026-06-18 17:39:48.393	2026-06-18 17:39:48.393	0	0
-8c32ad02-289c-4543-b384-6cb1c0b8d9e4	154c28b2-97e5-4179-824e-8179589d5547	\N	\N	\N	READY_MADE	Test	\N	\N	T-1781804420404	\N	10.00	\N	\N	STANDARD	\N	\N	\N	\N	DRAFT	f	t	t	f	\N	\N	\N	2026-06-18 17:40:23.047	2026-06-18 17:40:23.047	0	0
-836e8c3d-8cfa-44a6-b483-ffbb4e64699a	5ab54e5a-4ef6-4911-8ea1-4224617df55c	\N	4c568875-d770-4045-b0de-1e5bdfa743c7	5ae10054-9bd2-4a17-a042-0855590cd119	READY_MADE	Updated Owner Product	Updated description	\N	OWNER-SKU-1781805745364	\N	1999.99	\N	\N	STANDARD	\N	\N	\N	\N	DRAFT	t	t	t	t	\N	\N	\N	2026-06-18 18:02:27.594	2026-06-18 18:02:56.916	0	0
-45fe0f2a-9e3a-46a2-aa77-9ea846b0ff84	5ab54e5a-4ef6-4911-8ea1-4224617df55c	\N	6f36e050-bde1-4390-aaaa-704d035a61e6	8c573535-1946-4e53-a4dc-f32880e43416	READY_MADE	Updated Owner Product	Updated description	\N	OWNER-SKU-1781805810285	\N	1999.99	\N	\N	STANDARD	\N	\N	\N	\N	DRAFT	t	t	t	t	\N	\N	\N	2026-06-18 18:03:32.434	2026-06-18 18:03:59.23	0	0
-24c56af1-bd37-48b8-8570-dd473100019a	5ab54e5a-4ef6-4911-8ea1-4224617df55c	\N	6f36e050-bde1-4390-aaaa-704d035a61e6	8c573535-1946-4e53-a4dc-f32880e43416	READY_MADE	Temp Product 1781805849546	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	DRAFT	f	t	t	f	\N	\N	\N	2026-06-18 18:04:09.548	2026-06-18 18:04:09.548	0	0
-ca917ea6-0ccb-40ac-b8cd-eac7bf309c22	416af8dc-b903-425c-92cd-f12ca2483386	\N	0411488f-4570-4640-9531-fd242a384295	23ef7a87-ea4d-4ad5-988b-aaa443b4ebe9	READY_MADE	Audit To Delete 1781807824326	\N	\N	\N	\N	300.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	t	\N	\N	\N	2026-06-18 18:37:13.208	2026-06-18 18:37:42.589	0	0
-292d4168-93db-4fe9-9d98-f6295e9a4d72	154c28b2-97e5-4179-824e-8179589d5547	\N	\N	\N	READY_MADE	Updated Product	Updated description	Test product short desc	SKU-1781806459459	\N	1499.99	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	t	t	t	f	\N	\N	\N	2026-06-18 18:14:21.887	2026-06-18 18:14:55.577	0	0
-0e81677e-b675-4b5d-98de-b5501683ce37	416af8dc-b903-425c-92cd-f12ca2483386	\N	0411488f-4570-4640-9531-fd242a384295	23ef7a87-ea4d-4ad5-988b-aaa443b4ebe9	READY_MADE	Audit To Inactivate 1781807824326	\N	\N	\N	\N	400.00	\N	\N	STANDARD	\N	\N	\N	\N	INACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:37:13.681	2026-06-18 18:37:43.645	0	0
-e146c366-ec72-40f4-a985-43a011c8d79f	154c28b2-97e5-4179-824e-8179589d5547	\N	\N	\N	READY_MADE	Updated Product	Updated description	Test product short desc	SKU-1781806589948	\N	1499.99	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	t	t	t	t	\N	\N	\N	2026-06-18 18:16:32.336	2026-06-18 18:18:05.401	0	0
-0dfce70b-f384-4642-ba1f-365211b229b2	6900ca7f-05c5-4a4a-a636-8d1f9fc3eba8	\N	ed7fd462-a008-4f79-9af5-306612f4ffd0	661e45bd-0c95-4ea3-abb6-a827d1c9bdb2	READY_MADE	Wishlist Active Product 1781806807337	\N	\N	\N	\N	999.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:20:07.339	2026-06-18 18:20:07.339	0	0
-a1e2ae9a-db7e-41a2-9dc3-0c3886526342	6900ca7f-05c5-4a4a-a636-8d1f9fc3eba8	\N	ed7fd462-a008-4f79-9af5-306612f4ffd0	661e45bd-0c95-4ea3-abb6-a827d1c9bdb2	READY_MADE	Wishlist To Delete 1781806808386	\N	\N	\N	\N	100.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	t	\N	\N	\N	2026-06-18 18:20:08.388	2026-06-18 18:20:08.711	0	0
-2867ecfa-5340-4b57-bc67-cb5631f8d740	6900ca7f-05c5-4a4a-a636-8d1f9fc3eba8	\N	ed7fd462-a008-4f79-9af5-306612f4ffd0	661e45bd-0c95-4ea3-abb6-a827d1c9bdb2	READY_MADE	Wishlist Inactive Product 1781806809844	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	INACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:20:09.846	2026-06-18 18:20:09.846	0	0
-3ea8c88d-dd24-47e0-bcd6-267a04a8cc9d	6900ca7f-05c5-4a4a-a636-8d1f9fc3eba8	\N	7d82019f-54b6-47b2-af9c-53e5b74da244	568bd02b-1535-43d6-af0b-e2befdb7839a	READY_MADE	Wishlist Active Product 1781807127334	\N	\N	\N	\N	999.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:25:27.337	2026-06-18 18:25:27.337	0	0
-8730ca20-b208-44a8-8eec-77d77207e9ca	6900ca7f-05c5-4a4a-a636-8d1f9fc3eba8	\N	7d82019f-54b6-47b2-af9c-53e5b74da244	568bd02b-1535-43d6-af0b-e2befdb7839a	READY_MADE	Wishlist To Delete 1781807128460	\N	\N	\N	\N	100.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	t	\N	\N	\N	2026-06-18 18:25:28.462	2026-06-18 18:25:28.901	0	0
-711c60aa-72b7-49d5-88aa-1763096fb04b	6900ca7f-05c5-4a4a-a636-8d1f9fc3eba8	\N	7d82019f-54b6-47b2-af9c-53e5b74da244	568bd02b-1535-43d6-af0b-e2befdb7839a	READY_MADE	Wishlist Inactive Product 1781807130137	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	INACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:25:30.139	2026-06-18 18:25:30.139	0	0
-112e139b-9e3f-459f-8ec0-92e6007f7d94	6900ca7f-05c5-4a4a-a636-8d1f9fc3eba8	\N	392abf64-af32-4e93-99ff-0e7243b54cfc	0de91bc3-d70d-49d7-b3c9-10ba282d78da	READY_MADE	Wishlist Active Product 1781807145868	\N	\N	\N	\N	999.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:25:45.869	2026-06-18 18:25:45.869	0	0
-351ba216-97d6-49ce-929a-1ffad941220b	6900ca7f-05c5-4a4a-a636-8d1f9fc3eba8	\N	392abf64-af32-4e93-99ff-0e7243b54cfc	0de91bc3-d70d-49d7-b3c9-10ba282d78da	READY_MADE	Wishlist To Delete 1781807146764	\N	\N	\N	\N	100.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	t	\N	\N	\N	2026-06-18 18:25:46.765	2026-06-18 18:25:47.477	0	0
-06cfa9d4-f449-48b7-878e-058a9dc10a70	6900ca7f-05c5-4a4a-a636-8d1f9fc3eba8	\N	392abf64-af32-4e93-99ff-0e7243b54cfc	0de91bc3-d70d-49d7-b3c9-10ba282d78da	READY_MADE	Wishlist Inactive Product 1781807148127	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	INACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:25:48.128	2026-06-18 18:25:48.128	0	0
-0e1a9224-820b-4e11-92c8-0f76c57eab3f	416af8dc-b903-425c-92cd-f12ca2483386	\N	bde29a4d-e296-4b90-9422-8a8527e427ca	a97eacc2-95d5-4fb0-9754-e2de9562927b	READY_MADE	Audit Prod 1 1781808669195	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:51:17.508	2026-06-18 18:51:17.508	0	0
-136987c9-d75e-4b3e-8106-afcdce03dea9	416af8dc-b903-425c-92cd-f12ca2483386	\N	bde29a4d-e296-4b90-9422-8a8527e427ca	a97eacc2-95d5-4fb0-9754-e2de9562927b	READY_MADE	Audit Prod 2 1781808669195	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:51:18.778	2026-06-18 18:51:18.778	0	0
-e0c8a9b5-baac-4e90-9249-67c6d9fe659f	19859527-fe72-4cd4-99ab-dfc7c544be7f	\N	bde29a4d-e296-4b90-9422-8a8527e427ca	a97eacc2-95d5-4fb0-9754-e2de9562927b	READY_MADE	Boutique B Product 1781808669195	\N	\N	\N	\N	999.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:51:19.459	2026-06-18 18:51:19.459	0	0
-bf84e631-a059-4424-87c3-648cbc36eb28	416af8dc-b903-425c-92cd-f12ca2483386	\N	bde29a4d-e296-4b90-9422-8a8527e427ca	a97eacc2-95d5-4fb0-9754-e2de9562927b	READY_MADE	Audit To Delete 1781808669195	\N	\N	\N	\N	300.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	t	\N	\N	\N	2026-06-18 18:51:23.119	2026-06-18 18:51:49.193	0	0
-884bac17-0917-4b96-a1c3-0166e5480b1b	416af8dc-b903-425c-92cd-f12ca2483386	\N	bde29a4d-e296-4b90-9422-8a8527e427ca	a97eacc2-95d5-4fb0-9754-e2de9562927b	READY_MADE	Audit To Inactivate 1781808669195	\N	\N	\N	\N	400.00	\N	\N	STANDARD	\N	\N	\N	\N	INACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:51:23.592	2026-06-18 18:51:50.726	0	0
-405e28d5-4e8b-46f0-8f7a-8f0582c438c3	416af8dc-b903-425c-92cd-f12ca2483386	\N	c9430425-b8a9-490e-8ea3-185fc4ef724f	6e754310-e84b-4d00-a6d6-8ef8d0ae2e1b	READY_MADE	Audit Prod 1 1781809114924	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:58:38.718	2026-06-18 18:58:38.718	0	0
-23e62d17-4dd4-42aa-a106-5d4f9ebba6fc	416af8dc-b903-425c-92cd-f12ca2483386	\N	c9430425-b8a9-490e-8ea3-185fc4ef724f	6e754310-e84b-4d00-a6d6-8ef8d0ae2e1b	READY_MADE	Audit Prod 2 1781809114924	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:58:39.219	2026-06-18 18:58:39.219	0	0
-c8704420-9b8a-4ba0-a033-cc44c79b129e	ebb03214-7fe9-48bc-9702-ce513b1fe095	\N	c9430425-b8a9-490e-8ea3-185fc4ef724f	6e754310-e84b-4d00-a6d6-8ef8d0ae2e1b	READY_MADE	Boutique B Product 1781809114924	\N	\N	\N	\N	999.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:58:39.471	2026-06-18 18:58:39.471	0	0
-fe9da2dd-36cb-4173-8cab-1fd28fa92da6	416af8dc-b903-425c-92cd-f12ca2483386	\N	c9430425-b8a9-490e-8ea3-185fc4ef724f	6e754310-e84b-4d00-a6d6-8ef8d0ae2e1b	READY_MADE	Audit To Delete 1781809114924	\N	\N	\N	\N	300.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	t	\N	\N	\N	2026-06-18 18:58:41.224	2026-06-18 18:58:56.397	0	0
-143309f2-b0f1-4277-8182-babe121a4551	416af8dc-b903-425c-92cd-f12ca2483386	\N	c9430425-b8a9-490e-8ea3-185fc4ef724f	6e754310-e84b-4d00-a6d6-8ef8d0ae2e1b	READY_MADE	Audit To Inactivate 1781809114924	\N	\N	\N	\N	400.00	\N	\N	STANDARD	\N	\N	\N	\N	INACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 18:58:41.475	2026-06-18 18:58:57.403	0	0
-50b5e987-1a09-4714-8293-501d38452549	416af8dc-b903-425c-92cd-f12ca2483386	\N	42b3ee53-391f-441b-b8b6-73ecd43797c5	6cb4dbc7-b424-4ab8-a120-5309c7486514	READY_MADE	Audit Prod 1 1781809334074	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 19:02:18.006	2026-06-18 19:02:18.006	0	0
-40d28def-27f1-417a-8c6c-18cdf1671b3f	416af8dc-b903-425c-92cd-f12ca2483386	\N	42b3ee53-391f-441b-b8b6-73ecd43797c5	6cb4dbc7-b424-4ab8-a120-5309c7486514	READY_MADE	Audit Prod 2 1781809334074	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 19:02:18.525	2026-06-18 19:02:18.525	0	0
-16c6c907-ae69-46e6-b8fb-d6cc8470de7f	8f5b1639-55db-4043-9069-d90579d02921	\N	42b3ee53-391f-441b-b8b6-73ecd43797c5	6cb4dbc7-b424-4ab8-a120-5309c7486514	READY_MADE	Boutique B Product 1781809334074	\N	\N	\N	\N	999.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 19:02:18.785	2026-06-18 19:02:18.785	0	0
-3b675a38-55b3-45e6-a773-3e80e88f6936	416af8dc-b903-425c-92cd-f12ca2483386	\N	42b3ee53-391f-441b-b8b6-73ecd43797c5	6cb4dbc7-b424-4ab8-a120-5309c7486514	READY_MADE	Audit To Delete 1781809334074	\N	\N	\N	\N	300.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	t	\N	\N	\N	2026-06-18 19:02:20.595	2026-06-18 19:02:31.451	0	0
-c5000fd0-42fc-47d3-8fbb-0e40814e7980	416af8dc-b903-425c-92cd-f12ca2483386	\N	42b3ee53-391f-441b-b8b6-73ecd43797c5	6cb4dbc7-b424-4ab8-a120-5309c7486514	READY_MADE	Audit To Inactivate 1781809334074	\N	\N	\N	\N	400.00	\N	\N	STANDARD	\N	\N	\N	\N	INACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 19:02:20.854	2026-06-18 19:02:32.487	0	0
-aa35c61c-9cf8-4669-a0d2-0e583774bc3f	416af8dc-b903-425c-92cd-f12ca2483386	\N	90a299fc-ffdb-45ca-ac79-76144b32e87c	01a9b824-1943-4286-ad32-4345edc17c81	READY_MADE	Audit Prod 1 1781809480752	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 19:04:44.711	2026-06-18 19:04:44.711	0	0
-ec6195ef-4dda-4fab-a1f1-b10a23c376d9	416af8dc-b903-425c-92cd-f12ca2483386	\N	90a299fc-ffdb-45ca-ac79-76144b32e87c	01a9b824-1943-4286-ad32-4345edc17c81	READY_MADE	Audit Prod 2 1781809480752	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 19:04:45.229	2026-06-18 19:04:45.229	0	0
-81b7df6a-5fa3-40f0-b361-bf0d9489fa0f	adace4fb-ac88-4f51-8e3d-02090b6b093d	\N	90a299fc-ffdb-45ca-ac79-76144b32e87c	01a9b824-1943-4286-ad32-4345edc17c81	READY_MADE	Boutique B Product 1781809480752	\N	\N	\N	\N	999.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 19:04:45.49	2026-06-18 19:04:45.49	0	0
-a5aab1d0-a86b-40da-bfda-abe0f5c83ffb	416af8dc-b903-425c-92cd-f12ca2483386	\N	90a299fc-ffdb-45ca-ac79-76144b32e87c	01a9b824-1943-4286-ad32-4345edc17c81	READY_MADE	Audit To Delete 1781809480752	\N	\N	\N	\N	300.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	t	\N	\N	\N	2026-06-18 19:04:47.298	2026-06-18 19:05:03.102	0	0
-0c0d325e-111f-49b6-96b5-b72b9006621d	416af8dc-b903-425c-92cd-f12ca2483386	\N	90a299fc-ffdb-45ca-ac79-76144b32e87c	01a9b824-1943-4286-ad32-4345edc17c81	READY_MADE	Audit To Inactivate 1781809480752	\N	\N	\N	\N	400.00	\N	\N	STANDARD	\N	\N	\N	\N	INACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 19:04:47.558	2026-06-18 19:05:04.129	0	0
-e787b99c-23a4-40dd-b0e5-598467c46da8	416af8dc-b903-425c-92cd-f12ca2483386	\N	90a299fc-ffdb-45ca-ac79-76144b32e87c	01a9b824-1943-4286-ad32-4345edc17c81	READY_MADE	Audit Constraint Prod 1781809514369	\N	\N	\N	\N	100.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-18 19:05:14.37	2026-06-18 19:05:14.37	0	0
-39d029a5-b0aa-4f31-8b3a-0f256bbe86d3	154c28b2-97e5-4179-824e-8179589d5547	003ac880-776e-4b84-95b4-23e1ffd8e799	392abf64-af32-4e93-99ff-0e7243b54cfc	0de91bc3-d70d-49d7-b3c9-10ba282d78da	READY_MADE	E2E Updated	\N	\N	E2E-1782103543855	\N	1999.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	t	t	t	t	\N	\N	\N	2026-06-22 04:45:55.385	2026-06-22 04:46:49.228	0	0
-abc779aa-b799-4d31-95da-24d92a3117e2	e4e28167-51e8-4ce9-826a-4c6f4449721c	\N	4651ac3a-c744-4a22-ab99-01168f89d1d0	\N	READY_MADE	Coupon Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-22 04:47:07.183	2026-06-22 04:47:07.183	0	0
-203e6454-b477-49fb-8fca-963537bbdfe3	e4e28167-51e8-4ce9-826a-4c6f4449721c	\N	\N	\N	READY_MADE	Coupon Test Product 2	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-22 04:47:07.729	2026-06-22 04:47:07.729	0	0
-5d3f8cfb-5c57-4234-92b1-54e5775cc71f	154c28b2-97e5-4179-824e-8179589d5547	e70ee2b1-84ff-41b7-beb2-3bbc003968b9	0411488f-4570-4640-9531-fd242a384295	23ef7a87-ea4d-4ad5-988b-aaa443b4ebe9	READY_MADE	E2E Updated	\N	\N	E2E-1782103732085	\N	1999.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	t	t	t	t	\N	\N	\N	2026-06-22 04:49:00.115	2026-06-22 04:49:42.275	0	0
-9e953786-5208-482b-9aad-9fd59d522801	154c28b2-97e5-4179-824e-8179589d5547	663309c9-c87d-4589-9ef3-4c94d9930892	c9430425-b8a9-490e-8ea3-185fc4ef724f	6e754310-e84b-4d00-a6d6-8ef8d0ae2e1b	READY_MADE	E2E Updated	\N	\N	E2E-1782108797325	\N	1999.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	t	t	t	t	\N	\N	\N	2026-06-22 06:13:26.479	2026-06-22 06:14:23.16	0	0
-e2325ca0-ecb2-492f-99a3-95f0aadf455b	0f9b0f5a-ad9f-418f-b24c-bb20df336626	\N	5eec108d-0ff3-4117-9589-8aca4546a828	\N	READY_MADE	Coupon Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-22 04:49:50.811	2026-06-22 04:49:50.811	0	0
-b05123c2-365a-403b-b1e5-c7e90ed58a8e	0f9b0f5a-ad9f-418f-b24c-bb20df336626	\N	\N	\N	READY_MADE	Coupon Test Product 2	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-22 04:49:51.362	2026-06-22 04:49:51.362	0	0
-03b55a79-956a-450b-a907-cde762bad400	41c3ef8d-4fba-4c34-8178-407099d4712f	\N	bd7abb45-4fa2-49ba-935e-05aec1ebbf7f	\N	READY_MADE	Coupon Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-22 04:50:09.334	2026-06-22 04:50:09.334	0	0
-0e08bf12-e1b5-48ed-ba94-626bcbfb65af	41c3ef8d-4fba-4c34-8178-407099d4712f	\N	\N	\N	READY_MADE	Coupon Test Product 2	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-22 04:50:09.914	2026-06-22 04:50:09.914	0	0
-e6432376-09bf-4ade-b6fb-9404a3e48070	e348a642-ac02-419e-9c90-dd8ed38616bf	\N	1d4bfbc7-154d-4ed8-bed0-2a6a2c54e794	\N	READY_MADE	Coupon Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-22 06:24:09.171	2026-06-22 06:24:09.171	0	0
-6d454bed-36d1-456e-95e8-18897fe26f1c	e348a642-ac02-419e-9c90-dd8ed38616bf	\N	\N	\N	READY_MADE	Coupon Test Product 2	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-22 06:24:10.774	2026-06-22 06:24:10.774	0	0
-d4224e8d-0794-4f10-804e-7ee4ea720d65	ee732cec-30a1-4c83-9238-5cc412f364d8	\N	6fe04503-3c5c-4299-83c4-5d197647938f	\N	READY_MADE	Coupon Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-22 04:41:35.134	2026-06-22 04:41:35.134	0	0
-f0875728-b869-40aa-839e-0e85d2a13935	ee732cec-30a1-4c83-9238-5cc412f364d8	\N	\N	\N	READY_MADE	Coupon Test Product 2	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-22 04:41:35.796	2026-06-22 04:41:35.796	0	0
-0ee12b9b-3586-421c-bc67-d7ecb00344df	154c28b2-97e5-4179-824e-8179589d5547	\N	f538a3af-2b1b-4df1-97d0-560ef35591cf	094a73d7-c694-4291-a1bb-0930e6a2a4bf	READY_MADE	API Test Product	\N	\N	\N	\N	999.00	\N	\N	STANDARD	\N	\N	\N	\N	DRAFT	f	t	t	f	\N	\N	\N	2026-06-22 04:41:57.447	2026-06-22 04:41:57.447	0	0
-00b503ba-e2ff-4ddd-9551-0a2ff3b2b1aa	154c28b2-97e5-4179-824e-8179589d5547	\N	f538a3af-2b1b-4df1-97d0-560ef35591cf	094a73d7-c694-4291-a1bb-0930e6a2a4bf	READY_MADE	Variant Test	\N	\N	VT-1782108706770	\N	999.00	\N	\N	STANDARD	\N	\N	\N	\N	DRAFT	f	t	t	f	\N	\N	\N	2026-06-22 06:11:58.809	2026-06-22 06:11:58.809	0	0
-22fbfc8a-46fa-471e-b1e2-87aac5b94414	154c28b2-97e5-4179-824e-8179589d5547	\N	f538a3af-2b1b-4df1-97d0-560ef35591cf	094a73d7-c694-4291-a1bb-0930e6a2a4bf	READY_MADE	Variant Test	\N	\N	VT-1782108756652	\N	999.00	\N	\N	STANDARD	\N	\N	\N	\N	DRAFT	f	t	t	f	\N	\N	\N	2026-06-22 06:12:45.251	2026-06-22 06:12:45.251	0	0
-dcd60b0d-54f7-4e92-8a22-99e4eb5edea3	d31a980d-407e-4511-a5eb-436a186d5092	\N	24fad22e-2b35-4ab8-95cc-50de54b4abab	\N	READY_MADE	Stress Product 1782112020354	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-22 07:07:04.955	2026-06-22 07:07:04.955	0	0
+d76e3712-0704-4ea3-a2ff-40fa020337b3	2264d82c-69d2-48c6-bdbb-81146f0b4492	\N	63447bc2-9550-40af-a4c4-c9b73d510e90	\N	READY_MADE	Handcrafted Silk Sari	Intricately woven premium silk dress.	\N	\N	\N	4999.00	\N	\N	STANDARD	\N	\N	\N	\N	DRAFT	f	t	t	f	\N	\N	\N	2026-06-29 19:04:00.21	2026-06-29 19:04:00.21	0	0
+c6ed3c61-624a-4565-b8cd-b2bbe279eb51	6447b13c-38b3-4e98-bb17-03e04d0f8d3e	\N	\N	\N	READY_MADE	Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-30 16:29:17.951	2026-06-30 16:29:17.951	0	0
+126a165b-4c1c-4261-a02e-229cff5520bf	8639ba89-07d9-485e-bc3d-20f68e97658b	\N	1ac5511f-b3a9-40a1-9ea3-89e34522e9d8	\N	READY_MADE	Stress Product 1782836957475	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-30 16:29:17.977	2026-06-30 16:29:17.977	0	0
+0d1aecee-368b-4815-972b-8f8c0b2f5840	10eb5784-f69e-4085-8eaa-133c2f79d21a	\N	80bbd89a-37d6-4048-8056-ce7f7a69dfba	\N	READY_MADE	Coupon Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-30 16:29:17.98	2026-06-30 16:29:17.98	0	0
+8b5afa40-8fe1-4201-b710-99e2fea3a089	b086a84e-c9a3-4dc8-8ede-aa698668a0b2	\N	\N	\N	READY_MADE	Tracking Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-30 16:29:18.002	2026-06-30 16:29:18.002	0	0
+5853832d-ea34-4b80-b486-58710649b12b	10eb5784-f69e-4085-8eaa-133c2f79d21a	\N	\N	\N	READY_MADE	Coupon Test Product 2	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-30 16:29:18.014	2026-06-30 16:29:18.014	0	0
+0b87cc59-7dd5-4580-96ea-4bdb5dac9925	b086a84e-c9a3-4dc8-8ede-aa698668a0b2	\N	\N	\N	READY_MADE	Tracking Test Product 2	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-30 16:29:18.03	2026-06-30 16:29:18.03	0	0
+3aaca081-97e9-44a3-9165-699951d5f1db	cda137f3-6d97-4c4a-95d7-f0b9fb15d533	\N	\N	\N	READY_MADE	Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-01 03:33:59.256	2026-07-01 03:33:59.256	0	0
+f8a8a6c6-0415-4f64-b1ff-052c8ff52e66	0bc91246-24c6-4373-851f-d6c025d6a61d	\N	\N	\N	READY_MADE	Tracking Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-01 03:33:59.428	2026-07-01 03:33:59.428	0	0
+34263d96-02a1-402b-a4c5-ae5965a805f4	99ddf620-1225-4e84-b91a-36e85b487df7	\N	5fc3b997-1b54-4d31-9beb-be79e925b5ec	\N	READY_MADE	Stress Product 1782876838261	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-01 03:33:59.446	2026-07-01 03:33:59.446	0	0
+6b109b19-9335-44ce-9d96-110d3d863ee5	0bc91246-24c6-4373-851f-d6c025d6a61d	\N	\N	\N	READY_MADE	Tracking Test Product 2	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-01 03:33:59.52	2026-07-01 03:33:59.52	0	0
+c593a490-07cb-4795-b517-3eeb08601458	52ce0656-6d86-4e27-ba2d-58f09b95e7dd	\N	\N	\N	READY_MADE	Review Test Product	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-06-30 16:29:17.934	2026-06-30 16:29:19.821	5	1
+a14d5806-9c71-4a33-ab8f-b5cc4a509334	664f6ef7-a082-4dd9-a00c-1aa3e22a690c	\N	e0183a2c-3320-48c9-8dd3-fa2d41722fc8	\N	READY_MADE	Coupon Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-01 03:33:59.728	2026-07-01 03:33:59.728	0	0
+e99a2d32-aef4-4cb2-932e-459c4d445c85	664f6ef7-a082-4dd9-a00c-1aa3e22a690c	\N	\N	\N	READY_MADE	Coupon Test Product 2	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-01 03:33:59.783	2026-07-01 03:33:59.783	0	0
+e16177ce-d621-472c-b141-be23f142723b	7364b9da-43dd-4b71-9f6d-a7afb48cc091	\N	\N	\N	READY_MADE	Review Test Product	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-01 03:33:59.273	2026-07-01 03:34:02.308	4	2
+5831ce0f-1378-4192-b831-a4f618394892	4079e784-770a-4c7d-9819-087e149278c1	\N	07429631-abb8-4f6f-991f-cd05e7b232cd	\N	READY_MADE	Stress Product 1782961995437	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-02 03:13:20.51	2026-07-02 03:13:20.51	0	0
+6a4c2501-fe66-4816-ba09-2dd3ccc41d93	9c0180cc-8287-419a-a7de-f5961fcd0e01	\N	feca0aa7-54c3-4af8-b605-8d6197836968	\N	READY_MADE	Coupon Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-02 03:13:17.045	2026-07-02 03:13:17.045	0	0
+79909fa2-8c47-46a8-a4f0-fe1bc8f6d5a6	19007c86-b45a-4dd7-be2d-bf38ed9dc2cc	\N	\N	\N	READY_MADE	Tracking Test Product	\N	\N	\N	\N	1000.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-02 03:13:17.074	2026-07-02 03:13:17.074	0	0
+bf25ad06-69c8-4e20-a799-32921352c9cb	19007c86-b45a-4dd7-be2d-bf38ed9dc2cc	\N	\N	\N	READY_MADE	Tracking Test Product 2	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-02 03:13:17.153	2026-07-02 03:13:17.153	0	0
+fed8ddf5-3dfb-4402-8b3a-02d291568daa	9c0180cc-8287-419a-a7de-f5961fcd0e01	\N	\N	\N	READY_MADE	Coupon Test Product 2	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-02 03:13:17.168	2026-07-02 03:13:17.168	0	0
+07a52c01-2676-427b-a79d-4c10a3ae69f2	75c477b0-23b1-4db3-93d1-e4abbcc2e985	\N	5e31a435-6d74-4518-bd78-791e47754241	\N	READY_MADE	Stress Product 1782962020011	\N	\N	\N	\N	500.00	\N	\N	STANDARD	\N	\N	\N	\N	ACTIVE	f	t	t	f	\N	\N	\N	2026-07-02 03:13:45.249	2026-07-02 03:13:45.249	0	0
 \.
 
 
 --
--- Data for Name: return_requests; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: qa_agent_registries; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.qa_agent_registries (id, agent_key, name, category, execution_order, is_enabled, version, timeout_ms, configuration, created_at, updated_at) FROM stdin;
+5361fa6f-65c5-4aec-ac68-4aa8a804a123	performance_agent	Performance Auditor	PERFORMANCE	1	t	1.0.0	10000	{"imageSizeThresholdKb": 500}	2026-06-29 19:03:40.818	2026-06-29 20:26:19.126
+439f8ed3-0305-4b11-9d6d-e0bb3733bbba	seo_agent	SEO & Metadata Auditor	SEO	2	t	1.0.0	10000	{"requireMetaDescription": true}	2026-06-29 19:03:40.822	2026-06-29 20:26:19.134
+c39d6eb0-2b66-490f-aa2c-107d9f252c35	accessibility_agent	WCAG Accessibility Auditor	ACCESSIBILITY	3	t	1.0.0	10000	{"wcagStandard": "WCAG22_AA"}	2026-06-29 19:03:40.824	2026-06-29 20:26:19.136
+2ddcefdc-68d8-4f3d-9da6-095522c5e691	security_agent	CSP & Security Auditor	SECURITY	4	t	1.0.0	10000	{"blockInlineScripts": true}	2026-06-29 19:03:40.825	2026-06-29 20:26:19.137
+0909727f-c52c-4f48-8a44-367bb9be113b	responsive_agent	Responsive Layout Auditor	UX	5	t	1.0.0	10000	{"auditedBreakpoints": ["xs", "sm", "md", "lg"]}	2026-06-29 19:03:40.826	2026-06-29 20:26:19.138
+19cebd2e-45b8-4017-a888-ecd3be33a0de	ux_ui_agent	UI / UX Auditor	UX	6	t	1.0.0	10000	{"minTouchTargetSizePx": 44}	2026-06-29 19:03:40.827	2026-06-29 20:26:19.14
+5728bb9e-f6d4-4843-9608-1053694f7231	brand_agent	Brand Alignment Auditor	BRAND	7	t	1.0.0	10000	{"verifyPrimaryPaletteMatch": true}	2026-06-29 19:03:40.828	2026-06-29 20:26:19.141
+f1028428-c55f-46c2-bc40-387972e3c00c	content_agent	Content Quality Auditor	BRAND	8	t	1.0.0	10000	{"verifyGrammar": true}	2026-06-29 19:03:40.829	2026-06-29 20:26:19.142
+\.
+
+
+--
+-- Data for Name: return_requests; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.return_requests (id, return_number, order_id, order_item_id, customer_id, reason, notes, status, refund_amount, requested_at, approved_at, rejected_at, completed_at, created_at, updated_at) FROM stdin;
@@ -2841,93 +7592,73 @@ COPY public.return_requests (id, return_number, order_id, order_item_id, custome
 
 
 --
--- Data for Name: reviews; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: reviews; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.reviews (id, boutique_id, user_id, order_id, rating, rating_stitching, rating_measurement, rating_delivery, rating_communication, rating_value, comment, reply, verified_purchase, review_images, report_count, moderation_status, is_suspicious, suspicious_reason, ip_address, created_at) FROM stdin;
-8c59698e-e9f6-4f23-b4a6-961e7a2554ea	3b360640-f08b-460c-b06e-4f4ba821e298	b29700ad-222e-42e1-9137-ef0f389be22f	\N	5	\N	\N	\N	\N	\N	Absolutely beautiful stitching! Perfect fit.	\N	t	{}	0	APPROVED	f	\N	\N	2026-06-05 02:57:04.464
-39728810-4dfe-4572-a24b-c45c71c8a94b	3b360640-f08b-460c-b06e-4f4ba821e298	6d8d307c-ca33-4b53-b7a2-4726acf44c0e	\N	5	\N	\N	\N	\N	\N	Amazing designer Blouse. Loved it.	\N	f	{}	0	APPROVED	f	\N	\N	2026-06-02 02:57:04.464
-d8c6344e-1f03-4e34-b37e-c2b9d82bf36f	3b360640-f08b-460c-b06e-4f4ba821e298	7a003ffa-76ed-4e4a-8f98-316e8a95dfc5	\N	1	\N	\N	\N	\N	\N	SCAM BOUTIQUE! THEY TOOK MY MONEY AND STOLE MY DRESS!	\N	t	{}	0	PENDING	t	High NLP negative intensity	\N	2026-05-30 02:57:04.464
-ede707bf-7492-466b-b333-1d78a25a3672	3b360640-f08b-460c-b06e-4f4ba821e298	f0b801e0-baa1-4344-8897-6c1f83b3dcba	\N	2	\N	\N	\N	\N	\N	Not satisfied, delayed delivery	\N	f	{}	0	PENDING	f	\N	\N	2026-05-27 02:57:04.464
-6b5ef43e-873c-47bf-a39a-02bd55f98442	3b360640-f08b-460c-b06e-4f4ba821e298	ed855518-26d3-4eaf-9e17-43b290fbadfd	\N	5	\N	\N	\N	\N	\N	This is the best boutique ever, very fast delivery check out discount code: GET50!	\N	t	{}	0	FLAGGED	t	Contains promotional links/codes	\N	2026-05-24 02:57:04.464
 \.
 
 
 --
--- Data for Name: shipping_addresses; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: shipping_addresses; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.shipping_addresses (id, user_id, full_name, phone, address_line1, address_line2, city, state, pincode, is_default, created_at) FROM stdin;
-c46b7564-18bb-4eb5-837e-623b58754eeb	eb75e40e-a0c8-46c6-953c-c914e399f9d4	Auto Default	9999999999	Auto St	\N	Auto City	Auto State	999999	t	2026-06-19 03:11:22.35
-8e2e7a10-c5cf-49c1-8e3c-9ccfb1c4a37d	c1df2ddb-66de-4151-8d57-dafc9fbb08d0	John	1234567890	1 Main St	\N	Mumbai	Maharashtra	400001	t	2026-06-19 03:14:07.846
-e235047d-b7f4-4b9a-b573-d03a3065a4cc	a4b291d0-5aa4-40e5-a813-d49e7d309480	Auto Default	9999999999	Auto St	\N	Auto City	Auto State	999999	t	2026-06-19 03:14:36.721
-95255891-8ad3-4062-8647-cff02c80961e	e00770ea-ef70-470f-9b29-1a5d6df59470	Test User	9999999999	123 Test Street	\N	Hyderabad	Telangana	500001	t	2026-06-25 07:25:52.364
 \.
 
 
 --
--- Data for Name: sub_categories; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: sub_categories; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.sub_categories (id, category_id, name, description, image, sort_order, is_active, created_at, updated_at) FROM stdin;
-6e3a887a-6d59-4de2-b8c2-be585f1133d9	b4566aff-8c5b-4a21-949d-ad00efd8b4cd	Classic Sherwani	\N	\N	0	t	2026-06-18 16:30:19.74	2026-06-18 16:30:19.74
-ff04fa73-08c7-4a48-9d8a-808a553b6db7	b4566aff-8c5b-4a21-949d-ad00efd8b4cd	Indo-Western Suit	\N	\N	0	t	2026-06-18 16:30:21.865	2026-06-18 16:30:21.865
-72a29b80-3667-4ce8-a2e8-72813b34f882	b4566aff-8c5b-4a21-949d-ad00efd8b4cd	Jodhpuri Suit	\N	\N	0	t	2026-06-18 16:30:23.197	2026-06-18 16:30:23.197
-cc491ba7-2c6e-4376-a7ea-ae47e420d6aa	b4566aff-8c5b-4a21-949d-ad00efd8b4cd	Bandhgala	\N	\N	0	t	2026-06-18 16:30:24.526	2026-06-18 16:30:24.526
-ea7bfe71-0845-4602-b98c-41966c55d036	b4566aff-8c5b-4a21-949d-ad00efd8b4cd	Wedding Sherwani	\N	\N	0	t	2026-06-18 16:30:25.856	2026-06-18 16:30:25.856
-131a4a6f-a529-4269-af3c-976cae996c48	b4566aff-8c5b-4a21-949d-ad00efd8b4cd	Reception Suit	\N	\N	0	t	2026-06-18 16:30:27.186	2026-06-18 16:30:27.186
-83248087-7bce-4bfa-9f00-01b4c9f895df	e15d73aa-0bc6-4ce1-8fa0-b5ca874a65cf	Bridal Lehenga	\N	\N	0	t	2026-06-18 16:30:28.518	2026-06-18 16:30:28.518
-3fc0471e-68fd-40e3-8bfa-35465a9beb5d	e15d73aa-0bc6-4ce1-8fa0-b5ca874a65cf	Reception Gown	\N	\N	0	t	2026-06-18 16:30:29.847	2026-06-18 16:30:29.847
-b451d11f-6123-451a-860f-6f1054a8bc2f	e15d73aa-0bc6-4ce1-8fa0-b5ca874a65cf	Engagement Outfit	\N	\N	0	t	2026-06-18 16:30:31.177	2026-06-18 16:30:31.177
-dbc88d4a-13cf-4ed0-be33-9e537ac59628	e15d73aa-0bc6-4ce1-8fa0-b5ca874a65cf	Mehendi Ensemble	\N	\N	0	t	2026-06-18 16:30:32.504	2026-06-18 16:30:32.504
-91954027-3632-48c4-b9d7-92a713be7166	e15d73aa-0bc6-4ce1-8fa0-b5ca874a65cf	Sangeet Lehenga	\N	\N	0	t	2026-06-18 16:30:33.837	2026-06-18 16:30:33.837
-16fbd89d-e6da-486b-94ba-c3b0e22046f0	e15d73aa-0bc6-4ce1-8fa0-b5ca874a65cf	Cocktail Dress	\N	\N	0	t	2026-06-18 16:30:35.431	2026-06-18 16:30:35.431
-de5a4f56-ac49-4d14-9964-299ca8ff5613	410d9117-e13d-4669-96cb-b74026bdd8fa	Cotton Kurta	\N	\N	0	t	2026-06-18 16:30:36.76	2026-06-18 16:30:36.76
-1148451a-161e-4612-b22e-c276cc20881e	410d9117-e13d-4669-96cb-b74026bdd8fa	Silk Kurta	\N	\N	0	t	2026-06-18 16:30:38.094	2026-06-18 16:30:38.094
-44cef1d8-ad69-4ae6-ba41-657f44d29e59	410d9117-e13d-4669-96cb-b74026bdd8fa	Kurta Pajama Set	\N	\N	0	t	2026-06-18 16:30:39.424	2026-06-18 16:30:39.424
-6fb489f7-8658-4f03-9706-fd670fa71e2d	410d9117-e13d-4669-96cb-b74026bdd8fa	Dhoti Kurta	\N	\N	0	t	2026-06-18 16:30:40.754	2026-06-18 16:30:40.754
-59cda24f-2484-4f8c-adf1-b4afd7c193eb	410d9117-e13d-4669-96cb-b74026bdd8fa	Pathani Suit	\N	\N	0	t	2026-06-18 16:30:42.087	2026-06-18 16:30:42.087
-9bf3bdef-d3d6-49ce-ad6a-6ce1ae8cfcae	410d9117-e13d-4669-96cb-b74026bdd8fa	Nehru Jacket	\N	\N	0	t	2026-06-18 16:30:43.411	2026-06-18 16:30:43.411
-b1429980-8eb0-48ee-a4c2-312bbc4faea7	5b416adc-f64a-420e-8a50-30c4accf7ca8	Handloom Saree	\N	\N	0	t	2026-06-18 16:30:45.216	2026-06-18 16:30:45.216
-5c9a2e8a-7f62-4e59-837b-635aa33594c2	5b416adc-f64a-420e-8a50-30c4accf7ca8	Designer Saree	\N	\N	0	t	2026-06-18 16:30:46.552	2026-06-18 16:30:46.552
-9ae7d7b8-0c82-4406-a2c2-0a9ff83a42a1	5b416adc-f64a-420e-8a50-30c4accf7ca8	Silk Saree	\N	\N	0	t	2026-06-18 16:30:47.88	2026-06-18 16:30:47.88
-a26ec249-d038-4333-85f0-25ad5bfa2808	5b416adc-f64a-420e-8a50-30c4accf7ca8	Printed Saree	\N	\N	0	t	2026-06-18 16:30:49.205	2026-06-18 16:30:49.205
-347cf4e9-e1a5-43bc-bed0-28be9a453924	5b416adc-f64a-420e-8a50-30c4accf7ca8	Blouse Stitching	\N	\N	0	t	2026-06-18 16:30:50.8	2026-06-18 16:30:50.8
-33877a08-94ac-471f-98be-6e9b330499f0	5b416adc-f64a-420e-8a50-30c4accf7ca8	Saree Draping	\N	\N	0	t	2026-06-18 16:30:52.133	2026-06-18 16:30:52.133
-246b3689-ec05-4cd7-a407-2ecae0590d3a	6c781dcc-4836-4a88-b444-e0cc35d6fe40	Blazer & Suit	\N	\N	0	t	2026-06-18 16:30:53.462	2026-06-18 16:30:53.462
-767b53f1-f84b-441e-9c42-39f91e3c4bf4	6c781dcc-4836-4a88-b444-e0cc35d6fe40	Western Gown	\N	\N	0	t	2026-06-18 16:30:54.791	2026-06-18 16:30:54.791
-8885de29-65fc-453d-b247-bba544735182	6c781dcc-4836-4a88-b444-e0cc35d6fe40	Crop Top & Skirt	\N	\N	0	t	2026-06-18 16:30:56.12	2026-06-18 16:30:56.12
-1c7d415d-ad83-43ca-a92a-ae332b4295a9	6c781dcc-4836-4a88-b444-e0cc35d6fe40	Jumpsuit	\N	\N	0	t	2026-06-18 16:30:57.451	2026-06-18 16:30:57.451
-9bfc9eab-f5b1-4e2c-bdab-3558a60edc25	6c781dcc-4836-4a88-b444-e0cc35d6fe40	Fusion Dress	\N	\N	0	t	2026-06-18 16:30:58.78	2026-06-18 16:30:58.78
-821af8ba-1410-4dd4-8b16-11de4201c3cc	6c781dcc-4836-4a88-b444-e0cc35d6fe40	Pant & Shirt	\N	\N	0	t	2026-06-18 16:31:00.111	2026-06-18 16:31:00.111
-f1e510d5-5453-41d8-a2fe-ee74ba405f31	c6310a97-b478-4175-aa80-0ac8a98df22a	Boys Sherwani	\N	\N	0	t	2026-06-18 16:31:01.438	2026-06-18 16:31:01.438
-ca54d95b-9d51-40d1-92a6-9eb3cf0dcf3c	c6310a97-b478-4175-aa80-0ac8a98df22a	Girls Lehenga	\N	\N	0	t	2026-06-18 16:31:02.764	2026-06-18 16:31:02.764
-79c2f0fe-17c7-46c3-babd-c0007d697410	c6310a97-b478-4175-aa80-0ac8a98df22a	Kids Kurta	\N	\N	0	t	2026-06-18 16:31:04.092	2026-06-18 16:31:04.092
-77456393-afd3-4923-8d16-17f3d38df797	c6310a97-b478-4175-aa80-0ac8a98df22a	Kids Indo-Western	\N	\N	0	t	2026-06-18 16:31:05.421	2026-06-18 16:31:05.421
-cbc75785-9e35-4d43-97f0-3593d4913a47	c6310a97-b478-4175-aa80-0ac8a98df22a	Kids Western	\N	\N	0	t	2026-06-18 16:32:09.974	2026-06-18 16:32:09.974
-6ba7613b-e3e0-4a19-ad80-9a2997a487bc	c6310a97-b478-4175-aa80-0ac8a98df22a	School Uniform	\N	\N	0	t	2026-06-18 16:32:11.813	2026-06-18 16:32:11.813
-0c46c58b-91fa-4cd4-a195-3858c73b1f48	2419c616-444d-4e19-9244-ff28eb52c81d	Turban / Pagdi	\N	\N	0	t	2026-06-18 16:32:13.125	2026-06-18 16:32:13.125
-5ed0d5c0-9147-4f63-9b92-308a521c91f3	2419c616-444d-4e19-9244-ff28eb52c81d	Stole / Dupatta	\N	\N	0	t	2026-06-18 16:32:14.437	2026-06-18 16:32:14.437
-b4fa4c16-d112-4514-b94b-de7f32726297	2419c616-444d-4e19-9244-ff28eb52c81d	Fashion Jewelry	\N	\N	0	t	2026-06-18 16:32:15.751	2026-06-18 16:32:15.751
-33c0e00c-9b44-4bcc-ab60-78ca3b24afc6	2419c616-444d-4e19-9244-ff28eb52c81d	Cufflinks	\N	\N	0	t	2026-06-18 16:32:17.065	2026-06-18 16:32:17.065
-8c5e296f-c618-4739-9624-5a9ba745d1fe	2419c616-444d-4e19-9244-ff28eb52c81d	Footwear	\N	\N	0	t	2026-06-18 16:32:18.377	2026-06-18 16:32:18.377
-a3046e14-4008-4083-b027-456b61e00e5f	2419c616-444d-4e19-9244-ff28eb52c81d	Brooch / Lapel Pin	\N	\N	0	t	2026-06-18 16:32:19.688	2026-06-18 16:32:19.688
-5ae10054-9bd2-4a17-a042-0855590cd119	4c568875-d770-4045-b0de-1e5bdfa743c7	TestSubCat 1781805719560	Owner product test subcategory	\N	0	t	2026-06-18 18:01:59.562	2026-06-18 18:01:59.562
-8c573535-1946-4e53-a4dc-f32880e43416	6f36e050-bde1-4390-aaaa-704d035a61e6	TestSubCat 1781805790048	Owner product test subcategory	\N	0	t	2026-06-18 18:03:10.049	2026-06-18 18:03:10.049
-661e45bd-0c95-4ea3-abb6-a827d1c9bdb2	ed7fd462-a008-4f79-9af5-306612f4ffd0	WishlistSubCat 1781806803179	\N	\N	0	t	2026-06-18 18:20:03.181	2026-06-18 18:20:03.181
-568bd02b-1535-43d6-af0b-e2befdb7839a	7d82019f-54b6-47b2-af9c-53e5b74da244	WishlistSubCat 1781807125019	\N	\N	0	t	2026-06-18 18:25:25.02	2026-06-18 18:25:25.02
-0de91bc3-d70d-49d7-b3c9-10ba282d78da	392abf64-af32-4e93-99ff-0e7243b54cfc	WishlistSubCat 1781807144393	\N	\N	0	t	2026-06-18 18:25:44.394	2026-06-18 18:25:44.394
-23ef7a87-ea4d-4ad5-988b-aaa443b4ebe9	0411488f-4570-4640-9531-fd242a384295	AuditSubCat 1781807824326	\N	\N	0	t	2026-06-18 18:37:07.662	2026-06-18 18:37:07.662
-a97eacc2-95d5-4fb0-9754-e2de9562927b	bde29a4d-e296-4b90-9422-8a8527e427ca	AuditSubCat 1781808669195	\N	\N	0	t	2026-06-18 18:51:13.635	2026-06-18 18:51:13.635
-6e754310-e84b-4d00-a6d6-8ef8d0ae2e1b	c9430425-b8a9-490e-8ea3-185fc4ef724f	AuditSubCat 1781809114924	\N	\N	0	t	2026-06-18 18:58:37.214	2026-06-18 18:58:37.214
-6cb4dbc7-b424-4ab8-a120-5309c7486514	42b3ee53-391f-441b-b8b6-73ecd43797c5	AuditSubCat 1781809334074	\N	\N	0	t	2026-06-18 19:02:16.439	2026-06-18 19:02:16.439
-01a9b824-1943-4286-ad32-4345edc17c81	90a299fc-ffdb-45ca-ac79-76144b32e87c	AuditSubCat 1781809480752	\N	\N	0	t	2026-06-18 19:04:43.16	2026-06-18 19:04:43.16
-094a73d7-c694-4291-a1bb-0930e6a2a4bf	f538a3af-2b1b-4df1-97d0-560ef35591cf	TestSubCat 1782103078229	Owner product test subcategory	\N	0	t	2026-06-22 04:37:58.23	2026-06-22 04:37:58.23
+9b878d47-4670-43f6-aa30-9de3d2e5ac34	63447bc2-9550-40af-a4c4-c9b73d510e90	Classic Sherwani	\N	\N	0	t	2026-06-29 19:03:40.592	2026-06-29 19:03:40.592
+fd55c515-c868-4460-bf1d-78746bed70a6	63447bc2-9550-40af-a4c4-c9b73d510e90	Indo-Western Suit	\N	\N	0	t	2026-06-29 19:03:40.597	2026-06-29 19:03:40.597
+d4fad897-845f-4e3c-8ba4-43c5876bfad2	63447bc2-9550-40af-a4c4-c9b73d510e90	Jodhpuri Suit	\N	\N	0	t	2026-06-29 19:03:40.6	2026-06-29 19:03:40.6
+fb765d28-c5f3-4d2f-a870-095b6b0a7893	63447bc2-9550-40af-a4c4-c9b73d510e90	Bandhgala	\N	\N	0	t	2026-06-29 19:03:40.603	2026-06-29 19:03:40.603
+a1804281-52e5-420d-91ec-8bf2ffd4e2cc	63447bc2-9550-40af-a4c4-c9b73d510e90	Wedding Sherwani	\N	\N	0	t	2026-06-29 19:03:40.606	2026-06-29 19:03:40.606
+9644a2e0-d6a4-4eef-8f95-75876c7a6491	63447bc2-9550-40af-a4c4-c9b73d510e90	Reception Suit	\N	\N	0	t	2026-06-29 19:03:40.608	2026-06-29 19:03:40.608
+7ddb6522-a631-4552-a381-8023aa9e729c	9cd74113-8e19-48ba-a85f-3a19c6767e21	Bridal Lehenga	\N	\N	0	t	2026-06-29 19:03:40.61	2026-06-29 19:03:40.61
+f4991e97-19ac-4fa2-aa09-381849e96b57	9cd74113-8e19-48ba-a85f-3a19c6767e21	Reception Gown	\N	\N	0	t	2026-06-29 19:03:40.612	2026-06-29 19:03:40.612
+c8ba9799-b8e7-4c72-82e1-6e79a8601576	9cd74113-8e19-48ba-a85f-3a19c6767e21	Engagement Outfit	\N	\N	0	t	2026-06-29 19:03:40.615	2026-06-29 19:03:40.615
+e25b0694-7470-44e1-9bfb-74e22619a448	9cd74113-8e19-48ba-a85f-3a19c6767e21	Mehendi Ensemble	\N	\N	0	t	2026-06-29 19:03:40.618	2026-06-29 19:03:40.618
+7ca52e81-8788-4e8b-a88c-d44a6f102d46	9cd74113-8e19-48ba-a85f-3a19c6767e21	Sangeet Lehenga	\N	\N	0	t	2026-06-29 19:03:40.62	2026-06-29 19:03:40.62
+6e9f1ac8-0eab-459c-b768-bbe86ac5c14b	9cd74113-8e19-48ba-a85f-3a19c6767e21	Cocktail Dress	\N	\N	0	t	2026-06-29 19:03:40.622	2026-06-29 19:03:40.622
+7667072f-84dd-4e9f-9dbf-33bb5adcb474	54b74c58-4940-40c8-a1c5-702508eae6a3	Cotton Kurta	\N	\N	0	t	2026-06-29 19:03:40.624	2026-06-29 19:03:40.624
+1c3cb71a-55e6-4f00-958f-56f9e796c5e4	54b74c58-4940-40c8-a1c5-702508eae6a3	Silk Kurta	\N	\N	0	t	2026-06-29 19:03:40.626	2026-06-29 19:03:40.626
+7c714321-3a5d-4712-9e32-52e06f81feeb	54b74c58-4940-40c8-a1c5-702508eae6a3	Kurta Pajama Set	\N	\N	0	t	2026-06-29 19:03:40.628	2026-06-29 19:03:40.628
+236d9bad-44ba-419e-8264-2073838a7736	54b74c58-4940-40c8-a1c5-702508eae6a3	Dhoti Kurta	\N	\N	0	t	2026-06-29 19:03:40.63	2026-06-29 19:03:40.63
+aba5a1de-b975-413b-90d7-2489cb9121f6	54b74c58-4940-40c8-a1c5-702508eae6a3	Pathani Suit	\N	\N	0	t	2026-06-29 19:03:40.632	2026-06-29 19:03:40.632
+a3b9e4e6-f2be-42a9-a999-64feff628558	54b74c58-4940-40c8-a1c5-702508eae6a3	Nehru Jacket	\N	\N	0	t	2026-06-29 19:03:40.635	2026-06-29 19:03:40.635
+78b78a80-1ed8-4602-9cba-5dc4437b2d96	cec01ea9-4a81-43b6-8431-50d0a11f250a	Handloom Saree	\N	\N	0	t	2026-06-29 19:03:40.636	2026-06-29 19:03:40.636
+7f103688-4c8d-4a8d-b6aa-59b27934674c	cec01ea9-4a81-43b6-8431-50d0a11f250a	Designer Saree	\N	\N	0	t	2026-06-29 19:03:40.638	2026-06-29 19:03:40.638
+fd04c450-5735-4c65-bf73-821407100856	cec01ea9-4a81-43b6-8431-50d0a11f250a	Silk Saree	\N	\N	0	t	2026-06-29 19:03:40.64	2026-06-29 19:03:40.64
+1731a960-c1b5-45c9-a7f6-c16e2b3ca244	cec01ea9-4a81-43b6-8431-50d0a11f250a	Printed Saree	\N	\N	0	t	2026-06-29 19:03:40.642	2026-06-29 19:03:40.642
+891a9253-9919-4bc3-a583-f0e14c55ef71	cec01ea9-4a81-43b6-8431-50d0a11f250a	Blouse Stitching	\N	\N	0	t	2026-06-29 19:03:40.644	2026-06-29 19:03:40.644
+1dc5c371-b305-4892-a29a-bfa28a5236a2	cec01ea9-4a81-43b6-8431-50d0a11f250a	Saree Draping	\N	\N	0	t	2026-06-29 19:03:40.646	2026-06-29 19:03:40.646
+66685c84-561b-4b36-825e-a6741d061000	29ca0d6b-b644-48f6-8a9e-5d65513c1e57	Blazer & Suit	\N	\N	0	t	2026-06-29 19:03:40.649	2026-06-29 19:03:40.649
+f8df88ad-234e-4afe-8994-65e780f91b94	29ca0d6b-b644-48f6-8a9e-5d65513c1e57	Western Gown	\N	\N	0	t	2026-06-29 19:03:40.651	2026-06-29 19:03:40.651
+c040b3e1-36f5-449f-9137-58ee8fa2d7f7	29ca0d6b-b644-48f6-8a9e-5d65513c1e57	Crop Top & Skirt	\N	\N	0	t	2026-06-29 19:03:40.653	2026-06-29 19:03:40.653
+007982ba-06d9-4511-9cbd-bfa51f2cb37c	29ca0d6b-b644-48f6-8a9e-5d65513c1e57	Jumpsuit	\N	\N	0	t	2026-06-29 19:03:40.655	2026-06-29 19:03:40.655
+f2c43759-5d42-456f-9aa1-b9818eb6ecf1	29ca0d6b-b644-48f6-8a9e-5d65513c1e57	Fusion Dress	\N	\N	0	t	2026-06-29 19:03:40.657	2026-06-29 19:03:40.657
+0ec020aa-9a6f-4a07-a240-9b87575b037d	29ca0d6b-b644-48f6-8a9e-5d65513c1e57	Pant & Shirt	\N	\N	0	t	2026-06-29 19:03:40.659	2026-06-29 19:03:40.659
+ee1f8578-1c57-4f0d-bc5d-cc7d5e836a1d	fcd534dd-4fd3-45f6-98ee-3731e23284cf	Boys Sherwani	\N	\N	0	t	2026-06-29 19:03:40.661	2026-06-29 19:03:40.661
+0372b9e8-3c97-489e-9dfc-2e49cdc6f810	fcd534dd-4fd3-45f6-98ee-3731e23284cf	Girls Lehenga	\N	\N	0	t	2026-06-29 19:03:40.663	2026-06-29 19:03:40.663
+162cbe95-8e7a-40bb-9824-80435e76e31c	fcd534dd-4fd3-45f6-98ee-3731e23284cf	Kids Kurta	\N	\N	0	t	2026-06-29 19:03:40.666	2026-06-29 19:03:40.666
+2951eba6-5ad7-4b1d-af0a-a6b248c2dc6e	fcd534dd-4fd3-45f6-98ee-3731e23284cf	Kids Indo-Western	\N	\N	0	t	2026-06-29 19:03:40.668	2026-06-29 19:03:40.668
+01c2ea7e-e6d7-4987-b87e-9ec6398e862e	fcd534dd-4fd3-45f6-98ee-3731e23284cf	Kids Western	\N	\N	0	t	2026-06-29 19:03:40.67	2026-06-29 19:03:40.67
+8b1a3a0d-f7ed-4fb6-a70c-21840f9cfb70	fcd534dd-4fd3-45f6-98ee-3731e23284cf	School Uniform	\N	\N	0	t	2026-06-29 19:03:40.672	2026-06-29 19:03:40.672
+bc468764-3ecf-475b-b48b-2496a5ea2bdc	fef8ff5b-1f95-470e-a00a-334d9d926f81	Turban / Pagdi	\N	\N	0	t	2026-06-29 19:03:40.674	2026-06-29 19:03:40.674
+82ed17dc-d183-44da-ba35-37f993d1c419	fef8ff5b-1f95-470e-a00a-334d9d926f81	Stole / Dupatta	\N	\N	0	t	2026-06-29 19:03:40.676	2026-06-29 19:03:40.676
+e2671672-a02a-42c1-aaa4-eb72221f8bfd	fef8ff5b-1f95-470e-a00a-334d9d926f81	Fashion Jewelry	\N	\N	0	t	2026-06-29 19:03:40.678	2026-06-29 19:03:40.678
+a43e375e-6a0a-45be-871e-e789ad49840d	fef8ff5b-1f95-470e-a00a-334d9d926f81	Cufflinks	\N	\N	0	t	2026-06-29 19:03:40.68	2026-06-29 19:03:40.68
+8c8449ea-b268-4430-b70c-836f030c9d79	fef8ff5b-1f95-470e-a00a-334d9d926f81	Footwear	\N	\N	0	t	2026-06-29 19:03:40.682	2026-06-29 19:03:40.682
+dd6be54d-6434-4ffe-bad8-25bc53dca1dc	fef8ff5b-1f95-470e-a00a-334d9d926f81	Brooch / Lapel Pin	\N	\N	0	t	2026-06-29 19:03:40.684	2026-06-29 19:03:40.684
 \.
 
 
 --
--- Data for Name: subscription_billing_history; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: subscription_billing_history; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.subscription_billing_history (id, subscription_id, amount, payment_status, payment_method, invoice_url, created_at) FROM stdin;
@@ -2935,20 +7666,19 @@ COPY public.subscription_billing_history (id, subscription_id, amount, payment_s
 
 
 --
--- Data for Name: subscription_plans; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: subscription_plans; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.subscription_plans (id, name, plan_code, description, monthly_price, yearly_price, trial_period_days, grace_period_days, sort_order, is_active, is_featured, recommended_plan, created_at, updated_at, allow_direct_selling, allow_custom_tailoring, max_ready_made_products, max_custom_designs, max_orders_per_month, max_bookings_per_month, max_customers, max_measurements, max_gallery_images, max_staff_accounts, max_branches, can_manage_products, can_manage_stock, can_manage_shipping, can_manage_returns, can_manage_coupons, can_manage_offers, can_manage_product_variants, can_manage_reviews, can_use_custom_measurements, can_use_measurement_history, can_create_custom_orders, can_manage_tailoring_orders, can_manage_production_workflow, can_manage_tailor_assignments, can_manage_customers, can_manage_customer_notes, can_manage_rewards, can_manage_referrals, can_manage_wallet, can_manage_staff, can_manage_attendance, can_manage_tasks, can_manage_payroll, can_use_whatsapp_marketing, can_use_sms_marketing, can_use_email_marketing, can_create_campaigns, can_view_analytics, can_view_advanced_analytics, can_view_financial_reports, can_list_in_marketplace, can_feature_products, can_feature_boutique, can_sell_premium_designs, can_use_ai_assistant, can_use_ai_recommendations, can_use_ai_design_suggestions, can_use_api_access, can_use_custom_branding, can_use_white_label, can_use_multi_branch) FROM stdin;
-4f2694be-9a84-4415-8b33-169f758b65fd	STARTER	starter_monthly	Starter subscription plan	999.00	9990.00	14	3	1	t	f	f	2026-06-17 18:00:22.972	2026-06-18 16:31:16.296	t	f	100	0	500	0	-1	0	200	5	1	t	t	f	f	t	t	f	t	f	f	f	t	f	f	t	t	f	f	f	t	f	f	f	f	f	f	f	t	f	f	t	f	f	f	f	f	f	f	f	f	f
-e036df85-63ec-4c83-8ce1-ea1cd9cff6f1	PRO	pro_monthly	Pro subscription plan	2999.00	29990.00	14	3	2	t	t	t	2026-06-17 18:00:23.232	2026-06-18 16:31:17.058	t	t	999999	999999	999999	100	-1	-1	999999	20	2	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	f	t	t	t	t	t	t	f	t	t	t	f	t	t	f	f	t	f	f
-fdedbcb8-5649-48fc-a79f-7a47254c876f	ENTERPRISE	enterprise_monthly	Enterprise subscription plan	9999.00	99990.00	14	3	3	t	f	f	2026-06-17 18:00:23.493	2026-06-18 16:31:17.82	t	t	999999	999999	999999	999999	-1	-1	999999	999999	999999	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
-6382ecb7-a82e-49f9-8770-c0edc63e0e4b	FREE	free_monthly	Free subscription plan	0.00	0.00	0	3	0	t	f	f	2026-06-17 18:00:22.268	2026-06-22 06:12:25.878	t	f	999999	0	999999	0	999999	0	20	1	1	t	t	f	f	f	f	t	t	f	f	f	t	f	f	t	t	f	f	f	t	f	f	f	f	f	f	f	f	f	f	t	f	f	f	f	f	f	f	f	f	f
-6b6997d9-5663-4d45-811f-1766a5353d17	FREE	free_monthly_copy	Free subscription plan	0.00	0.00	0	3	0	f	f	f	2026-06-22 09:46:24.347	2026-06-22 09:46:36.89	t	f	999999	0	999999	0	999999	0	20	1	1	t	t	f	f	f	f	t	t	f	f	f	t	f	f	t	t	f	f	f	t	f	f	f	f	f	f	f	f	f	f	t	f	f	f	f	f	f	f	f	f	f
+f4bc5700-4794-4144-a952-c7dc50cb58ec	FREE	free_monthly	Free subscription plan	0.00	0.00	0	3	0	t	f	f	2026-06-29 19:03:40.415	2026-06-29 19:03:40.415	t	f	20	0	50	0	-1	0	20	1	1	t	f	f	f	f	f	f	t	f	f	f	t	f	f	t	t	f	f	f	t	f	f	f	f	f	f	f	f	f	f	t	f	f	f	f	f	f	f	f	f	f
+32cc017d-95ee-453f-bbfc-1ca305f38a17	STARTER	starter_monthly	Starter subscription plan	999.00	9990.00	14	3	1	t	f	f	2026-06-29 19:03:40.42	2026-06-29 19:03:40.42	t	f	100	0	500	0	-1	0	200	5	1	t	f	f	f	f	f	f	t	f	f	f	t	f	f	t	t	f	f	f	t	f	f	f	f	f	f	f	t	f	f	t	f	f	f	f	f	f	f	f	f	f
+4d9a4ff3-e554-4f7f-bdab-2870bbff8ac7	PRO	pro_monthly	Pro subscription plan	2999.00	29990.00	14	3	2	t	t	t	2026-06-29 19:03:40.424	2026-06-29 19:03:40.424	t	t	999999	999999	999999	100	-1	-1	999999	20	2	t	t	f	f	f	f	f	t	t	f	t	t	f	f	t	t	f	f	f	t	f	f	f	f	f	f	t	t	f	f	t	f	t	f	t	f	f	f	f	f	f
+429b7650-e90c-4fa1-b21b-3e009352d1eb	ENTERPRISE	enterprise_monthly	Enterprise subscription plan	9999.00	99990.00	14	3	3	t	f	f	2026-06-29 19:03:40.428	2026-06-29 19:03:40.428	t	t	999999	999999	999999	999999	-1	-1	999999	999999	999999	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t	t
 \.
 
 
 --
--- Data for Name: support_ticket_admin_notes; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: support_ticket_admin_notes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.support_ticket_admin_notes (id, ticket_id, admin_id, note, created_at) FROM stdin;
@@ -2956,7 +7686,7 @@ COPY public.support_ticket_admin_notes (id, ticket_id, admin_id, note, created_a
 
 
 --
--- Data for Name: support_ticket_messages; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: support_ticket_messages; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.support_ticket_messages (id, ticket_id, sender_type, sender_id, sender_name, message, attachment_url, attachment_type, created_at) FROM stdin;
@@ -2964,102 +7694,265 @@ COPY public.support_ticket_messages (id, ticket_id, sender_type, sender_id, send
 
 
 --
--- Data for Name: support_tickets; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: support_tickets; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.support_tickets (id, user_id, boutique_id, order_id, ticket_type, priority, escalation_level, source, subject, description, status, assigned_admin_id, created_at, updated_at, first_response_at, resolved_at, escalated_at, sla_breached, fraud_score, risk_level, excessive_ticket_flag, attachment_url, attachment_type) FROM stdin;
-3b5bd8dc-b5b1-4a9f-bc24-a358ec45af83	b29700ad-222e-42e1-9137-ef0f389be22f	3b360640-f08b-460c-b06e-4f4ba821e298	\N	ORDER_ISSUE	MEDIUM	NONE	WEB	Expected delivery date query	When will order ORD-123 be delivered?	OPEN	\N	2026-06-05 00:57:04.464	2026-06-05 02:57:04.632	\N	\N	\N	f	10	LOW	f	\N	\N
-1f0851cf-3c1e-4c4d-b0b6-60cd3a1ccbbd	6d8d307c-ca33-4b53-b7a2-4726acf44c0e	3b360640-f08b-460c-b06e-4f4ba821e298	\N	PAYMENT_ISSUE	HIGH	NONE	WEB	Double charge on my credit card	I was charged twice for booking.	OPEN	\N	2026-06-04 21:57:04.464	2026-06-05 02:57:04.636	\N	\N	\N	f	10	LOW	f	\N	\N
-e62517e3-9e75-498e-a4d9-cbf137d5d273	7a003ffa-76ed-4e4a-8f98-316e8a95dfc5	3b360640-f08b-460c-b06e-4f4ba821e298	\N	REFUND_REQUEST	CRITICAL	NONE	WEB	Refund delay	Refund not received yet.	IN_PROGRESS	\N	2026-06-03 14:57:04.464	2026-06-05 02:57:04.639	\N	\N	\N	t	60	HIGH	f	\N	\N
-34144fff-1a0a-46b2-84fb-674b1b6e10a9	f0b801e0-baa1-4344-8897-6c1f83b3dcba	3b360640-f08b-460c-b06e-4f4ba821e298	\N	CUSTOMER_COMPLAINT	MEDIUM	NONE	WEB	Bad communication	Boutique owner is not responsive.	OPEN	\N	2026-06-03 02:57:04.464	2026-06-05 02:57:04.641	\N	\N	\N	t	10	LOW	t	\N	\N
-84233fb4-be51-4460-bbde-6fe36820ed22	ed855518-26d3-4eaf-9e17-43b290fbadfd	3b360640-f08b-460c-b06e-4f4ba821e298	\N	ORDER_ISSUE	LOW	NONE	WEB	Address change request	Update my address please.	RESOLVED	\N	2026-06-02 02:57:04.464	2026-06-05 02:57:04.644	\N	\N	\N	f	10	LOW	f	\N	\N
 \.
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: tenants; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.users (id, phone, name, status, segment, created_at, otp, otp_expires_at) FROM stdin;
-b29700ad-222e-42e1-9137-ef0f389be22f	9876543200	Aranya Sen	ACTIVE	VIP	2026-06-05 02:57:04.424	\N	\N
-6d8d307c-ca33-4b53-b7a2-4726acf44c0e	9876543201	Bhavya Rao	ACTIVE	VIP	2026-06-03 02:57:04.433	\N	\N
-7a003ffa-76ed-4e4a-8f98-316e8a95dfc5	9876543202	Deepika Padukone	ACTIVE	VIP	2026-06-01 02:57:04.435	\N	\N
-f0b801e0-baa1-4344-8897-6c1f83b3dcba	9876543203	Esha Deol	ACTIVE	ACTIVE	2026-05-30 02:57:04.437	\N	\N
-ed855518-26d3-4eaf-9e17-43b290fbadfd	9876543204	Gauri Khan	ACTIVE	ACTIVE	2026-05-28 02:57:04.44	\N	\N
-98402b40-f980-4afd-94c9-24e655be507f	9876543205	Ishita Sharma	ACTIVE	ACTIVE	2026-05-26 02:57:04.442	\N	\N
-c253196e-0a2f-42be-9d25-0703dc299a11	9876543206	Kriti Sanon	ACTIVE	ACTIVE	2026-05-24 02:57:04.445	\N	\N
-e4cac1e9-af60-43e1-95d3-f1e25cc16aab	9876543207	Meera Rajput	ACTIVE	ACTIVE	2026-05-22 02:57:04.447	\N	\N
-d7ff1fc4-53d3-4c65-8099-5b1df71612da	9876543208	Neha Dhupia	ACTIVE	NEW	2026-05-20 02:57:04.449	\N	\N
-a0e40168-e5a0-4d52-8c38-5dc7b699a801	9876543209	Priyanka Chopra	ACTIVE	NEW	2026-05-18 02:57:04.451	\N	\N
-9a52b57d-9943-4e91-9482-de1d2700fb0c	9876543210	Rhea Chakraborty	ACTIVE	NEW	2026-05-16 02:57:04.453	\N	\N
-ddc3a65c-48f8-47aa-903a-f168e46332b7	9876543211	Shraddha Kapoor	ACTIVE	NEW	2026-05-14 02:57:04.456	\N	\N
-23a107f5-551c-4bb6-8a82-905048ddbd09	9876543212	Taapsee Pannu	ACTIVE	NEW	2026-05-12 02:57:04.458	\N	\N
-67487184-01c0-457c-b4b0-b213bd587291	9876543213	Vidya Balan	ACTIVE	NEW	2026-05-10 02:57:04.46	\N	\N
-54b57369-6046-4e12-8855-c5c8a0dd5825	9876543214	Yami Gautam	ACTIVE	NEW	2026-05-08 02:57:04.462	\N	\N
-05969429-152d-4041-b84d-edc8786bbde3	9999988888	New User	ACTIVE	NEW	2026-06-05 02:57:10.871	\N	\N
-c4c6b80e-7521-42db-9aca-f5ba44393974	9111111001	Customer One	ACTIVE	NEW	2026-06-18 18:20:10.616	\N	\N
-7c28ff2a-e342-4bc1-8570-db66548f7eab	9111111002	Customer Two	ACTIVE	NEW	2026-06-18 18:20:11.468	\N	\N
-d8227294-8b84-422f-b1a6-83578207ae94	91111111781807148965	Customer One	ACTIVE	NEW	2026-06-18 18:25:48.967	\N	\N
-bfb31d8b-253c-47ba-9658-e93823f7342d	92222221781807148965	Customer Two	ACTIVE	NEW	2026-06-18 18:25:49.971	\N	\N
-2d115048-c9d1-4a8a-abad-dbfe023b081c	99990001781807824326	Cart Customer 1	ACTIVE	NEW	2026-06-18 18:37:13.988	\N	\N
-9249b3b6-c219-4c71-884a-c512bf257ecd	99990011781807824326	Cart Customer 2	ACTIVE	NEW	2026-06-18 18:37:14.812	\N	\N
-7235d5ec-662e-4d1a-9220-d5aec3df6f66	99990001781808669195	Cart Customer 1	ACTIVE	NEW	2026-06-18 18:51:23.999	\N	\N
-73f26525-68f3-4a72-abc6-58f9ad8c17d3	99990011781808669195	Cart Customer 2	ACTIVE	NEW	2026-06-18 18:51:25.128	\N	\N
-b4ea6dd1-727e-4950-9cc3-709429d9d089	99990001781809114924	Cart Customer 1	ACTIVE	NEW	2026-06-18 18:58:41.726	\N	\N
-2d3265eb-1ddc-4ef2-8dfb-7da686576ba2	99990011781809114924	Cart Customer 2	ACTIVE	NEW	2026-06-18 18:58:42.227	\N	\N
-c60f6ccc-fd11-4b3e-99fb-08d2a1aa563d	99990001781809334074	Cart Customer 1	ACTIVE	NEW	2026-06-18 19:02:21.113	\N	\N
-1de8d272-1b64-4c37-a054-588b565675f8	99990011781809334074	Cart Customer 2	ACTIVE	NEW	2026-06-18 19:02:21.632	\N	\N
-34ba5271-bc6b-4310-8d71-5d1e986724cb	99990001781809480752	Cart Customer 1	ACTIVE	NEW	2026-06-18 19:04:47.818	\N	\N
-12b8ad26-5404-42c8-add0-87802fc31f4e	99990011781809480752	Cart Customer 2	ACTIVE	NEW	2026-06-18 19:04:48.337	\N	\N
-e70e0a7f-77e5-4ede-b101-2e48de465c26	99999001781812074548	Ship Customer 1	ACTIVE	NEW	2026-06-18 19:47:56.403	\N	\N
-64fdca53-c61a-4ea1-82a3-814b6d4ead49	99999011781812074548	Ship Customer 2	ACTIVE	NEW	2026-06-18 19:47:56.927	\N	\N
-eb75e40e-a0c8-46c6-953c-c914e399f9d4	99999001781838665165	Ship Customer 1	ACTIVE	NEW	2026-06-19 03:11:07.508	\N	\N
-feb4cc98-5ff7-4c75-9e60-8fb6308f4aa5	99999011781838665165	Ship Customer 2	ACTIVE	NEW	2026-06-19 03:11:08.101	\N	\N
-c1df2ddb-66de-4151-8d57-dafc9fbb08d0	99999001781838844835	Test	ACTIVE	NEW	2026-06-19 03:14:06.759	\N	\N
-a4b291d0-5aa4-40e5-a813-d49e7d309480	99999001781838864320	Ship Customer 1	ACTIVE	NEW	2026-06-19 03:14:26.113	\N	\N
-7dab5182-fe06-4221-b7d7-5e225078776e	99999011781838864320	Ship Customer 2	ACTIVE	NEW	2026-06-19 03:14:26.625	\N	\N
-2c924802-3ea6-46c9-8b49-ac757eb5ff00	9999999996	New User	ACTIVE	NEW	2026-06-22 04:25:39.179	\N	\N
-8cea8464-3433-4bd9-a7ac-3b5951a79db5	9999999995	New User	ACTIVE	NEW	2026-06-22 04:26:55.045	\N	\N
-304da0e9-2ce8-402a-8df3-0d3cf51dc0ce	9999999994	New User	ACTIVE	NEW	2026-06-22 04:27:10.885	\N	\N
-37ee804a-b95d-4e47-b37d-9d45baecd16b	9999999993	New User	ACTIVE	NEW	2026-06-22 04:27:45.03	\N	\N
-2ac33923-61ac-4c42-bc02-539a1bcf2aff	9999999998	New User	ACTIVE	NEW	2026-06-22 04:24:50.704	\N	\N
-e00770ea-ef70-470f-9b29-1a5d6df59470	9999999999	New User	ACTIVE	NEW	2026-06-23 03:24:55.77	\N	\N
-ec909aba-e303-45a3-9cea-531477024eff	+91999900005798	Coupon Customer	ACTIVE	NEW	2026-06-22 06:24:05.8	\N	\N
-3ffa4abd-b926-452b-b849-1eb9fcaf41d7	+91999900001138	Coupon Customer	ACTIVE	NEW	2026-06-22 04:41:33.133	\N	\N
-687f8b7b-74b9-4355-a365-726d1bee2cac	+91888800003685	Coupon Customer 2	ACTIVE	NEW	2026-06-22 04:41:33.687	\N	\N
-16d12870-dc25-4d43-bd65-13ef687be3e4	+91888800006730	Coupon Customer 2	ACTIVE	NEW	2026-06-22 06:24:06.732	\N	\N
-2b25d884-74a8-46ff-9a3f-c267f4c3685a	+91999900003125	Coupon Customer	ACTIVE	NEW	2026-06-22 04:47:05.271	\N	\N
-a3b3ee5e-3819-4667-9fee-45fb70087bd1	+91888800005818	Coupon Customer 2	ACTIVE	NEW	2026-06-22 04:47:05.82	\N	\N
-a2ec72ca-4dd6-42c0-a066-0da0481ea2c8	+91999900006717	Coupon Customer	ACTIVE	NEW	2026-06-22 04:49:48.859	\N	\N
-060dd72d-39f8-4ed4-aefb-7e2e78960dbd	+91888800009395	Coupon Customer 2	ACTIVE	NEW	2026-06-22 04:49:49.396	\N	\N
-7b529a89-bcd7-44ab-a822-80f0c6c38ed6	+91999900005093	Coupon Customer	ACTIVE	NEW	2026-06-22 04:50:07.246	\N	\N
-3d285609-0e23-4da3-b7f0-9a11dadf0bdf	+91888800007862	Coupon Customer 2	ACTIVE	NEW	2026-06-22 04:50:07.864	\N	\N
-0d723df8-bc81-41bb-aa70-f254c6671f3f	+91999920354	Stress Tester	ACTIVE	NEW	2026-06-22 07:07:02.701	\N	\N
-06fb2c69-4a4a-44a4-a77c-5c9a64bf3215	8575848930	New User	ACTIVE	NEW	2026-06-22 09:30:40.269	903413	2026-06-22 09:35:40.266
-d354509d-581a-492a-9d6f-5b5bf8a0da00	9000000001	New User	ACTIVE	NEW	2026-06-23 03:30:46.661	\N	\N
-a57183cb-996a-41dc-aecb-27a68b06212e	9000000002	New User	ACTIVE	NEW	2026-06-23 03:30:48.203	\N	\N
-8afa4bb0-89e7-4da4-8f18-d7d604cc6e6f	7660922416	New User	ACTIVE	NEW	2026-06-22 09:25:18.226	\N	\N
+COPY public.tenants (id, name, domain, status, created_at, updated_at) FROM stdin;
+b903e835-0537-48c6-aa57-a5f036ddb701	Antair Default Tenant	antair-storefront.local	ACTIVE	2026-06-29 19:03:57.397	2026-06-29 19:03:57.397
+6875f9bf-1044-43d7-bf48-a49f4c7a1847	Test Tenant	test-1782876607193.example.com	ACTIVE	2026-07-01 03:30:07.196	2026-07-01 03:30:07.196
+ea3ad905-8c0b-4f80-a815-369aa83ef534	Test Tenant	test-1782876662626.example.com	ACTIVE	2026-07-01 03:31:02.628	2026-07-01 03:31:02.628
+140cf49f-6639-48a4-a8ed-c907dc9e4721	Test Tenant	test-1782876839686.example.com	ACTIVE	2026-07-01 03:33:59.687	2026-07-01 03:33:59.687
+bb9f747c-330e-41c2-ac82-5c47f600ffad	Test Tenant	test-1782961932440.example.com	ACTIVE	2026-07-02 03:12:12.442	2026-07-02 03:12:12.442
+a56726e3-7058-43da-8b99-46d6993c3f72	Test Tenant	test-1782961966581.example.com	ACTIVE	2026-07-02 03:12:46.584	2026-07-02 03:12:46.584
+8889c040-02c7-415f-8027-d9df4054cff9	Test Tenant	test-1782961997690.example.com	ACTIVE	2026-07-02 03:13:17.693	2026-07-02 03:13:17.693
+d4704a98-7342-4a98-9bcb-7fadc813ea25	Test Tenant	test-1782962022399.example.com	ACTIVE	2026-07-02 03:13:42.401	2026-07-02 03:13:42.401
 \.
 
 
 --
--- Data for Name: wishlists; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+-- Data for Name: universal_contents; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.universal_contents (id, business_id, key, "baseText", "seoTags", version, created_at, updated_at) FROM stdin;
+7fd92a7f-4551-48a8-8d20-b067adf2c2c3	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	home-hero-headline	Elegance Redefined. Bespoke Couture Styled For You.	\N	1	2026-06-29 19:03:59.584	2026-06-29 19:03:59.584
+bf3da7c9-957b-4ae4-95c7-664762a11492	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	home-featured-title	Curated Boutique Collections	\N	1	2026-06-29 19:03:59.588	2026-06-29 19:03:59.588
+1351cec9-c275-4eee-b9c6-fbfa525e6df0	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	image-alt-comp-hero	Luxury customized apparel fashion display at storefront.	\N	1	2026-06-30 14:58:25.471	2026-06-30 14:58:25.471
+7e4d1ed9-ce44-4c1d-938d-075bc78d5fe8	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	image-alt-comp-grid	Luxury customized apparel fashion display at storefront.	\N	1	2026-06-30 14:58:25.481	2026-06-30 14:58:25.481
+\.
+
+
+--
+-- Data for Name: user_role_mappings; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.user_role_mappings (id, business_id, user_id, role, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.users (id, phone, name, status, segment, created_at, otp, otp_expires_at, otp_generated_at, otp_max_attempts, otp_remaining_attempts, otp_status, otp_updated_at, otp_verified_at) FROM stdin;
+ee5b28e9-b55f-427e-b0ee-c5993787577f	9999999999	Seed Operator	ACTIVE	NEW	2026-06-29 19:03:40.959	\N	\N	\N	5	5	ACTIVE	2026-06-29 19:03:40.959	\N
+5be1beff-60fe-49ff-b05f-a3fb13a85477	+91999900007541	Tracking Customer	ACTIVE	NEW	2026-06-30 16:29:17.684	\N	\N	\N	5	5	ACTIVE	2026-06-30 16:29:17.684	\N
+872b7072-0403-4d62-8172-e9710e895814	+91999900007590	Review Test Customer	ACTIVE	NEW	2026-06-30 16:29:17.699	\N	\N	\N	5	5	ACTIVE	2026-06-30 16:29:17.699	\N
+420369c0-56f5-4573-a9cc-09287240f34f	+91999957475	Stress Tester	ACTIVE	NEW	2026-06-30 16:29:17.691	\N	\N	\N	5	5	ACTIVE	2026-06-30 16:29:17.691	\N
+92720bc1-0ccc-4a03-aa9d-931df0ffb1de	+91999900007543	Test Customer	ACTIVE	NEW	2026-06-30 16:29:17.687	\N	\N	\N	5	5	ACTIVE	2026-06-30 16:29:17.687	\N
+67dc2c4f-2c47-4530-8d43-8e2c952e1a37	+91999900007822	Coupon Customer	ACTIVE	NEW	2026-06-30 16:29:17.824	\N	\N	\N	5	5	ACTIVE	2026-06-30 16:29:17.824	\N
+d78e19b3-179c-493f-aef8-577cd715e74c	+91888800007865	Coupon Customer 2	ACTIVE	NEW	2026-06-30 16:29:17.867	\N	\N	\N	5	5	ACTIVE	2026-06-30 16:29:17.867	\N
+3ec6863c-fbc5-45ee-8c5a-22e75618c7fd	+91999900007918	Tracking Customer 2	ACTIVE	NEW	2026-06-30 16:29:17.919	\N	\N	\N	5	5	ACTIVE	2026-06-30 16:29:17.919	\N
+7ce08474-2a06-4006-9db1-05e2a90a7152	+91888800008655	Second Customer	ACTIVE	NEW	2026-06-30 16:29:18.658	\N	\N	\N	5	5	ACTIVE	2026-06-30 16:29:18.658	\N
+f9db09b6-48d4-4653-89dc-702b14ae6250	+91999900015646	CMS Template Tester	ACTIVE	NEW	2026-07-01 03:30:06.088	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:30:06.088	\N
+71b7312c-ead2-4591-908a-9dd924fcde0e	+91999900015945	CMS Prompt Tester	ACTIVE	NEW	2026-07-01 03:30:06.376	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:30:06.376	\N
+241aff64-90e8-404e-9d90-0f0e33683e8b	+91999900001259	Test Customer	ACTIVE	NEW	2026-07-01 03:30:11.761	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:30:11.761	\N
+226845b3-4a34-43e2-affb-f6d132a54f21	+919999000111375	CMS Template Tester	ACTIVE	NEW	2026-07-01 03:30:11.927	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:30:11.927	\N
+3a87a75e-e192-41ed-8577-f4a96dd11154	+91999911834	Stress Tester	ACTIVE	NEW	2026-07-01 03:30:12.688	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:30:12.688	\N
+0fbd302f-612b-4c2c-9c67-6ea101b9c459	+91999900002642	Tracking Customer	ACTIVE	NEW	2026-07-01 03:30:13.048	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:30:13.048	\N
+da3b1ecd-8bd5-418a-83e1-4143207ad584	+91999900002860	Review Test Customer	ACTIVE	NEW	2026-07-01 03:30:13.369	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:30:13.369	\N
+676fc86f-ab8b-4603-907c-e3603f9d2a3f	+91999900003395	Coupon Customer	ACTIVE	NEW	2026-07-01 03:30:13.4	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:30:13.4	\N
+d2f315ab-b762-438b-b085-a0f87001e4cb	+919999000162270	CMS Template Tester	ACTIVE	NEW	2026-07-01 03:31:02.355	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:31:02.355	\N
+3e7510f6-0a87-4389-bfb4-06944191245a	+919999000162326	CMS Prompt Tester	ACTIVE	NEW	2026-07-01 03:31:02.427	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:31:02.427	\N
+67de23cd-74e3-4337-8e48-46756d114f15	+91999900008382	Test Customer	ACTIVE	NEW	2026-07-01 03:33:58.758	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:33:58.758	\N
+33ddb96b-4477-4b90-bba2-3800f946e4c6	+91999938261	Stress Tester	ACTIVE	NEW	2026-07-01 03:33:58.758	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:33:58.758	\N
+85beff7c-fc07-4673-bbc0-371a2c8144bb	+91999900008622	Review Test Customer	ACTIVE	NEW	2026-07-01 03:33:58.851	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:33:58.851	\N
+6f4f06e9-e517-4f4b-851f-40fd90d25112	+91999900008380	Tracking Customer	ACTIVE	NEW	2026-07-01 03:33:58.758	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:33:58.758	\N
+f618a4f3-c440-4efc-95d5-393266e2a317	+919999000138701	CMS Template Tester	ACTIVE	NEW	2026-07-01 03:33:58.956	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:33:58.956	\N
+888bf9e6-e5d5-4b74-8325-93992a4b2a2d	+919999000138973	CMS Prompt Tester	ACTIVE	NEW	2026-07-01 03:33:59.175	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:33:59.175	\N
+6201239f-58f3-4564-abde-ea64491c83c9	+91999900009255	Tracking Customer 2	ACTIVE	NEW	2026-07-01 03:33:59.256	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:33:59.256	\N
+68c6486b-7e57-448d-a82a-c82f789e05fd	+91999900009517	Coupon Customer	ACTIVE	NEW	2026-07-01 03:33:59.519	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:33:59.519	\N
+e20d6d1c-181a-4fee-bf7e-4a7e9e8c2022	+91888800009601	Coupon Customer 2	ACTIVE	NEW	2026-07-01 03:33:59.603	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:33:59.603	\N
+1c8a49fb-d614-46ce-b9cf-be8df207718a	+91888800001976	Second Customer	ACTIVE	NEW	2026-07-01 03:34:01.978	\N	\N	\N	5	5	ACTIVE	2026-07-01 03:34:01.978	\N
+3c719952-b7d9-455b-888e-2b079af11b4f	+919999000120379	CMS Prompt Tester	ACTIVE	NEW	2026-07-02 03:13:40.714	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:13:40.714	\N
+01149cb1-efe3-4f8d-815d-80f53fa14a6c	+919999000120111	CMS Template Tester	ACTIVE	NEW	2026-07-02 03:13:41.493	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:13:41.493	\N
+98b9499b-1a5d-4907-9d38-6cc9ed983b43	+91999920011	Stress Tester	ACTIVE	NEW	2026-07-02 03:13:44.498	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:13:44.498	\N
+c0abbe7b-051b-420f-b009-2362c30e5322	+919999000129851	CMS Prompt Tester	ACTIVE	NEW	2026-07-02 03:12:10.254	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:12:10.254	\N
+ee667eb1-70cc-4abc-8d50-05e31f9992bd	+919999000129484	CMS Template Tester	ACTIVE	NEW	2026-07-02 03:12:11.319	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:12:11.319	\N
+3aacbe49-ea97-4f18-8f94-2717120c7260	+91999900006256	Coupon Customer	ACTIVE	NEW	2026-07-02 03:12:16.261	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:12:16.261	\N
+aa1c1462-716a-4031-8872-24c0988aaa96	+91888800006363	Coupon Customer 2	ACTIVE	NEW	2026-07-02 03:12:16.365	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:12:16.365	\N
+bb6dd159-b5ae-49ad-9b79-697a171aa45a	+919999000165265	CMS Template Tester	ACTIVE	NEW	2026-07-02 03:12:45.666	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:12:45.666	\N
+f6596463-415c-4c36-b12c-fe4d92ca0d69	+919999000165492	CMS Prompt Tester	ACTIVE	NEW	2026-07-02 03:12:45.834	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:12:45.834	\N
+4d2237e6-3f4a-4ca7-9496-0cf03c099f60	+91999900005889	Tracking Customer	ACTIVE	NEW	2026-07-02 03:13:16.245	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:13:16.245	\N
+bc4642a8-4837-47ab-a176-53c609b26d54	+919999000195976	CMS Prompt Tester	ACTIVE	NEW	2026-07-02 03:13:16.344	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:13:16.344	\N
+5177ce60-10c8-4636-9fee-320b7706c8cf	+91999900006565	Coupon Customer	ACTIVE	NEW	2026-07-02 03:13:16.567	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:13:16.567	\N
+e918e6e3-d225-4f89-bb3c-c19f8e7917a1	+919999000195503	CMS Template Tester	ACTIVE	NEW	2026-07-02 03:13:16.654	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:13:16.654	\N
+95fb0a42-6647-4a8f-a932-2b7b4c20ce0f	+91888800006703	Coupon Customer 2	ACTIVE	NEW	2026-07-02 03:13:16.706	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:13:16.706	\N
+e2b30073-c2cf-491b-ab65-f32612db945a	+91999900006844	Tracking Customer 2	ACTIVE	NEW	2026-07-02 03:13:16.845	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:13:16.845	\N
+54f734c3-4030-42cf-90fe-7d2830c2b3ba	+91999995437	Stress Tester	ACTIVE	NEW	2026-07-02 03:13:19.741	\N	\N	\N	5	5	ACTIVE	2026-07-02 03:13:19.741	\N
+\.
+
+
+--
+-- Data for Name: websites; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.websites (id, business_id, domain, status, created_at, updated_at) FROM stdin;
+01b539cf-c7ab-44b6-9854-4001f2033bbb	519d4d01-29fc-4cf8-bdbc-d8f8fd5f988b	antair-test-couture.antair.live	PUBLISHED	2026-06-29 19:03:57.409	2026-06-29 19:04:02.076
+\.
+
+
+--
+-- Data for Name: wishlists; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.wishlists (id, user_id, design_id, created_at) FROM stdin;
-2b0b3151-c802-4faf-81e7-a4dbbb2264f3	b29700ad-222e-42e1-9137-ef0f389be22f	0a821036-397c-47dc-bbca-2de894aa5655	2026-06-05 02:57:04.464
-1731ce7e-ad68-42a8-8e7e-79d0d42c645c	6d8d307c-ca33-4b53-b7a2-4726acf44c0e	0a821036-397c-47dc-bbca-2de894aa5655	2026-06-03 02:57:04.464
-f3820740-ee0c-40f8-b6bc-b776b82ec7a5	7a003ffa-76ed-4e4a-8f98-316e8a95dfc5	0a821036-397c-47dc-bbca-2de894aa5655	2026-06-01 02:57:04.464
-b90f7326-91ef-47ae-949d-0bf0035852b5	f0b801e0-baa1-4344-8897-6c1f83b3dcba	0a821036-397c-47dc-bbca-2de894aa5655	2026-05-30 02:57:04.464
-891870dc-3e58-4c9d-96a6-fbc93b1bdbde	ed855518-26d3-4eaf-9e17-43b290fbadfd	0a821036-397c-47dc-bbca-2de894aa5655	2026-05-28 02:57:04.464
-f748c257-cf47-42a9-80fd-ef0595174d29	98402b40-f980-4afd-94c9-24e655be507f	0a821036-397c-47dc-bbca-2de894aa5655	2026-05-26 02:57:04.464
-551d1aaf-14f9-4e69-927a-46dd1a828d3e	c253196e-0a2f-42be-9d25-0703dc299a11	0a821036-397c-47dc-bbca-2de894aa5655	2026-05-24 02:57:04.464
-f2fd88c5-7045-4641-a344-c719f810189b	e4cac1e9-af60-43e1-95d3-f1e25cc16aab	0a821036-397c-47dc-bbca-2de894aa5655	2026-05-22 02:57:04.464
 \.
 
 
 --
--- Name: _ProductToProductTag _ProductToProductTag_AB_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Data for Name: workflow_definitions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.workflow_definitions (id, name, description, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: workflow_executions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.workflow_executions (id, workflow_id, status, payload, progress, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: workflow_stages; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.workflow_stages (id, workflow_id, name, "order", created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: workflow_tasks; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.workflow_tasks (id, stage_id, name, "order", agent_id, artifact_type, dependencies, created_at) FROM stdin;
+\.
+
+
+--
+-- Name: AIAgent AIAgent_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AIAgent"
+    ADD CONSTRAINT "AIAgent_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: AIArtifact AIArtifact_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AIArtifact"
+    ADD CONSTRAINT "AIArtifact_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: AICacheRecord AICacheRecord_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AICacheRecord"
+    ADD CONSTRAINT "AICacheRecord_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: AIContext AIContext_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AIContext"
+    ADD CONSTRAINT "AIContext_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: AIConversation AIConversation_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AIConversation"
+    ADD CONSTRAINT "AIConversation_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: AIExecutionLog AIExecutionLog_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AIExecutionLog"
+    ADD CONSTRAINT "AIExecutionLog_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: AIExecution AIExecution_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AIExecution"
+    ADD CONSTRAINT "AIExecution_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: AIKnowledgeBase AIKnowledgeBase_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AIKnowledgeBase"
+    ADD CONSTRAINT "AIKnowledgeBase_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: AISession AISession_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AISession"
+    ADD CONSTRAINT "AISession_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: AITool AITool_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AITool"
+    ADD CONSTRAINT "AITool_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: ApprovalHistory ApprovalHistory_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."ApprovalHistory"
+    ADD CONSTRAINT "ApprovalHistory_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: ApprovalRequest ApprovalRequest_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."ApprovalRequest"
+    ADD CONSTRAINT "ApprovalRequest_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: PromptHistory PromptHistory_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."PromptHistory"
+    ADD CONSTRAINT "PromptHistory_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: PromptTemplate PromptTemplate_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."PromptTemplate"
+    ADD CONSTRAINT "PromptTemplate_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: _ProductToProductTag _ProductToProductTag_AB_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."_ProductToProductTag"
@@ -3067,7 +7960,7 @@ ALTER TABLE ONLY public."_ProductToProductTag"
 
 
 --
--- Name: _prisma_migrations _prisma_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: _prisma_migrations _prisma_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public._prisma_migrations
@@ -3075,7 +7968,7 @@ ALTER TABLE ONLY public._prisma_migrations
 
 
 --
--- Name: activities activities_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: activities activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.activities
@@ -3083,7 +7976,7 @@ ALTER TABLE ONLY public.activities
 
 
 --
--- Name: admin_notifications admin_notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: admin_notifications admin_notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.admin_notifications
@@ -3091,7 +7984,31 @@ ALTER TABLE ONLY public.admin_notifications
 
 
 --
--- Name: audit_logs audit_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: ai_agent_registry ai_agent_registry_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ai_agent_registry
+    ADD CONSTRAINT ai_agent_registry_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ai_learning_records ai_learning_records_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ai_learning_records
+    ADD CONSTRAINT ai_learning_records_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: asset_libraries asset_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_libraries
+    ADD CONSTRAINT asset_libraries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: audit_logs audit_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.audit_logs
@@ -3099,7 +8016,15 @@ ALTER TABLE ONLY public.audit_logs
 
 
 --
--- Name: booking_histories booking_histories_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: autofix_queue_items autofix_queue_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.autofix_queue_items
+    ADD CONSTRAINT autofix_queue_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: booking_histories booking_histories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.booking_histories
@@ -3107,7 +8032,7 @@ ALTER TABLE ONLY public.booking_histories
 
 
 --
--- Name: bookings bookings_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: bookings bookings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bookings
@@ -3115,7 +8040,31 @@ ALTER TABLE ONLY public.bookings
 
 
 --
--- Name: boutique_subscriptions boutique_subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: boutique_certifications boutique_certifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.boutique_certifications
+    ADD CONSTRAINT boutique_certifications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: boutique_pages boutique_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.boutique_pages
+    ADD CONSTRAINT boutique_pages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: boutique_plugins boutique_plugins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.boutique_plugins
+    ADD CONSTRAINT boutique_plugins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: boutique_subscriptions boutique_subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.boutique_subscriptions
@@ -3123,7 +8072,15 @@ ALTER TABLE ONLY public.boutique_subscriptions
 
 
 --
--- Name: boutiques boutiques_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: boutique_themes boutique_themes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.boutique_themes
+    ADD CONSTRAINT boutique_themes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: boutiques boutiques_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.boutiques
@@ -3131,7 +8088,23 @@ ALTER TABLE ONLY public.boutiques
 
 
 --
--- Name: cart_items cart_items_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: business_template_assignments business_template_assignments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.business_template_assignments
+    ADD CONSTRAINT business_template_assignments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: businesses businesses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.businesses
+    ADD CONSTRAINT businesses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cart_items cart_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cart_items
@@ -3139,7 +8112,7 @@ ALTER TABLE ONLY public.cart_items
 
 
 --
--- Name: carts carts_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: carts carts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.carts
@@ -3147,7 +8120,7 @@ ALTER TABLE ONLY public.carts
 
 
 --
--- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.categories
@@ -3155,7 +8128,495 @@ ALTER TABLE ONLY public.categories
 
 
 --
--- Name: commerce_order_histories commerce_order_histories_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: certification_chat_messages certification_chat_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.certification_chat_messages
+    ADD CONSTRAINT certification_chat_messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: certification_profiles certification_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.certification_profiles
+    ADD CONSTRAINT certification_profiles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: certification_workflow_definitions certification_workflow_definitions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.certification_workflow_definitions
+    ADD CONSTRAINT certification_workflow_definitions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: certification_workflows certification_workflows_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.certification_workflows
+    ADD CONSTRAINT certification_workflows_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_ai_agents cms_ai_agents_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_ai_agents
+    ADD CONSTRAINT cms_ai_agents_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_ai_builders cms_ai_builders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_ai_builders
+    ADD CONSTRAINT cms_ai_builders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_ai_costs cms_ai_costs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_ai_costs
+    ADD CONSTRAINT cms_ai_costs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_ai_execution_steps cms_ai_execution_steps_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_ai_execution_steps
+    ADD CONSTRAINT cms_ai_execution_steps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_ai_providers cms_ai_providers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_ai_providers
+    ADD CONSTRAINT cms_ai_providers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_ai_settings cms_ai_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_ai_settings
+    ADD CONSTRAINT cms_ai_settings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_ai_usage cms_ai_usage_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_ai_usage
+    ADD CONSTRAINT cms_ai_usage_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_ai_workflows cms_ai_workflows_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_ai_workflows
+    ADD CONSTRAINT cms_ai_workflows_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_assignment_configurations cms_assignment_configurations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_assignment_configurations
+    ADD CONSTRAINT cms_assignment_configurations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_assignment_histories cms_assignment_histories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_assignment_histories
+    ADD CONSTRAINT cms_assignment_histories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_blueprint_apis cms_blueprint_apis_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_apis
+    ADD CONSTRAINT cms_blueprint_apis_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_blueprint_components cms_blueprint_components_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_components
+    ADD CONSTRAINT cms_blueprint_components_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_blueprint_features cms_blueprint_features_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_features
+    ADD CONSTRAINT cms_blueprint_features_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_blueprint_pages cms_blueprint_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_pages
+    ADD CONSTRAINT cms_blueprint_pages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_blueprint_template_versions cms_blueprint_template_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_template_versions
+    ADD CONSTRAINT cms_blueprint_template_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_blueprint_templates cms_blueprint_templates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_templates
+    ADD CONSTRAINT cms_blueprint_templates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_builder_profile_versions cms_builder_profile_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_builder_profile_versions
+    ADD CONSTRAINT cms_builder_profile_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_builder_profiles cms_builder_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_builder_profiles
+    ADD CONSTRAINT cms_builder_profiles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_audit_logs cms_prompt_audit_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_audit_logs
+    ADD CONSTRAINT cms_prompt_audit_logs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_categories cms_prompt_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_categories
+    ADD CONSTRAINT cms_prompt_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_collection_items cms_prompt_collection_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_collection_items
+    ADD CONSTRAINT cms_prompt_collection_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_collections cms_prompt_collections_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_collections
+    ADD CONSTRAINT cms_prompt_collections_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_executions cms_prompt_executions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_executions
+    ADD CONSTRAINT cms_prompt_executions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_favorites cms_prompt_favorites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_favorites
+    ADD CONSTRAINT cms_prompt_favorites_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_histories cms_prompt_histories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_histories
+    ADD CONSTRAINT cms_prompt_histories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_ratings cms_prompt_ratings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_ratings
+    ADD CONSTRAINT cms_prompt_ratings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_tag_prompts cms_prompt_tag_prompts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_tag_prompts
+    ADD CONSTRAINT cms_prompt_tag_prompts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_tags cms_prompt_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_tags
+    ADD CONSTRAINT cms_prompt_tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_usage_analytics cms_prompt_usage_analytics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_usage_analytics
+    ADD CONSTRAINT cms_prompt_usage_analytics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_variables cms_prompt_variables_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_variables
+    ADD CONSTRAINT cms_prompt_variables_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompt_versions cms_prompt_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_versions
+    ADD CONSTRAINT cms_prompt_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_prompts cms_prompts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompts
+    ADD CONSTRAINT cms_prompts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_requirement_relations cms_requirement_relations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_requirement_relations
+    ADD CONSTRAINT cms_requirement_relations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_requirement_templates cms_requirement_templates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_requirement_templates
+    ADD CONSTRAINT cms_requirement_templates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_requirement_versions cms_requirement_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_requirement_versions
+    ADD CONSTRAINT cms_requirement_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_requirements cms_requirements_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_requirements
+    ADD CONSTRAINT cms_requirements_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_standard_audit_logs cms_standard_audit_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_standard_audit_logs
+    ADD CONSTRAINT cms_standard_audit_logs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_standard_versions cms_standard_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_standard_versions
+    ADD CONSTRAINT cms_standard_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_standards cms_standards_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_standards
+    ADD CONSTRAINT cms_standards_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_template_analytics cms_template_analytics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_analytics
+    ADD CONSTRAINT cms_template_analytics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_template_builder_compat cms_template_builder_compat_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_builder_compat
+    ADD CONSTRAINT cms_template_builder_compat_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_template_categories cms_template_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_categories
+    ADD CONSTRAINT cms_template_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_template_favorites cms_template_favorites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_favorites
+    ADD CONSTRAINT cms_template_favorites_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_template_pipeline_stages cms_template_pipeline_stages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_pipeline_stages
+    ADD CONSTRAINT cms_template_pipeline_stages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_template_ratings cms_template_ratings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_ratings
+    ADD CONSTRAINT cms_template_ratings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_template_requirement_joins cms_template_requirement_joins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_requirement_joins
+    ADD CONSTRAINT cms_template_requirement_joins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_template_tag_template cms_template_tag_template_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_tag_template
+    ADD CONSTRAINT cms_template_tag_template_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_template_tags cms_template_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_tags
+    ADD CONSTRAINT cms_template_tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_template_versions cms_template_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_versions
+    ADD CONSTRAINT cms_template_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_templates cms_templates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_templates
+    ADD CONSTRAINT cms_templates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_uploads cms_uploads_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_uploads
+    ADD CONSTRAINT cms_uploads_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_validation_report_analytics cms_validation_report_analytics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_validation_report_analytics
+    ADD CONSTRAINT cms_validation_report_analytics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_validation_report_comparisons cms_validation_report_comparisons_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_validation_report_comparisons
+    ADD CONSTRAINT cms_validation_report_comparisons_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_validation_report_exports cms_validation_report_exports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_validation_report_exports
+    ADD CONSTRAINT cms_validation_report_exports_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_validation_report_history cms_validation_report_history_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_validation_report_history
+    ADD CONSTRAINT cms_validation_report_history_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_validation_report_sections cms_validation_report_sections_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_validation_report_sections
+    ADD CONSTRAINT cms_validation_report_sections_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_validation_reports cms_validation_reports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_validation_reports
+    ADD CONSTRAINT cms_validation_reports_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: commerce_order_histories commerce_order_histories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_order_histories
@@ -3163,7 +8624,7 @@ ALTER TABLE ONLY public.commerce_order_histories
 
 
 --
--- Name: commerce_order_items commerce_order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: commerce_order_items commerce_order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_order_items
@@ -3171,7 +8632,7 @@ ALTER TABLE ONLY public.commerce_order_items
 
 
 --
--- Name: commerce_orders commerce_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders commerce_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_orders
@@ -3179,7 +8640,7 @@ ALTER TABLE ONLY public.commerce_orders
 
 
 --
--- Name: commerce_payments commerce_payments_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: commerce_payments commerce_payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_payments
@@ -3187,7 +8648,15 @@ ALTER TABLE ONLY public.commerce_payments
 
 
 --
--- Name: coupon_usages coupon_usages_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: content_translations content_translations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.content_translations
+    ADD CONSTRAINT content_translations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: coupon_usages coupon_usages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.coupon_usages
@@ -3195,7 +8664,7 @@ ALTER TABLE ONLY public.coupon_usages
 
 
 --
--- Name: coupons coupons_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: coupons coupons_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.coupons
@@ -3203,7 +8672,7 @@ ALTER TABLE ONLY public.coupons
 
 
 --
--- Name: custom_plan_requests custom_plan_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: custom_plan_requests custom_plan_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.custom_plan_requests
@@ -3211,7 +8680,7 @@ ALTER TABLE ONLY public.custom_plan_requests
 
 
 --
--- Name: customer_addresses customer_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: customer_addresses customer_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.customer_addresses
@@ -3219,7 +8688,7 @@ ALTER TABLE ONLY public.customer_addresses
 
 
 --
--- Name: customer_notifications customer_notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: customer_notifications customer_notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.customer_notifications
@@ -3227,7 +8696,7 @@ ALTER TABLE ONLY public.customer_notifications
 
 
 --
--- Name: delivery_tracking_history delivery_tracking_history_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: delivery_tracking_history delivery_tracking_history_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.delivery_tracking_history
@@ -3235,7 +8704,7 @@ ALTER TABLE ONLY public.delivery_tracking_history
 
 
 --
--- Name: delivery_tracking delivery_tracking_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: delivery_tracking delivery_tracking_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.delivery_tracking
@@ -3243,7 +8712,63 @@ ALTER TABLE ONLY public.delivery_tracking
 
 
 --
--- Name: designs designs_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: deployment_artifacts deployment_artifacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployment_artifacts
+    ADD CONSTRAINT deployment_artifacts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: deployment_build_logs deployment_build_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployment_build_logs
+    ADD CONSTRAINT deployment_build_logs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: deployment_domains deployment_domains_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployment_domains
+    ADD CONSTRAINT deployment_domains_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: deployment_environment_variables deployment_environment_variables_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployment_environment_variables
+    ADD CONSTRAINT deployment_environment_variables_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: deployment_environments deployment_environments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployment_environments
+    ADD CONSTRAINT deployment_environments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: deployment_variable_histories deployment_variable_histories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployment_variable_histories
+    ADD CONSTRAINT deployment_variable_histories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: deployments deployments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployments
+    ADD CONSTRAINT deployments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: designs designs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.designs
@@ -3251,7 +8776,15 @@ ALTER TABLE ONLY public.designs
 
 
 --
--- Name: exchange_requests exchange_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: developer_api_keys developer_api_keys_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.developer_api_keys
+    ADD CONSTRAINT developer_api_keys_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: exchange_requests exchange_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.exchange_requests
@@ -3259,7 +8792,79 @@ ALTER TABLE ONLY public.exchange_requests
 
 
 --
--- Name: measurements measurements_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: immutable_releases immutable_releases_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.immutable_releases
+    ADD CONSTRAINT immutable_releases_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: marketplace_capabilities marketplace_capabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_capabilities
+    ADD CONSTRAINT marketplace_capabilities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: marketplace_dependencies marketplace_dependencies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_dependencies
+    ADD CONSTRAINT marketplace_dependencies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: marketplace_installations marketplace_installations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_installations
+    ADD CONSTRAINT marketplace_installations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: marketplace_licenses marketplace_licenses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_licenses
+    ADD CONSTRAINT marketplace_licenses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: marketplace_packages marketplace_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_packages
+    ADD CONSTRAINT marketplace_packages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: marketplace_publishers marketplace_publishers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_publishers
+    ADD CONSTRAINT marketplace_publishers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: marketplace_reviews marketplace_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_reviews
+    ADD CONSTRAINT marketplace_reviews_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: marketplace_versions marketplace_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_versions
+    ADD CONSTRAINT marketplace_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: measurements measurements_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.measurements
@@ -3267,7 +8872,15 @@ ALTER TABLE ONLY public.measurements
 
 
 --
--- Name: notification_campaigns notification_campaigns_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: mobile_apps mobile_apps_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.mobile_apps
+    ADD CONSTRAINT mobile_apps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notification_campaigns notification_campaigns_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notification_campaigns
@@ -3275,7 +8888,7 @@ ALTER TABLE ONLY public.notification_campaigns
 
 
 --
--- Name: notification_receipts notification_receipts_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: notification_receipts notification_receipts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notification_receipts
@@ -3283,7 +8896,7 @@ ALTER TABLE ONLY public.notification_receipts
 
 
 --
--- Name: notification_templates notification_templates_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: notification_templates notification_templates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notification_templates
@@ -3291,7 +8904,7 @@ ALTER TABLE ONLY public.notification_templates
 
 
 --
--- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notifications
@@ -3299,7 +8912,7 @@ ALTER TABLE ONLY public.notifications
 
 
 --
--- Name: order_histories order_histories_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: order_histories order_histories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.order_histories
@@ -3307,7 +8920,7 @@ ALTER TABLE ONLY public.order_histories
 
 
 --
--- Name: order_sequences order_sequences_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: order_sequences order_sequences_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.order_sequences
@@ -3315,7 +8928,7 @@ ALTER TABLE ONLY public.order_sequences
 
 
 --
--- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.orders
@@ -3323,7 +8936,7 @@ ALTER TABLE ONLY public.orders
 
 
 --
--- Name: owner_feature_permissions owner_feature_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: owner_feature_permissions owner_feature_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.owner_feature_permissions
@@ -3331,7 +8944,7 @@ ALTER TABLE ONLY public.owner_feature_permissions
 
 
 --
--- Name: owners owners_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: owners owners_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.owners
@@ -3339,7 +8952,15 @@ ALTER TABLE ONLY public.owners
 
 
 --
--- Name: payments payments_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: page_component_nodes page_component_nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.page_component_nodes
+    ADD CONSTRAINT page_component_nodes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: payments payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.payments
@@ -3347,7 +8968,7 @@ ALTER TABLE ONLY public.payments
 
 
 --
--- Name: payouts payouts_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: payouts payouts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.payouts
@@ -3355,7 +8976,7 @@ ALTER TABLE ONLY public.payouts
 
 
 --
--- Name: platform_settings platform_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: platform_settings platform_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.platform_settings
@@ -3363,7 +8984,7 @@ ALTER TABLE ONLY public.platform_settings
 
 
 --
--- Name: product_analytics product_analytics_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_analytics product_analytics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_analytics
@@ -3371,7 +8992,7 @@ ALTER TABLE ONLY public.product_analytics
 
 
 --
--- Name: product_brands product_brands_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_brands product_brands_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_brands
@@ -3379,7 +9000,7 @@ ALTER TABLE ONLY public.product_brands
 
 
 --
--- Name: product_images product_images_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_images product_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_images
@@ -3387,7 +9008,7 @@ ALTER TABLE ONLY public.product_images
 
 
 --
--- Name: product_inventory_logs product_inventory_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_inventory_logs product_inventory_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_inventory_logs
@@ -3395,7 +9016,7 @@ ALTER TABLE ONLY public.product_inventory_logs
 
 
 --
--- Name: product_inventory product_inventory_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_inventory product_inventory_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_inventory
@@ -3403,7 +9024,7 @@ ALTER TABLE ONLY public.product_inventory
 
 
 --
--- Name: product_reviews product_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_reviews product_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_reviews
@@ -3411,7 +9032,7 @@ ALTER TABLE ONLY public.product_reviews
 
 
 --
--- Name: product_tags product_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_tags product_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_tags
@@ -3419,7 +9040,7 @@ ALTER TABLE ONLY public.product_tags
 
 
 --
--- Name: product_variant_attributes product_variant_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_variant_attributes product_variant_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_variant_attributes
@@ -3427,7 +9048,7 @@ ALTER TABLE ONLY public.product_variant_attributes
 
 
 --
--- Name: product_variants product_variants_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_variants product_variants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_variants
@@ -3435,7 +9056,7 @@ ALTER TABLE ONLY public.product_variants
 
 
 --
--- Name: product_wishlists product_wishlists_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_wishlists product_wishlists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_wishlists
@@ -3443,7 +9064,7 @@ ALTER TABLE ONLY public.product_wishlists
 
 
 --
--- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.products
@@ -3451,7 +9072,15 @@ ALTER TABLE ONLY public.products
 
 
 --
--- Name: return_requests return_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: qa_agent_registries qa_agent_registries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qa_agent_registries
+    ADD CONSTRAINT qa_agent_registries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: return_requests return_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.return_requests
@@ -3459,7 +9088,7 @@ ALTER TABLE ONLY public.return_requests
 
 
 --
--- Name: reviews reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: reviews reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.reviews
@@ -3467,7 +9096,7 @@ ALTER TABLE ONLY public.reviews
 
 
 --
--- Name: shipping_addresses shipping_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: shipping_addresses shipping_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.shipping_addresses
@@ -3475,7 +9104,7 @@ ALTER TABLE ONLY public.shipping_addresses
 
 
 --
--- Name: sub_categories sub_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: sub_categories sub_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sub_categories
@@ -3483,7 +9112,7 @@ ALTER TABLE ONLY public.sub_categories
 
 
 --
--- Name: subscription_billing_history subscription_billing_history_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: subscription_billing_history subscription_billing_history_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.subscription_billing_history
@@ -3491,7 +9120,7 @@ ALTER TABLE ONLY public.subscription_billing_history
 
 
 --
--- Name: subscription_plans subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: subscription_plans subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.subscription_plans
@@ -3499,7 +9128,7 @@ ALTER TABLE ONLY public.subscription_plans
 
 
 --
--- Name: support_ticket_admin_notes support_ticket_admin_notes_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: support_ticket_admin_notes support_ticket_admin_notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.support_ticket_admin_notes
@@ -3507,7 +9136,7 @@ ALTER TABLE ONLY public.support_ticket_admin_notes
 
 
 --
--- Name: support_ticket_messages support_ticket_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: support_ticket_messages support_ticket_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.support_ticket_messages
@@ -3515,7 +9144,7 @@ ALTER TABLE ONLY public.support_ticket_messages
 
 
 --
--- Name: support_tickets support_tickets_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: support_tickets support_tickets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.support_tickets
@@ -3523,7 +9152,31 @@ ALTER TABLE ONLY public.support_tickets
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: tenants tenants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tenants
+    ADD CONSTRAINT tenants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: universal_contents universal_contents_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.universal_contents
+    ADD CONSTRAINT universal_contents_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_role_mappings user_role_mappings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_role_mappings
+    ADD CONSTRAINT user_role_mappings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
@@ -3531,7 +9184,15 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: wishlists wishlists_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: websites websites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.websites
+    ADD CONSTRAINT websites_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wishlists wishlists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.wishlists
@@ -3539,518 +9200,1487 @@ ALTER TABLE ONLY public.wishlists
 
 
 --
--- Name: _ProductToProductTag_B_index; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: workflow_definitions workflow_definitions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.workflow_definitions
+    ADD CONSTRAINT workflow_definitions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: workflow_executions workflow_executions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.workflow_executions
+    ADD CONSTRAINT workflow_executions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: workflow_stages workflow_stages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.workflow_stages
+    ADD CONSTRAINT workflow_stages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: workflow_tasks workflow_tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.workflow_tasks
+    ADD CONSTRAINT workflow_tasks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: AICacheRecord_cacheKey_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX "AICacheRecord_cacheKey_key" ON public."AICacheRecord" USING btree ("cacheKey");
+
+
+--
+-- Name: AIKnowledgeBase_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX "AIKnowledgeBase_key_key" ON public."AIKnowledgeBase" USING btree (key);
+
+
+--
+-- Name: AITool_name_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX "AITool_name_key" ON public."AITool" USING btree (name);
+
+
+--
+-- Name: _ProductToProductTag_B_index; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX "_ProductToProductTag_B_index" ON public."_ProductToProductTag" USING btree ("B");
 
 
 --
--- Name: admin_notifications_boutique_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: admin_notifications_boutique_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX admin_notifications_boutique_id_idx ON public.admin_notifications USING btree (boutique_id);
 
 
 --
--- Name: admin_notifications_created_at_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: admin_notifications_created_at_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX admin_notifications_created_at_idx ON public.admin_notifications USING btree (created_at);
 
 
 --
--- Name: admin_notifications_is_read_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: admin_notifications_is_read_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX admin_notifications_is_read_idx ON public.admin_notifications USING btree (is_read);
 
 
 --
--- Name: admin_notifications_recipient_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: admin_notifications_recipient_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX admin_notifications_recipient_id_idx ON public.admin_notifications USING btree (recipient_id);
 
 
 --
--- Name: admin_notifications_recipient_type_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: admin_notifications_recipient_type_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX admin_notifications_recipient_type_idx ON public.admin_notifications USING btree (recipient_type);
 
 
 --
--- Name: boutique_subscriptions_boutique_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: ai_agent_registry_name_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX ai_agent_registry_name_key ON public.ai_agent_registry USING btree (name);
+
+
+--
+-- Name: boutique_certifications_business_id_target_id_release_tag_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX boutique_certifications_business_id_target_id_release_tag_key ON public.boutique_certifications USING btree (business_id, target_id, release_tag);
+
+
+--
+-- Name: boutique_pages_website_id_slug_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX boutique_pages_website_id_slug_key ON public.boutique_pages USING btree (website_id, slug);
+
+
+--
+-- Name: boutique_plugins_business_id_plugin_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX boutique_plugins_business_id_plugin_key_key ON public.boutique_plugins USING btree (business_id, plugin_key);
+
+
+--
+-- Name: boutique_subscriptions_boutique_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX boutique_subscriptions_boutique_id_idx ON public.boutique_subscriptions USING btree (boutique_id);
 
 
 --
--- Name: boutiques_is_deleted_status_featured_boutique_created_at_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: boutique_themes_business_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX boutique_themes_business_id_key ON public.boutique_themes USING btree (business_id);
+
+
+--
+-- Name: boutiques_business_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX boutiques_business_id_key ON public.boutiques USING btree (business_id);
+
+
+--
+-- Name: boutiques_is_deleted_status_featured_boutique_created_at_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX boutiques_is_deleted_status_featured_boutique_created_at_idx ON public.boutiques USING btree (is_deleted, status, featured_boutique, created_at);
 
 
 --
--- Name: cart_items_cart_id_product_id_variant_id_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: business_template_assignments_business_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX business_template_assignments_business_id_idx ON public.business_template_assignments USING btree (business_id);
+
+
+--
+-- Name: business_template_assignments_business_id_template_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX business_template_assignments_business_id_template_id_key ON public.business_template_assignments USING btree (business_id, template_id);
+
+
+--
+-- Name: business_template_assignments_status_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX business_template_assignments_status_idx ON public.business_template_assignments USING btree (status);
+
+
+--
+-- Name: business_template_assignments_template_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX business_template_assignments_template_id_idx ON public.business_template_assignments USING btree (template_id);
+
+
+--
+-- Name: cart_items_cart_id_product_id_variant_id_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX cart_items_cart_id_product_id_variant_id_key ON public.cart_items USING btree (cart_id, product_id, variant_id);
 
 
 --
--- Name: carts_user_id_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: carts_user_id_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX carts_user_id_key ON public.carts USING btree (user_id);
 
 
 --
--- Name: categories_name_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: categories_name_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX categories_name_key ON public.categories USING btree (name);
 
 
 --
--- Name: commerce_order_histories_order_id_created_at_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: certification_profiles_business_id_name_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX certification_profiles_business_id_name_key ON public.certification_profiles USING btree (business_id, name);
+
+
+--
+-- Name: certification_workflow_definitions_name_version_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX certification_workflow_definitions_name_version_key ON public.certification_workflow_definitions USING btree (name, version);
+
+
+--
+-- Name: cms_ai_agents_category_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_agents_category_idx ON public.cms_ai_agents USING btree (category);
+
+
+--
+-- Name: cms_ai_agents_is_enabled_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_agents_is_enabled_idx ON public.cms_ai_agents USING btree (is_enabled);
+
+
+--
+-- Name: cms_ai_agents_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_ai_agents_key_key ON public.cms_ai_agents USING btree (key);
+
+
+--
+-- Name: cms_ai_agents_source_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_agents_source_idx ON public.cms_ai_agents USING btree (source);
+
+
+--
+-- Name: cms_ai_builders_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_ai_builders_key_key ON public.cms_ai_builders USING btree (key);
+
+
+--
+-- Name: cms_ai_costs_category_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_costs_category_idx ON public.cms_ai_costs USING btree (category);
+
+
+--
+-- Name: cms_ai_costs_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_costs_created_at_idx ON public.cms_ai_costs USING btree (created_at);
+
+
+--
+-- Name: cms_ai_costs_provider_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_costs_provider_id_idx ON public.cms_ai_costs USING btree (provider_id);
+
+
+--
+-- Name: cms_ai_execution_steps_execution_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_execution_steps_execution_id_idx ON public.cms_ai_execution_steps USING btree (execution_id);
+
+
+--
+-- Name: cms_ai_execution_steps_status_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_execution_steps_status_idx ON public.cms_ai_execution_steps USING btree (status);
+
+
+--
+-- Name: cms_ai_providers_is_enabled_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_providers_is_enabled_idx ON public.cms_ai_providers USING btree (is_enabled);
+
+
+--
+-- Name: cms_ai_providers_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_ai_providers_key_key ON public.cms_ai_providers USING btree (key);
+
+
+--
+-- Name: cms_ai_providers_priority_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_providers_priority_idx ON public.cms_ai_providers USING btree (priority);
+
+
+--
+-- Name: cms_ai_providers_provider_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_providers_provider_idx ON public.cms_ai_providers USING btree (provider);
+
+
+--
+-- Name: cms_ai_settings_category_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_settings_category_idx ON public.cms_ai_settings USING btree (category);
+
+
+--
+-- Name: cms_ai_settings_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_ai_settings_key_key ON public.cms_ai_settings USING btree (key);
+
+
+--
+-- Name: cms_ai_usage_agent_key_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_usage_agent_key_idx ON public.cms_ai_usage USING btree (agent_key);
+
+
+--
+-- Name: cms_ai_usage_date_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_usage_date_idx ON public.cms_ai_usage USING btree (date);
+
+
+--
+-- Name: cms_ai_usage_provider_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_usage_provider_id_idx ON public.cms_ai_usage USING btree (provider_id);
+
+
+--
+-- Name: cms_ai_workflows_status_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_ai_workflows_status_idx ON public.cms_ai_workflows USING btree (status);
+
+
+--
+-- Name: cms_assignment_configurations_assignment_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_assignment_configurations_assignment_id_key ON public.cms_assignment_configurations USING btree (assignment_id);
+
+
+--
+-- Name: cms_assignment_histories_assignment_id_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_assignment_histories_assignment_id_created_at_idx ON public.cms_assignment_histories USING btree (assignment_id, created_at);
+
+
+--
+-- Name: cms_blueprint_apis_blueprint_template_id_path_method_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_blueprint_apis_blueprint_template_id_path_method_key ON public.cms_blueprint_apis USING btree (blueprint_template_id, path, method);
+
+
+--
+-- Name: cms_blueprint_features_blueprint_template_id_requirement_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_blueprint_features_blueprint_template_id_requirement_id_key ON public.cms_blueprint_features USING btree (blueprint_template_id, requirement_id);
+
+
+--
+-- Name: cms_blueprint_pages_blueprint_template_id_route_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_blueprint_pages_blueprint_template_id_route_key ON public.cms_blueprint_pages USING btree (blueprint_template_id, route);
+
+
+--
+-- Name: cms_blueprint_template_versions_blueprint_template_id_versi_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_blueprint_template_versions_blueprint_template_id_versi_key ON public.cms_blueprint_template_versions USING btree (blueprint_template_id, version);
+
+
+--
+-- Name: cms_blueprint_templates_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_blueprint_templates_key_key ON public.cms_blueprint_templates USING btree (key);
+
+
+--
+-- Name: cms_builder_profile_versions_builder_profile_id_version_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_builder_profile_versions_builder_profile_id_version_key ON public.cms_builder_profile_versions USING btree (builder_profile_id, version);
+
+
+--
+-- Name: cms_builder_profiles_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_builder_profiles_key_key ON public.cms_builder_profiles USING btree (key);
+
+
+--
+-- Name: cms_prompt_audit_logs_prompt_id_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompt_audit_logs_prompt_id_created_at_idx ON public.cms_prompt_audit_logs USING btree (prompt_id, created_at);
+
+
+--
+-- Name: cms_prompt_categories_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_prompt_categories_key_key ON public.cms_prompt_categories USING btree (key);
+
+
+--
+-- Name: cms_prompt_collection_items_collection_id_prompt_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_prompt_collection_items_collection_id_prompt_id_key ON public.cms_prompt_collection_items USING btree (collection_id, prompt_id);
+
+
+--
+-- Name: cms_prompt_collections_user_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompt_collections_user_id_idx ON public.cms_prompt_collections USING btree (user_id);
+
+
+--
+-- Name: cms_prompt_executions_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompt_executions_created_at_idx ON public.cms_prompt_executions USING btree (created_at);
+
+
+--
+-- Name: cms_prompt_executions_prompt_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompt_executions_prompt_id_idx ON public.cms_prompt_executions USING btree (prompt_id);
+
+
+--
+-- Name: cms_prompt_executions_status_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompt_executions_status_idx ON public.cms_prompt_executions USING btree (status);
+
+
+--
+-- Name: cms_prompt_favorites_prompt_id_user_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_prompt_favorites_prompt_id_user_id_key ON public.cms_prompt_favorites USING btree (prompt_id, user_id);
+
+
+--
+-- Name: cms_prompt_histories_prompt_id_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompt_histories_prompt_id_created_at_idx ON public.cms_prompt_histories USING btree (prompt_id, created_at);
+
+
+--
+-- Name: cms_prompt_ratings_prompt_id_user_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_prompt_ratings_prompt_id_user_id_key ON public.cms_prompt_ratings USING btree (prompt_id, user_id);
+
+
+--
+-- Name: cms_prompt_tag_prompts_prompt_id_tag_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_prompt_tag_prompts_prompt_id_tag_id_key ON public.cms_prompt_tag_prompts USING btree (prompt_id, tag_id);
+
+
+--
+-- Name: cms_prompt_tags_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_prompt_tags_key_key ON public.cms_prompt_tags USING btree (key);
+
+
+--
+-- Name: cms_prompt_usage_analytics_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompt_usage_analytics_created_at_idx ON public.cms_prompt_usage_analytics USING btree (created_at);
+
+
+--
+-- Name: cms_prompt_usage_analytics_prompt_id_action_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompt_usage_analytics_prompt_id_action_idx ON public.cms_prompt_usage_analytics USING btree (prompt_id, action);
+
+
+--
+-- Name: cms_prompt_variables_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_prompt_variables_key_key ON public.cms_prompt_variables USING btree (key);
+
+
+--
+-- Name: cms_prompt_versions_prompt_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompt_versions_prompt_id_idx ON public.cms_prompt_versions USING btree (prompt_id);
+
+
+--
+-- Name: cms_prompt_versions_prompt_id_version_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_prompt_versions_prompt_id_version_key ON public.cms_prompt_versions USING btree (prompt_id, version);
+
+
+--
+-- Name: cms_prompts_business_id_is_deleted_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompts_business_id_is_deleted_idx ON public.cms_prompts USING btree (business_id, is_deleted);
+
+
+--
+-- Name: cms_prompts_category_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompts_category_id_idx ON public.cms_prompts USING btree (category_id);
+
+
+--
+-- Name: cms_prompts_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompts_created_at_idx ON public.cms_prompts USING btree (created_at);
+
+
+--
+-- Name: cms_prompts_promptType_is_deleted_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX "cms_prompts_promptType_is_deleted_idx" ON public.cms_prompts USING btree ("promptType", is_deleted);
+
+
+--
+-- Name: cms_prompts_reference_type_reference_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_prompts_reference_type_reference_id_idx ON public.cms_prompts USING btree (reference_type, reference_id);
+
+
+--
+-- Name: cms_requirement_relations_source_requirement_id_target_requ_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_requirement_relations_source_requirement_id_target_requ_key ON public.cms_requirement_relations USING btree (source_requirement_id, target_requirement_id, type);
+
+
+--
+-- Name: cms_requirement_templates_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_requirement_templates_key_key ON public.cms_requirement_templates USING btree (key);
+
+
+--
+-- Name: cms_requirement_versions_requirement_id_version_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_requirement_versions_requirement_id_version_key ON public.cms_requirement_versions USING btree (requirement_id, version);
+
+
+--
+-- Name: cms_requirements_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_requirements_key_key ON public.cms_requirements USING btree (key);
+
+
+--
+-- Name: cms_standard_versions_standard_id_version_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_standard_versions_standard_id_version_key ON public.cms_standard_versions USING btree (standard_id, version);
+
+
+--
+-- Name: cms_standards_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_standards_key_key ON public.cms_standards USING btree (key);
+
+
+--
+-- Name: cms_template_analytics_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_template_analytics_created_at_idx ON public.cms_template_analytics USING btree (created_at);
+
+
+--
+-- Name: cms_template_analytics_template_id_action_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_template_analytics_template_id_action_idx ON public.cms_template_analytics USING btree (template_id, action);
+
+
+--
+-- Name: cms_template_builder_compat_template_id_builder_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_template_builder_compat_template_id_builder_key_key ON public.cms_template_builder_compat USING btree (template_id, builder_key);
+
+
+--
+-- Name: cms_template_categories_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_template_categories_key_key ON public.cms_template_categories USING btree (key);
+
+
+--
+-- Name: cms_template_favorites_template_id_user_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_template_favorites_template_id_user_id_key ON public.cms_template_favorites USING btree (template_id, user_id);
+
+
+--
+-- Name: cms_template_pipeline_stages_template_id_stage_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_template_pipeline_stages_template_id_stage_idx ON public.cms_template_pipeline_stages USING btree (template_id, stage);
+
+
+--
+-- Name: cms_template_ratings_template_id_user_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_template_ratings_template_id_user_id_key ON public.cms_template_ratings USING btree (template_id, user_id);
+
+
+--
+-- Name: cms_template_requirement_joins_template_id_requirement_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_template_requirement_joins_template_id_requirement_id_key ON public.cms_template_requirement_joins USING btree (template_id, requirement_id);
+
+
+--
+-- Name: cms_template_tag_template_template_id_tag_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_template_tag_template_template_id_tag_id_key ON public.cms_template_tag_template USING btree (template_id, tag_id);
+
+
+--
+-- Name: cms_template_tags_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_template_tags_key_key ON public.cms_template_tags USING btree (key);
+
+
+--
+-- Name: cms_template_versions_template_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_template_versions_template_id_idx ON public.cms_template_versions USING btree (template_id);
+
+
+--
+-- Name: cms_template_versions_template_id_version_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_template_versions_template_id_version_key ON public.cms_template_versions USING btree (template_id, version);
+
+
+--
+-- Name: cms_templates_category_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_templates_category_id_idx ON public.cms_templates USING btree (category_id);
+
+
+--
+-- Name: cms_templates_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_templates_created_at_idx ON public.cms_templates USING btree (created_at);
+
+
+--
+-- Name: cms_templates_status_is_deleted_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_templates_status_is_deleted_idx ON public.cms_templates USING btree (status, is_deleted);
+
+
+--
+-- Name: cms_templates_tier_is_deleted_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_templates_tier_is_deleted_idx ON public.cms_templates USING btree (tier, is_deleted);
+
+
+--
+-- Name: cms_validation_report_analytics_business_id_period_start_pe_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_validation_report_analytics_business_id_period_start_pe_key ON public.cms_validation_report_analytics USING btree (business_id, period_start, period_end);
+
+
+--
+-- Name: cms_validation_report_comparisons_business_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_validation_report_comparisons_business_id_idx ON public.cms_validation_report_comparisons USING btree (business_id);
+
+
+--
+-- Name: cms_validation_report_exports_report_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_validation_report_exports_report_id_idx ON public.cms_validation_report_exports USING btree (report_id);
+
+
+--
+-- Name: cms_validation_report_history_report_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_validation_report_history_report_id_idx ON public.cms_validation_report_history USING btree (report_id);
+
+
+--
+-- Name: cms_validation_report_sections_report_id_section_type_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX cms_validation_report_sections_report_id_section_type_key ON public.cms_validation_report_sections USING btree (report_id, section_type);
+
+
+--
+-- Name: cms_validation_reports_business_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_validation_reports_business_id_idx ON public.cms_validation_reports USING btree (business_id);
+
+
+--
+-- Name: cms_validation_reports_certification_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_validation_reports_certification_id_idx ON public.cms_validation_reports USING btree (certification_id);
+
+
+--
+-- Name: cms_validation_reports_template_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_validation_reports_template_id_idx ON public.cms_validation_reports USING btree (template_id);
+
+
+--
+-- Name: cms_validation_reports_upload_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX cms_validation_reports_upload_id_idx ON public.cms_validation_reports USING btree (upload_id);
+
+
+--
+-- Name: commerce_order_histories_order_id_created_at_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX commerce_order_histories_order_id_created_at_idx ON public.commerce_order_histories USING btree (order_id, created_at);
 
 
 --
--- Name: commerce_order_items_order_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_order_items_order_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX commerce_order_items_order_id_idx ON public.commerce_order_items USING btree (order_id);
 
 
 --
--- Name: commerce_order_items_product_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_order_items_product_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX commerce_order_items_product_id_idx ON public.commerce_order_items USING btree (product_id);
 
 
 --
--- Name: commerce_order_items_variant_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_order_items_variant_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX commerce_order_items_variant_id_idx ON public.commerce_order_items USING btree (variant_id);
 
 
 --
--- Name: commerce_orders_boutique_id_created_at_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders_boutique_id_created_at_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX commerce_orders_boutique_id_created_at_idx ON public.commerce_orders USING btree (boutique_id, created_at);
 
 
 --
--- Name: commerce_orders_boutique_id_status_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders_boutique_id_status_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX commerce_orders_boutique_id_status_idx ON public.commerce_orders USING btree (boutique_id, status);
 
 
 --
--- Name: commerce_orders_created_at_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders_created_at_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX commerce_orders_created_at_idx ON public.commerce_orders USING btree (created_at);
 
 
 --
--- Name: commerce_orders_order_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders_order_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX commerce_orders_order_id_idx ON public.commerce_orders USING btree (order_id);
 
 
 --
--- Name: commerce_orders_order_id_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders_order_id_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX commerce_orders_order_id_key ON public.commerce_orders USING btree (order_id);
 
 
 --
--- Name: commerce_orders_payment_status_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders_payment_status_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX commerce_orders_payment_status_idx ON public.commerce_orders USING btree (payment_status);
 
 
 --
--- Name: commerce_orders_user_id_created_at_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders_user_id_created_at_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX commerce_orders_user_id_created_at_idx ON public.commerce_orders USING btree (user_id, created_at);
 
 
 --
--- Name: commerce_orders_user_id_status_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders_user_id_status_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX commerce_orders_user_id_status_idx ON public.commerce_orders USING btree (user_id, status);
 
 
 --
--- Name: commerce_payments_commerce_order_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_payments_commerce_order_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX commerce_payments_commerce_order_id_idx ON public.commerce_payments USING btree (commerce_order_id);
 
 
 --
--- Name: commerce_payments_razorpay_order_id_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: commerce_payments_razorpay_order_id_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX commerce_payments_razorpay_order_id_key ON public.commerce_payments USING btree (razorpay_order_id);
 
 
 --
--- Name: coupon_usages_coupon_id_user_id_order_id_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: content_translations_content_id_locale_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX content_translations_content_id_locale_key ON public.content_translations USING btree (content_id, locale);
+
+
+--
+-- Name: coupon_usages_coupon_id_user_id_order_id_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX coupon_usages_coupon_id_user_id_order_id_key ON public.coupon_usages USING btree (coupon_id, user_id, order_id);
 
 
 --
--- Name: coupons_code_boutique_id_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: coupons_code_boutique_id_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX coupons_code_boutique_id_key ON public.coupons USING btree (code, boutique_id);
 
 
 --
--- Name: coupons_code_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: coupons_code_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX coupons_code_idx ON public.coupons USING btree (code);
 
 
 --
--- Name: customer_notifications_created_at_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: customer_notifications_created_at_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX customer_notifications_created_at_idx ON public.customer_notifications USING btree (created_at);
 
 
 --
--- Name: customer_notifications_customer_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: customer_notifications_customer_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX customer_notifications_customer_id_idx ON public.customer_notifications USING btree (customer_id);
 
 
 --
--- Name: customer_notifications_is_read_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: customer_notifications_is_read_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX customer_notifications_is_read_idx ON public.customer_notifications USING btree (is_read);
 
 
 --
--- Name: delivery_tracking_history_tracking_id_created_at_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: delivery_tracking_history_tracking_id_created_at_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX delivery_tracking_history_tracking_id_created_at_idx ON public.delivery_tracking_history USING btree (tracking_id, created_at);
 
 
 --
--- Name: delivery_tracking_order_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: delivery_tracking_order_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX delivery_tracking_order_id_idx ON public.delivery_tracking USING btree (order_id);
 
 
 --
--- Name: designs_boutique_id_is_deleted_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: deployment_build_logs_deployment_id_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX deployment_build_logs_deployment_id_created_at_idx ON public.deployment_build_logs USING btree (deployment_id, created_at);
+
+
+--
+-- Name: deployment_domains_business_id_domain_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX deployment_domains_business_id_domain_key ON public.deployment_domains USING btree (business_id, domain);
+
+
+--
+-- Name: deployment_domains_business_id_status_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX deployment_domains_business_id_status_idx ON public.deployment_domains USING btree (business_id, status);
+
+
+--
+-- Name: deployment_environment_variables_environment_id_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX deployment_environment_variables_environment_id_key_key ON public.deployment_environment_variables USING btree (environment_id, key);
+
+
+--
+-- Name: deployment_environments_business_id_name_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX deployment_environments_business_id_name_key ON public.deployment_environments USING btree (business_id, name);
+
+
+--
+-- Name: deployment_variable_histories_variable_id_version_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX deployment_variable_histories_variable_id_version_idx ON public.deployment_variable_histories USING btree (variable_id, version);
+
+
+--
+-- Name: deployments_business_id_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX deployments_business_id_created_at_idx ON public.deployments USING btree (business_id, created_at);
+
+
+--
+-- Name: deployments_business_id_environment_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX deployments_business_id_environment_id_idx ON public.deployments USING btree (business_id, environment_id);
+
+
+--
+-- Name: deployments_business_id_status_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX deployments_business_id_status_idx ON public.deployments USING btree (business_id, status);
+
+
+--
+-- Name: designs_boutique_id_is_deleted_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX designs_boutique_id_is_deleted_idx ON public.designs USING btree (boutique_id, is_deleted);
 
 
 --
--- Name: exchange_requests_customer_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: developer_api_keys_business_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX developer_api_keys_business_id_idx ON public.developer_api_keys USING btree (business_id);
+
+
+--
+-- Name: developer_api_keys_key_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX developer_api_keys_key_idx ON public.developer_api_keys USING btree (key);
+
+
+--
+-- Name: developer_api_keys_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX developer_api_keys_key_key ON public.developer_api_keys USING btree (key);
+
+
+--
+-- Name: developer_api_keys_status_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX developer_api_keys_status_idx ON public.developer_api_keys USING btree (status);
+
+
+--
+-- Name: exchange_requests_customer_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX exchange_requests_customer_id_idx ON public.exchange_requests USING btree (customer_id);
 
 
 --
--- Name: exchange_requests_exchange_number_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: exchange_requests_exchange_number_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX exchange_requests_exchange_number_key ON public.exchange_requests USING btree (exchange_number);
 
 
 --
--- Name: exchange_requests_order_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: exchange_requests_order_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX exchange_requests_order_id_idx ON public.exchange_requests USING btree (order_id);
 
 
 --
--- Name: exchange_requests_status_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: exchange_requests_status_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX exchange_requests_status_idx ON public.exchange_requests USING btree (status);
 
 
 --
--- Name: measurements_user_id_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: immutable_releases_business_id_release_tag_environment_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX immutable_releases_business_id_release_tag_environment_key ON public.immutable_releases USING btree (business_id, release_tag, environment);
+
+
+--
+-- Name: marketplace_capabilities_type_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX marketplace_capabilities_type_idx ON public.marketplace_capabilities USING btree (type);
+
+
+--
+-- Name: marketplace_installations_business_id_package_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX marketplace_installations_business_id_package_id_key ON public.marketplace_installations USING btree (business_id, package_id);
+
+
+--
+-- Name: marketplace_licenses_license_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX marketplace_licenses_license_key_key ON public.marketplace_licenses USING btree (license_key);
+
+
+--
+-- Name: marketplace_packages_slug_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX marketplace_packages_slug_key ON public.marketplace_packages USING btree (slug);
+
+
+--
+-- Name: marketplace_packages_status_created_at_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX marketplace_packages_status_created_at_idx ON public.marketplace_packages USING btree (status, created_at);
+
+
+--
+-- Name: marketplace_publishers_email_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX marketplace_publishers_email_key ON public.marketplace_publishers USING btree (email);
+
+
+--
+-- Name: marketplace_reviews_business_id_package_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX marketplace_reviews_business_id_package_id_key ON public.marketplace_reviews USING btree (business_id, package_id);
+
+
+--
+-- Name: marketplace_versions_package_id_version_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX marketplace_versions_package_id_version_key ON public.marketplace_versions USING btree (package_id, version);
+
+
+--
+-- Name: measurements_user_id_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX measurements_user_id_key ON public.measurements USING btree (user_id);
 
 
 --
--- Name: notification_templates_name_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: mobile_apps_bundle_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX mobile_apps_bundle_id_key ON public.mobile_apps USING btree (bundle_id);
+
+
+--
+-- Name: notification_templates_name_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX notification_templates_name_key ON public.notification_templates USING btree (name);
 
 
 --
--- Name: order_sequences_date_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: order_sequences_date_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX order_sequences_date_key ON public.order_sequences USING btree (date);
 
 
 --
--- Name: orders_order_id_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: orders_order_id_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX orders_order_id_key ON public.orders USING btree (order_id);
 
 
 --
--- Name: owner_feature_permissions_owner_id_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: owner_feature_permissions_owner_id_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX owner_feature_permissions_owner_id_key ON public.owner_feature_permissions USING btree (owner_id);
 
 
 --
--- Name: owners_email_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: owners_email_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX owners_email_key ON public.owners USING btree (email);
 
 
 --
--- Name: owners_username_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: owners_username_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX owners_username_key ON public.owners USING btree (username);
 
 
 --
--- Name: product_analytics_product_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_analytics_product_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX product_analytics_product_id_idx ON public.product_analytics USING btree (product_id);
 
 
 --
--- Name: product_analytics_product_id_period_start_period_end_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_analytics_product_id_period_start_period_end_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX product_analytics_product_id_period_start_period_end_key ON public.product_analytics USING btree (product_id, period_start, period_end);
 
 
 --
--- Name: product_brands_boutique_id_name_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_brands_boutique_id_name_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX product_brands_boutique_id_name_key ON public.product_brands USING btree (boutique_id, name);
 
 
 --
--- Name: product_images_product_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_images_product_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX product_images_product_id_idx ON public.product_images USING btree (product_id);
 
 
 --
--- Name: product_inventory_logs_product_id_created_at_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_inventory_logs_product_id_created_at_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX product_inventory_logs_product_id_created_at_idx ON public.product_inventory_logs USING btree (product_id, created_at);
 
 
 --
--- Name: product_inventory_logs_variant_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_inventory_logs_variant_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX product_inventory_logs_variant_id_idx ON public.product_inventory_logs USING btree (variant_id);
 
 
 --
--- Name: product_inventory_variant_id_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_inventory_variant_id_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX product_inventory_variant_id_key ON public.product_inventory USING btree (variant_id);
 
 
 --
--- Name: product_reviews_product_id_status_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_reviews_product_id_status_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX product_reviews_product_id_status_idx ON public.product_reviews USING btree (product_id, status);
 
 
 --
--- Name: product_reviews_product_id_user_id_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_reviews_product_id_user_id_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX product_reviews_product_id_user_id_key ON public.product_reviews USING btree (product_id, user_id);
 
 
 --
--- Name: product_tags_boutique_id_name_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_tags_boutique_id_name_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX product_tags_boutique_id_name_key ON public.product_tags USING btree (boutique_id, name);
 
 
 --
--- Name: product_variant_attributes_product_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_variant_attributes_product_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX product_variant_attributes_product_id_idx ON public.product_variant_attributes USING btree (product_id);
 
 
 --
--- Name: product_variants_product_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_variants_product_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX product_variants_product_id_idx ON public.product_variants USING btree (product_id);
 
 
 --
--- Name: product_variants_product_id_sku_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_variants_product_id_sku_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX product_variants_product_id_sku_key ON public.product_variants USING btree (product_id, sku);
 
 
 --
--- Name: product_wishlists_user_id_product_id_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: product_wishlists_user_id_product_id_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX product_wishlists_user_id_product_id_key ON public.product_wishlists USING btree (user_id, product_id);
 
 
 --
--- Name: products_boutique_id_sku_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: products_boutique_id_sku_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX products_boutique_id_sku_key ON public.products USING btree (boutique_id, sku);
 
 
 --
--- Name: products_boutique_id_status_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: products_boutique_id_status_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX products_boutique_id_status_idx ON public.products USING btree (boutique_id, status);
 
 
 --
--- Name: products_category_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: products_category_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX products_category_id_idx ON public.products USING btree (category_id);
 
 
 --
--- Name: products_status_created_at_is_marketplace_visible_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: products_status_created_at_is_marketplace_visible_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX products_status_created_at_is_marketplace_visible_idx ON public.products USING btree (status, created_at, is_marketplace_visible);
 
 
 --
--- Name: return_requests_customer_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: qa_agent_registries_agent_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX qa_agent_registries_agent_key_key ON public.qa_agent_registries USING btree (agent_key);
+
+
+--
+-- Name: return_requests_customer_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX return_requests_customer_id_idx ON public.return_requests USING btree (customer_id);
 
 
 --
--- Name: return_requests_order_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: return_requests_order_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX return_requests_order_id_idx ON public.return_requests USING btree (order_id);
 
 
 --
--- Name: return_requests_return_number_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: return_requests_return_number_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX return_requests_return_number_key ON public.return_requests USING btree (return_number);
 
 
 --
--- Name: return_requests_status_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: return_requests_status_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX return_requests_status_idx ON public.return_requests USING btree (status);
 
 
 --
--- Name: reviews_boutique_id_moderation_status_created_at_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: reviews_boutique_id_moderation_status_created_at_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX reviews_boutique_id_moderation_status_created_at_idx ON public.reviews USING btree (boutique_id, moderation_status, created_at);
 
 
 --
--- Name: shipping_addresses_user_id_idx; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: shipping_addresses_user_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX shipping_addresses_user_id_idx ON public.shipping_addresses USING btree (user_id);
 
 
 --
--- Name: sub_categories_category_id_name_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: sub_categories_category_id_name_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX sub_categories_category_id_name_key ON public.sub_categories USING btree (category_id, name);
 
 
 --
--- Name: subscription_plans_plan_code_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: subscription_plans_plan_code_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX subscription_plans_plan_code_key ON public.subscription_plans USING btree (plan_code);
 
 
 --
--- Name: uq_user_design; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: tenants_domain_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX tenants_domain_key ON public.tenants USING btree (domain);
+
+
+--
+-- Name: universal_contents_business_id_key_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX universal_contents_business_id_key_key ON public.universal_contents USING btree (business_id, key);
+
+
+--
+-- Name: uq_user_design; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX uq_user_design ON public.wishlists USING btree (user_id, design_id);
 
 
 --
--- Name: users_phone_key; Type: INDEX; Schema: public; Owner: neondb_owner
+-- Name: user_role_mappings_business_id_user_id_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX user_role_mappings_business_id_user_id_key ON public.user_role_mappings USING btree (business_id, user_id);
+
+
+--
+-- Name: users_phone_key; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX users_phone_key ON public.users USING btree (phone);
 
 
 --
--- Name: _ProductToProductTag _ProductToProductTag_A_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: websites_domain_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX websites_domain_key ON public.websites USING btree (domain);
+
+
+--
+-- Name: workflow_definitions_name_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX workflow_definitions_name_key ON public.workflow_definitions USING btree (name);
+
+
+--
+-- Name: AIAgent AIAgent_promptTemplateId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AIAgent"
+    ADD CONSTRAINT "AIAgent_promptTemplateId_fkey" FOREIGN KEY ("promptTemplateId") REFERENCES public."PromptTemplate"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: AIConversation AIConversation_contextId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AIConversation"
+    ADD CONSTRAINT "AIConversation_contextId_fkey" FOREIGN KEY ("contextId") REFERENCES public."AIContext"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: AIExecutionLog AIExecutionLog_executionId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AIExecutionLog"
+    ADD CONSTRAINT "AIExecutionLog_executionId_fkey" FOREIGN KEY ("executionId") REFERENCES public."AIExecution"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: AIExecution AIExecution_sessionId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."AIExecution"
+    ADD CONSTRAINT "AIExecution_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES public."AISession"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: ApprovalHistory ApprovalHistory_requestId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."ApprovalHistory"
+    ADD CONSTRAINT "ApprovalHistory_requestId_fkey" FOREIGN KEY ("requestId") REFERENCES public."ApprovalRequest"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: PromptHistory PromptHistory_templateId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."PromptHistory"
+    ADD CONSTRAINT "PromptHistory_templateId_fkey" FOREIGN KEY ("templateId") REFERENCES public."PromptTemplate"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: _ProductToProductTag _ProductToProductTag_A_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."_ProductToProductTag"
@@ -4058,7 +10688,7 @@ ALTER TABLE ONLY public."_ProductToProductTag"
 
 
 --
--- Name: _ProductToProductTag _ProductToProductTag_B_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: _ProductToProductTag _ProductToProductTag_B_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."_ProductToProductTag"
@@ -4066,7 +10696,15 @@ ALTER TABLE ONLY public."_ProductToProductTag"
 
 
 --
--- Name: audit_logs audit_logs_performed_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: asset_libraries asset_libraries_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_libraries
+    ADD CONSTRAINT asset_libraries_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: audit_logs audit_logs_performed_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.audit_logs
@@ -4074,7 +10712,15 @@ ALTER TABLE ONLY public.audit_logs
 
 
 --
--- Name: booking_histories booking_histories_booking_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: autofix_queue_items autofix_queue_items_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.autofix_queue_items
+    ADD CONSTRAINT autofix_queue_items_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: booking_histories booking_histories_booking_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.booking_histories
@@ -4082,7 +10728,7 @@ ALTER TABLE ONLY public.booking_histories
 
 
 --
--- Name: bookings bookings_assigned_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: bookings bookings_assigned_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bookings
@@ -4090,7 +10736,7 @@ ALTER TABLE ONLY public.bookings
 
 
 --
--- Name: bookings bookings_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: bookings bookings_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bookings
@@ -4098,7 +10744,7 @@ ALTER TABLE ONLY public.bookings
 
 
 --
--- Name: bookings bookings_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: bookings bookings_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bookings
@@ -4106,7 +10752,39 @@ ALTER TABLE ONLY public.bookings
 
 
 --
--- Name: boutique_subscriptions boutique_subscriptions_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: boutique_certifications boutique_certifications_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.boutique_certifications
+    ADD CONSTRAINT boutique_certifications_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: boutique_certifications boutique_certifications_profile_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.boutique_certifications
+    ADD CONSTRAINT boutique_certifications_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES public.certification_profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: boutique_pages boutique_pages_website_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.boutique_pages
+    ADD CONSTRAINT boutique_pages_website_id_fkey FOREIGN KEY (website_id) REFERENCES public.websites(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: boutique_plugins boutique_plugins_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.boutique_plugins
+    ADD CONSTRAINT boutique_plugins_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: boutique_subscriptions boutique_subscriptions_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.boutique_subscriptions
@@ -4114,7 +10792,7 @@ ALTER TABLE ONLY public.boutique_subscriptions
 
 
 --
--- Name: boutique_subscriptions boutique_subscriptions_plan_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: boutique_subscriptions boutique_subscriptions_plan_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.boutique_subscriptions
@@ -4122,7 +10800,23 @@ ALTER TABLE ONLY public.boutique_subscriptions
 
 
 --
--- Name: boutiques boutiques_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: boutique_themes boutique_themes_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.boutique_themes
+    ADD CONSTRAINT boutique_themes_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: boutiques boutiques_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.boutiques
+    ADD CONSTRAINT boutiques_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: boutiques boutiques_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.boutiques
@@ -4130,7 +10824,31 @@ ALTER TABLE ONLY public.boutiques
 
 
 --
--- Name: cart_items cart_items_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: business_template_assignments business_template_assignments_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.business_template_assignments
+    ADD CONSTRAINT business_template_assignments_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: business_template_assignments business_template_assignments_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.business_template_assignments
+    ADD CONSTRAINT business_template_assignments_template_id_fkey FOREIGN KEY (template_id) REFERENCES public.cms_templates(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: businesses businesses_tenant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.businesses
+    ADD CONSTRAINT businesses_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cart_items cart_items_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cart_items
@@ -4138,7 +10856,7 @@ ALTER TABLE ONLY public.cart_items
 
 
 --
--- Name: cart_items cart_items_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: cart_items cart_items_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cart_items
@@ -4146,7 +10864,7 @@ ALTER TABLE ONLY public.cart_items
 
 
 --
--- Name: cart_items cart_items_variant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: cart_items cart_items_variant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cart_items
@@ -4154,7 +10872,7 @@ ALTER TABLE ONLY public.cart_items
 
 
 --
--- Name: carts carts_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: carts carts_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.carts
@@ -4162,7 +10880,431 @@ ALTER TABLE ONLY public.carts
 
 
 --
--- Name: commerce_order_histories commerce_order_histories_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: certification_profiles certification_profiles_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.certification_profiles
+    ADD CONSTRAINT certification_profiles_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: certification_workflows certification_workflows_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.certification_workflows
+    ADD CONSTRAINT certification_workflows_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: certification_workflows certification_workflows_definition_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.certification_workflows
+    ADD CONSTRAINT certification_workflows_definition_id_fkey FOREIGN KEY (definition_id) REFERENCES public.certification_workflow_definitions(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: cms_ai_agents cms_ai_agents_provider_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_ai_agents
+    ADD CONSTRAINT cms_ai_agents_provider_id_fkey FOREIGN KEY (provider_id) REFERENCES public.cms_ai_providers(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: cms_ai_costs cms_ai_costs_provider_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_ai_costs
+    ADD CONSTRAINT cms_ai_costs_provider_id_fkey FOREIGN KEY (provider_id) REFERENCES public.cms_ai_providers(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: cms_ai_usage cms_ai_usage_provider_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_ai_usage
+    ADD CONSTRAINT cms_ai_usage_provider_id_fkey FOREIGN KEY (provider_id) REFERENCES public.cms_ai_providers(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: cms_assignment_configurations cms_assignment_configurations_assignment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_assignment_configurations
+    ADD CONSTRAINT cms_assignment_configurations_assignment_id_fkey FOREIGN KEY (assignment_id) REFERENCES public.business_template_assignments(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_assignment_configurations cms_assignment_configurations_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_assignment_configurations
+    ADD CONSTRAINT cms_assignment_configurations_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: cms_assignment_histories cms_assignment_histories_assignment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_assignment_histories
+    ADD CONSTRAINT cms_assignment_histories_assignment_id_fkey FOREIGN KEY (assignment_id) REFERENCES public.business_template_assignments(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_blueprint_apis cms_blueprint_apis_blueprint_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_apis
+    ADD CONSTRAINT cms_blueprint_apis_blueprint_template_id_fkey FOREIGN KEY (blueprint_template_id) REFERENCES public.cms_blueprint_templates(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_blueprint_components cms_blueprint_components_page_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_components
+    ADD CONSTRAINT cms_blueprint_components_page_id_fkey FOREIGN KEY (page_id) REFERENCES public.cms_blueprint_pages(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_blueprint_features cms_blueprint_features_blueprint_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_features
+    ADD CONSTRAINT cms_blueprint_features_blueprint_template_id_fkey FOREIGN KEY (blueprint_template_id) REFERENCES public.cms_blueprint_templates(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_blueprint_features cms_blueprint_features_requirement_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_features
+    ADD CONSTRAINT cms_blueprint_features_requirement_id_fkey FOREIGN KEY (requirement_id) REFERENCES public.cms_requirements(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_blueprint_pages cms_blueprint_pages_blueprint_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_pages
+    ADD CONSTRAINT cms_blueprint_pages_blueprint_template_id_fkey FOREIGN KEY (blueprint_template_id) REFERENCES public.cms_blueprint_templates(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_blueprint_template_versions cms_blueprint_template_versions_blueprint_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_template_versions
+    ADD CONSTRAINT cms_blueprint_template_versions_blueprint_template_id_fkey FOREIGN KEY (blueprint_template_id) REFERENCES public.cms_blueprint_templates(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_blueprint_templates cms_blueprint_templates_standard_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_blueprint_templates
+    ADD CONSTRAINT cms_blueprint_templates_standard_id_fkey FOREIGN KEY (standard_id) REFERENCES public.cms_standards(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: cms_builder_profile_versions cms_builder_profile_versions_builder_profile_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_builder_profile_versions
+    ADD CONSTRAINT cms_builder_profile_versions_builder_profile_id_fkey FOREIGN KEY (builder_profile_id) REFERENCES public.cms_builder_profiles(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_builder_profiles cms_builder_profiles_standard_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_builder_profiles
+    ADD CONSTRAINT cms_builder_profiles_standard_id_fkey FOREIGN KEY (standard_id) REFERENCES public.cms_standards(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: cms_prompt_audit_logs cms_prompt_audit_logs_prompt_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_audit_logs
+    ADD CONSTRAINT cms_prompt_audit_logs_prompt_id_fkey FOREIGN KEY (prompt_id) REFERENCES public.cms_prompts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_prompt_collection_items cms_prompt_collection_items_collection_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_collection_items
+    ADD CONSTRAINT cms_prompt_collection_items_collection_id_fkey FOREIGN KEY (collection_id) REFERENCES public.cms_prompt_collections(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_prompt_collection_items cms_prompt_collection_items_prompt_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_collection_items
+    ADD CONSTRAINT cms_prompt_collection_items_prompt_id_fkey FOREIGN KEY (prompt_id) REFERENCES public.cms_prompts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_prompt_executions cms_prompt_executions_builder_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_executions
+    ADD CONSTRAINT cms_prompt_executions_builder_id_fkey FOREIGN KEY (builder_id) REFERENCES public.cms_ai_builders(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: cms_prompt_executions cms_prompt_executions_prompt_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_executions
+    ADD CONSTRAINT cms_prompt_executions_prompt_id_fkey FOREIGN KEY (prompt_id) REFERENCES public.cms_prompts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_prompt_favorites cms_prompt_favorites_prompt_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_favorites
+    ADD CONSTRAINT cms_prompt_favorites_prompt_id_fkey FOREIGN KEY (prompt_id) REFERENCES public.cms_prompts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_prompt_histories cms_prompt_histories_prompt_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_histories
+    ADD CONSTRAINT cms_prompt_histories_prompt_id_fkey FOREIGN KEY (prompt_id) REFERENCES public.cms_prompts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_prompt_ratings cms_prompt_ratings_prompt_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_ratings
+    ADD CONSTRAINT cms_prompt_ratings_prompt_id_fkey FOREIGN KEY (prompt_id) REFERENCES public.cms_prompts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_prompt_tag_prompts cms_prompt_tag_prompts_prompt_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_tag_prompts
+    ADD CONSTRAINT cms_prompt_tag_prompts_prompt_id_fkey FOREIGN KEY (prompt_id) REFERENCES public.cms_prompts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_prompt_tag_prompts cms_prompt_tag_prompts_tag_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_tag_prompts
+    ADD CONSTRAINT cms_prompt_tag_prompts_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES public.cms_prompt_tags(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_prompt_usage_analytics cms_prompt_usage_analytics_prompt_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_usage_analytics
+    ADD CONSTRAINT cms_prompt_usage_analytics_prompt_id_fkey FOREIGN KEY (prompt_id) REFERENCES public.cms_prompts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_prompt_versions cms_prompt_versions_prompt_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompt_versions
+    ADD CONSTRAINT cms_prompt_versions_prompt_id_fkey FOREIGN KEY (prompt_id) REFERENCES public.cms_prompts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_prompts cms_prompts_builder_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompts
+    ADD CONSTRAINT cms_prompts_builder_id_fkey FOREIGN KEY (builder_id) REFERENCES public.cms_ai_builders(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: cms_prompts cms_prompts_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_prompts
+    ADD CONSTRAINT cms_prompts_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.cms_prompt_categories(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: cms_requirement_relations cms_requirement_relations_source_requirement_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_requirement_relations
+    ADD CONSTRAINT cms_requirement_relations_source_requirement_id_fkey FOREIGN KEY (source_requirement_id) REFERENCES public.cms_requirements(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_requirement_relations cms_requirement_relations_target_requirement_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_requirement_relations
+    ADD CONSTRAINT cms_requirement_relations_target_requirement_id_fkey FOREIGN KEY (target_requirement_id) REFERENCES public.cms_requirements(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_requirement_versions cms_requirement_versions_requirement_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_requirement_versions
+    ADD CONSTRAINT cms_requirement_versions_requirement_id_fkey FOREIGN KEY (requirement_id) REFERENCES public.cms_requirements(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_standard_versions cms_standard_versions_standard_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_standard_versions
+    ADD CONSTRAINT cms_standard_versions_standard_id_fkey FOREIGN KEY (standard_id) REFERENCES public.cms_standards(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_standards cms_standards_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_standards
+    ADD CONSTRAINT cms_standards_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES public.cms_standards(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: cms_template_analytics cms_template_analytics_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_analytics
+    ADD CONSTRAINT cms_template_analytics_template_id_fkey FOREIGN KEY (template_id) REFERENCES public.cms_templates(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_template_builder_compat cms_template_builder_compat_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_builder_compat
+    ADD CONSTRAINT cms_template_builder_compat_template_id_fkey FOREIGN KEY (template_id) REFERENCES public.cms_templates(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_template_favorites cms_template_favorites_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_favorites
+    ADD CONSTRAINT cms_template_favorites_template_id_fkey FOREIGN KEY (template_id) REFERENCES public.cms_templates(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_template_pipeline_stages cms_template_pipeline_stages_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_pipeline_stages
+    ADD CONSTRAINT cms_template_pipeline_stages_template_id_fkey FOREIGN KEY (template_id) REFERENCES public.cms_templates(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_template_ratings cms_template_ratings_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_ratings
+    ADD CONSTRAINT cms_template_ratings_template_id_fkey FOREIGN KEY (template_id) REFERENCES public.cms_templates(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_template_requirement_joins cms_template_requirement_joins_requirement_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_requirement_joins
+    ADD CONSTRAINT cms_template_requirement_joins_requirement_id_fkey FOREIGN KEY (requirement_id) REFERENCES public.cms_requirements(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_template_requirement_joins cms_template_requirement_joins_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_requirement_joins
+    ADD CONSTRAINT cms_template_requirement_joins_template_id_fkey FOREIGN KEY (template_id) REFERENCES public.cms_requirement_templates(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_template_tag_template cms_template_tag_template_tag_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_tag_template
+    ADD CONSTRAINT cms_template_tag_template_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES public.cms_template_tags(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_template_tag_template cms_template_tag_template_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_tag_template
+    ADD CONSTRAINT cms_template_tag_template_template_id_fkey FOREIGN KEY (template_id) REFERENCES public.cms_templates(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_template_versions cms_template_versions_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_template_versions
+    ADD CONSTRAINT cms_template_versions_template_id_fkey FOREIGN KEY (template_id) REFERENCES public.cms_templates(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_templates cms_templates_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_templates
+    ADD CONSTRAINT cms_templates_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.cms_template_categories(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: cms_uploads cms_uploads_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_uploads
+    ADD CONSTRAINT cms_uploads_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_validation_report_analytics cms_validation_report_analytics_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_validation_report_analytics
+    ADD CONSTRAINT cms_validation_report_analytics_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_validation_report_comparisons cms_validation_report_comparisons_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_validation_report_comparisons
+    ADD CONSTRAINT cms_validation_report_comparisons_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_validation_report_sections cms_validation_report_sections_report_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_validation_report_sections
+    ADD CONSTRAINT cms_validation_report_sections_report_id_fkey FOREIGN KEY (report_id) REFERENCES public.cms_validation_reports(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: cms_validation_reports cms_validation_reports_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_validation_reports
+    ADD CONSTRAINT cms_validation_reports_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: commerce_order_histories commerce_order_histories_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_order_histories
@@ -4170,7 +11312,7 @@ ALTER TABLE ONLY public.commerce_order_histories
 
 
 --
--- Name: commerce_order_items commerce_order_items_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: commerce_order_items commerce_order_items_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_order_items
@@ -4178,7 +11320,7 @@ ALTER TABLE ONLY public.commerce_order_items
 
 
 --
--- Name: commerce_order_items commerce_order_items_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: commerce_order_items commerce_order_items_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_order_items
@@ -4186,7 +11328,7 @@ ALTER TABLE ONLY public.commerce_order_items
 
 
 --
--- Name: commerce_order_items commerce_order_items_variant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: commerce_order_items commerce_order_items_variant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_order_items
@@ -4194,7 +11336,7 @@ ALTER TABLE ONLY public.commerce_order_items
 
 
 --
--- Name: commerce_orders commerce_orders_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders commerce_orders_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_orders
@@ -4202,7 +11344,7 @@ ALTER TABLE ONLY public.commerce_orders
 
 
 --
--- Name: commerce_orders commerce_orders_coupon_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders commerce_orders_coupon_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_orders
@@ -4210,7 +11352,7 @@ ALTER TABLE ONLY public.commerce_orders
 
 
 --
--- Name: commerce_orders commerce_orders_shipping_address_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders commerce_orders_shipping_address_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_orders
@@ -4218,7 +11360,7 @@ ALTER TABLE ONLY public.commerce_orders
 
 
 --
--- Name: commerce_orders commerce_orders_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: commerce_orders commerce_orders_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_orders
@@ -4226,7 +11368,7 @@ ALTER TABLE ONLY public.commerce_orders
 
 
 --
--- Name: commerce_payments commerce_payments_commerce_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: commerce_payments commerce_payments_commerce_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.commerce_payments
@@ -4234,7 +11376,15 @@ ALTER TABLE ONLY public.commerce_payments
 
 
 --
--- Name: coupon_usages coupon_usages_coupon_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: content_translations content_translations_content_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.content_translations
+    ADD CONSTRAINT content_translations_content_id_fkey FOREIGN KEY (content_id) REFERENCES public.universal_contents(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: coupon_usages coupon_usages_coupon_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.coupon_usages
@@ -4242,7 +11392,7 @@ ALTER TABLE ONLY public.coupon_usages
 
 
 --
--- Name: coupon_usages coupon_usages_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: coupon_usages coupon_usages_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.coupon_usages
@@ -4250,7 +11400,7 @@ ALTER TABLE ONLY public.coupon_usages
 
 
 --
--- Name: coupon_usages coupon_usages_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: coupon_usages coupon_usages_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.coupon_usages
@@ -4258,7 +11408,7 @@ ALTER TABLE ONLY public.coupon_usages
 
 
 --
--- Name: coupons coupons_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: coupons coupons_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.coupons
@@ -4266,7 +11416,7 @@ ALTER TABLE ONLY public.coupons
 
 
 --
--- Name: custom_plan_requests custom_plan_requests_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: custom_plan_requests custom_plan_requests_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.custom_plan_requests
@@ -4274,7 +11424,7 @@ ALTER TABLE ONLY public.custom_plan_requests
 
 
 --
--- Name: custom_plan_requests custom_plan_requests_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: custom_plan_requests custom_plan_requests_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.custom_plan_requests
@@ -4282,7 +11432,7 @@ ALTER TABLE ONLY public.custom_plan_requests
 
 
 --
--- Name: customer_addresses customer_addresses_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: customer_addresses customer_addresses_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.customer_addresses
@@ -4290,7 +11440,7 @@ ALTER TABLE ONLY public.customer_addresses
 
 
 --
--- Name: customer_notifications customer_notifications_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: customer_notifications customer_notifications_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.customer_notifications
@@ -4298,7 +11448,7 @@ ALTER TABLE ONLY public.customer_notifications
 
 
 --
--- Name: delivery_tracking_history delivery_tracking_history_tracking_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: delivery_tracking_history delivery_tracking_history_tracking_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.delivery_tracking_history
@@ -4306,7 +11456,7 @@ ALTER TABLE ONLY public.delivery_tracking_history
 
 
 --
--- Name: delivery_tracking delivery_tracking_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: delivery_tracking delivery_tracking_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.delivery_tracking
@@ -4314,7 +11464,79 @@ ALTER TABLE ONLY public.delivery_tracking
 
 
 --
--- Name: designs designs_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: deployment_artifacts deployment_artifacts_deployment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployment_artifacts
+    ADD CONSTRAINT deployment_artifacts_deployment_id_fkey FOREIGN KEY (deployment_id) REFERENCES public.deployments(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: deployment_build_logs deployment_build_logs_deployment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployment_build_logs
+    ADD CONSTRAINT deployment_build_logs_deployment_id_fkey FOREIGN KEY (deployment_id) REFERENCES public.deployments(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: deployment_domains deployment_domains_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployment_domains
+    ADD CONSTRAINT deployment_domains_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: deployment_domains deployment_domains_environment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployment_domains
+    ADD CONSTRAINT deployment_domains_environment_id_fkey FOREIGN KEY (environment_id) REFERENCES public.deployment_environments(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: deployment_environment_variables deployment_environment_variables_environment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployment_environment_variables
+    ADD CONSTRAINT deployment_environment_variables_environment_id_fkey FOREIGN KEY (environment_id) REFERENCES public.deployment_environments(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: deployment_environments deployment_environments_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployment_environments
+    ADD CONSTRAINT deployment_environments_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: deployments deployments_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployments
+    ADD CONSTRAINT deployments_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: deployments deployments_environment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployments
+    ADD CONSTRAINT deployments_environment_id_fkey FOREIGN KEY (environment_id) REFERENCES public.deployment_environments(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: deployments deployments_rollback_target_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deployments
+    ADD CONSTRAINT deployments_rollback_target_id_fkey FOREIGN KEY (rollback_target_id) REFERENCES public.deployments(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: designs designs_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.designs
@@ -4322,7 +11544,15 @@ ALTER TABLE ONLY public.designs
 
 
 --
--- Name: exchange_requests exchange_requests_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: developer_api_keys developer_api_keys_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.developer_api_keys
+    ADD CONSTRAINT developer_api_keys_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: exchange_requests exchange_requests_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.exchange_requests
@@ -4330,7 +11560,7 @@ ALTER TABLE ONLY public.exchange_requests
 
 
 --
--- Name: exchange_requests exchange_requests_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: exchange_requests exchange_requests_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.exchange_requests
@@ -4338,7 +11568,7 @@ ALTER TABLE ONLY public.exchange_requests
 
 
 --
--- Name: exchange_requests exchange_requests_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: exchange_requests exchange_requests_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.exchange_requests
@@ -4346,7 +11576,103 @@ ALTER TABLE ONLY public.exchange_requests
 
 
 --
--- Name: measurements measurements_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: immutable_releases immutable_releases_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.immutable_releases
+    ADD CONSTRAINT immutable_releases_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: marketplace_capabilities marketplace_capabilities_version_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_capabilities
+    ADD CONSTRAINT marketplace_capabilities_version_id_fkey FOREIGN KEY (version_id) REFERENCES public.marketplace_versions(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: marketplace_dependencies marketplace_dependencies_version_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_dependencies
+    ADD CONSTRAINT marketplace_dependencies_version_id_fkey FOREIGN KEY (version_id) REFERENCES public.marketplace_versions(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: marketplace_installations marketplace_installations_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_installations
+    ADD CONSTRAINT marketplace_installations_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: marketplace_installations marketplace_installations_installed_version_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_installations
+    ADD CONSTRAINT marketplace_installations_installed_version_id_fkey FOREIGN KEY (installed_version_id) REFERENCES public.marketplace_versions(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: marketplace_installations marketplace_installations_package_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_installations
+    ADD CONSTRAINT marketplace_installations_package_id_fkey FOREIGN KEY (package_id) REFERENCES public.marketplace_packages(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: marketplace_licenses marketplace_licenses_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_licenses
+    ADD CONSTRAINT marketplace_licenses_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: marketplace_licenses marketplace_licenses_package_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_licenses
+    ADD CONSTRAINT marketplace_licenses_package_id_fkey FOREIGN KEY (package_id) REFERENCES public.marketplace_packages(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: marketplace_packages marketplace_packages_publisher_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_packages
+    ADD CONSTRAINT marketplace_packages_publisher_id_fkey FOREIGN KEY (publisher_id) REFERENCES public.marketplace_publishers(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: marketplace_publishers marketplace_publishers_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_publishers
+    ADD CONSTRAINT marketplace_publishers_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.owners(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: marketplace_reviews marketplace_reviews_package_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_reviews
+    ADD CONSTRAINT marketplace_reviews_package_id_fkey FOREIGN KEY (package_id) REFERENCES public.marketplace_packages(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: marketplace_versions marketplace_versions_package_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.marketplace_versions
+    ADD CONSTRAINT marketplace_versions_package_id_fkey FOREIGN KEY (package_id) REFERENCES public.marketplace_packages(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: measurements measurements_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.measurements
@@ -4354,7 +11680,15 @@ ALTER TABLE ONLY public.measurements
 
 
 --
--- Name: notification_receipts notification_receipts_notification_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: mobile_apps mobile_apps_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.mobile_apps
+    ADD CONSTRAINT mobile_apps_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: notification_receipts notification_receipts_notification_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notification_receipts
@@ -4362,7 +11696,7 @@ ALTER TABLE ONLY public.notification_receipts
 
 
 --
--- Name: notifications notifications_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: notifications notifications_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notifications
@@ -4370,7 +11704,7 @@ ALTER TABLE ONLY public.notifications
 
 
 --
--- Name: notifications notifications_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: notifications notifications_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notifications
@@ -4378,7 +11712,7 @@ ALTER TABLE ONLY public.notifications
 
 
 --
--- Name: notifications notifications_recipient_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: notifications notifications_recipient_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notifications
@@ -4386,7 +11720,7 @@ ALTER TABLE ONLY public.notifications
 
 
 --
--- Name: notifications notifications_recipient_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: notifications notifications_recipient_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notifications
@@ -4394,7 +11728,7 @@ ALTER TABLE ONLY public.notifications
 
 
 --
--- Name: order_histories order_histories_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: order_histories order_histories_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.order_histories
@@ -4402,7 +11736,7 @@ ALTER TABLE ONLY public.order_histories
 
 
 --
--- Name: orders orders_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: orders orders_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.orders
@@ -4410,7 +11744,7 @@ ALTER TABLE ONLY public.orders
 
 
 --
--- Name: orders orders_design_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: orders orders_design_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.orders
@@ -4418,7 +11752,7 @@ ALTER TABLE ONLY public.orders
 
 
 --
--- Name: orders orders_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: orders orders_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.orders
@@ -4426,7 +11760,7 @@ ALTER TABLE ONLY public.orders
 
 
 --
--- Name: owner_feature_permissions owner_feature_permissions_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: owner_feature_permissions owner_feature_permissions_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.owner_feature_permissions
@@ -4434,7 +11768,7 @@ ALTER TABLE ONLY public.owner_feature_permissions
 
 
 --
--- Name: owners owners_assigned_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: owners owners_assigned_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.owners
@@ -4442,7 +11776,15 @@ ALTER TABLE ONLY public.owners
 
 
 --
--- Name: payments payments_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: page_component_nodes page_component_nodes_page_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.page_component_nodes
+    ADD CONSTRAINT page_component_nodes_page_id_fkey FOREIGN KEY (page_id) REFERENCES public.boutique_pages(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: payments payments_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.payments
@@ -4450,7 +11792,7 @@ ALTER TABLE ONLY public.payments
 
 
 --
--- Name: payments payments_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: payments payments_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.payments
@@ -4458,7 +11800,7 @@ ALTER TABLE ONLY public.payments
 
 
 --
--- Name: payments payments_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: payments payments_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.payments
@@ -4466,7 +11808,7 @@ ALTER TABLE ONLY public.payments
 
 
 --
--- Name: payments payments_payout_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: payments payments_payout_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.payments
@@ -4474,7 +11816,7 @@ ALTER TABLE ONLY public.payments
 
 
 --
--- Name: payouts payouts_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: payouts payouts_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.payouts
@@ -4482,7 +11824,7 @@ ALTER TABLE ONLY public.payouts
 
 
 --
--- Name: product_analytics product_analytics_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_analytics product_analytics_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_analytics
@@ -4490,7 +11832,7 @@ ALTER TABLE ONLY public.product_analytics
 
 
 --
--- Name: product_brands product_brands_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_brands product_brands_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_brands
@@ -4498,7 +11840,7 @@ ALTER TABLE ONLY public.product_brands
 
 
 --
--- Name: product_images product_images_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_images product_images_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_images
@@ -4506,7 +11848,7 @@ ALTER TABLE ONLY public.product_images
 
 
 --
--- Name: product_inventory_logs product_inventory_logs_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_inventory_logs product_inventory_logs_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_inventory_logs
@@ -4514,7 +11856,7 @@ ALTER TABLE ONLY public.product_inventory_logs
 
 
 --
--- Name: product_inventory_logs product_inventory_logs_variant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_inventory_logs product_inventory_logs_variant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_inventory_logs
@@ -4522,7 +11864,7 @@ ALTER TABLE ONLY public.product_inventory_logs
 
 
 --
--- Name: product_inventory product_inventory_variant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_inventory product_inventory_variant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_inventory
@@ -4530,7 +11872,7 @@ ALTER TABLE ONLY public.product_inventory
 
 
 --
--- Name: product_reviews product_reviews_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_reviews product_reviews_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_reviews
@@ -4538,7 +11880,7 @@ ALTER TABLE ONLY public.product_reviews
 
 
 --
--- Name: product_reviews product_reviews_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_reviews product_reviews_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_reviews
@@ -4546,7 +11888,7 @@ ALTER TABLE ONLY public.product_reviews
 
 
 --
--- Name: product_reviews product_reviews_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_reviews product_reviews_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_reviews
@@ -4554,7 +11896,7 @@ ALTER TABLE ONLY public.product_reviews
 
 
 --
--- Name: product_tags product_tags_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_tags product_tags_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_tags
@@ -4562,7 +11904,7 @@ ALTER TABLE ONLY public.product_tags
 
 
 --
--- Name: product_variant_attributes product_variant_attributes_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_variant_attributes product_variant_attributes_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_variant_attributes
@@ -4570,7 +11912,7 @@ ALTER TABLE ONLY public.product_variant_attributes
 
 
 --
--- Name: product_variants product_variants_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_variants product_variants_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_variants
@@ -4578,7 +11920,7 @@ ALTER TABLE ONLY public.product_variants
 
 
 --
--- Name: product_wishlists product_wishlists_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_wishlists product_wishlists_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_wishlists
@@ -4586,7 +11928,7 @@ ALTER TABLE ONLY public.product_wishlists
 
 
 --
--- Name: product_wishlists product_wishlists_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: product_wishlists product_wishlists_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_wishlists
@@ -4594,7 +11936,7 @@ ALTER TABLE ONLY public.product_wishlists
 
 
 --
--- Name: products products_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: products products_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.products
@@ -4602,7 +11944,7 @@ ALTER TABLE ONLY public.products
 
 
 --
--- Name: products products_brand_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: products products_brand_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.products
@@ -4610,7 +11952,7 @@ ALTER TABLE ONLY public.products
 
 
 --
--- Name: products products_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: products products_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.products
@@ -4618,7 +11960,7 @@ ALTER TABLE ONLY public.products
 
 
 --
--- Name: products products_sub_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: products products_sub_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.products
@@ -4626,7 +11968,7 @@ ALTER TABLE ONLY public.products
 
 
 --
--- Name: return_requests return_requests_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: return_requests return_requests_customer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.return_requests
@@ -4634,7 +11976,7 @@ ALTER TABLE ONLY public.return_requests
 
 
 --
--- Name: return_requests return_requests_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: return_requests return_requests_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.return_requests
@@ -4642,7 +11984,7 @@ ALTER TABLE ONLY public.return_requests
 
 
 --
--- Name: return_requests return_requests_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: return_requests return_requests_order_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.return_requests
@@ -4650,7 +11992,7 @@ ALTER TABLE ONLY public.return_requests
 
 
 --
--- Name: reviews reviews_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: reviews reviews_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.reviews
@@ -4658,7 +12000,7 @@ ALTER TABLE ONLY public.reviews
 
 
 --
--- Name: reviews reviews_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: reviews reviews_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.reviews
@@ -4666,7 +12008,7 @@ ALTER TABLE ONLY public.reviews
 
 
 --
--- Name: reviews reviews_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: reviews reviews_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.reviews
@@ -4674,7 +12016,7 @@ ALTER TABLE ONLY public.reviews
 
 
 --
--- Name: shipping_addresses shipping_addresses_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: shipping_addresses shipping_addresses_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.shipping_addresses
@@ -4682,7 +12024,7 @@ ALTER TABLE ONLY public.shipping_addresses
 
 
 --
--- Name: sub_categories sub_categories_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: sub_categories sub_categories_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sub_categories
@@ -4690,7 +12032,7 @@ ALTER TABLE ONLY public.sub_categories
 
 
 --
--- Name: subscription_billing_history subscription_billing_history_subscription_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: subscription_billing_history subscription_billing_history_subscription_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.subscription_billing_history
@@ -4698,7 +12040,7 @@ ALTER TABLE ONLY public.subscription_billing_history
 
 
 --
--- Name: support_ticket_admin_notes support_ticket_admin_notes_admin_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: support_ticket_admin_notes support_ticket_admin_notes_admin_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.support_ticket_admin_notes
@@ -4706,7 +12048,7 @@ ALTER TABLE ONLY public.support_ticket_admin_notes
 
 
 --
--- Name: support_ticket_admin_notes support_ticket_admin_notes_ticket_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: support_ticket_admin_notes support_ticket_admin_notes_ticket_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.support_ticket_admin_notes
@@ -4714,7 +12056,7 @@ ALTER TABLE ONLY public.support_ticket_admin_notes
 
 
 --
--- Name: support_ticket_messages support_ticket_messages_ticket_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: support_ticket_messages support_ticket_messages_ticket_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.support_ticket_messages
@@ -4722,7 +12064,7 @@ ALTER TABLE ONLY public.support_ticket_messages
 
 
 --
--- Name: support_tickets support_tickets_assigned_admin_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: support_tickets support_tickets_assigned_admin_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.support_tickets
@@ -4730,7 +12072,7 @@ ALTER TABLE ONLY public.support_tickets
 
 
 --
--- Name: support_tickets support_tickets_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: support_tickets support_tickets_boutique_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.support_tickets
@@ -4738,7 +12080,7 @@ ALTER TABLE ONLY public.support_tickets
 
 
 --
--- Name: support_tickets support_tickets_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: support_tickets support_tickets_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.support_tickets
@@ -4746,7 +12088,7 @@ ALTER TABLE ONLY public.support_tickets
 
 
 --
--- Name: support_tickets support_tickets_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: support_tickets support_tickets_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.support_tickets
@@ -4754,7 +12096,31 @@ ALTER TABLE ONLY public.support_tickets
 
 
 --
--- Name: wishlists wishlists_design_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: universal_contents universal_contents_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.universal_contents
+    ADD CONSTRAINT universal_contents_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: user_role_mappings user_role_mappings_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_role_mappings
+    ADD CONSTRAINT user_role_mappings_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: websites websites_business_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.websites
+    ADD CONSTRAINT websites_business_id_fkey FOREIGN KEY (business_id) REFERENCES public.businesses(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: wishlists wishlists_design_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.wishlists
@@ -4762,7 +12128,7 @@ ALTER TABLE ONLY public.wishlists
 
 
 --
--- Name: wishlists wishlists_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+-- Name: wishlists wishlists_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.wishlists
@@ -4770,29 +12136,40 @@ ALTER TABLE ONLY public.wishlists
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: neondb_owner
+-- Name: workflow_executions workflow_executions_workflow_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-REVOKE USAGE ON SCHEMA public FROM PUBLIC;
-
-
---
--- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: public; Owner: cloud_admin
---
-
-ALTER DEFAULT PRIVILEGES FOR ROLE cloud_admin IN SCHEMA public GRANT ALL ON SEQUENCES TO neon_superuser WITH GRANT OPTION;
+ALTER TABLE ONLY public.workflow_executions
+    ADD CONSTRAINT workflow_executions_workflow_id_fkey FOREIGN KEY (workflow_id) REFERENCES public.workflow_definitions(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
--- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: cloud_admin
+-- Name: workflow_stages workflow_stages_workflow_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE cloud_admin IN SCHEMA public GRANT ALL ON TABLES TO neon_superuser WITH GRANT OPTION;
+ALTER TABLE ONLY public.workflow_stages
+    ADD CONSTRAINT workflow_stages_workflow_id_fkey FOREIGN KEY (workflow_id) REFERENCES public.workflow_definitions(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: workflow_tasks workflow_tasks_agent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.workflow_tasks
+    ADD CONSTRAINT workflow_tasks_agent_id_fkey FOREIGN KEY (agent_id) REFERENCES public.ai_agent_registry(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: workflow_tasks workflow_tasks_stage_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.workflow_tasks
+    ADD CONSTRAINT workflow_tasks_stage_id_fkey FOREIGN KEY (stage_id) REFERENCES public.workflow_stages(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict dBxJwgSCXWpgCdSjX5apIm37Sd3N57wOrsb3EQu9KqRTqkn5HetA526BmmWfDJb
+\unrestrict bUvittvSZEdJfhXdc4W6qzXr9uYIs37MuFHTsn8uZwSbZtLfp9TCrTUesRZzgw1
 

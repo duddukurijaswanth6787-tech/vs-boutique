@@ -11,9 +11,9 @@ class BoutiquesController {
 
       const totalTime = Date.now() - tStart;
       if (result.fromCache) {
-        console.log(`[AUDIT] GET /boutiques/public - [CACHE HIT] Cache Age: unknown, DB Query: 0ms, Serialization: 0ms, Controller: 0ms, Total Execution: ${totalTime}ms`);
+        console.warn(`[Boutiques] [AUDIT] GET /boutiques/public - [CACHE HIT] Cache Age: unknown, DB Query: 0ms, Serialization: 0ms, Controller: 0ms, Total Execution: ${totalTime}ms`);
       } else {
-        console.log(`[AUDIT] GET /boutiques/public - [CACHE MISS] DB Query: ${dbTime}ms, Serialization: unknown, Controller: unknown, Total Execution: ${totalTime}ms`);
+        console.warn(`[Boutiques] [AUDIT] GET /boutiques/public - [CACHE MISS] DB Query: ${dbTime}ms, Serialization: unknown, Controller: unknown, Total Execution: ${totalTime}ms`);
       }
 
       res.setHeader('Content-Type', 'application/json');
@@ -34,9 +34,9 @@ class BoutiquesController {
 
       const totalTime = Date.now() - tStart;
       if (result.fromCache) {
-        console.log(`[AUDIT] GET /boutiques/public/${id} - [CACHE HIT] Cache Age: unknown, DB Query: 0ms, Serialization: 0ms, Controller: 0ms, Total Execution: ${totalTime}ms`);
+        console.warn(`[Boutiques] [AUDIT] GET /boutiques/public/${id} - [CACHE HIT] Cache Age: unknown, DB Query: 0ms, Serialization: 0ms, Controller: 0ms, Total Execution: ${totalTime}ms`);
       } else {
-        console.log(`[AUDIT] GET /boutiques/public/${id} - [CACHE MISS] DB Query: ${dbTime}ms, Serialization: unknown, Controller: unknown, Total Execution: ${totalTime}ms`);
+        console.warn(`[Boutiques] [AUDIT] GET /boutiques/public/${id} - [CACHE MISS] DB Query: ${dbTime}ms, Serialization: unknown, Controller: unknown, Total Execution: ${totalTime}ms`);
       }
 
       res.setHeader('Content-Type', 'application/json');

@@ -44,7 +44,7 @@ async function run() {
     });
 
     token = loginRes.data?.token || loginRes.data?.data?.token;
-  } catch (e) {}
+  } catch (e) { console.error('[verify-requirements] first login error:', e); }
 
   if (!token) {
     try {
@@ -60,7 +60,7 @@ async function run() {
       });
 
       token = loginRes.data?.token || loginRes.data?.data?.token;
-    } catch (e) {}
+    } catch (e) { console.error('[verify-requirements] second login error:', e); }
   }
 
   if (!token) {

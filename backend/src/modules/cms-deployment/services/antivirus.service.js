@@ -85,7 +85,7 @@ class AntivirusService {
       fs.writeFileSync(tmpFile, buffer);
       return await this.scanFile(tmpFile);
     } finally {
-      try { if (fs.existsSync(tmpFile)) fs.unlinkSync(tmpFile); } catch {}
+      try { if (fs.existsSync(tmpFile)) fs.unlinkSync(tmpFile); } catch (e) { console.error('[AntivirusService] cleanup error:', e); }
     }
   }
 

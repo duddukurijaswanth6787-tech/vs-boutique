@@ -1,9 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
-const EventEmitter = require('events');
-
-// Global event bus for Phase 7 audits integration
-const eventBus = require('../../../modules/ai-core/utils/eventBus') || new EventEmitter();
+const { EventEmitter } = require('events');
+const prisma = require('../../../utils/prisma');
+const { eventBus, Events } = require('../../../services/eventBus');
 
 class CertificationService {
   constructor() {
@@ -14,7 +11,7 @@ class CertificationService {
    * Run dynamic workflow-driven QA audit.
    */
   async runAudit(businessId, releaseTag, targetType = 'WEBSITE', targetId) {
-    console.log(`[QA-INFO] Launching certification audit for Release: ${releaseTag}`);
+    console.warn(`[QA-INFO] Launching certification audit for Release: ${releaseTag}`);
 
     // Resolve active Workflow Definition
     const definition = await prisma.certificationWorkflowDefinition.findFirst({

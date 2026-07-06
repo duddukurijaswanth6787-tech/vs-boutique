@@ -177,7 +177,6 @@ const OwnerProfile = () => {
             setUploadingType(type);
             const response = await uploadImage(file, type);
             const url = response?.url || '';
-            if (url) console.log('Uploaded URL:', url);
             return url;
         } catch (err) {
             alert(err.response?.data?.message || err.message || 'Failed to upload image');

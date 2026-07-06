@@ -39,6 +39,8 @@ model User {
   supportTickets        SupportTicket[]
   wishlists             Wishlist[]
 
+  @@index([phone])
+  @@index([status])
   @@map("users")
 }
 
@@ -178,6 +180,8 @@ model Owner {
 
   marketplacePublishers MarketplacePublisher[]
 
+  @@index([role])
+  @@index([status])
   @@map("owners")
 }
 
@@ -241,6 +245,9 @@ model Order {
   reviews                 Review[]
   supportTickets          SupportTicket[]
 
+  @@index([orderStatus])
+  @@index([boutiqueId])
+  @@index([createdAt])
   @@map("orders")
 }
 
@@ -276,6 +283,9 @@ model Booking {
   boutique         Boutique         @relation(fields: [boutiqueId], references: [id], onDelete: Cascade)
   order            Order?           @relation("OrderBookings", fields: [orderId], references: [id])
 
+  @@index([boutiqueId])
+  @@index([status])
+  @@index([bookingDate])
   @@map("bookings")
 }
 
@@ -308,7 +318,7 @@ model Notification {
   isRead          Boolean               @default(false) @map("is_read")
   scheduledAt     DateTime?             @map("scheduled_at")
   isBroadcast     Boolean               @default(false) @map("is_broadcast")
-  createdAt       DateTime              @map("created_at")
+  createdAt       DateTime              @default(now()) @map("created_at")
   targetType      String?               @map("target_type") @db.VarChar(50)
   targetValue     String?               @map("target_value") @db.VarChar(100)
   sentPush        Boolean               @default(false) @map("sent_push")
@@ -321,6 +331,9 @@ model Notification {
   recipient       Owner?                @relation(fields: [recipientId], references: [id], onDelete: Cascade)
   recipientUser   User?                 @relation(fields: [recipientUserId], references: [id], onDelete: Cascade)
 
+  @@index([recipientUserId])
+  @@index([type])
+  @@index([createdAt])
   @@map("notifications")
 }
 
@@ -351,6 +364,8 @@ model Payment {
   order               Order            @relation(fields: [orderId], references: [id])
   payout              Payout?          @relation("PayoutPayments", fields: [payoutId], references: [id])
 
+  @@index([orderId])
+  @@index([status])
   @@map("payments")
 }
 
@@ -377,6 +392,10 @@ model AuditLog {
   timestamp     DateTime @default(now())
   owner         Owner    @relation(fields: [performedBy], references: [id])
 
+  @@index([entityType, entityId, timestamp])
+  @@index([actionType])
+  @@index([performedBy])
+  @@index([timestamp])
   @@map("audit_logs")
 }
 
@@ -679,6 +698,8 @@ model SubscriptionBillingHistory {
   createdAt      DateTime             @default(now()) @map("created_at")
   subscription   BoutiqueSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
 
+  @@index([subscriptionId])
+  @@index([paymentStatus])
   @@map("subscription_billing_history")
 }
 
@@ -725,6 +746,8 @@ model NotificationReceipt {
   clickedAt        DateTime?    @map("clicked_at")
   notification     Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
 
+  @@index([notificationId])
+  @@index([recipientUserId])
   @@map("notification_receipts")
 }
 
@@ -856,6 +879,8 @@ model Product {
   @@index([boutiqueId, status])
   @@index([categoryId])
   @@index([status, createdAt, isMarketplaceVisible])
+  @@index([boutiqueId])
+  @@index([status])
   @@map("products")
 }
 
@@ -1159,6 +1184,8 @@ model ProductReview {
 
   @@unique([productId, userId])
   @@index([productId, status])
+  @@index([productId])
+  @@index([status])
   @@map("product_reviews")
 }
 
@@ -1866,7 +1893,14 @@ model Business {
   deployments              Deployment[]
   deploymentDomains        DeploymentDomain[]
   cmsUploads               CmsUpload[]
+  validationReports        CmsValidationReport[]
+  validationReportComparisons CmsValidationReportComparison[]
+  validationReportAnalytics   CmsValidationReportAnalytics[]
+  businessTemplateAssignments BusinessTemplateAssignment[]
+  assignmentConfigurations    CmsAssignmentConfiguration[]
+  developerApiKeys            DeveloperApiKey[]
 
+  @@index([status])
   @@map("businesses")
 }
 
@@ -2014,6 +2048,7 @@ model WorkflowExecution {
   createdAt  DateTime           @default(now()) @map("created_at")
   updatedAt  DateTime           @updatedAt @map("updated_at")
 
+  @@index([status])
   @@map("workflow_executions")
 }
 
@@ -2848,6 +2883,7 @@ model DeploymentArtifact {
   metadata      Json?
   createdAt     DateTime  @default(now()) @map("created_at")
 
+  @@index([deploymentId])
   @@map("deployment_artifacts")
 }
 
@@ -3385,20 +3421,426 @@ model CmsTemplateBuilderCompatibility {
   @@map("cms_template_builder_compat")
 }
 
+enum AssignmentStatus {
+  DRAFT
+  CONFIGURING
+  READY
+  DEPLOYING
+  ACTIVE
+  SUSPENDED
+  ARCHIVED
+  FAILED
+}
+
 model BusinessTemplateAssignment {
-  id             String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  businessId     String      @map("business_id") @db.Uuid
-  templateId     String      @map("template_id") @db.Uuid
-  template       CmsTemplate @relation(fields: [templateId], references: [id])
-  subscriptionId String?     @map("subscription_id") @db.Uuid
-  deploymentId   String?     @map("deployment_id") @db.Uuid
-  environmentId  String?     @map("environment_id") @db.Uuid
-  assignedBy     String?     @map("assigned_by") @db.Uuid
-  assignedAt     DateTime    @default(now()) @map("assigned_at")
-  status         String      @default("ASSIGNED") @db.VarChar(50)
+  id             String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  businessId     String                    @map("business_id") @db.Uuid
+  business       Business                  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  templateId     String                    @map("template_id") @db.Uuid
+  template       CmsTemplate               @relation(fields: [templateId], references: [id])
+  subscriptionId String?                   @map("subscription_id") @db.Uuid
+  deploymentId   String?                   @map("deployment_id") @db.Uuid
+  environmentId  String?                   @map("environment_id") @db.Uuid
+  assignedBy     String?                   @map("assigned_by") @db.Uuid
+  assignedAt     DateTime                  @default(now()) @map("assigned_at")
+  status         AssignmentStatus          @default(DRAFT)
+  config         CmsAssignmentConfiguration?
+  history        CmsAssignmentHistory[]
 
   @@unique([businessId, templateId])
   @@index([businessId])
   @@index([templateId])
+  @@index([status])
   @@map("business_template_assignments")
+}
+
+model CmsAssignmentConfiguration {
+  id               String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  assignmentId     String   @unique @map("assignment_id") @db.Uuid
+  assignment       BusinessTemplateAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  businessId       String   @map("business_id") @db.Uuid
+  business         Business @relation(fields: [businessId], references: [id])
+
+  theme            String?  @default("default") @db.VarChar(50)
+  primaryColor     String?  @default("#3B82F6") @db.VarChar(7)
+  secondaryColor   String?  @default("#10B981") @db.VarChar(7)
+  logoUrl          String?  @map("logo_url") @db.VarChar(512)
+  faviconUrl       String?  @map("favicon_url") @db.VarChar(512)
+
+  language         String?  @default("en") @db.VarChar(10)
+  currency         String?  @default("INR") @db.VarChar(3)
+  timezone         String?  @default("Asia/Kolkata") @db.VarChar(50)
+  contactEmail     String?  @map("contact_email") @db.VarChar(255)
+  contactPhone     String?  @map("contact_phone") @db.VarChar(20)
+
+  metaTitle        String?  @map("meta_title") @db.VarChar(255)
+  metaDescription  String?  @map("meta_description") @db.Text
+
+  googleAnalyticsId String? @map("google_analytics_id") @db.VarChar(50)
+  facebookPixelId  String?  @map("facebook_pixel_id") @db.VarChar(50)
+
+  storageProvider  String?  @default("auto") @map("storage_provider") @db.VarChar(50)
+
+  createdBy        String?  @map("created_by") @db.Uuid
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("cms_assignment_configurations")
+}
+
+model CmsAssignmentHistory {
+  id             String           @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  assignmentId   String           @map("assignment_id") @db.Uuid
+  assignment     BusinessTemplateAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  action         String           @db.VarChar(50)
+  previousStatus AssignmentStatus?
+  newStatus      AssignmentStatus?
+  changes        Json?
+  snapshot       Json?
+  performedBy    String?          @map("performed_by") @db.Uuid
+  createdAt      DateTime         @default(now()) @map("created_at")
+
+  @@index([assignmentId, createdAt])
+  @@map("cms_assignment_histories")
+}
+
+// ============================================================
+// CMS VALIDATION REPORTS — Phase 12
+// ============================================================
+
+enum ValidationReportStatus {
+  DRAFT
+  GENERATING
+  COMPLETED
+  FAILED
+}
+
+enum ValidationReportSectionType {
+  FOLDER
+  COMPONENTS
+  APIS
+  CMS_COMPATIBILITY
+  PERFORMANCE
+  SEO
+  ACCESSIBILITY
+  SECURITY
+  RESPONSIVE
+  AI_RECOMMENDATIONS
+  SUMMARY
+  OVERALL_SCORE
+}
+
+enum ExportFormat {
+  JSON
+  CSV
+  PDF
+  EXCEL
+  MARKDOWN
+}
+
+model CmsValidationReport {
+  id                    String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  businessId            String                    @map("business_id") @db.Uuid
+  business              Business                  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  uploadId              String?                   @map("upload_id") @db.Uuid
+  certificationId       String?                   @map("certification_id") @db.Uuid
+  templateId            String?                   @map("template_id") @db.Uuid
+
+  certificationSummary  Json?                     @map("certification_summary")
+  aiRecommendations     Json?                     @map("ai_recommendations")
+  templateVersion       Json?                     @map("template_version")
+
+  overallScore          Float                     @default(0) @map("overall_score")
+  status                ValidationReportStatus    @default(COMPLETED)
+
+  sections              CmsValidationReportSection[]
+
+  generatedBy           String                    @map("generated_by") @db.Uuid
+  sourceType            String                    @default("CERTIFICATION") @map("source_type") @db.VarChar(50)
+  sourceLabel           String?                   @map("source_label") @db.VarChar(255)
+  createdAt             DateTime                  @default(now()) @map("created_at")
+  updatedAt             DateTime                  @updatedAt @map("updated_at")
+
+  @@index([businessId])
+  @@index([certificationId])
+  @@index([templateId])
+  @@index([uploadId])
+  @@map("cms_validation_reports")
+}
+
+model CmsValidationReportSection {
+  id              String                        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  reportId        String                        @map("report_id") @db.Uuid
+  report          CmsValidationReport            @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  sectionType     ValidationReportSectionType    @map("section_type")
+  score           Float?
+  maxScore        Float?                        @map("max_score")
+  status          String                        @default("PASSED") @db.VarChar(20)
+
+  issues          Json                          @default("[]")
+  suggestions     Json                          @default("[]")
+  data            Json                          @default("{}")
+
+  executionOrder  Int                           @default(0) @map("execution_order")
+  createdAt       DateTime                      @default(now()) @map("created_at")
+
+  @@unique([reportId, sectionType])
+  @@map("cms_validation_report_sections")
+}
+
+model CmsValidationReportComparison {
+  id              String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  businessId      String     @map("business_id") @db.Uuid
+  business        Business   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  reportId1       String     @map("report_id_1") @db.Uuid
+  reportId2       String     @map("report_id_2") @db.Uuid
+
+  diffData        Json       @map("diff_data")
+  summary         Json       @map("summary")
+
+  createdBy       String     @map("created_by") @db.Uuid
+  createdAt       DateTime   @default(now()) @map("created_at")
+
+  @@index([businessId])
+  @@map("cms_validation_report_comparisons")
+}
+
+model CmsValidationReportExport {
+  id              String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  reportId        String       @map("report_id") @db.Uuid
+  format          ExportFormat
+  status          String       @default("PENDING") @db.VarChar(20)
+  fileUrl         String?      @map("file_url") @db.VarChar(512)
+  fileSize        Int?         @map("file_size")
+  errorDetails    String?      @map("error_details") @db.Text
+
+  createdBy       String       @map("created_by") @db.Uuid
+  createdAt       DateTime     @default(now()) @map("created_at")
+  completedAt     DateTime?    @map("completed_at")
+
+  @@index([reportId])
+  @@map("cms_validation_report_exports")
+}
+
+model CmsValidationReportAnalytics {
+  id                String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  businessId        String   @map("business_id") @db.Uuid
+  business          Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  periodStart       DateTime @map("period_start")
+  periodEnd         DateTime @map("period_end")
+
+  totalReports      Int      @default(0) @map("total_reports")
+  avgScore          Float    @default(0) @map("avg_score")
+  passCount         Int      @default(0) @map("pass_count")
+  failCount         Int      @default(0) @map("fail_count")
+
+  sectionAverages   Json     @default("{}") @map("section_averages")
+  scoreDistribution Json     @default("{}") @map("score_distribution")
+
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  @@unique([businessId, periodStart, periodEnd])
+  @@map("cms_validation_report_analytics")
+}
+
+model CmsValidationReportHistory {
+  id              String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  reportId        String   @map("report_id") @db.Uuid
+  action          String   @db.VarChar(50)
+  previousStatus  String?  @map("previous_status") @db.VarChar(20)
+  newStatus       String?  @map("new_status") @db.VarChar(20)
+  changes         Json     @default("{}")
+  performedBy     String   @map("performed_by") @db.Uuid
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([reportId])
+  @@map("cms_validation_report_history")
+}
+
+// ===== PHASE 14: AI AGENT CENTER =====
+
+model CmsAiProvider {
+  id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name        String   @db.VarChar(255)
+  key         String   @unique @db.VarChar(100)
+  provider    String   @db.VarChar(50) // gemini, openai, claude, deepseek, grok, openrouter, bolt, lovable, v0, firebase
+  model       String   @default("gemini-1.5-pro") @db.VarChar(255)
+  baseUrl     String?  @map("base_url") @db.VarChar(512)
+  apiKey      String   @map("api_key") @db.Text // encrypted
+  temperature Float    @default(0.7)
+  maxTokens   Int      @default(4096) @map("max_tokens")
+  supportsStreaming Boolean @default(true) @map("supports_streaming")
+  supportsThinking   Boolean @default(false) @map("supports_thinking")
+  isEnabled   Boolean  @default(true) @map("is_enabled")
+  priority    Int      @default(0) // lower = higher priority
+  costPerMillionTokens Json @default("{}") @map("cost_per_million_tokens")
+  rateLimit   Json     @default("{}") @map("rate_limit")
+  retryPolicy Json     @default("{\"maxRetries\":3,\"backoffMs\":1000}") @map("retry_policy")
+  timeout     Int      @default(30000)
+  lastHealthCheck  DateTime? @map("last_health_check")
+  healthStatus     String   @default("unknown") @db.VarChar(20) @map("health_status") // healthy, degraded, offline, unknown
+  healthMessage    String?  @map("health_message") @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  agents CmsAiAgent[]
+  usage  CmsAiUsage[]
+  costs  CmsAiCost[]
+
+  @@index([provider])
+  @@index([isEnabled])
+  @@index([priority])
+  @@map("cms_ai_providers")
+}
+
+model CmsAiAgent {
+  id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name        String   @db.VarChar(255)
+  key         String   @unique @db.VarChar(100)
+  description String?  @db.Text
+  category    String   @db.VarChar(50) // pipeline, certification, prompt, aifix, workflow, custom
+  source      String   @db.VarChar(50) // ai-core, certification, custom
+  sourceId    String?  @map("source_id") @db.VarChar(255)
+  providerId  String?  @map("provider_id") @db.Uuid
+  provider    CmsAiProvider? @relation(fields: [providerId], references: [id])
+  model       String?  @db.VarChar(255)
+  systemPrompt String? @map("system_prompt") @db.Text
+  isEnabled   Boolean  @default(true) @map("is_enabled")
+  executionOrder Int   @default(0) @map("execution_order")
+  dependencies String[] @default([])
+  timeout     Int      @default(30000)
+  retryPolicy Json     @default("{}") @map("retry_policy")
+  version     String   @default("1.0.0") @db.VarChar(20)
+  healthStatus String  @default("unknown") @db.VarChar(20) @map("health_status")
+  metrics     Json     @default("{}")
+  metadata    Json     @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([category])
+  @@index([isEnabled])
+  @@index([source])
+  @@map("cms_ai_agents")
+}
+
+model CmsAiWorkflow {
+  id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  stages      Json     @default("[]") // Array of {name, agentKey, order, config}
+  status      String   @default("active") @db.VarChar(20) // active, inactive, draft
+  trigger     String   @default("manual") @db.VarChar(20) // manual, scheduled, event
+  schedule    String?  @db.VarChar(100) // cron expression
+  eventTrigger String? @map("event_trigger") @db.VarChar(100) // event name if trigger=event
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@map("cms_ai_workflows")
+}
+
+model CmsAiExecutionStep {
+  id            String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  executionId   String    @map("execution_id") @db.Uuid
+  agentKey      String    @map("agent_key") @db.VarChar(100)
+  agentName     String    @map("agent_name") @db.VarChar(255)
+  status        String    @default("PENDING") @db.VarChar(20)
+  inputPayload  Json?     @map("input_payload")
+  outputPayload Json?     @map("output_payload")
+  tokensUsed    Int       @default(0) @map("tokens_used")
+  latencyMs     Int       @default(0) @map("latency_ms")
+  retryCount    Int       @default(0) @map("retry_count")
+  errorMessage  String?   @map("error_message") @db.Text
+  startedAt     DateTime? @map("started_at")
+  completedAt   DateTime? @map("completed_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  @@index([executionId])
+  @@index([status])
+  @@map("cms_ai_execution_steps")
+}
+
+model CmsAiUsage {
+  id              String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  providerId      String?  @map("provider_id") @db.Uuid
+  provider        CmsAiProvider? @relation(fields: [providerId], references: [id])
+  agentKey        String?  @map("agent_key") @db.VarChar(100)
+  executionId     String?  @map("execution_id") @db.Uuid
+  model           String   @db.VarChar(255)
+  promptTokens    Int      @default(0) @map("prompt_tokens")
+  completionTokens Int     @default(0) @map("completion_tokens")
+  totalTokens     Int      @default(0) @map("total_tokens")
+  cost            Float    @default(0.0)
+  date            DateTime @default(now())
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([providerId])
+  @@index([date])
+  @@index([agentKey])
+  @@map("cms_ai_usage")
+}
+
+model CmsAiCost {
+  id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  providerId  String?  @map("provider_id") @db.Uuid
+  provider    CmsAiProvider? @relation(fields: [providerId], references: [id])
+  agentKey    String?  @map("agent_key") @db.VarChar(100)
+  executionId String?  @map("execution_id") @db.Uuid
+  cost        Float    @default(0.0)
+  currency    String   @default("USD") @db.VarChar(3)
+  description String?  @db.Text
+  category    String   @default("execution") @db.VarChar(50) // execution, provider, agent, workflow
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([providerId])
+  @@index([createdAt])
+  @@index([category])
+  @@map("cms_ai_costs")
+}
+
+model CmsAiSettings {
+  id          String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  key         String     @unique @db.VarChar(100)
+  value       Json
+  category    String     @default("general") @db.VarChar(50)
+  description String?    @db.Text
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  createdAt   DateTime   @default(now()) @map("created_at")
+
+  @@index([category])
+  @@map("cms_ai_settings")
+}
+
+model DeveloperApiKey {
+  id                   String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  businessId           String   @map("business_id") @db.Uuid
+  business             Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name                 String   @db.VarChar(255)
+  key                  String   @unique @db.VarChar(128)
+  prefix               String   @db.VarChar(20)
+  scopes               Json     @default("[]")
+  status               String   @default("ACTIVE") @db.VarChar(20)
+  environment          String   @default("PRODUCTION") @db.VarChar(20)
+  createdBy            String?  @map("created_by") @db.Uuid
+  expiresAt            DateTime? @map("expires_at")
+  lastUsedAt           DateTime? @map("last_used_at")
+  rotatedAt            DateTime? @map("rotated_at")
+  revokedAt            DateTime? @map("revoked_at")
+  usageCount           Int      @default(0) @map("usage_count")
+  lastIpAddress        String?  @map("last_ip_address") @db.VarChar(45)
+  allowedIps           Json     @default("[]")
+  rateLimitOverride    Int?     @map("rate_limit_override")
+  webhookSigningSecret String?  @map("webhook_signing_secret") @db.VarChar(128)
+  metadata             Json     @default("{}")
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  @@index([businessId])
+  @@index([key])
+  @@index([status])
+  @@map("developer_api_keys")
 }

@@ -1,9 +1,29 @@
-import React from 'react';
-import { UploadCloud, CheckCircle2, AlertCircle, Play, Globe, Activity, Cpu, Clock, RefreshCw, BarChart2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { UploadCloud, CheckCircle2, AlertCircle, Play, Globe, Activity, Cpu, Clock, RefreshCw, BarChart2, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { CMSPage, CMSStatsCard, CMSCard, CMSBadge, CMSStatusChip, CMSDataTable } from '../../components';
 
 export default function CMSDashboard() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <CMSPage
+        title="CMS Workspace Overview"
+        description="Monitor website certifications, check build results, manage active domains, and review live website health statistics."
+      >
+        <div className="flex items-center justify-center h-96">
+          <Loader2 className="animate-spin text-primary" size={48} />
+        </div>
+      </CMSPage>
+    );
+  }
+
   const mockActivities = [
     { id: 1, type: 'certification', title: 'AI Certification Passed', desc: "Template 'Boutique Luxe' version 1.2.0 passed rules evaluation.", time: '10 mins ago', status: 'passed' },
     { id: 2, type: 'upload', title: 'New Codebase Uploaded', desc: 'ZIP archive uploaded for boutique theme template.', time: '1 hour ago', status: 'pending' },

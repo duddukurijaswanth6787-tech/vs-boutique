@@ -31,7 +31,7 @@ const uploadLimiter = rateLimit({
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 500,
+  max: process.env.RATE_LIMIT_MAX || 1000,
   message: { success: false, message: 'Too many requests, please try again after 15 minutes' },
   standardHeaders: true,
   legacyHeaders: false,
@@ -56,26 +56,62 @@ const { swaggerUi, specs } = require('./swagger');
 
 const app = express();
 
-// Swagger Documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+// Swagger Documentation (disabled in production)
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+}
 
 // Middleware
 app.disable('x-powered-by');
+const cspDirectives = process.env.NODE_ENV === 'production'
+  ? {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      imgSrc: ["'self'", 'data:', 'blob:', 'https://*.amazonaws.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      connectSrc: ["'self'"],
+      frameSrc: ["'none'"],
+      objectSrc: ["'none'"]
+    }
+  : {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      imgSrc: ["'self'", 'data:', 'blob:', 'https://*.amazonaws.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      connectSrc: ["'self'"],
+      frameSrc: ["'none'"],
+      objectSrc: ["'none'"]
+    };
 app.use(helmet({
-  contentSecurityPolicy: false,
+  contentSecurityPolicy: { directives: cspDirectives },
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
-const allowedOriginsRegex = /^(https?:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+)(:\d+)?)$/;
-app.use(cors({
+const allowedOrigins = [
+  'https://vsboutique.shop',
+  'https://www.vsboutique.shop',
+  'https://admin.vsboutique.shop',
+  'https://owner.vsboutique.shop'
+];
+
+const corsOptions = {
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
-    if (allowedOriginsRegex.test(origin)) {
-      return callback(null, true);
+    
+    const isAllowed = allowedOrigins.includes(origin) || 
+      (process.env.NODE_ENV !== 'production' && (origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1')));
+      
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
     }
-    callback(null, false);
   },
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Disable caching for development to avoid 304 confusion
@@ -111,13 +147,17 @@ app.get('/health', async (req, res) => {
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
       memory: `${memoryMB}MB`,
-      database: 'connected'
+      database: 'connected',
+      environment: process.env.NODE_ENV || 'development',
+      version: process.env.APP_VERSION || '1.0.0'
     });
   } catch (err) {
     res.status(503).json({
       status: 'unhealthy',
       timestamp: new Date().toISOString(),
       database: 'disconnected',
+      environment: process.env.NODE_ENV || 'development',
+      version: process.env.APP_VERSION || '1.0.0',
       error: err.message
     });
   }
@@ -188,9 +228,48 @@ app.use('/api/v1/cms/projects', require('./modules/cms-verification/routes/verif
 app.use('/api/v1/cms/deployment', require('./modules/cms-deployment/routes/deployment.routes'));
 app.use('/api/v1/cms/prompts', require('./modules/cms-prompts/routes/prompts.routes'));
 app.use('/api/v1/cms/templates', require('./modules/cms-templates/routes/templates.routes'));
+app.use('/api/v1/cms/reports', require('./modules/cms-reports/routes/reports.routes'));
+app.use('/api/v1/cms/business-assignment', require('./modules/cms-business-assignment/routes/assignment.routes'));
+app.use('/api/v1/cms/ai-center', require('./modules/cms-ai-center/routes/ai-center.routes'));
+app.use('/api/v1/cms/settings', require('./modules/cms-settings/routes/settings.routes'));
+app.use('/api/v1/cms/subscriptions', require('./modules/cms-subscriptions/routes/subscriptions.routes'));
+app.use('/api/v1/cms/marketplace', require('./modules/cms-marketplace/routes/marketplace.routes'));
+app.use('/api/v1/cms/monitoring', require('./modules/cms-monitoring/routes/monitoring.routes'));
+app.use('/api/v1/cms/workflows', require('./modules/cms-workflow/routes/workflow.routes'));
+app.use('/api/v1/cms/customer-success', require('./modules/cms-customer-success/routes/customer-success.routes'));
+app.use('/api/v1/cms/developer', require('./modules/cms-developer-platform/routes/developer.routes'));
+app.use('/api/v1/cms/compliance', require('./modules/cms-compliance/routes/compliance.routes'));
+app.use('/api/v1/cms/disaster', require('./modules/cms-disaster-recovery/routes/disaster.routes'));
+app.use('/api/v1/cms/infrastructure', require('./modules/cms-infrastructure/routes/infrastructure.routes'));
+app.use('/api/v1/cms/analytics', require('./modules/cms-analytics/routes/analytics.routes'));
+app.use('/api/v1/cms/partners', require('./modules/cms-partners/routes/partner.routes'));
+app.use('/api/v1/cms/notifications', require('./modules/cms-notifications/routes/notification.routes'));
+app.use('/api/v1/cms/devops', require('./modules/cms-devops/routes/devops.routes'));
 
 // Initialize template integration service (certification + deployment + pipeline subscriptions)
 require('./modules/cms-templates/services/template-integration.service');
+// Initialize reports integration service (certification event subscriptions)
+require('./modules/cms-reports/services/reports-integration.service').start();
+// Initialize Business Assignment queue workers (Phase 13.5 enterprise optimization)
+require('./modules/cms-business-assignment/services/assignment-queue');
+// Initialize AI Agent Center (Phase 14 enterprise AI orchestration)
+const aiCenterInit = require('./modules/cms-ai-center/services/settings.service');
+aiCenterInit.initializeDefaults().catch(() => {});
+// Initialize CMS Settings defaults (Phase 15)
+const cmsSettingsInit = require('./modules/cms-settings/services/settings.service');
+cmsSettingsInit.initializeDefaults().catch(() => {});
+// Initialize CMS Subscription defaults (Phase 16)
+const cmsSubsInit = require('./modules/cms-subscriptions/services/subscriptions.service');
+cmsSubsInit.initializeDefaults().catch(() => {});
+// Initialize CMS Marketplace defaults (Phase 17)
+const cmsMpInit = require('./modules/cms-marketplace/services/marketplace.service');
+cmsMpInit.initializeDefaults().catch(() => {});
+// Initialize CMS Monitoring defaults (Phase 18)
+const cmsMonInit = require('./modules/cms-monitoring/services/monitoring.service');
+cmsMonInit.initializeDefaults().catch(() => {});
+// Initialize CMS Workflow defaults (Phase 19)
+const cmsWfTpl = require('./modules/cms-workflow/services/templates.service');
+cmsWfTpl.initializeDefaults().catch(() => {});
 
 /**
  * @swagger
@@ -363,6 +442,20 @@ function shutdown(signal) {
         process.exit(1);
     }, 15000);
 }
+
+// Process-level error monitoring (Phase 18)
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION:', err.message, err.stack);
+  const { eventBus, Events } = require('./services/eventBus');
+  eventBus.emit(Events.MONITORING_ALERT, { type: 'uncaught_exception', message: err.message, stack: err.stack, timestamp: new Date() });
+  shutdown('UNCAUGHT_EXCEPTION');
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('UNHANDLED REJECTION:', reason instanceof Error ? reason.message : reason);
+  const { eventBus, Events } = require('./services/eventBus');
+  eventBus.emit(Events.MONITORING_ALERT, { type: 'unhandled_rejection', message: reason instanceof Error ? reason.message : String(reason), timestamp: new Date() });
+});
 
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));

@@ -79,6 +79,10 @@ const WebsiteStandards = lazy(() => import('./features/admin/cms/standards/pages
 const RequirementsSelector = lazy(() => import('./features/admin/cms/requirements/pages/RequirementsSelector'));
 const WebsiteDevelopmentKit = lazy(() => import('./features/admin/cms/website-platform/pages/WebsiteDevelopmentKit'));
 const PromptLibrary = lazy(() => import('./features/admin/cms/prompts/pages/PromptLibrary'));
+const PromptAnalytics = lazy(() => import('./features/admin/cms/prompts/pages/PromptAnalytics'));
+const PromptCollections = lazy(() => import('./features/admin/cms/prompts/pages/PromptCollections'));
+const PromptEditor = lazy(() => import('./features/admin/cms/prompts/pages/PromptEditor'));
+const PromptHistory = lazy(() => import('./features/admin/cms/prompts/pages/PromptHistory'));
 const AIRequirementGenerator = lazy(() => import('./features/admin/cms/website-platform/pages/AIRequirementGenerator'));
 const AIWebsiteGenerator = lazy(() => import('./features/admin/cms/website-platform/pages/AIWebsiteGenerator'));
 const UploadWebsite = lazy(() => import('./features/admin/cms/website-platform/pages/UploadWebsite'));
@@ -90,7 +94,12 @@ const TemplateDeployments = lazy(() => import('./features/admin/cms/templates/pa
 const TemplateAnalytics = lazy(() => import('./features/admin/cms/templates/pages/TemplateAnalytics'));
 const AICertification = lazy(() => import('./features/admin/cms/ai-certification/pages/AICertification'));
 const MarketplaceHome = lazy(() => import('./features/admin/cms/marketplace/pages/MarketplaceHome'));
-const ValidationReports = lazy(() => import('./features/admin/cms/ai-certification/pages/ValidationReports'));
+const ValidationReportsDashboard = lazy(() => import('./features/admin/cms/reports/pages/ValidationDashboard'));
+const ReportDetail = lazy(() => import('./features/admin/cms/reports/pages/ReportDetail'));
+const ReportHistory = lazy(() => import('./features/admin/cms/reports/pages/ReportHistory'));
+const ReportComparison = lazy(() => import('./features/admin/cms/reports/pages/ReportComparison'));
+const ReportAnalytics = lazy(() => import('./features/admin/cms/reports/pages/ReportAnalytics'));
+const GenerateReport = lazy(() => import('./features/admin/cms/reports/pages/GenerateReport'));
 const PromptGenerator = lazy(() => import('./features/admin/cms/ai-certification/pages/PromptGenerator'));
 const AIAgentsConfig = lazy(() => import('./features/admin/cms/ai-certification/pages/AIAgentsConfig'));
 const CertificationRules = lazy(() => import('./features/admin/cms/ai-certification/pages/CertificationRules'));
@@ -99,7 +108,34 @@ const FeatureFlags = lazy(() => import('./features/admin/cms/platform/pages/Feat
 const DomainsManager = lazy(() => import('./features/admin/cms/platform/pages/DomainsManager'));
 const DeploymentCenter = lazy(() => import('./features/admin/cms/platform/pages/DeploymentCenter'));
 const WebsiteHealth = lazy(() => import('./features/admin/cms/platform/pages/WebsiteHealth'));
+const MonitoringCenter = lazy(() => import('./features/admin/cms/monitoring/pages/MonitoringCenter'));
 const CMSSettings = lazy(() => import('./features/admin/cms/configuration/pages/CMSSettings'));
+const BusinessAssignments = lazy(() => import('./features/admin/cms/business-assignment/pages/BusinessAssignments'));
+const AssignmentDetail = lazy(() => import('./features/admin/cms/business-assignment/pages/AssignmentDetail'));
+const AssignmentWizard = lazy(() => import('./features/admin/cms/business-assignment/pages/AssignmentWizard'));
+const AssignmentConfiguration = lazy(() => import('./features/admin/cms/business-assignment/pages/AssignmentConfiguration'));
+const AssignmentDeploy = lazy(() => import('./features/admin/cms/business-assignment/pages/AssignmentDeploy'));
+const AssignmentHistory = lazy(() => import('./features/admin/cms/business-assignment/pages/AssignmentHistory'));
+const AssignmentAnalytics = lazy(() => import('./features/admin/cms/business-assignment/pages/AssignmentAnalytics'));
+const AssignmentQueueMonitor = lazy(() => import('./features/admin/cms/business-assignment/pages/AssignmentQueueMonitor'));
+const AICenterDashboard = lazy(() => import('./features/admin/cms/ai-center/pages/AICenterDashboard'));
+const AIProviders = lazy(() => import('./features/admin/cms/ai-center/pages/AIProviders'));
+const AIAgents = lazy(() => import('./features/admin/cms/ai-center/pages/AIAgents'));
+const AIWorkflows = lazy(() => import('./features/admin/cms/ai-center/pages/AIWorkflows'));
+const AIExecutions = lazy(() => import('./features/admin/cms/ai-center/pages/AIExecutions'));
+const AIUsage = lazy(() => import('./features/admin/cms/ai-center/pages/AIUsage'));
+const AIHealth = lazy(() => import('./features/admin/cms/ai-center/pages/AIHealth'));
+const AISettings = lazy(() => import('./features/admin/cms/ai-center/pages/AISettings'));
+const AIQueue = lazy(() => import('./features/admin/cms/ai-center/pages/AIQueue'));
+const CustomerSuccess = lazy(() => import('./features/admin/cms/customer-success/pages/CustomerSuccess'));
+const DeveloperPlatform = lazy(() => import('./features/admin/cms/developer-platform/pages/DeveloperPlatform'));
+const ComplianceCenter = lazy(() => import('./features/admin/cms/compliance/pages/ComplianceCenter'));
+const DisasterRecoveryCenter = lazy(() => import('./features/admin/cms/disaster-recovery/pages/DisasterRecoveryCenter'));
+const InfrastructureCenter = lazy(() => import('./features/admin/cms/infrastructure/pages/InfrastructureCenter'));
+const AnalyticsCenter = lazy(() => import('./features/admin/cms/analytics/pages/AnalyticsCenter'));
+const WhiteLabelCenter = lazy(() => import('./features/admin/cms/partners/pages/WhiteLabelCenter'));
+const NotificationCenter = lazy(() => import('./features/admin/cms/notifications/pages/NotificationCenter'));
+const DevOpsCenter = lazy(() => import('./features/admin/cms/devops/pages/DevOpsCenter'));
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -158,19 +194,31 @@ const AdminLayout = ({ children }) => {
     if (path.includes('admin/cms/standards')) return 'Website Standards';
     if (path.includes('admin/cms/sdk')) return 'Website Dev Kit (WDK)';
     if (path.includes('admin/cms/prompt-library')) return 'Prompt Library';
+    if (path.includes('admin/cms/prompts/analytics')) return 'Prompt Analytics';
+    if (path.includes('admin/cms/prompts/collections')) return 'Prompt Collections';
+    if (path.includes('admin/cms/prompts/editor')) return 'Prompt Editor';
+    if (path.includes('admin/cms/prompts/history')) return 'Prompt History';
     if (path.includes('admin/cms/requirement-generator')) return 'AI Requirement Generator';
     if (path.includes('admin/cms/upload')) return 'Upload Website codebase';
     if (path.includes('admin/cms/templates')) return 'Template Library';
     if (path.includes('admin/cms/certification')) return 'AI Certification Hub';
     if (path.includes('admin/cms/reports')) return 'Validation Reports';
     if (path.includes('admin/cms/prompt-generator')) return 'Prompt Generator';
+    if (path.includes('admin/cms/ai-center')) return 'AI Agent Center';
     if (path.includes('admin/cms/agents')) return 'AI Agents configuration';
     if (path.includes('admin/cms/rules')) return 'Certification Rules Engine';
     if (path.includes('admin/cms/subscriptions')) return 'Subscription Plans Configurator';
     if (path.includes('admin/cms/feature-flags')) return 'Tenant Feature Flags';
     if (path.includes('admin/cms/domains')) return 'Domains & Routing';
+    if (path.includes('admin/cms/business-assignment')) return 'Business Assignments';
     if (path.includes('admin/cms/deployment')) return 'Deployment & Release Center';
     if (path.includes('admin/cms/health')) return 'Website Health Monitoring';
+    if (path.includes('admin/cms/customer-success')) return 'Customer Success Center';
+    if (path.includes('admin/cms/compliance')) return 'Compliance Center';
+    if (path.includes('admin/cms/disaster-recovery')) return 'Disaster Recovery Center';
+    if (path.includes('admin/cms/infrastructure')) return 'Infrastructure Center';
+    if (path.includes('admin/cms/analytics')) return 'Analytics Center';
+    if (path.includes('admin/cms/developer')) return 'Developer Platform';
     if (path.includes('admin/cms/settings')) return 'CMS Settings';
     if (path.includes('settings')) return 'Settings';
     return 'VS Admin';
@@ -472,6 +520,54 @@ function AppRoutes() {
         } 
       />
       <Route 
+        path="/admin/cms/prompts/analytics" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><PromptAnalytics /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/prompts/collections" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><PromptCollections /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/prompts/editor" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><PromptEditor /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/prompts/editor/:id" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><PromptEditor /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/prompts/history" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><PromptHistory /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/prompts/history/:id" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><PromptHistory /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
         path="/admin/cms/requirement-generator" 
         element={
           <ProtectedRoute allowedRoles={['super-admin']}>
@@ -563,7 +659,47 @@ function AppRoutes() {
         path="/admin/cms/reports" 
         element={
           <ProtectedRoute allowedRoles={['super-admin']}>
-            <AdminLayout><ValidationReports /></AdminLayout>
+            <AdminLayout><ValidationReportsDashboard /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/reports/generate" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><GenerateReport /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/reports/analytics" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><ReportAnalytics /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/reports/compare" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><ReportComparison /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/reports/:id" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><ReportDetail /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/reports/:id/history" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><ReportHistory /></AdminLayout>
           </ProtectedRoute>
         } 
       />
@@ -616,6 +752,142 @@ function AppRoutes() {
         } 
       />
       <Route 
+        path="/admin/cms/business-assignment" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><BusinessAssignments /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/business-assignment/wizard" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AssignmentWizard /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/business-assignment/analytics" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AssignmentAnalytics /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/business-assignment/jobs" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AssignmentQueueMonitor /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/business-assignment/:id" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AssignmentDetail /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/business-assignment/:id/config" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AssignmentConfiguration /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/business-assignment/:id/deploy" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AssignmentDeploy /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/business-assignment/:id/history" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AssignmentHistory /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/ai-center" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AICenterDashboard /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/ai-center/providers" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AIProviders /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/ai-center/agents" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AIAgents /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/ai-center/workflows" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AIWorkflows /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/ai-center/executions" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AIExecutions /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/ai-center/usage" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AIUsage /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/ai-center/health" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AIHealth /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/ai-center/settings" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AISettings /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/cms/ai-center/queue" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AIQueue /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
         path="/admin/cms/deployment" 
         element={
           <ProtectedRoute allowedRoles={['super-admin']}>
@@ -632,12 +904,92 @@ function AppRoutes() {
         } 
       />
       <Route 
-        path="/admin/cms/settings" 
+        path="/admin/cms/monitoring" 
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><MonitoringCenter /></AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route
+        path="/admin/cms/settings"
         element={
           <ProtectedRoute allowedRoles={['super-admin']}>
             <AdminLayout><CMSSettings /></AdminLayout>
           </ProtectedRoute>
-        } 
+        }
+      />
+      <Route
+        path="/admin/cms/customer-success"
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><CustomerSuccess /></AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cms/developer"
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><DeveloperPlatform /></AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cms/compliance"
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><ComplianceCenter /></AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cms/disaster-recovery"
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><DisasterRecoveryCenter /></AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cms/infrastructure"
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><InfrastructureCenter /></AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cms/analytics"
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><AnalyticsCenter /></AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cms/partners"
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><WhiteLabelCenter /></AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cms/notifications"
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><NotificationCenter /></AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cms/devops"
+        element={
+          <ProtectedRoute allowedRoles={['super-admin']}>
+            <AdminLayout><DevOpsCenter /></AdminLayout>
+          </ProtectedRoute>
+        }
       />
 
       {/* Owner Routes */}

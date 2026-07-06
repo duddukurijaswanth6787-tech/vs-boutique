@@ -1,6 +1,6 @@
 $source = $pwd.Path
 $destination = Join-Path (Split-Path $pwd.Path -Parent) "simple_app_temp_zip"
-$zipPath = Join-Path $pwd.Path "simple-app-ub-ev-26-06.zip"
+$zipPath = Join-Path $pwd.Path "up-06-07.zip"
 
 
 $exclude = @(
@@ -14,6 +14,7 @@ $exclude = @(
   'simple-app-update-17-06.zip',
   'simple-app-up-ev-25-06.zip',
   'simple-app-ub-ev-26-06.zip',
+  'up-06-07.zip',
   'postman.postman-for-vscode-1.19.1.vsix',
   '.git',
   '.vscode'

@@ -61,7 +61,7 @@ class AcmeService {
         const filePath = path.join(this.challengeDir, token);
         try {
           if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-        } catch {}
+        } catch (e) { console.error('[ACME Service] challengeRemove unlink error:', e); }
       }
     });
 

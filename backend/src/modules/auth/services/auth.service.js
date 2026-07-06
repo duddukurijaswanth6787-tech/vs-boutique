@@ -118,7 +118,7 @@ class AuthService {
     const now = new Date();
     const otpExpiresAt = new Date(now.getTime() + 5 * 60 * 1000);
 
-    console.log(`[AUTH] OTP for ${phone}: ${otp}`);
+    if (process.env.NODE_ENV !== 'production') console.log(`[AUTH] OTP for ${phone}: ${otp}`);
 
     const user = await authRepository.upsertUserOtp(phone, otp, otpExpiresAt, now);
 

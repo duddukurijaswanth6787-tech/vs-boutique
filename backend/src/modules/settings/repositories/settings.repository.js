@@ -46,7 +46,7 @@ class SettingsRepository {
 
   async getReviewsToModerate(limit = 5) {
     return prisma.review.findMany({
-      where: { isModerated: false },
+      where: { moderationStatus: 'PENDING' },
       orderBy: { createdAt: 'desc' },
       take: limit
     });

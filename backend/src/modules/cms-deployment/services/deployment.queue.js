@@ -7,6 +7,7 @@ class DeploymentQueue {
     this.redisClient = null;
     this.queues = {};
     this.redisWorkers = {};
+    this._handlers = {};
     this._initializeRedis();
   }
 
@@ -60,6 +61,7 @@ class DeploymentQueue {
   }
 
   registerWorker(jobType, handler) {
+    this._handlers[jobType] = handler;
     const queueName = `deployment-${jobType}`;
     if (this.useRedis && this.redisClient) {
       try {
@@ -72,7 +74,7 @@ class DeploymentQueue {
         });
 
         worker.on('completed', (job) => {
-          console.log(`[DeploymentQueue] Job ${job.id} on ${queueName} completed`);
+          console.warn(`[DeploymentQueue] Job ${job.id} on ${queueName} completed`);
         });
 
         this.redisWorkers[queueName] = worker;
