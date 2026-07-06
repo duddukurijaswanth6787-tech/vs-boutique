@@ -92,7 +92,8 @@ const allowedOrigins = [
   'https://vsboutique.shop',
   'https://www.vsboutique.shop',
   'https://admin.vsboutique.shop',
-  'https://owner.vsboutique.shop'
+  'https://owner.vsboutique.shop',
+  'https://vs-boutique.vercel.app'
 ];
 
 const corsOptions = {
@@ -108,7 +109,8 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  credentials: true,
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
