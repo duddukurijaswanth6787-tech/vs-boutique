@@ -345,7 +345,7 @@ export default function AIWebsiteGenerator() {
 
               {status === 'ACTIVE' && (
                 <a 
-                  href={`http://localhost:3000/boutique/${activeBoutique?.id}`} 
+                  href={`${window.location.origin}/boutique/${activeBoutique?.id}`} 
                   target="_blank" 
                   rel="noreferrer"
                   className="w-full mt-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-medium text-xs flex items-center justify-center gap-1.5 transition shadow-lg shadow-emerald-950/40"
