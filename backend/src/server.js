@@ -163,6 +163,32 @@ app.get('/health', async (req, res) => {
   }
 });
 
+app.get('/api/v1/health/live', (req, res) => {
+  res.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
+app.get('/api/v1/health/ready', async (req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({
+      status: 'ready',
+      timestamp: new Date().toISOString(),
+      database: 'connected'
+    });
+  } catch (err) {
+    res.status(503).json({
+      status: 'unready',
+      timestamp: new Date().toISOString(),
+      database: 'disconnected',
+      error: err.message
+    });
+  }
+});
+
 // Start reservation cleanup job
 const { startReservationCleanup } = require('./jobs/cleanupReservations');
 startReservationCleanup();
