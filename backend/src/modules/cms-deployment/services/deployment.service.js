@@ -1,7 +1,6 @@
 const prisma = require('../../../utils/prisma');
 const { getStorageAdapter } = require('../adapters');
 const crypto = require('crypto');
-const { v4: uuidv4 } = require('uuid');
 
 class DeploymentService {
   constructor() {

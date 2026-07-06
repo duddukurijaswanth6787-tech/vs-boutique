@@ -23488,6 +23488,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "businessId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -23527,6 +23534,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "businessId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -23561,6 +23575,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "businessId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -23581,6 +23602,9 @@
                 "type": "object",
                 "properties": {
                   "blueprintId": {
+                    "example": "any"
+                  },
+                  "businessId": {
                     "example": "any"
                   }
                 }

@@ -51,7 +51,7 @@ const { protect, authorize } = require('./middleware/authMiddleware');
 const sharp = require('sharp');
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
 const { s3 } = require('./utils/s3');
-const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 const { swaggerUi, specs } = require('./swagger');
 
 const app = express();
@@ -337,7 +337,7 @@ app.post('/upload', uploadLimiter, protect, authorize('owner', 'super-admin'), (
 
             if (req.file.mimetype === 'image/svg+xml') {
                 // For SVGs, bypass sharp compression and upload directly as SVG
-                const uniqueId = uuidv4();
+                const uniqueId = crypto.randomUUID();
                 finalKey = `uploads/${type}/${Date.now()}-${uniqueId}.svg`;
             } else {
                 // For JPEG, PNG, WebP: compress & convert to WebP using sharp
@@ -367,7 +367,7 @@ app.post('/upload', uploadLimiter, protect, authorize('owner', 'super-admin'), (
                     .webp({ quality: 80 })
                     .toBuffer();
 
-                const uniqueId = uuidv4();
+                const uniqueId = crypto.randomUUID();
                 finalKey = `uploads/${type}/${Date.now()}-${uniqueId}.webp`;
                 contentType = 'image/webp';
             }
