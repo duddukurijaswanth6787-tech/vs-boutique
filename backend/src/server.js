@@ -445,7 +445,7 @@ app.use((req, res) => {
 // Global Error Handler Middleware
 app.use(errorLogger);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3005;
 const server = app.listen(PORT, '0.0.0.0', () => {
     logServerStartup(app, PORT);
 });
