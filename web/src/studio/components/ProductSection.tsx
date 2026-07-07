@@ -174,11 +174,11 @@ export default function ProductSection({
           <div className="h-[1px] w-12 bg-accent/30 mx-auto mt-2" />
         </div>
 
-        {/* Main Side-by-Side Dual Column Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 items-start">
+        {/* Main Stacked Rows */}
+        <div className="space-y-12">
           
-          {/* LEFT Column (Col-span 3): New Arrivals (5 products) */}
-          <div className="lg:col-span-3 space-y-5" id="new-arrivals-column">
+          {/* New Arrivals (5 products) */}
+          <div className="space-y-5" id="new-arrivals-column">
             <div className="flex items-center justify-between border-b border-accent/15 pb-2">
               <h3 className="text-sm md:text-base font-extrabold uppercase tracking-wider text-luxury-black font-sans">
                 New Arrivals
@@ -191,7 +191,7 @@ export default function ProductSection({
               </button>
             </div>
 
-            <div className="flex overflow-x-auto gap-4 pb-4 md:grid md:grid-cols-3 md:gap-5 md:pb-0 scrollbar-none">
+            <div className="flex overflow-x-auto gap-4 pb-4 md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-5 md:pb-0 scrollbar-none">
               {newArrivals.map((product) => (
                 <div key={product.id} className="w-56 sm:w-64 md:w-full shrink-0">
                   <ProductCard product={product} />
@@ -200,8 +200,8 @@ export default function ProductSection({
             </div>
           </div>
 
-          {/* RIGHT Column (Col-span 2): Trending Now (3 products) */}
-          <div className="lg:col-span-2 space-y-5" id="trending-column">
+          {/* Trending Now (3 products) */}
+          <div className="space-y-5" id="trending-column">
             <div className="flex items-center justify-between border-b border-accent/15 pb-2">
               <h3 className="text-sm md:text-base font-extrabold uppercase tracking-wider text-luxury-black font-sans">
                 Trending Now
@@ -214,7 +214,7 @@ export default function ProductSection({
               </button>
             </div>
 
-            <div className="flex overflow-x-auto gap-4 pb-4 md:grid md:grid-cols-2 md:gap-5 md:pb-0 scrollbar-none">
+            <div className="flex overflow-x-auto gap-4 pb-4 md:grid md:grid-cols-3 lg:grid-cols-3 md:gap-5 md:pb-0 scrollbar-none">
               {trendingNow.map((product) => (
                 <div key={product.id} className="w-56 sm:w-64 md:w-full shrink-0">
                   <ProductCard product={product} />
