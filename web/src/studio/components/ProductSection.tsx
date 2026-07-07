@@ -175,10 +175,10 @@ export default function ProductSection({
         </div>
 
         {/* Main Side-by-Side Dual Column Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 items-start">
           
-          {/* LEFT Column (Col-span 7): New Arrivals (5 products) */}
-          <div className="lg:col-span-7 space-y-5" id="new-arrivals-column">
+          {/* LEFT Column (Col-span 3): New Arrivals (5 products) */}
+          <div className="lg:col-span-3 space-y-5" id="new-arrivals-column">
             <div className="flex items-center justify-between border-b border-accent/15 pb-2">
               <h3 className="text-sm md:text-base font-extrabold uppercase tracking-wider text-luxury-black font-sans">
                 New Arrivals
@@ -200,8 +200,8 @@ export default function ProductSection({
             </div>
           </div>
 
-          {/* RIGHT Column (Col-span 5): Trending Now (3 products) */}
-          <div className="lg:col-span-5 space-y-5" id="trending-column">
+          {/* RIGHT Column (Col-span 2): Trending Now (3 products) */}
+          <div className="lg:col-span-2 space-y-5" id="trending-column">
             <div className="flex items-center justify-between border-b border-accent/15 pb-2">
               <h3 className="text-sm md:text-base font-extrabold uppercase tracking-wider text-luxury-black font-sans">
                 Trending Now
