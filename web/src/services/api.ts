@@ -83,15 +83,18 @@ export const api = {
   },
 
   async getSiteSettings() {
-    return { success: false, message: 'Site settings API not available in legacy client' };
+    return await request('/api/site-settings');
   },
 
   async updateSiteSettings(key: string, value: any) {
-    return { success: false, message: 'Site settings API not available in legacy client' };
+    return await request('/api/site-settings', {
+      method: 'POST',
+      body: JSON.stringify({ key, value }),
+    });
   },
 
   async getStorefrontReports() {
-    return { success: false, message: 'Storefront reports API not available in legacy client' };
+    return await request('/api/admin/storefront-reports');
   },
 
   async updateOrderStatus(orderId: number, status: string) {

@@ -1,4 +1,5 @@
 import { ArrowUp, Mail, Phone, Clock, ShieldCheck, Play, Globe } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -88,12 +89,12 @@ export default function Footer() {
         <div className="space-y-3">
           <h4 className="text-xs font-bold text-accent uppercase tracking-widest font-sans">Customer Service</h4>
           <ul className="space-y-1.5 text-xs text-gray-500 font-sans">
-            <li><a href="#" className="hover:text-accent transition-colors">Shipping Policy</a></li>
-            <li><a href="#" className="hover:text-accent transition-colors">Returns & Exchange</a></li>
-            <li><a href="#" className="hover:text-accent transition-colors">Terms & Conditions</a></li>
-            <li><a href="#" className="hover:text-accent transition-colors">Privacy Policy</a></li>
-            <li><a href="#" className="hover:text-accent transition-colors">Payment Policy</a></li>
-            <li><a href="#" className="hover:text-accent transition-colors">Support Center</a></li>
+            <li><Link to="/shipping-policy" className="hover:text-accent transition-colors">Shipping Policy</Link></li>
+            <li><Link to="/returns-exchange" className="hover:text-accent transition-colors">Returns & Exchange</Link></li>
+            <li><Link to="/terms" className="hover:text-accent transition-colors">Terms & Conditions</Link></li>
+            <li><Link to="/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link></li>
+            <li><Link to="/payment-policy" className="hover:text-accent transition-colors">Payment Policy</Link></li>
+            <li><Link to="/support" className="hover:text-accent transition-colors">Support Center</Link></li>
           </ul>
         </div>
 

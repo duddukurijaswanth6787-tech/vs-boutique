@@ -260,6 +260,7 @@ app.use('/api/v1/cms/reports', require('./modules/cms-reports/routes/reports.rou
 app.use('/api/v1/cms/business-assignment', require('./modules/cms-business-assignment/routes/assignment.routes'));
 app.use('/api/v1/cms/ai-center', require('./modules/cms-ai-center/routes/ai-center.routes'));
 app.use('/api/v1/cms/settings', require('./modules/cms-settings/routes/settings.routes'));
+app.use('/api/v1/cms/policies', require('./modules/cms-policies/routes/policies.routes'));
 app.use('/api/v1/cms/subscriptions', require('./modules/cms-subscriptions/routes/subscriptions.routes'));
 app.use('/api/v1/cms/marketplace', require('./modules/cms-marketplace/routes/marketplace.routes'));
 app.use('/api/v1/cms/monitoring', require('./modules/cms-monitoring/routes/monitoring.routes'));

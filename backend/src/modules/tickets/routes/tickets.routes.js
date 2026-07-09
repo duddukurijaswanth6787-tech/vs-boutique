@@ -4,6 +4,8 @@ const controller = require('../controllers/tickets.controller');
 const { protect, authorize, checkReadOnlyMode, checkBoutiqueStatus } = require('../../../middleware/authMiddleware');
 
 router.post('/', protect, checkReadOnlyMode, checkBoutiqueStatus, controller.createTicket.bind(controller));
+router.post('/public', checkReadOnlyMode, controller.createPublicTicket.bind(controller));
+router.get('/public-status', controller.getPublicTicketStatus.bind(controller));
 router.get('/admin/analytics', protect, authorize('super-admin'), controller.getTicketAnalytics.bind(controller));
 router.get('/customer', protect, checkReadOnlyMode, checkBoutiqueStatus, controller.getTicketsForCustomer.bind(controller));
 router.get('/owner', protect, authorize('owner'), checkReadOnlyMode, checkBoutiqueStatus, controller.getTicketsForOwner.bind(controller));
@@ -12,6 +14,7 @@ router.get('/admin', protect, authorize('super-admin'), controller.getTicketsFor
 router.get('/:id', protect, checkReadOnlyMode, checkBoutiqueStatus, controller.getTicketDetails.bind(controller));
 router.get('/:id/messages', protect, checkReadOnlyMode, checkBoutiqueStatus, controller.getTicketMessages.bind(controller));
 router.post('/:id/messages', protect, checkReadOnlyMode, checkBoutiqueStatus, controller.postMessage.bind(controller));
+router.put('/:id/reply', protect, authorize('super-admin'), checkReadOnlyMode, controller.replyToTicket.bind(controller));
 
 router.get('/:id/notes', protect, authorize('super-admin'), controller.getTicketNotes.bind(controller));
 router.post('/:id/notes', protect, authorize('super-admin'), controller.addTicketNote.bind(controller));

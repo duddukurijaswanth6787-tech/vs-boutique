@@ -16,11 +16,12 @@ export default function PageFooter({
   ];
 
   const legalLinks = [
-    { label: 'Privacy Policy', path: '/customer/privacy' },
-    { label: 'Terms & Conditions', path: '/customer/terms' },
-    { label: 'Refund Policy', path: '/customer/refund' },
-    { label: 'Shipping Policy', path: '/customer/shipping' },
-    { label: 'About Us', path: '/customer/about' },
+    { label: 'Shipping Policy', path: '/shipping-policy' },
+    { label: 'Returns & Exchange', path: '/returns-exchange' },
+    { label: 'Terms & Conditions', path: '/terms' },
+    { label: 'Privacy Policy', path: '/privacy' },
+    { label: 'Payment Policy', path: '/payment-policy' },
+    { label: 'Support Center', path: '/support' },
   ];
 
   return (
@@ -64,9 +65,9 @@ export default function PageFooter({
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Customer Service */}
           <div>
-            <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-4">Legal</h4>
+            <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-4">Customer Service</h4>
             <ul className="space-y-2.5">
               {legalLinks.map((link) => (
                 <li key={link.label}>

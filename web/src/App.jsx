@@ -68,6 +68,12 @@ const CustomerShipping = lazy(() => import('./features/shared/info/pages/Custome
 const CustomerAbout = lazy(() => import('./features/shared/info/pages/CustomerAbout'));
 const CustomerContact = lazy(() => import('./features/shared/info/pages/CustomerContact'));
 const CustomerHelp = lazy(() => import('./features/shared/help/pages/CustomerHelp'));
+const ShippingPolicy = lazy(() => import('./features/shared/info/pages/ShippingPolicy'));
+const ReturnsExchange = lazy(() => import('./features/shared/info/pages/ReturnsExchange'));
+const TermsAndConditions = lazy(() => import('./features/shared/info/pages/TermsAndConditions'));
+const PrivacyPolicy = lazy(() => import('./features/shared/info/pages/PrivacyPolicy'));
+const PaymentPolicy = lazy(() => import('./features/shared/info/pages/PaymentPolicy'));
+const SupportCenter = lazy(() => import('./features/shared/info/pages/SupportCenter'));
 const DesignSystemShowcase = lazy(() => import('./features/shared/info/pages/DesignSystemShowcase'));
 const LiveWebsiteControl = lazy(() => import('./features/admin/pages/LiveWebsite/LiveWebsiteControl'));
 const StudioApp = lazy(() => import('./studio/StudioApp'));
@@ -1164,6 +1170,12 @@ function AppRoutes() {
         </CustomerAuthProvider>
       }>
         <Route path="/" element={<StudioApp />} />
+        <Route path="/shipping-policy" element={<ShippingPolicy />} />
+        <Route path="/returns-exchange" element={<ReturnsExchange />} />
+        <Route path="/terms" element={<TermsAndConditions />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/payment-policy" element={<PaymentPolicy />} />
+        <Route path="/support" element={<SupportCenter />} />
         <Route path="/boutique/:id" element={<StudioApp />} />
         <Route path="/products" element={<StudioApp />} />
         <Route path="/products/:id" element={<StudioApp />} />

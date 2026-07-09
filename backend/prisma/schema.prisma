@@ -10,6 +10,8 @@ datasource db {
 model User {
   id                    String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   phone                 String                 @unique @db.VarChar(20)
+  email                 String?                @unique @db.VarChar(255)
+  password              String?                @db.VarChar(255)
   name                  String?                @default("New User") @db.VarChar(255)
   status                UserStatus             @default(ACTIVE)
   segment               CustomerSegment        @default(NEW)
@@ -485,7 +487,7 @@ model BookingHistory {
 
 model SupportTicket {
   id                  String                   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  userId              String                   @map("user_id") @db.Uuid
+  userId              String?                  @map("user_id") @db.Uuid
   boutiqueId          String?                  @map("boutique_id") @db.Uuid
   orderId             String?                  @map("order_id") @db.Uuid
   ticketType          TicketType               @map("ticket_type")
@@ -507,12 +509,18 @@ model SupportTicket {
   excessiveTicketFlag Boolean                  @default(false) @map("excessive_ticket_flag")
   attachmentUrl       String?                  @map("attachment_url") @db.VarChar(512)
   attachmentType      String?                  @map("attachment_type") @db.VarChar(50)
+  ticketNumber        String?                  @map("ticket_number") @db.VarChar(50)
+  name                String?                  @db.VarChar(255)
+  email               String?                  @db.VarChar(255)
+  phone               String?                  @db.VarChar(20)
+  message             String?                  @db.Text
+  reply               String?                  @db.Text
   adminNotes          SupportTicketAdminNote[]
   messages            SupportTicketMessage[]
   assignedAdmin       Owner?                   @relation(fields: [assignedAdminId], references: [id])
   boutique            Boutique?                @relation(fields: [boutiqueId], references: [id])
   order               Order?                   @relation(fields: [orderId], references: [id])
-  user                User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                User?                    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("support_tickets")
 }
@@ -3843,4 +3851,45 @@ model DeveloperApiKey {
   @@index([key])
   @@index([status])
   @@map("developer_api_keys")
+}
+
+model PolicySettings {
+  id                 String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  shippingCharges    Decimal  @default(99.00) @map("shipping_charges") @db.Decimal(10, 2)
+  freeShippingLimit  Decimal  @default(999.00) @map("free_shipping_limit") @db.Decimal(10, 2)
+  returnDays         Int      @default(7) @map("return_days")
+  exchangeDays       Int      @default(7) @map("exchange_days")
+  refundDays         Int      @default(7) @map("refund_days")
+  businessHours      String   @default("9 AM - 6 PM, Mon-Sat") @map("business_hours") @db.VarChar(100)
+  supportEmail       String   @default("support@vsboutique.shop") @map("support_email") @db.VarChar(255)
+  supportPhone       String   @default("+91 90001 00020") @map("support_phone") @db.VarChar(20)
+  whatsApp           String   @default("+91 90001 00020") @map("whatsapp") @db.VarChar(20)
+  companyAddress     String   @default("Hyderabad, Telangana, India") @map("company_address") @db.Text
+  updatedAt          DateTime @updatedAt @map("updated_at")
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  @@map("policy_settings")
+}
+
+model CmsPolicy {
+  id             String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  key            String   @unique @db.VarChar(50) // e.g. "shipping", "returns", "terms", "privacy", "payment"
+  title          String   @db.VarChar(255)
+  content        String   @db.Text
+  draftContent   String?  @map("draft_content") @db.Text
+  status         String   @default("PUBLISHED") @db.VarChar(20) // "PUBLISHED", "DRAFT"
+  version        Int      @default(1)
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  history        Json     @default("[]") // [{version: 1, content: "...", updatedAt: "..."}]
+
+  @@map("cms_policies")
+}
+
+model SiteSettings {
+  key       String   @id @db.VarChar(255)
+  value     Json
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("site_settings")
 }

@@ -166,6 +166,63 @@ class TicketsController {
       return res.status(500).json({ message: err.message });
     }
   }
+
+  async createPublicTicket(req, res) {
+    try {
+      const { name, email, phone, subject, message, orderId } = req.body;
+      if (!name || !email || !subject || !message) {
+        return res.status(400).json({ message: 'Name, email, subject, and message are required' });
+      }
+      const ticket = await service.createPublicTicket({
+        name,
+        email,
+        phone,
+        subject,
+        message,
+        orderId
+      });
+      return res.status(201).json({ success: true, data: ticket });
+    } catch (err) {
+      console.error('[TicketsController.createPublicTicket]', err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  async getPublicTicketStatus(req, res) {
+    try {
+      const { ticketNumber } = req.query;
+      if (!ticketNumber) {
+        return res.status(400).json({ message: 'Ticket number is required' });
+      }
+      const ticket = await service.getPublicTicketStatus(ticketNumber);
+      if (!ticket) {
+        return res.status(404).json({ message: 'Ticket not found' });
+      }
+      return res.json({ success: true, data: ticket });
+    } catch (err) {
+      console.error('[TicketsController.getPublicTicketStatus]', err);
+      return res.status(500).json({ message: err.message });
+    }
+  }
+
+  async replyToTicket(req, res) {
+    try {
+      const { reply, status } = req.body;
+      if (!reply) {
+        return res.status(400).json({ message: 'Reply is required' });
+      }
+      const ticket = await service.replyToTicket(req.params.id, {
+        reply,
+        status: status || 'RESOLVED',
+        adminId: req.user?.id || 'admin-1',
+        adminName: req.user?.ownerName || 'Admin'
+      });
+      return res.json({ success: true, data: ticket });
+    } catch (err) {
+      console.error('[TicketsController.replyToTicket]', err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
 }
 
 module.exports = new TicketsController();

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { 
   getAdminTickets, 
   getTicketById, 
@@ -96,6 +97,25 @@ const AdminTickets = () => {
   ]);
 
   // Mutations
+  const backendUrl = window.VITE_API_URL || import.meta.env.VITE_API_URL || '';
+
+  const replyTicketMutation = useMutation({
+    mutationFn: async (data) => {
+      const token = localStorage.getItem('token');
+      const res = await axios.put(`${backendUrl}/tickets/${selectedTicketId}/reply`, data, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return res.data;
+    },
+    onSuccess: () => {
+      setReplyText('');
+      setAttachmentUrl('');
+      queryClient.invalidateQueries(['ticketMessages', selectedTicketId]);
+      queryClient.invalidateQueries(['ticketDetails', selectedTicketId]);
+      queryClient.invalidateQueries(['adminTickets']);
+    }
+  });
+
   const sendMessageMutation = useMutation({
     mutationFn: (data) => createTicketMessage(selectedTicketId, data),
     onSuccess: () => {
@@ -132,15 +152,11 @@ const AdminTickets = () => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (!replyText.trim() && !attachmentUrl.trim()) return;
+    if (!replyText.trim()) return;
 
-    sendMessageMutation.mutate({
-      senderType: 'ADMIN',
-      senderId: 'admin-1', // Mock admin user ID
-      senderName: 'Super Admin',
-      message: replyText,
-      attachmentUrl: attachmentUrl || null,
-      attachmentType: attachmentUrl ? (attachmentUrl.match(/\.(jpeg|jpg|gif|png)$/) ? 'image' : 'pdf') : null
+    replyTicketMutation.mutate({
+      reply: replyText,
+      status: ticket?.status || 'RESOLVED'
     });
   };
 
@@ -282,6 +298,7 @@ const AdminTickets = () => {
                     </div>
 
                     <h4 className="font-extrabold text-gray-900 text-xs mt-2 truncate">{t.subject}</h4>
+                    <p className="text-[9px] text-gray-400 font-bold mt-0.5">{t.ticketNumber || 'TKT-General'} | By: {t.user?.name || t.name || 'Guest'}</p>
                     <p className="text-[10px] text-gray-500 mt-1 truncate">{t.description}</p>
                     
                     <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-50">
@@ -334,7 +351,7 @@ const AdminTickets = () => {
                     </span>
                   </div>
                   <p className="text-[10px] text-gray-400 mt-1 font-bold">
-                    User: {ticket.user?.name} ({ticket.user?.phone}) | Boutique: {ticket.boutique?.name || 'Platform'}
+                    User: {ticket.user?.name || ticket.name || 'Guest'} ({ticket.user?.phone || ticket.phone || 'N/A'}) {ticket.email ? `| ${ticket.email}` : ''} | Boutique: {ticket.boutique?.name || 'Platform'}
                   </p>
                 </div>
 

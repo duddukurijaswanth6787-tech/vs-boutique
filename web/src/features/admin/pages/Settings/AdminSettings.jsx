@@ -24,6 +24,7 @@ import {
   PieChart
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import AdminPolicies from './components/AdminPolicies';
 
 const AdminSettings = () => {
   const queryClient = useQueryClient();
@@ -142,7 +143,7 @@ const AdminSettings = () => {
         </div>
         
         {/* Navigation Tabs */}
-        <div className="flex bg-gray-100 p-1.5 rounded-2xl w-fit">
+        <div className="flex bg-gray-100 p-1.5 rounded-2xl w-fit flex-wrap gap-1">
           <button
             onClick={() => setActiveTab('commission')}
             className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
@@ -162,6 +163,16 @@ const AdminSettings = () => {
             }`}
           >
             Subscriptions & MRR
+          </button>
+          <button
+            onClick={() => setActiveTab('policies')}
+            className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
+              activeTab === 'policies'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-500 hover:text-gray-900'
+            }`}
+          >
+            Policies & CMS Settings
           </button>
         </div>
       </div>
@@ -472,6 +483,18 @@ const AdminSettings = () => {
             ) : (
               <p className="text-center font-bold text-gray-400 py-10">No subscription analytics data found.</p>
             )}
+          </motion.div>
+        )}
+
+        {/* TAB 3: POLICIES & CMS SETTINGS */}
+        {activeTab === 'policies' && (
+          <motion.div
+            key="policies-tab"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+          >
+            <AdminPolicies />
           </motion.div>
         )}
       </AnimatePresence>

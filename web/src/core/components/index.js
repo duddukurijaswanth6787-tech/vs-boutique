@@ -47,6 +47,7 @@ export { default as MobileNavSheet } from './navigation/MobileNavSheet';
 
 // Shared / Cross-portal
 export { default as LegalPage } from './shared/LegalPage';
+export { default as PremiumLegalPage } from './shared/PremiumLegalPage';
 export { default as AppPreviewMockup } from './shared/AppPreviewMockup';
 export { default as DeleteConfirm } from './shared/DeleteConfirm';
 export { default as EditModal } from './shared/EditModal';

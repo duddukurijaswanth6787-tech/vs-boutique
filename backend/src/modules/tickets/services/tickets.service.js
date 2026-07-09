@@ -313,6 +313,78 @@ class TicketsService {
       riskLevels
     };
   }
+
+  async createPublicTicket({ name, email, phone, subject, message, orderId }) {
+    const prisma = require('../../../utils/prisma');
+    const ticketNumber = 'TKT-' + Math.floor(100000 + Math.random() * 900000);
+
+    let linkedOrderId = null;
+    if (orderId && orderId.length === 36) {
+      linkedOrderId = orderId;
+    }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { phone: phone || '___non_existent_phone___' },
+          { email: email || '___non_existent_email___' }
+        ]
+      }
+    });
+
+    const ticket = await prisma.supportTicket.create({
+      data: {
+        userId: user ? user.id : null,
+        ticketType: 'CUSTOMER_COMPLAINT',
+        priority: 'MEDIUM',
+        source: 'WEB',
+        subject,
+        description: message,
+        status: 'OPEN',
+        ticketNumber,
+        name,
+        email,
+        phone,
+        message,
+        orderId: linkedOrderId
+      }
+    });
+
+    await logAction('CREATE_PUBLIC_SUPPORT_TICKET', 'SupportTicket', ticket.id, user ? user.id : 'SYSTEM', { ticketNumber });
+    return ticket;
+  }
+
+  async replyToTicket(ticketId, { reply, status, adminId, adminName }) {
+    const prisma = require('../../../utils/prisma');
+    const ticket = await prisma.supportTicket.update({
+      where: { id: ticketId },
+      data: {
+        reply,
+        status,
+        resolvedAt: status === 'RESOLVED' ? new Date() : undefined
+      }
+    });
+
+    await prisma.supportTicketMessage.create({
+      data: {
+        ticketId,
+        senderType: 'ADMIN',
+        senderId: adminId,
+        senderName: adminName,
+        message: reply
+      }
+    });
+
+    await logAction('REPLY_SUPPORT_TICKET', 'SupportTicket', ticketId, adminId, { status });
+    return ticket;
+  }
+
+  async getPublicTicketStatus(ticketNumber) {
+    const prisma = require('../../../utils/prisma');
+    return prisma.supportTicket.findFirst({
+      where: { ticketNumber }
+    });
+  }
 }
 
 module.exports = new TicketsService();
