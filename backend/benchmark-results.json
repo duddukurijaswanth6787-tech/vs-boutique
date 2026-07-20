@@ -1,0 +1,259 @@
+{
+  "apiLatencies": {
+    "dashboard_summary": {
+      "path": "/dashboard/summary",
+      "httpStatus": 200,
+      "responseSize": 3307,
+      "rowsReturned": 0,
+      "coldDuration": 124.42500000000018,
+      "min": 6.59,
+      "p50": 7.62,
+      "p95": 14.4,
+      "p99": 19.17,
+      "max": 19.17,
+      "avg": 8.59
+    },
+    "sales_chart": {
+      "path": "/dashboard/sales-chart?period=monthly",
+      "httpStatus": 200,
+      "responseSize": 548,
+      "rowsReturned": 14,
+      "coldDuration": 4.189900000000307,
+      "min": 1.99,
+      "p50": 2.28,
+      "p95": 3.1,
+      "p99": 3.17,
+      "max": 3.17,
+      "avg": 2.41
+    },
+    "products_list": {
+      "path": "/products?limit=10",
+      "httpStatus": 200,
+      "responseSize": 5878,
+      "rowsReturned": 10,
+      "coldDuration": 11.23660000000018,
+      "min": 3.12,
+      "p50": 3.81,
+      "p95": 5.78,
+      "p99": 6.05,
+      "max": 6.05,
+      "avg": 4
+    },
+    "orders_list": {
+      "path": "/orders?limit=10",
+      "httpStatus": 200,
+      "responseSize": 3224,
+      "rowsReturned": 10,
+      "coldDuration": 5.076399999999921,
+      "min": 2.23,
+      "p50": 2.96,
+      "p95": 4.05,
+      "p99": 4.08,
+      "max": 4.08,
+      "avg": 3.03
+    },
+    "inventory_list": {
+      "path": "/inventory?limit=10",
+      "httpStatus": 200,
+      "responseSize": 3882,
+      "rowsReturned": 10,
+      "coldDuration": 11.467400000000453,
+      "min": 2.3,
+      "p50": 2.71,
+      "p95": 3.98,
+      "p99": 5.38,
+      "max": 5.38,
+      "avg": 2.97
+    },
+    "social_analytics": {
+      "path": "/admin/social/analytics/summary",
+      "httpStatus": 200,
+      "responseSize": 1505,
+      "rowsReturned": 0,
+      "coldDuration": 18.051699999999983,
+      "min": 5.35,
+      "p50": 5.94,
+      "p95": 11.71,
+      "p99": 12.19,
+      "max": 12.19,
+      "avg": 6.75
+    }
+  },
+  "pagination": {
+    "products_page_1": {
+      "path": "/products?page=1&limit=10",
+      "p50": 4.42,
+      "p95": 7.45
+    },
+    "products_page_middle": {
+      "path": "/products?page=50&limit=10",
+      "p50": 4.24,
+      "p95": 5.6
+    },
+    "products_page_deep": {
+      "path": "/products?page=100&limit=10",
+      "p50": 4.71,
+      "p95": 7.34
+    },
+    "orders_page_1": {
+      "path": "/orders?page=1&limit=10",
+      "p50": 3.08,
+      "p95": 4
+    },
+    "orders_page_middle": {
+      "path": "/orders?page=250&limit=10",
+      "p50": 2.77,
+      "p95": 5.09
+    },
+    "orders_page_deep": {
+      "path": "/orders?page=500&limit=10",
+      "p50": 3.06,
+      "p95": 6.79
+    },
+    "inventory_page_1": {
+      "path": "/inventory?page=1&limit=10",
+      "p50": 2.62,
+      "p95": 2.99
+    },
+    "inventory_page_middle": {
+      "path": "/inventory?page=100&limit=10",
+      "p50": 2.81,
+      "p95": 3.82
+    },
+    "inventory_page_deep": {
+      "path": "/inventory?page=200&limit=10",
+      "p50": 3.33,
+      "p95": 6.7
+    }
+  },
+  "search": {
+    "products_search_exact": {
+      "path": "/products?search=SKU-500-100500",
+      "rowsMatched": 1,
+      "p50": 4.98,
+      "p95": 5.36
+    },
+    "products_search_prefix": {
+      "path": "/products?search=SKU-5",
+      "rowsMatched": 20,
+      "p50": 4.98,
+      "p95": 6.96
+    },
+    "products_search_partial": {
+      "path": "/products?search=Title",
+      "rowsMatched": 20,
+      "p50": 4.97,
+      "p95": 8.06
+    },
+    "products_search_nomatch": {
+      "path": "/products?search=XYZNonExistentSearchTerm",
+      "rowsMatched": 0,
+      "p50": 4.97,
+      "p95": 6.17
+    },
+    "orders_search_exact": {
+      "path": "/orders?search=ORD-1000500",
+      "rowsMatched": 1,
+      "p50": 7.4,
+      "p95": 12.03
+    },
+    "orders_search_prefix": {
+      "path": "/orders?search=ORD-10",
+      "rowsMatched": 20,
+      "p50": 5.98,
+      "p95": 6.73
+    },
+    "orders_search_partial": {
+      "path": "/orders?search=St",
+      "rowsMatched": 0,
+      "p50": 4.87,
+      "p95": 7.23
+    },
+    "orders_search_nomatch": {
+      "path": "/orders?search=XYZNonExistentSearchTerm",
+      "rowsMatched": 0,
+      "p50": 7.19,
+      "p95": 8.08
+    }
+  },
+  "filters": {
+    "products_filter_status_active": {
+      "path": "/products?status=ACTIVE&sortBy=createdAt&sortOrder=desc",
+      "rowsMatched": 20,
+      "p50": 4.67,
+      "p95": 7.13
+    },
+    "products_filter_brand": {
+      "path": "/products?brandId=brand-uuid-1",
+      "rowsMatched": 0,
+      "p50": 1.86,
+      "p95": 2.59
+    },
+    "products_filter_price_range": {
+      "path": "/products?minPrice=1000&maxPrice=3000",
+      "rowsMatched": 20,
+      "p50": 4.32,
+      "p95": 5.64
+    },
+    "orders_filter_status_shipped": {
+      "path": "/orders?status=SHIPPED&sortBy=createdAt&sortOrder=desc",
+      "rowsMatched": 20,
+      "p50": 3.24,
+      "p95": 4.03
+    },
+    "inventory_filter_lowstock": {
+      "path": "/inventory?stockStatus=LOW_STOCK",
+      "rowsMatched": 20,
+      "p50": 3.59,
+      "p95": 5.07
+    },
+    "inventory_filter_outofstock": {
+      "path": "/inventory?stockStatus=OUT_OF_STOCK",
+      "rowsMatched": 0,
+      "p50": 2.24,
+      "p95": 4.94
+    }
+  },
+  "concurrency": {
+    "users_1": {
+      "concurrency": 1,
+      "requests": 100,
+      "successRate": 100,
+      "errorRate": 0,
+      "p50": 4.58,
+      "p95": 7.79,
+      "p99": 9.2,
+      "rps": 205.51
+    },
+    "users_5": {
+      "concurrency": 5,
+      "requests": 100,
+      "successRate": 104,
+      "errorRate": 0,
+      "p50": 14.25,
+      "p95": 20.78,
+      "p99": 30.6,
+      "rps": 317.78
+    },
+    "users_10": {
+      "concurrency": 10,
+      "requests": 100,
+      "successRate": 109.00000000000001,
+      "errorRate": 0,
+      "p50": 29.45,
+      "p95": 44.86,
+      "p99": 50.48,
+      "rps": 300.33
+    },
+    "users_25": {
+      "concurrency": 25,
+      "requests": 100,
+      "successRate": 124,
+      "errorRate": 0,
+      "p50": 70.87,
+      "p95": 99.21,
+      "p99": 117.11,
+      "rps": 284.22
+    }
+  }
+}

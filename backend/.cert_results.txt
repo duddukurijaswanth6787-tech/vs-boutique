@@ -1,0 +1,56 @@
+404  /api/v1/dashboard
+200  /api/v1/products
+200  /api/v1/categories
+200  /api/v1/brands
+200  /api/v1/attributes
+200  /api/v1/inventory
+200  /api/v1/warehouses
+401  /api/v1/orders
+404  /api/v1/cancellations
+401  /api/v1/returns
+401  /api/v1/payments
+401  /api/v1/refunds
+401  /api/v1/coupons
+401  /api/v1/offers
+404  /api/v1/shipping
+404  /api/v1/tax
+401  /api/v1/invoices
+401  /api/v1/wallet
+401  /api/v1/notifications
+200  /api/v1/reviews
+404  /api/v1/cms
+401  /api/v1/campaigns
+200  /api/v1/faqs
+404  /api/v1/reports
+401  /api/v1/audit-logs
+401  /api/v1/settings
+404  /api/v1/support
+401  /api/v1/staff
+401  /api/v1/roles
+401  /api/v1/permissions
+401  /api/v1/users
+404  /api/v1/customer-profile
+404  /api/v1/customer-addresses
+200  /api/v1/media
+401  /api/v1/search
+401  /api/v1/recently-viewed
+404  /api/v1/wishlist
+404  /api/v1/cart
+404  /api/v1/checkout
+401  /api/v1/sessions
+404  /api/v1/email-verification
+404  /api/v1/password
+401  /api/v1/me
+404  /api/v1/import
+200  /api/v1/variants
+404  /api/v1/admin/rag/agents [DEAD-EXPECTED]
+404  /api/v1/admin/rag/knowledge-sources [DEAD-EXPECTED]
+404  /api/v1/admin/social [DEAD-EXPECTED]
+404  /api/v1/ai/agent [DEAD-EXPECTED]
+404  /api/v1/ai/admin [DEAD-EXPECTED]
+404  /api/v1/ai/analytics [DEAD-EXPECTED]
+404  /api/v1/ai/chat [DEAD-EXPECTED]
+404  /api/v1/ai/recommendations [DEAD-EXPECTED]
+404  /api/v1/ai/search [DEAD-EXPECTED]
+404  /api/v1/drug-interactions [DEAD-EXPECTED]
+404  /api/v1/prescriptions [DEAD-EXPECTED]

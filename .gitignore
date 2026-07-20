@@ -1,15 +1,12 @@
-node_modules/
+node_modules
+# Keep environment variables out of version control (all nested .env files)
 .env
-.env.backup
 .env.*
-.DS_Store
-dist/
-build/
-.expo/
-*.log
+!.env.example
+!.env*.example
 
-# Temporary and output files
-*.zip
-api_test_results.json
-cms_analysis_output.json
-backend/scratch/
+/generated/prisma
+coverage
+dist
+.next
+*.log

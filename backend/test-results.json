@@ -1,0 +1,226 @@
+[
+  {
+    "name": "Create CMS Page",
+    "method": "POST",
+    "endpoint": "/cms/pages",
+    "expected": 201,
+    "actual": 201,
+    "result": "PASS"
+  },
+  {
+    "name": "Get CMS Pages List",
+    "method": "GET",
+    "endpoint": "/cms/pages",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Create CMS Section",
+    "method": "POST",
+    "endpoint": "/cms/sections",
+    "expected": 201,
+    "actual": 201,
+    "result": "PASS"
+  },
+  {
+    "name": "Get CMS Sections List",
+    "method": "GET",
+    "endpoint": "/cms/sections",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Create Banner",
+    "method": "POST",
+    "endpoint": "/cms/banners",
+    "expected": 201,
+    "actual": 201,
+    "result": "PASS"
+  },
+  {
+    "name": "Get Banners List",
+    "method": "GET",
+    "endpoint": "/cms/banners",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Create FAQ",
+    "method": "POST",
+    "endpoint": "/faqs",
+    "expected": 201,
+    "actual": 201,
+    "result": "PASS"
+  },
+  {
+    "name": "Get FAQs List",
+    "method": "GET",
+    "endpoint": "/faqs",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Create Coupon",
+    "method": "POST",
+    "endpoint": "/coupons",
+    "expected": 201,
+    "actual": 201,
+    "result": "PASS"
+  },
+  {
+    "name": "Get Coupons List",
+    "method": "GET",
+    "endpoint": "/coupons",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Create Offer",
+    "method": "POST",
+    "endpoint": "/offers",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Get Offers List",
+    "method": "GET",
+    "endpoint": "/offers",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Create Campaign",
+    "method": "POST",
+    "endpoint": "/campaigns",
+    "expected": 201,
+    "actual": 201,
+    "result": "PASS"
+  },
+  {
+    "name": "Get Campaigns List",
+    "method": "GET",
+    "endpoint": "/campaigns",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Get Reviews List",
+    "method": "GET",
+    "endpoint": "/reviews",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Create Social Post Draft",
+    "method": "POST",
+    "endpoint": "/admin/social/posts",
+    "expected": 201,
+    "actual": 201,
+    "result": "PASS"
+  },
+  {
+    "name": "Product Tagging on Post",
+    "method": "PUT",
+    "endpoint": "/admin/social/posts/1fac4739-d7df-440b-be9f-57702bd0d095/products",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Generate Social Post Presigned URL",
+    "method": "POST",
+    "endpoint": "/admin/social/posts/1fac4739-d7df-440b-be9f-57702bd0d095/upload-url",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Binary PUT to Mock S3",
+    "method": "PUT",
+    "endpoint": "http://localhost:9099/vasanthi-designers-dev-bucket/social/posts/1fac4739-d7df-440b-be9f-57702bd0d095/images/2228886e-510a-4691-a0c8-2dffaf9a3406.webp",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Verify Object Exists in S3",
+    "method": "HEAD",
+    "endpoint": "http://localhost:9099/vasanthi-designers-dev-bucket/social/posts/1fac4739-d7df-440b-be9f-57702bd0d095/images/2228886e-510a-4691-a0c8-2dffaf9a3406.webp",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Attach Media Reference to Post",
+    "method": "PUT",
+    "endpoint": "/admin/social/posts/1fac4739-d7df-440b-be9f-57702bd0d095/media",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Database binary/base64 check",
+    "method": "Prisma",
+    "endpoint": "socialPost",
+    "expected": "no binary",
+    "actual": "clean URL only",
+    "result": "PASS"
+  },
+  {
+    "name": "Publish Social Post",
+    "method": "PUT",
+    "endpoint": "/admin/social/posts/1fac4739-d7df-440b-be9f-57702bd0d095/status",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Submit Post Safety Report",
+    "method": "POST",
+    "endpoint": "/social/posts/1fac4739-d7df-440b-be9f-57702bd0d095/report",
+    "expected": 201,
+    "actual": 201,
+    "result": "PASS"
+  },
+  {
+    "name": "Admin Resolve Moderation Report",
+    "method": "PUT",
+    "endpoint": "/admin/social/reports/e4afb748-3e97-4c7d-97a6-5a1db896d76d",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Generate Banner Presigned URL",
+    "method": "POST",
+    "endpoint": "/media/upload-url",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Banner Binary PUT to S3",
+    "method": "PUT",
+    "endpoint": "http://localhost:9099/vasanthi-designers-dev-bucket/products/banners/images/84478a42-e81b-4919-8169-cbf5b1333ce1.png",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  },
+  {
+    "name": "Verify Banner Object in S3",
+    "method": "HEAD",
+    "endpoint": "http://localhost:9099/vasanthi-designers-dev-bucket/products/banners/images/84478a42-e81b-4919-8169-cbf5b1333ce1.png",
+    "expected": 200,
+    "actual": 200,
+    "result": "PASS"
+  }
+]

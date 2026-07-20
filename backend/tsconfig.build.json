@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "test",
+    "dist",
+    "**/*spec.ts",
+    "src/domains/rag-agent",
+    "src/domains/rag-knowledge",
+    "src/domains/ai-chat",
+    "src/domains/ai-search",
+    "src/domains/ai-recommendation",
+    "src/domains/ai-analytics",
+    "src/domains/ai-admin",
+    "src/domains/prescription",
+    "src/domains/drug-interaction"
+  ]
+}
